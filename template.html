@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>F1viz — 2026 Season</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#070910">
+<style>
+:root{
+  --bg:#070910; --ink:#eef1f8; --muted:#98a2ba; --muted-2:#606a82;
+  --line:rgba(150,166,205,.14); --line-2:rgba(150,166,205,.09);
+  --panel-a:rgba(255,255,255,.055); --panel-b:rgba(255,255,255,.014);
+  --gold:#f2c14e; --pod:#8fd3c6; --bad:#e77b83;
+  --c:#00D7B6;
+  --sans:"Helvetica Neue",Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+.app{display:flex;flex-direction:column;height:100dvh}
+button{font-family:inherit}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;gap:16px;padding:13px 26px;border-bottom:1px solid var(--line-2);z-index:5}
+.brand{font-weight:800;font-size:19px;letter-spacing:.14em;display:flex;align-items:center;gap:2px}
+.brand span{color:var(--c);transition:color .4s}
+.modes{display:flex;gap:3px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:3px}
+.modes button{font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);
+  background:none;border:0;padding:7px 16px;border-radius:999px;cursor:pointer;transition:.2s}
+.modes button.on{color:#05070d;background:var(--c)}
+.ctx{margin-left:auto;text-align:right;font-size:11px;color:var(--muted-2);letter-spacing:.04em;line-height:1.45}
+.ctx b{color:var(--muted);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.peek{display:none;align-items:baseline;gap:8px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:800;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
+.peek b{flex:0 0 auto;font-style:italic;font-size:.92em;color:color-mix(in srgb,var(--c) 82%,#fff)}
+.peek u{flex:0 0 auto;text-decoration:none;font-size:1.05em}
+.peek span{overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
+.peek i{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;font-style:normal;font-weight:600;font-size:.78em;color:var(--muted-2)}
+.peek em{flex:0 0 auto;font-style:normal}
+.peek em.pk-pos{font-weight:800;font-style:italic;font-size:.96em;color:color-mix(in srgb,var(--c) 85%,#fff)}
+.peek em.pk-pts{font-weight:800;color:var(--ink)}
+.peek em.pk-pts small{font-size:.6em;font-weight:700;color:var(--muted-2);margin-left:2px;letter-spacing:.03em}
+
+/* ---------- stage / card ---------- */
+.stage{flex:1;position:relative;overflow:hidden;min-height:0;
+  background:radial-gradient(1200px 640px at 84% -8%, color-mix(in srgb,var(--c) 24%,transparent), transparent 60%),
+             radial-gradient(820px 560px at 12% 118%, color-mix(in srgb,var(--c) 15%,transparent), transparent 62%)}
+/* per-team dramatic glow — distinct shape/position, data-team set on <html> in render() */
+:root[data-team="mercedes"] .stage{background:radial-gradient(1500px 560px at 50% -22%, color-mix(in srgb,var(--c) 30%,transparent), transparent 60%)}
+:root[data-team="ferrari"] .stage{background:radial-gradient(1050px 1050px at 100% -4%, color-mix(in srgb,var(--c) 38%,transparent), transparent 55%)}
+:root[data-team="mclaren"] .stage{background:radial-gradient(1150px 820px at 94% 110%, color-mix(in srgb,var(--c) 34%,transparent), transparent 60%)}
+:root[data-team="red_bull"] .stage{background:radial-gradient(720px 720px at 6% 2%, color-mix(in srgb,var(--c) 30%,transparent), transparent 55%),radial-gradient(820px 820px at 98% 104%, color-mix(in srgb,var(--c) 24%,transparent), transparent 58%)}
+:root[data-team="rb"] .stage{background:radial-gradient(860px 860px at 50% 34%, color-mix(in srgb,var(--c) 28%,transparent), transparent 62%)}
+:root[data-team="alpine"] .stage{background:radial-gradient(560px 1300px at -8% 50%, color-mix(in srgb,var(--c) 32%,transparent), transparent 60%)}
+:root[data-team="haas"] .stage{background:radial-gradient(700px 560px at 50% -12%, color-mix(in srgb,var(--c) 32%,transparent), transparent 58%)}
+:root[data-team="audi"] .stage{background:radial-gradient(1600px 560px at 50% 122%, color-mix(in srgb,var(--c) 30%,transparent), transparent 60%)}
+:root[data-team="williams"] .stage{background:radial-gradient(980px 760px at 3% -10%, color-mix(in srgb,var(--c) 32%,transparent), transparent 60%)}
+:root[data-team="aston_martin"] .stage{background:radial-gradient(560px 1300px at 108% 50%, color-mix(in srgb,var(--c) 32%,transparent), transparent 60%)}
+:root[data-team="cadillac"] .stage{background:radial-gradient(640px 640px at 2% -6%, color-mix(in srgb,var(--c) 28%,transparent), transparent 55%),radial-gradient(640px 640px at 98% -6%, color-mix(in srgb,var(--c) 28%,transparent), transparent 55%)}
+.wrap{position:absolute;inset:0;display:flex;justify-content:center;padding:26px 26px 20px}
+.card{width:100%;max-width:1320px;display:grid;grid-template-columns:1fr 1fr;gap:22px;min-height:0}
+.card.enter{animation:fade .4s cubic-bezier(.2,.7,.2,1)}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.panel{background:linear-gradient(180deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);border-radius:20px;min-height:0}
+
+/* ----- left: identity ----- */
+.idcard{display:flex;flex-direction:column;overflow:hidden;padding:14px}
+.hero-top{display:grid;grid-template-columns:1.12fr 1fr;grid-template-rows:1fr auto;grid-template-areas:"info photo" "team photo";column-gap:8px;row-gap:6px;height:clamp(230px,38vh,320px);flex:0 0 auto}
+.hero-info{grid-area:info;position:relative;display:flex;flex-direction:column;min-width:0;padding:2px 0}
+.hero-top>.teamline{grid-area:team}
+.bigpos{font-weight:800;font-style:italic;font-size:clamp(46px,8vh,84px);line-height:.76;letter-spacing:-.05em;
+  color:transparent;-webkit-text-stroke:1.8px color-mix(in srgb,var(--c) 60%,#fff);opacity:.9;pointer-events:none}
+.bigpos small{display:block;font-style:normal;-webkit-text-stroke:0;font-size:10px;font-weight:700;letter-spacing:.24em;
+  color:color-mix(in srgb,var(--c) 78%,#fff);margin-top:5px;opacity:.9}
+.postop{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.ptop{font-weight:800;font-size:clamp(19px,3.2vh,28px);color:var(--muted-2);white-space:nowrap;letter-spacing:-.01em;line-height:1}
+.ptop b{color:color-mix(in srgb,var(--c) 85%,#fff);margin:0 4px 0 4px}
+.ptop em{font-style:normal;font-size:.52em;color:var(--muted-2);font-weight:700;letter-spacing:.04em}
+.statgrid.r1{grid-template-columns:repeat(5,1fr)}
+.idstack{margin-top:auto;display:flex;flex-direction:column;min-width:0;gap:2px}
+.idstack .rnum{font-weight:800;font-style:italic;font-size:clamp(18px,2.7vh,26px);color:color-mix(in srgb,var(--c) 82%,#fff);line-height:1;letter-spacing:-.02em;margin-bottom:2px}
+.idstack .rnum .tla{font-style:normal;font-weight:700;font-size:.68em;letter-spacing:.11em;color:var(--muted-2);margin-left:9px}
+.idstack .gname{font-weight:500;font-size:clamp(20px,3.7vh,35px);color:var(--muted);letter-spacing:-.01em;line-height:.96}
+.idstack .f{font-weight:800;font-size:clamp(27px,5vh,50px);color:var(--ink);letter-spacing:-.03em;line-height:.9;margin-bottom:7px}
+.idstack .meta{display:flex;align-items:center;gap:9px;font-size:15.5px;color:var(--muted);margin-bottom:9px}
+.idstack .meta b{color:var(--ink);font-weight:800}.idstack .meta .flag{font-size:19px}
+.teamline{display:inline-flex;align-items:center;gap:11px;font-weight:800;font-size:16px;letter-spacing:.01em;color:color-mix(in srgb,var(--c) 82%,#fff);white-space:nowrap;align-self:end}
+.teamline .tcar{height:28px;width:auto;object-fit:contain;flex:0 0 auto}
+/* constructor: car on top + one-line data strip */
+.hero-car{position:relative;height:clamp(118px,18vh,158px);flex:0 0 auto;overflow:hidden;border-radius:12px;margin-bottom:11px;
+  background:radial-gradient(58% 74% at 50% 42%, color-mix(in srgb,var(--c) 18%,transparent), transparent 76%)}
+.hero-car.below{margin-bottom:0;margin-top:12px}
+.hero-car img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:1.5% 3%;filter:drop-shadow(0 8px 16px rgba(0,0,0,.5))}
+.hero-car .pfb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:44px;color:color-mix(in srgb,var(--c) 70%,#fff);opacity:.9}
+.cstrip{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px 18px;flex:0 0 auto;padding:0 2px}
+.cstrip .cpos{font-weight:800;font-style:italic;font-size:clamp(46px,6.6vh,58px);line-height:.78;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.8px color-mix(in srgb,var(--c) 60%,#fff);opacity:.92;flex:0 0 auto;margin-top:-2px}
+.cstrip .cpos small{font-style:normal;-webkit-text-stroke:0;font-size:.28em;font-weight:700;letter-spacing:.18em;color:color-mix(in srgb,var(--c) 78%,#fff);margin-left:3px;vertical-align:top}
+.cstrip .cpts{align-self:flex-end;margin-bottom:5px;font-weight:800;font-size:clamp(19px,3.2vh,28px);color:var(--muted-2);white-space:nowrap;line-height:1;letter-spacing:-.01em;flex:0 0 auto}
+.cstrip .cpts b{color:color-mix(in srgb,var(--c) 85%,#fff);margin:0 4px}
+.cstrip .cpts em{font-style:normal;font-size:.52em;color:var(--muted-2);font-weight:700;letter-spacing:.04em}
+.cteam{display:flex;flex-direction:column;min-width:0}
+.cteam .cname{font-weight:800;font-size:clamp(22px,3.4vh,30px);letter-spacing:-.02em;line-height:.95}
+.cteam .cnat{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);letter-spacing:.01em;margin-top:2px}
+.cteam .cnat .flag{font-size:14px}
+.cdrivers{display:flex;gap:16px;margin-left:auto;flex:0 0 auto}
+.cdrv{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.cdrv .cface{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:top center;border:1.5px solid color-mix(in srgb,var(--c) 55%,#333);background:#12151d}
+.cdrv .cface.fb{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--c)}
+.cdrv .cdinfo{display:flex;flex-direction:column;line-height:1.08}
+.cdrv .cdinfo b{font-weight:700;font-size:13.5px;letter-spacing:-.01em}
+.cdrv .cdinfo em{font-style:normal;font-weight:800;font-size:11.5px;color:color-mix(in srgb,var(--c) 82%,#fff);font-variant-numeric:tabular-nums}
+.hero-photo{grid-area:photo;position:relative;overflow:hidden;border-radius:12px;
+  background:radial-gradient(60% 64% at 50% 24%, color-mix(in srgb,var(--c) 18%,transparent), transparent 74%)}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}
+.hero-photo.car img{object-position:center;padding:5%}
+.hero-photo .pfb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:52px;color:color-mix(in srgb,var(--c) 70%,#fff);opacity:.9}
+.idbody{padding:12px 0 0;display:flex;flex-direction:column;gap:5px;flex:1;min-height:0}
+.statgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:10px;overflow:hidden;flex:0 0 auto}
+.statgrid+.statgrid{margin-top:4px}
+.stat{background:#0b0e15;padding:6px 4px 5px;text-align:center}
+.stat b.up{color:#79d69b}.stat b.down{color:var(--bad)}
+.stat b{display:block;font-weight:800;font-size:clamp(16px,2.3vh,21px);letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:8px;letter-spacing:.12em;color:var(--muted-2);font-weight:700;text-transform:uppercase;margin-top:4px;display:block}
+.arc{margin-top:8px;padding-top:8px;flex:1;display:flex;flex-direction:column;min-height:0}
+.arc-h{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:9px;letter-spacing:.16em;color:var(--muted-2);font-weight:700;text-transform:uppercase;margin-bottom:6px}
+.arc-h .arc-t{display:flex;align-items:center;gap:14px;min-width:0;flex-wrap:wrap}
+.arc-h .l{color:color-mix(in srgb,var(--c) 85%,#fff);white-space:nowrap;flex:0 0 auto}
+.clegend{display:inline-flex;align-items:center;gap:11px;font-weight:700;letter-spacing:.06em}
+.clegend .cli{display:flex;align-items:center;gap:5px}
+.clegend .cli i{width:11px;height:9px;border-radius:2px;background:var(--c);opacity:.85}
+.clegend .cli.b2 i{opacity:.32}
+.clegend .cli.spr i{background:#ff3d9a;opacity:.9}
+.clegend .cli b{color:var(--ink);font-weight:800;margin-left:3px;font-variant-numeric:tabular-nums}
+.chart2{flex:1;display:flex;flex-direction:column;min-height:0}
+.chart2 .cplot{position:relative;flex:1;min-height:58px}
+.chart2 .cplot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.chart2 .cx{position:absolute;top:0;bottom:0;width:1px;background:var(--line-2);transform:translateX(-.5px)}
+.chart2 .cdot{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--c);box-shadow:0 0 7px color-mix(in srgb,var(--c) 70%,transparent);transform:translate(-50%,-50%);z-index:2}
+.chart2 .cval{position:absolute;transform:translate(-50%,-155%);font-size:9px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;z-index:3}
+.chart2 .cxaxis{position:relative;height:20px;margin-top:4px}
+.chart2 .cflag{position:absolute;top:0;transform:translateX(-50%);font-size:13px;line-height:1;filter:saturate(1.05)}
+
+/* ----- right: GP list ----- */
+.gpcard{display:flex;flex-direction:column;overflow:hidden;position:relative}
+.gphead{display:flex;align-items:baseline;justify-content:space-between;padding:14px 18px 9px}
+.gphead b{font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.gphead span{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted-2)}
+.gpcols{display:grid;align-items:center;gap:10px;padding:0 18px 7px;border-bottom:1px solid var(--line-2);
+  font-size:8.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2)}
+.gpcols span:nth-child(n+4){text-align:right}
+.gps{flex:1;min-height:0;overflow-y:auto;padding:2px 8px 8px;scrollbar-width:thin;scrollbar-color:rgba(150,166,205,.3) transparent}
+.gps::-webkit-scrollbar{width:7px}.gps::-webkit-scrollbar-thumb{background:rgba(150,166,205,.24);border-radius:8px}
+.gp{display:grid;align-items:center;gap:10px;width:100%;
+  padding:3.5px 10px;border:0;border-bottom:1px solid var(--line-2);background:none;cursor:pointer;
+  color:var(--ink);text-align:left;border-radius:8px;transition:background .13s}
+.gp:hover{background:rgba(255,255,255,.04)}
+.gp.win{background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 9%,transparent),transparent 55%)}
+.gp.up{display:flex;align-items:center;gap:12px;opacity:.58;cursor:default}
+.gp.up:hover{background:none}
+.gp.up .gpn{flex:1;min-width:0}
+.gp.up .upcd{font-weight:700;font-size:12px;color:color-mix(in srgb,var(--c) 82%,#fff);white-space:nowrap;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.gp.up .upcd.gap{color:var(--muted-2);font-weight:600}
+.gp.sel{background:color-mix(in srgb,var(--c) 15%,transparent);box-shadow:inset 3px 0 0 var(--c)}
+.gp.up.sel{opacity:1}
+.gp .rd{font-weight:700;font-size:10.5px;color:var(--muted-2);letter-spacing:.03em;font-variant-numeric:tabular-nums}
+.gp .fl{font-size:16px;line-height:1}
+.gp .gpn{min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden}
+.gp .gpn b{font-weight:600;font-size:14.5px;letter-spacing:-.01em;white-space:nowrap;flex:0 0 auto}
+.gp .gpn i{font-style:normal;font-size:11px;color:var(--muted-2);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gp .gpn i::before{content:"·";margin-right:8px;color:rgba(150,166,205,.4)}
+.gp.win .gpn b{color:var(--gold)}
+.gp .delta{font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+.gp .delta em{font-style:normal;color:var(--muted-2);font-size:10px}
+.gp .flap{font-size:10px;font-weight:600;color:var(--muted-2);text-align:right;font-variant-numeric:tabular-nums}
+.gp .flap.best{color:#c9a3ff;font-weight:800}
+.gp .cars{display:flex;gap:9px;font-size:12.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;justify-content:flex-end}
+.gp .cars b{color:var(--ink);font-weight:700}
+.gp .cars .pod b{color:var(--pod)}.gp .cars .p1 b{color:var(--gold)}.gp .cars .out b{color:var(--bad)}
+.gp .fin{font-weight:800;font-size:16px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+.gp .fin.p1{color:var(--gold)}.gp .fin.pod{color:var(--pod)}.gp .fin.out{color:var(--bad);font-size:13px;letter-spacing:.04em}
+.gp .pts{font-weight:800;font-size:16px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+.gp .pts em{font-style:normal;font-size:8.5px;color:var(--muted-2);letter-spacing:.08em;margin-left:2px}
+.gp .pts i{font-style:normal;color:rgba(150,166,205,.3);font-weight:400}
+/* column templates */
+.gpcard.drv .gpcols,.gpcard.drv .gp{grid-template-columns:22px 16px minmax(0,1fr) 60px 26px 28px 36px 40px 30px 22px}
+.gp .pit{font-size:12px;font-weight:600;color:var(--muted-2);text-align:right;font-variant-numeric:tabular-nums}
+.gp .pit i{font-style:normal;color:rgba(150,166,205,.3)}
+.gp .ytmini{display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s;text-decoration:none}
+.gp:hover .ytmini{opacity:1}
+.gp .ytmini svg{width:19px;height:14px;display:block}
+.gp .spr{font-weight:800;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:#ff3d9a}
+.gp .spr i{font-style:normal;color:rgba(150,166,205,.28);font-weight:400}
+.gpcard.con .gpcols,.gpcard.con .gp{grid-template-columns:24px 18px minmax(0,1fr) 50px 50px 44px 22px}
+
+/* ---------- final grid card ---------- */
+.gridcard{grid-column:1/-1;display:flex;flex-direction:column;padding:20px 26px 14px}
+.gridcard h2{font-weight:700;font-size:19px;letter-spacing:.01em}
+.gridcard .gsub{font-size:10.5px;color:var(--muted-2);letter-spacing:.14em;text-transform:uppercase;margin:3px 0 14px}
+.chart{flex:1;display:flex;align-items:flex-end;gap:7px;min-height:0;overflow-x:auto;padding-bottom:4px}
+.col{flex:1 0 40px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;cursor:pointer}
+.col .face{width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:top center;margin-bottom:7px;border:1.5px solid var(--cc);background:#12151d}
+.col .face.fb{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--cc)}
+.col .barpts{font-weight:700;font-size:12.5px;margin-bottom:4px;font-variant-numeric:tabular-nums;color:color-mix(in srgb,var(--cc) 80%,#fff)}
+.col .bar{position:relative;width:66%;max-width:28px;border-radius:4px 4px 0 0;overflow:hidden;display:flex;flex-direction:column-reverse;
+  background:color-mix(in srgb,var(--cc) 18%,#0a0d14);transition:height .55s cubic-bezier(.2,.7,.2,1)}
+.col .bar .barpct{position:absolute;top:5px;left:0;right:0;text-align:center;z-index:2;pointer-events:none;font-size:9px;font-weight:800;letter-spacing:.01em;color:#000;text-shadow:0 1px 2px rgba(255,255,255,.22)}
+.col .bar .seg{width:100%;flex:0 0 auto;background:var(--cc);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.col .bar .seg+.seg{box-shadow:inset 0 -1.5px 0 rgba(4,6,11,.7)}
+.col .bar .seg em{font-style:normal;font-size:7px;font-weight:700;letter-spacing:.01em;line-height:1;
+  color:#000;text-shadow:0 1px 1px rgba(255,255,255,.18)}
+/* horizontal constructor standings */
+.hstand{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px;padding:6px 2px}
+.hrow{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:14px;cursor:pointer;padding:2px 6px;border-radius:8px;transition:background .13s}
+.hrow:hover{background:rgba(255,255,255,.035)}
+.hlabel{display:flex;align-items:baseline;gap:9px;min-width:0}
+.hlabel .hpos{font-weight:800;font-style:italic;font-size:15px;color:color-mix(in srgb,var(--cc) 78%,#fff);opacity:.6;width:22px;text-align:right;font-variant-numeric:tabular-nums}
+.hlabel .hname{font-weight:700;font-size:14.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:color-mix(in srgb,var(--cc) 82%,#fff)}
+.htrack{position:relative;display:flex;align-items:center;height:30px}
+.hbar{position:relative;height:100%;border-radius:0 4px 4px 0;display:flex;overflow:hidden;min-width:3px;background:color-mix(in srgb,var(--cc) 20%,#0a0d14)}
+.hbar .hpct{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;pointer-events:none;font-size:10.5px;font-weight:800;color:#000;text-shadow:0 1px 2px rgba(255,255,255,.22);font-variant-numeric:tabular-nums}
+.hbar .hseg{height:100%;flex:0 0 auto;background:var(--cc);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hbar .hseg+.hseg{box-shadow:inset 1.5px 0 0 rgba(4,6,11,.7)}
+.hbar .hseg em{font-style:normal;font-size:7px;font-weight:700;color:#000;text-shadow:0 1px 1px rgba(255,255,255,.18)}
+.hcar{height:30px;margin-left:8px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 4px 9px rgba(0,0,0,.55))}
+.hpts{font-weight:800;font-size:14.5px;margin-left:9px;font-variant-numeric:tabular-nums;flex:0 0 auto;color:color-mix(in srgb,var(--cc) 82%,#fff)}
+.col .code{font-weight:700;font-size:10px;letter-spacing:.06em;color:color-mix(in srgb,var(--cc) 80%,#fff);margin-top:6px}
+.col .rk{font-weight:700;font-size:10px;color:color-mix(in srgb,var(--cc) 80%,#fff);opacity:.6}
+
+/* ---------- control bar ---------- */
+/* ---------- races tab ---------- */
+.racemeta{display:flex;flex-direction:column;overflow:hidden;padding:16px}
+.rc-head .rc-round{font-weight:700;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 85%,#fff)}
+.rc-head .rc-full{font-weight:700;font-size:clamp(21px,3.3vh,29px);letter-spacing:-.01em;margin:3px 0 4px;line-height:1}
+.rc-head .rc-sub{font-size:12px;color:var(--muted-2);letter-spacing:.01em}
+.rc-stats{display:flex;gap:26px;margin-top:12px}
+.rc-stats>div{display:flex;flex-direction:column;gap:2px}
+.rc-stats b{font-weight:800;font-size:17px;letter-spacing:-.01em;line-height:1;font-variant-numeric:tabular-nums}
+.rc-stats b i{font-style:normal;font-size:.58em;font-weight:700;color:var(--muted-2);margin-left:3px}
+.rc-stats em{font-style:normal;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted-2)}
+.rc-map{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14px 0}
+.rc-map img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1) contrast(1.05)}
+.rc-summary{flex:0 0 auto}
+.rc-bottom{flex:0 0 auto;display:flex;gap:16px;align-items:stretch}
+.rc-bottom .rc-summary{flex:1 1 50%;min-width:0}
+.rc-hl{flex:1 1 50%;position:relative;display:block;border-radius:12px;overflow:hidden;border:1px solid var(--line);text-decoration:none;background:#0a0d14;transition:border-color .15s}
+.rc-hl img{width:100%;height:100%;min-height:104px;object-fit:cover;display:block}
+.rc-hl .rc-hl-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-62%);width:44px;height:31px;border-radius:8px;background:rgba(16,17,22,.72);display:flex;align-items:center;justify-content:center;transition:background .15s}
+.rc-hl .rc-hl-play svg{width:20px;height:20px;fill:#fff}
+.rc-hl:hover{border-color:rgba(255,46,46,.65)}
+.rc-hl:hover .rc-hl-play{background:#ff0000}
+.rc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;border-top:1px solid var(--line-2);font-size:13px}
+.rc-row span{color:var(--muted-2)}.rc-row b{font-weight:700}
+.rc-row .wl{font-style:normal;color:color-mix(in srgb,var(--c) 85%,#fff)}
+.rc-row .none{font-style:normal;color:var(--muted-2);font-weight:600}
+.raceres{display:flex;flex-direction:column;overflow:hidden}
+.rc-cls{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:2px 8px 6px}
+.clshead,.clsrow{display:grid;grid-template-columns:34px 4px minmax(0,1fr) 40px 42px 40px 34px 84px 26px;align-items:center;gap:10px}
+.clshead{padding:0 10px 6px;border-bottom:1px solid var(--line-2)}
+.clshead span{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2)}
+.clshead span:nth-child(n+4){text-align:right}
+.clsrow{flex:1;min-height:0;padding:2px 10px;border-bottom:1px solid var(--line-2)}
+.clsrow .clspos{font-weight:800;font-style:italic;font-size:14px;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.clsrow.win .clspos{color:var(--gold)}
+.clsrow .clspos.nc{color:var(--bad)}
+.clsrow .clspos.dns{color:var(--muted-2)}
+.clsrow .clsbar{width:4px;height:20px;border-radius:2px;background:var(--cc)}
+.clsrow .clsname{display:flex;align-items:baseline;gap:8px;min-width:0}
+.clsrow .clsname b{font-weight:600;font-size:14px;white-space:nowrap;flex:0 0 auto}
+.clsrow.win .clsname b{color:var(--gold)}
+.clsrow .clsname em{font-style:normal;font-size:11px;color:var(--muted-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.clsrow .clsfl{font-size:11.5px;color:var(--muted-2);text-align:right;font-variant-numeric:tabular-nums}
+.clsrow .clsfl .fl1{font-style:normal;font-weight:800;font-size:10px;letter-spacing:.05em;color:#c9a3ff}
+.clsrow .clsfl .mut{color:rgba(150,166,205,.4)}
+.clsrow .clsgrid,.clsrow .clspit{font-size:11.5px;color:var(--muted-2);text-align:right;font-variant-numeric:tabular-nums}
+.clsrow .clsdelta{font-weight:700;font-size:11.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted-2)}
+.clsrow .clsdelta.up{color:#4ad991}.clsrow .clsdelta.down{color:#ff6b6b}.clsrow .clsdelta.flat{color:var(--ink)}
+.clsrow .clsres{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.clsrow .clspts{font-weight:800;font-size:12.5px;color:color-mix(in srgb,var(--gold) 82%,#fff);min-width:18px;text-align:right;font-variant-numeric:tabular-nums}
+/* ----- lap-chart timing tower (race card toggle) ----- */
+.gphead .gph-r{display:flex;align-items:baseline;gap:12px}
+.lcbtn{font:inherit;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pod);background:color-mix(in srgb,var(--pod) 12%,transparent);border:1px solid color-mix(in srgb,var(--pod) 34%,transparent);border-radius:7px;padding:3px 9px;cursor:pointer;white-space:nowrap}
+.lcbtn:hover{background:color-mix(in srgb,var(--pod) 22%,transparent)}
+.rc-view{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.raceres [hidden]{display:none}
+.rc-lc{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 10px 8px;overflow:hidden}
+.lc-msg{margin:auto;color:var(--muted-2);font-size:12px}
+.lc-top{display:flex;align-items:center;gap:10px;padding:0 4px 5px}
+.lc-lap{font-weight:800;font-style:italic;font-variant-numeric:tabular-nums;font-size:14px;color:var(--ink);min-width:54px}
+.lc-lap small{font-style:normal;font-weight:700;font-size:9px;color:var(--muted-2);margin-left:1px}
+.lc-banner{font-size:9.5px;font-weight:800;letter-spacing:.12em;padding:2px 8px;border-radius:5px}
+.lc-banner.sc{background:rgba(245,200,35,.16);color:#ffdb5e;border:1px solid rgba(245,200,35,.4)}
+.lc-banner.vsc{background:rgba(245,200,35,.09);color:#ffe38a;border:1px solid rgba(245,200,35,.26)}
+.lc-legend{margin-left:auto;display:flex;gap:9px;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2)}
+.lc-legend span{display:inline-flex;align-items:center;gap:4px}
+.lc-legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.lc-head,.lc-row{display:grid;grid-template-columns:22px 4px 30px minmax(0,1fr) 34px 26px 26px 28px 22px 40px 64px 82px 50px;align-items:center;gap:6px}
+.lc-row .chg{font-size:10px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted-2)}
+.lc-head{padding:0 8px 5px;border-bottom:1px solid var(--line-2)}
+.lc-head span{font-size:8.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2)}
+.lc-head span:nth-child(n+5){text-align:right}
+.lc-tk{position:relative;flex:1;min-height:0;margin-top:4px;overflow:hidden}
+.lc-row{position:absolute;left:0;right:0;padding:0 8px;border-radius:7px;cursor:pointer;transition:transform .5s cubic-bezier(.22,.61,.36,1),opacity .35s,background .2s;will-change:transform;font-variant-numeric:tabular-nums}
+.lc-row:hover{background:rgba(255,255,255,.035)}
+.lc-row.out{opacity:.3}
+.lc-row.sel{background:color-mix(in srgb,var(--selc) 22%,transparent)!important;box-shadow:inset 3px 0 0 var(--selc)}
+.lc-row .p{font-weight:800;font-style:italic;font-size:12px;text-align:right;color:var(--muted)}
+.lc-row .bar{height:15px;border-radius:2px;background:var(--cc)}
+.lc-row .cd{font-weight:700;font-size:10.5px;letter-spacing:.03em}
+.lc-row .nm{font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-row .gr,.lc-row .bs,.lc-row .ws{font-size:10px;text-align:right;color:var(--muted-2)}
+.lc-row .pt{font-size:10px;text-align:right;justify-self:end;border-radius:4px;padding:1px 4px;min-width:12px;color:var(--muted)}
+.lc-row .pd{font-size:9.5px;text-align:right;color:#f5a623;font-weight:700}
+.lc-row .rt{font-size:10px;text-align:right;color:var(--muted)}
+.lc-row .lapc{display:flex;justify-content:flex-end;align-items:baseline;gap:3px;overflow:hidden}
+.lc-row .lp{font-weight:600;font-size:10.5px}
+.lc-row .dl{font-size:8px}
+.lc-row .gp{font-size:10px;text-align:right;color:var(--muted)}
+.lc-row .ft{font-size:10px;text-align:right;color:var(--muted-2)}
+.lc-ctrl{display:flex;align-items:center;gap:9px;padding:2px 2px 10px}
+.lc-ctrl button{width:30px;height:27px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1;padding:0}
+.lc-ctrl button:hover{color:var(--ink);border-color:var(--muted-2)}
+.lc-ctrl button.play{background:var(--pod);color:#06231d;border-color:transparent}
+.lc-slider{position:relative;flex:1;display:flex;align-items:center}
+.lc-slider input[type=range]{width:100%;height:4px;accent-color:var(--pod);cursor:pointer}
+.lc-lapdot{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);background:var(--pod);color:#06231d;font-weight:800;font-style:italic;font-size:11px;font-variant-numeric:tabular-nums;border-radius:10px;min-width:22px;height:20px;display:flex;align-items:center;justify-content:center;padding:0 6px;pointer-events:none;box-shadow:0 1px 5px rgba(0,0,0,.45);white-space:nowrap}
+.lc-total{display:flex;flex-direction:column;align-items:center;line-height:1;min-width:26px}
+.lc-total b{font-weight:800;font-style:italic;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.lc-total i{font-style:normal;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-top:1px}
+.lc-meta{display:flex;align-items:center;gap:12px}
+.lc-hint{font-size:9.5px;letter-spacing:.03em;color:var(--muted-2)}
+/* Results / Lap-evolution tab set (replaces the classification title) */
+.rc-tabset{display:inline-flex;gap:3px;background:var(--line-2);border-radius:9px;padding:3px}
+.rc-tab{font:inherit;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);background:transparent;border:0;border-radius:6px;padding:5px 11px;cursor:pointer;white-space:nowrap;transition:.15s}
+.rc-tab:hover{color:var(--muted)}
+.rc-tab.on{color:var(--ink);background:color-mix(in srgb,var(--c,#00D7B6) 30%,transparent)}
+/* ---- driver race deep-dive (replaces the GP modal) ---- */
+.rdv{grid-column:1/-1;display:flex;flex-direction:column;overflow:hidden}
+.rdv-msg{margin:auto;color:var(--muted-2);font-size:13px;padding:60px}
+.rdv-head{display:flex;align-items:center;gap:9px;padding:7px 16px;border-bottom:1px solid var(--line-2);flex:0 0 auto}
+.rdv-nav{width:34px;height:30px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.rdv-nav:hover{color:var(--ink);border-color:var(--muted-2)}
+.rdv-back{width:auto;padding:0 12px;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;gap:5px}
+.rdv-ht{flex:1;min-width:0}
+.rdv-round{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 85%,#fff);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rdv-gp{font-size:17px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rdv-gp small{color:var(--muted-2);font-weight:400;font-size:12px}
+.rdv-drv{display:flex;align-items:center;gap:10px;padding:0 2px 0 12px;border-left:1px solid var(--line-2);flex:0 0 auto;align-self:stretch}
+.rdv-face{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:top center;background:color-mix(in srgb,var(--c) 20%,#12151d);border:1.5px solid color-mix(in srgb,var(--c) 55%,#333);flex:0 0 auto}
+.rdv-dtxt{display:flex;flex-direction:column;line-height:1.12;min-width:0}
+.rdv-dtxt em{font-style:italic;font-weight:800;font-size:11px;color:color-mix(in srgb,var(--c) 82%,#fff)}
+.rdv-dtxt b{font-size:14px;font-weight:700;white-space:nowrap}
+.rdv-dtxt i{font-style:normal;font-size:9.5px;color:var(--muted-2);letter-spacing:.03em;white-space:nowrap}
+.rdv-car{height:26px;width:auto;max-width:88px;object-fit:contain;flex:0 0 auto}
+/* constructor race view: team header + two driver boxes */
+.rdv-team{display:flex;align-items:center;gap:11px;padding:0 2px 0 12px;border-left:1px solid var(--line-2);flex:0 0 auto;align-self:stretch}
+.rdv-tpts{display:flex;flex-direction:column;align-items:center;line-height:1;flex:0 0 auto}
+.rdv-tpts b{font-size:23px;font-weight:800;font-style:italic;color:color-mix(in srgb,var(--gold) 82%,#fff);font-variant-numeric:tabular-nums}
+.rdv-tpts em{font-style:normal;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);margin-top:2px}
+.rdv-facepair{display:flex;flex:0 0 auto}
+.rdv-face2{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:top center;border:1.5px solid color-mix(in srgb,var(--c) 55%,#333);background:color-mix(in srgb,var(--c) 20%,#12151d)}
+.rdv-face2:nth-child(2){margin-left:-9px}
+.rdv-boxes{gap:11px}
+.rdv-box{border:1px solid var(--line-2);border-radius:12px;padding:11px 13px;display:flex;flex-direction:column;gap:9px}
+.rdv-box .rbh{display:flex;align-items:center;gap:8px}
+.rbface{width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:top center;border:1.5px solid color-mix(in srgb,var(--dc) 55%,#333);flex:0 0 auto;background:#12151d}
+.rbline{width:16px;border-top:2px solid var(--dc);flex:0 0 auto}
+.rbname{font-weight:700;font-size:14px}
+.rbnum{font-style:italic;font-weight:800;font-size:10.5px;color:color-mix(in srgb,var(--dc) 82%,#fff)}
+.rbfin{font-weight:800;font-style:italic;font-size:22px}
+.rbfin.p1{color:var(--gold)}.rbfin.out{color:var(--bad)}
+.rbg{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:8px;overflow:hidden}
+.rbg span{background:var(--panel-b);padding:6px 2px;text-align:center;display:flex;flex-direction:column;gap:1px}
+.rbg b{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.rbg i{font-style:normal;font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2)}
+.rbr{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;padding:1px 2px}
+.rbr span{color:var(--muted);flex:0 0 auto}
+.rbr b{text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rdv-body{flex:1;min-height:0;display:grid;grid-template-columns:1.32fr 1fr}
+.rdv-left{padding:13px 12px 12px 18px;border-right:1px solid var(--line-2);display:flex;flex-direction:column;min-width:0;min-height:0}
+.rdv-chart{flex:1;min-height:0;position:relative}
+.rdv-chart svg{position:absolute;inset:0;width:100%;height:100%}
+.rdv-lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:9.5px;color:var(--muted-2);flex:0 0 auto}
+.rdv-lg span{display:inline-flex;align-items:center;gap:5px}
+.rdv-right{padding:13px 18px 14px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0}
+.rdv .ythl{margin-top:8px;padding:8px}
+.rdv .ythl .hl-thumb{width:92px}
+.rdv .hl-txt{overflow:hidden}
+.rdv .hl-txt b{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rdv .hl-txt i{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.worldcard{grid-column:1/-1;display:flex;flex-direction:column;padding:20px 24px 14px}
+.worldcard h2{font-weight:700;font-size:19px}
+.worldcard .gsub{font-size:10.5px;color:var(--muted-2);letter-spacing:.14em;text-transform:uppercase;margin:3px 0 12px}
+.worldwrap{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.worldwrap svg{width:100%;height:100%}
+.worldwrap .land{fill:rgba(150,166,205,.1);stroke:rgba(150,166,205,.16);stroke-width:.4}
+.geo text{font-size:8.4px;font-weight:800;text-anchor:middle;font-family:var(--sans);paint-order:stroke;stroke:#0a0d14;stroke-width:2.4;stroke-linejoin:round}
+.geo .geoline{stroke-width:.6;opacity:.5}
+.geo.done circle{fill:var(--gc,#00D7B6)}.geo.done text{fill:color-mix(in srgb,var(--gc,#54e8d1) 78%,#fff)}.geo.done .geoline{stroke:var(--gc,#54e8d1);opacity:.6}
+.geo.up circle{fill:var(--muted-2);opacity:.62}.geo.up text{fill:var(--muted-2);opacity:.92}.geo.up .geoline{stroke:var(--muted-2);opacity:.4}
+.euinset .eubg{fill:#0b0f16;fill-opacity:.9}
+.euinset .euborder{fill:none;stroke:rgba(150,166,205,.26);stroke-width:1}
+.euinset .euframe-src{fill:none;stroke:rgba(150,166,205,.32);stroke-width:.7;stroke-dasharray:3 2.5}
+.euinset .eulink{stroke:rgba(150,166,205,.22);stroke-width:.6}
+.euinset .euland{fill:rgba(150,166,205,.13);stroke:rgba(150,166,205,.22);stroke-width:.5;vector-effect:non-scaling-stroke}
+.euinset .eutitle{fill:var(--muted-2);font-size:9px;font-weight:800;letter-spacing:.2em;font-family:var(--sans);paint-order:stroke;stroke:#0b0f16;stroke-width:2.6;stroke-linejoin:round}
+.controls{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-top:1px solid var(--line-2);position:relative;z-index:6}
+.controls button{width:38px;height:33px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.controls button:hover{color:var(--ink);border-color:color-mix(in srgb,var(--c) 55%,var(--line))}
+.controls svg{width:17px;height:17px;fill:currentColor}
+.controls .play{width:44px;height:37px;background:var(--c);color:#05070d;border-color:transparent}
+.controls .play:hover{color:#05070d;filter:brightness(1.07)}
+.counter{display:flex;align-items:center;gap:7px;padding:0 14px;height:33px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;user-select:none;width:250px;box-sizing:border-box;justify-content:center}
+.counter b{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;min-width:18px;text-align:right;display:inline-block}
+.counter .lbl{font-size:11px;color:var(--muted-2)}
+.counter .who{font-weight:700;font-size:10.5px;letter-spacing:.08em;color:color-mix(in srgb,var(--c) 85%,#fff);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:150px}
+.sep{width:1px;height:20px;background:var(--line);margin:0 2px}
+.jumppop{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);width:min(560px,92vw);max-height:52vh;overflow-y:auto;background:#0b0e15;border:1px solid var(--line);border-radius:14px;padding:8px;z-index:20;box-shadow:0 20px 50px #000b}
+.jumppop[hidden]{display:none}
+.jgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px}
+.jitem{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;cursor:pointer;color:var(--ink)}
+.jitem:hover{background:rgba(255,255,255,.05)}.jitem.on{background:color-mix(in srgb,var(--jc) 20%,transparent)}
+.jitem .jp{font-weight:700;font-size:12px;color:var(--muted-2);width:20px;font-variant-numeric:tabular-nums}
+.jitem .jb{width:3px;height:18px;border-radius:2px;background:var(--jc)}
+.jitem b{font-weight:600;font-size:13px}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal[hidden]{display:none}
+.modal__ov{position:absolute;inset:0;background:rgba(5,7,13,.72);backdrop-filter:blur(6px)}
+.mnav{position:relative;z-index:2;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(15,18,26,.85);color:var(--ink);font-size:20px;cursor:pointer;flex:0 0 auto;margin:0 6px}
+.mnav:hover{border-color:var(--c)}
+.mbox{position:relative;z-index:1;width:min(540px,92vw);max-height:88vh;overflow:hidden;border-radius:18px;background:linear-gradient(180deg,#0e121b,#0a0d14);border:1px solid var(--line);box-shadow:0 30px 70px #000c}
+.mhead{padding:18px 22px 15px;border-bottom:1px solid var(--line-2);position:relative;
+  background:radial-gradient(420px 150px at 88% -40%,color-mix(in srgb,var(--c) 22%,transparent),transparent)}
+.mclose{position:absolute;top:13px;right:13px;width:29px;height:29px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:15px}
+.mhead .mround{font-weight:700;font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--c) 85%,#fff);text-transform:uppercase}
+.mhead h2{font-weight:700;font-size:22px;letter-spacing:-.01em;margin:3px 0}
+.mhead .mcirc{font-size:12px;color:var(--muted-2);letter-spacing:.01em}
+.mbody{padding:16px 22px 20px}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.mcell{background:rgba(255,255,255,.03);border:1px solid var(--line-2);border-radius:11px;padding:11px 8px;text-align:center}
+.mcell b{display:block;font-weight:800;font-size:21px;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.mcell span{font-size:8.5px;letter-spacing:.13em;color:var(--muted-2);font-weight:700;text-transform:uppercase;margin-top:5px;display:block}
+.mcell.hl{border-color:color-mix(in srgb,var(--c) 40%,var(--line))}
+.ythl{display:flex;align-items:center;gap:13px;margin-top:14px;padding:9px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);text-decoration:none;transition:.15s}
+.ythl:hover{border-color:rgba(255,46,46,.6);background:rgba(255,46,46,.06)}
+.hl-thumb{position:relative;width:128px;flex:0 0 auto;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#0a0d14}
+.hl-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hl-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;
+  background:rgba(255,0,0,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.hl-play svg{width:16px;height:16px;fill:#fff;margin-left:1px}
+.ythl:hover .hl-play{background:#ff0000}
+.hl-txt{display:flex;flex-direction:column;min-width:0}
+.hl-txt b{font-weight:800;font-size:14.5px;color:var(--ink);letter-spacing:.01em}
+.hl-txt i{font-style:normal;font-size:11px;color:var(--muted-2);letter-spacing:.05em;text-transform:uppercase;margin-top:3px}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:9px 2px;border-top:1px solid var(--line-2);font-size:13px}
+.mrow span{color:var(--muted-2)}.mrow b{font-weight:700;font-variant-numeric:tabular-nums}
+.tagline{display:inline-flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.badge{font-weight:700;font-size:10px;letter-spacing:.06em;padding:3px 9px;border-radius:999px;text-transform:uppercase}
+.badge.win{background:rgba(242,193,78,.16);color:var(--gold);border:1px solid rgba(242,193,78,.3)}
+.badge.pod{background:rgba(143,211,198,.14);color:var(--pod);border:1px solid rgba(143,211,198,.3)}
+.badge.pole{background:rgba(124,108,255,.16);color:#b7abff;border:1px solid rgba(124,108,255,.34)}
+.badge.fl{background:rgba(213,68,171,.14);color:#f19bd8;border:1px solid rgba(213,68,171,.32)}
+.badge.dnf{background:rgba(231,123,131,.13);color:var(--bad);border:1px solid rgba(231,123,131,.3)}
+.mdrow{display:flex;align-items:center;gap:11px;padding:11px 2px;border-top:1px solid var(--line-2)}
+.mdrow .mdc{font-weight:800;font-size:13px;width:30px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.mdrow .mdn{font-weight:600;font-size:14px;flex:1;display:flex;align-items:center;gap:7px}
+.mdrow .mdg{font-size:11.5px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.mdrow .mdf{font-weight:700;font-size:14px;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
+.mdrow .mdf.p1{color:var(--gold)}.mdrow .mdf.pod{color:var(--pod)}.mdrow .mdf.out{color:var(--bad);font-size:12px}
+.mdrow .mdp{font-weight:700;font-size:14px;min-width:42px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- mobile ---------- */
+@media (max-width:900px){
+  body{overflow:auto}.app{height:auto;min-height:100dvh}
+  .topbar{flex-wrap:wrap;gap:10px;padding:11px 15px;position:sticky;top:0;z-index:20;background:var(--bg)}.ctx{width:100%;text-align:left;margin:0;order:5}
+  /* once scrolled past the identity: drop the logo, show driver #num · name, keep the tabs */
+  .topbar.stuck{padding-top:9px;padding-bottom:9px;border-bottom-color:var(--line);box-shadow:0 8px 18px rgba(0,0,0,.45)}
+  .topbar.stuck{gap:8px}
+  .topbar.stuck .brand,.topbar.stuck .ctx{display:none}
+  .topbar.stuck .peek{display:flex;order:0;flex-basis:100%}
+  .topbar.stuck .modes{order:1}
+  .stage{overflow:visible}.wrap{position:relative;inset:auto;padding:15px}
+  .card{grid-template-columns:1fr;max-width:520px;margin:0 auto}
+  .idcard .photo{aspect-ratio:1.5/1}
+  .statgrid{grid-template-columns:repeat(4,1fr)}
+  /* full-height driver figure: head at top of box, photo bottom level with the car (in left column) */
+  .hero-top{height:auto;grid-template-columns:1.32fr 1fr;grid-template-rows:1fr auto;grid-template-areas:"info photo" "team photo"}
+  .idcard .hero-photo{min-height:300px}
+  .hero-photo.full img{object-fit:contain;object-position:bottom center}
+  .hero-top>.teamline{flex-wrap:wrap;align-self:end;margin-top:6px}
+  .hero-info .postop{flex-wrap:nowrap;gap:9px}                 /* P1 + points on one line, like desktop */
+  .hero-info .bigpos{font-size:clamp(42px,7vh,56px)}
+  .chart2 .cplot{flex:0 0 auto;height:96px}.chart2 .cflag{font-size:12px}.chart2 .cval{font-size:8px}
+  .gpcard{min-height:60vh}
+  .controls{position:sticky;bottom:0;background:var(--bg)}
+  .counter{width:auto}.counter .who{display:none}
+  .gridcard .chart{overflow-x:auto}.col{flex:0 0 42px}
+  /* standings/laps/sprint as horizontal bars on mobile — no cars, no per-race detail */
+  .hcar{display:none}
+  .hstand .hseg em{display:none}.hstand .hseg+.hseg{box-shadow:none}
+  .hstand{flex:none;justify-content:flex-start;gap:6px;padding:6px 2px 10px}
+  .hrow{grid-template-columns:132px 1fr;gap:11px}
+  .mstand .hbar{background:var(--cc)}
+  /* driver per-GP list: only crucial columns fit — round · flag · name · Fin · Race (tap row for the rest) */
+  .gpcard.drv .gpcols,.gpcard.drv .gp{grid-template-columns:22px 17px minmax(0,1fr) 46px 40px;gap:9px}
+  .gpcard.drv .h-delta,.gpcard.drv .h-flap,.gpcard.drv .h-pit,.gpcard.drv .h-spr,.gpcard.drv .h-hl,
+  .gpcard.drv .gp .delta,.gpcard.drv .gp .flap,.gpcard.drv .gp .pit,.gpcard.drv .gp .spr,.gpcard.drv .gp .ytmini{display:none}
+  /* constructor per-GP list: drop HL, free the name — round · flag · name · 2 drivers · Pts */
+  .gpcard.con .gpcols,.gpcard.con .gp{grid-template-columns:22px 17px minmax(0,1fr) 42px 42px 38px;gap:9px}
+  .gpcard.con .h-hl,.gpcard.con .gp .ytmini{display:none}
+  /* constructor header: wrap driver chips to their own row so they don't overlap the team name */
+  .cstrip{flex-wrap:wrap;gap:10px 18px}
+  .cstrip .cdrivers{margin-left:0;flex-basis:100%;gap:22px}
+  /* race classification: only crucial columns — pos · name · Result · Pts */
+  .clshead,.clsrow{grid-template-columns:30px 4px minmax(0,1fr) 74px 24px;gap:8px}
+  .clshead .h-grid,.clshead .h-delta,.clshead .h-fl,.clshead .h-pit,
+  .clsrow .clsgrid,.clsrow .clsdelta,.clsrow .clsfl,.clsrow .clspit,
+  .clsrow .clsname em{display:none}
+  /* lap-chart tower: keep identity + live action (name·+/-·race·lap); drop the rest to fit */
+  .lc-head,.lc-row{grid-template-columns:20px 3px 28px minmax(0,1fr) 28px 58px 72px;gap:6px}
+  .lc-row .gr,.lc-row .bs,.lc-row .ws,.lc-row .pt,.lc-row .pd,.lc-row .ft,
+  .lc-head .h-gr,.lc-head .h-bs,.lc-head .h-ws,.lc-head .h-pt,.lc-head .h-st,.lc-head .h-ft{display:none}
+  /* single-column card → panel is content-height, so give the tower an explicit height */
+  .rc-lc{flex:none}
+  .lc-tk{flex:none;height:60vh;min-height:466px}
+  .lc-hint{display:none}   /* too tight next to the tabs on mobile */
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">F1<span>viz</span></div>
+    <div class="peek" id="peek"></div>
+    <div class="modes">
+      <button data-mode="drivers" class="on">Drivers</button>
+      <button data-mode="constructors">Constructors</button>
+      <button data-mode="races">Races</button>
+    </div>
+    <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span></div>
+  </header>
+
+  <div class="stage"><div class="wrap" id="wrap"></div></div>
+
+  <div class="controls">
+    <button id="restart" title="Restart (Home)"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+    <button id="prev" title="Previous (←)"><svg viewBox="0 0 24 24"><path d="M15.5 5v14l-11-7z"/><rect x="16.5" y="5" width="2.4" height="14" rx="1"/></svg></button>
+    <button class="play" id="play" title="Play / Pause (Space)"><svg id="playIcon" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></button>
+    <button id="next" title="Next (→)"><svg viewBox="0 0 24 24"><path d="M8.5 5v14l11-7z"/><rect x="5.1" y="5" width="2.4" height="14" rx="1"/></svg></button>
+    <div class="counter" id="counter" title="Jump to…"><b id="cnum">1</b><span class="lbl">/ <span id="ctot">23</span></span><span class="who" id="cwho"></span></div>
+    <div class="sep"></div>
+    <button id="fs" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 3v-3h2v5h-5v-2z"/></svg></button>
+    <div class="jumppop" id="jumppop" hidden><div class="jgrid" id="jgrid"></div></div>
+  </div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal__ov"></div>
+  <button class="mnav" id="mPrev" aria-label="Previous GP">‹</button>
+  <div class="mbox" id="mbox"></div>
+  <button class="mnav" id="mNext" aria-label="Next GP">›</button>
+</div>
+
+<script>
+const DATA = /*__DATA__*/;
+const D = DATA.drivers, C = DATA.constructors;
+const IMGV = '?v=28';   // bump when refreshing local images (cache-bust)
+const IMG = s => `img/cut/${s}.png${IMGV}`;
+const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
+const CAR = tid => `img/cars/${tid}.png${IMGV}`;   // local official f1.com 2026 car cutouts (all 11 incl. Cadillac)
+const $ = s => document.querySelector(s);
+const wrap = $('#wrap');
+let mode='drivers', idx=0, playing=false, timer=null, curGP=0;
+const CTXA={drivers:"Drivers' Championship",constructors:"Constructors' Championship",races:"Grand Prix Results"};
+const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
+const N = () => list().length;
+const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?3:1);
+const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
+
+$('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
+const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const REF=new Date(DATA.meta.captured+'T00:00:00Z');
+const fmtDate=s=>{const d=new Date(s+'T00:00:00Z');return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
+const fmtRange=s=>{const e=new Date(s+'T00:00:00Z'),st=new Date(e.getTime()-2*86400000),sM=MON[st.getUTCMonth()],eM=MON[e.getUTCMonth()];
+  return sM===eM?`${st.getUTCDate()}–${e.getUTCDate()} ${eM}`:`${st.getUTCDate()} ${sM} – ${e.getUTCDate()} ${eM}`;};
+const daysTo=s=>Math.round((new Date(s+'T00:00:00Z')-REF)/86400000);
+const upRow=(cal,prev)=>{
+  const wk=n=>{const w=Math.round(n/7); return w<1?`${n} days`:`${w} week${w>1?'s':''}`;};  // approximate to weeks
+  const first = cal.r===DATA.meta.round+1 || !prev;   // first race still to come
+  let cd;
+  if(first){ const dd=daysTo(cal.date); cd = dd>0?`in ${wk(dd)}`:'upcoming'; }
+  else { const gap=Math.round((new Date(cal.date+'T00:00:00Z')-new Date(prev.date+'T00:00:00Z'))/86400000); cd = wk(gap); }
+  return `<div class="gp up"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${cd}</span></div>`;
+};
+const gmaxD = Math.max(...D.map(d=>d.points)), gmaxC = Math.max(...C.map(c=>c.points));
+const calR={}; DATA.calendar.forEach(c=>calR[c.r]=c);
+const fullName=r=>{const c=calR[r]; return c?c.full:'';};
+
+function chartHTML(prog){
+  const n=prog.length, max=Math.max(...prog,1);
+  const px=i=> n===1?50 : (5 + 90*i/(n-1));
+  const TOP=22, BOT=98, py=v=> BOT-(BOT-TOP)*(v/max);
+  const pts=prog.map((v,i)=>[px(i),py(v)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=`${line} L ${px(n-1).toFixed(1)} 100 L ${px(0).toFixed(1)} 100 Z`;
+  const grid=prog.map((v,i)=>`<span class="cx" style="left:${px(i)}%"></span>`).join('');
+  const dots=prog.map((v,i)=>`<span class="cval" style="left:${px(i)}%;top:${py(v)}%">${v}</span><span class="cdot" style="left:${px(i)}%;top:${py(v)}%"></span>`).join('');
+  const flags=DATA.rounds.map((r,i)=>`<span class="cflag" style="left:${px(i)}%" title="R${r.r} ${r.gp}">${r.flag}</span>`).join('');
+  return `<div class="chart2">
+    <div class="cplot">${grid}
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="var(--c)" stop-opacity=".34"/><stop offset="1" stop-color="var(--c)" stop-opacity="0"/></linearGradient></defs>
+        <path d="${area}" fill="url(#ag)"/>
+        <path d="${line}" fill="none" stroke="var(--c)" stroke-width="1.4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+      </svg>${dots}</div>
+    <div class="cxaxis">${flags}</div>
+  </div>`;
+}
+const isFinished=r=>r.fin!=null && (r.status==='Finished' || r.status==='Lapped');  // Lapped = classified finisher; Retired/DNS (even if classified, e.g. P16 "Retired") = NOT finished → DNF
+function finLabel(r){
+  if(!isFinished(r)){
+    if(r.fin==null){const m={R:'DNF',D:'DSQ',W:'DNS',E:'EXC',F:'DNF',N:'NC'};return {t:m[r.ptxt]||'DNF',cls:'out'};}
+    return {t:r.status==='Disqualified'?'DSQ':'DNF',cls:'out'};
+  }
+  return {t:'P'+r.fin, cls:r.fin===1?'p1':(r.fin<=3?'pod':'')};
+}
+function deltaLabel(r){
+  if(!isFinished(r)||!r.grid) return `<em>from</em> P${r.grid||'—'}`;
+  const d=r.grid-r.fin;
+  if(d===0) return `<em>P${r.grid}</em> <span style="color:var(--ink);font-size:17px;font-weight:800;line-height:0;vertical-align:-2px">=</span>`;
+  const col=d>0?'#79d69b':'var(--bad)', arr=d>0?'▲':'▼';
+  return `<em>P${r.grid}</em> <span style="color:${col}">${arr}${Math.abs(d)}</span>`;
+}
+const statCell=(v,k)=>`<div class="stat"><b>${v}</b><span>${k}</span></div>`;
+const gainedCell=g=>`<div class="stat"><b class="${g>0?'up':(g<0?'down':'')}">${g>0?'+':''}${g}</b><span>Gained</span></div>`;
+function xstats(races){
+  const fin=races.filter(isFinished), grids=races.filter(r=>r.grid>0).map(r=>r.grid);
+  return {
+    gained: races.reduce((s,r)=> r.grid ? s+(r.grid-(r.fin!=null?r.fin:23)) : s, 0),
+    racesGain: fin.filter(r=>r.grid&&r.fin<r.grid).length,
+    racesKept: fin.filter(r=>r.grid&&r.fin===r.grid).length,
+    racesLost: fin.filter(r=>r.grid&&r.fin>r.grid).length,
+    ptsFins: races.filter(r=>r.pts>0).length,
+    top10: fin.filter(r=>r.fin<=10).length,
+    dnf: races.filter(r=>!isFinished(r)).length,
+    bestGrid: grids.length?Math.min(...grids):null,
+    avgFin: fin.length? fin.reduce((s,r)=>s+r.fin,0)/fin.length : null,
+  };
+}
+const row2=x=>`${gainedCell(x.gained)}${statCell(x.ptsFins,'Pts Fins')}${statCell(x.top10,'Top 10')}${statCell(x.dnf,'DNF')}${statCell(x.bestGrid?('P'+x.bestGrid):'—','Best Grid')}${statCell(x.avgFin!=null?x.avgFin.toFixed(1):'—','Avg Fin')}`;
+
+/* ----- driver card ----- */
+function driverCard(d){
+  const byR={}; d.races.forEach(r=>byR[r.r]=r);
+  const x=xstats(d.races);
+  const rows=DATA.calendar.map((cal,i)=>{const r=byR[cal.r];
+    if(!r) return upRow(cal, DATA.calendar[i-1]);
+    const f=finLabel(r);
+    const flap = r.flrank ? `<span class="flap ${r.fl?'best':''}">${r.fl?'FL':('P'+r.flrank)}</span>` : `<span class="flap">—</span>`;
+    return `<div class="gp ${r.fin===1?'win':''}" data-gp="${r.r}">
+      <span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span>
+      <span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span>
+      <span class="delta">${deltaLabel(r)}</span>
+      ${flap}
+      <span class="pit">${r.pits==null?'<i>·</i>':(r.pits>0?r.pits:'<i>–</i>')}</span>
+      <span class="fin ${f.cls}">${f.t}</span>
+      <span class="pts">${r.rpts>0?r.rpts:'<i>–</i>'}</span>
+      <span class="spr">${r.spr==null?'<i>·</i>':(r.spr>0?r.spr:'<i>–</i>')}</span>
+      ${ytMini(cal.r)}
+    </div>`;}).join('');
+  return `<div class="card enter" style="--c:${d.color}">
+    <div class="panel idcard">
+      <div class="hero-top">
+        <div class="hero-info">
+          <div class="postop"><div class="bigpos">P${d.pos}</div><div class="ptop">·<b>${d.points}</b><em>pts</em></div></div>
+          <div class="idstack">
+            <div class="rnum">#${d.num||''}<span class="tla">${d.code}</span></div>
+            <div class="gname">${d.given}</div>
+            <div class="f">${d.family}</div>
+            <div class="meta"><b>${d.age}</b> yrs · <span class="flag">${d.flag}</span> ${d.nat}</div>
+          </div>
+        </div>
+        <div class="hero-photo${isMob()?' full':''}"><img src="${isMob()?IMGFULL(d.slug):IMG(d.slug)}" alt="${d.family}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'pfb',textContent:'${initials(d.given+' '+d.family)}'}))"></div>
+        <div class="teamline">${d.team}<img class="tcar" src="${CAR(d.teamId)}" alt="" onerror="this.remove()"></div>
+      </div>
+      <div class="idbody">
+        <div class="statgrid r1">${d.wins>0?statCell(d.wins,'Wins'):statCell(d.best?('P'+d.best):'—','Best')}${statCell(d.podiums,'Podiums')}${d.poles>0?statCell(d.poles,'Poles'):statCell(x.bestGrid?('P'+x.bestGrid):'—','Best Grid')}${statCell(d.fl,'Fastest')}${statCell(x.dnf,'DNF')}</div>
+        <div class="statgrid r1"><div class="stat"><b class="up">${x.racesGain}</b><span>Gained</span></div><div class="stat"><b>${x.racesKept}</b><span>Kept</span></div><div class="stat"><b class="down">${x.racesLost}</b><span>Lost</span></div>${statCell(d.sprintWins,'Spr Wins')}${statCell(d.sprintPoles,'Spr Poles')}</div>
+        <div class="arc"><div class="arc-h"><span class="arc-t"><span>Points per round</span>${(()=>{const s=d.races.reduce((a,r)=>a+((r.spr>0)?r.spr:0),0);return s>0?`<span class="clegend"><span class="cli"><i></i>Race<b>${d.points-s}</b></span><span class="cli spr"><i></i>Sprint<b>${s}</b></span></span>`:'';})()}</span><span class="l">${d.points} total</span></div>${driverStackChart(d)}</div>
+      </div>
+    </div>
+    <div class="panel gpcard drv">
+      <div class="gphead"><b>Season 2026</b><span>${DATA.meta.round} of ${DATA.calendar.length} rounds · tap a GP</span></div>
+      <div class="gpcols"><span></span><span></span><span>Grand Prix</span><span class="h-delta">Grid→Fin</span><span class="h-flap">FL</span><span class="h-pit">Pit</span><span>Fin</span><span>Race</span><span class="h-spr">Spr</span><span class="h-hl">HL</span></div>
+      <div class="gps">${rows}</div>
+    </div>
+  </div>`;
+}
+
+/* ----- constructor card ----- */
+function teamRounds(c){
+  const cars=teamCars(c.teamId);
+  return DATA.rounds.map(rd=>{
+    const entries=cars.map(d=>({d,r:d.races.find(x=>x.r===rd.r)}));
+    const pts=entries.reduce((s,e)=>s+(e.r?e.r.pts:0),0);
+    const fins=entries.map(e=>e.r&&e.r.fin).filter(Boolean);
+    return {rd,entries,pts,win:entries.some(e=>e.r&&e.r.fin===1),best:fins.length?Math.min(...fins):null};
+  });
+}
+function constructorCard(c){
+  const cars=teamCars(c.teamId);
+  const trByR={}; teamRounds(c).forEach(t=>trByR[t.rd.r]=t);
+  const rows=DATA.calendar.map((cal,i)=>{const t=trByR[cal.r];
+    if(!t) return upRow(cal, DATA.calendar[i-1]);
+    const cs=cars.map(d=>{const e=t.entries.find(x=>x.d.code===d.code), r=e&&e.r;
+      const cls=r&&r.fin===1?'p1':(r&&r.fin&&r.fin<=3?'pod':(r&&r.fin==null?'out':''));
+      return `<span class="fin ${cls}">${r?(r.fin?('P'+r.fin):'DNF'):'—'}</span>`;}).join('');
+    return `<div class="gp ${t.win?'win':''}" data-tr="${t.rd.r}">
+      <span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span>
+      <span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span>
+      ${cs}
+      <span class="pts">${t.pts||'<i>–</i>'}</span>
+      ${ytMini(cal.r)}
+    </div>`;}).join('');
+  const carImg=CAR(c.teamId);
+  const cx=xstats(cars.flatMap(d=>d.races));
+  const cSprW=cars.reduce((a,d)=>a+(d.sprintWins||0),0), cSprP=cars.reduce((a,d)=>a+(d.sprintPoles||0),0);
+  return `<div class="card enter" style="--c:${c.color}">
+    <div class="panel idcard">
+      <div class="cstrip">
+        <div class="cpos">P${c.pos}</div>
+        <div class="cpts">·<b>${c.points}</b><em>pts</em></div>
+        <div class="cteam"><span class="cname">${c.name}</span><span class="cnat"><span class="flag">${c.flag}</span>${c.nat}</span></div>
+        <div class="cdrivers">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>
+      </div>
+      <div class="hero-car below"><img src="${carImg}" alt="${c.name}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'pfb',textContent:'${c.name.slice(0,2).toUpperCase()}'}))"></div>
+      <div class="idbody">
+        <div class="statgrid r1">${c.wins>0?statCell(c.wins,'Wins'):statCell(c.best?('P'+c.best):'—','Best')}${statCell(c.podiums,'Podiums')}${c.poles>0?statCell(c.poles,'Poles'):statCell(cx.bestGrid?('P'+cx.bestGrid):'—','Best Grid')}${statCell(c.fl,'Fastest')}${statCell(cx.dnf,'DNF')}</div>
+        <div class="statgrid r1"><div class="stat"><b class="up">${cx.racesGain}</b><span>Gained</span></div><div class="stat"><b>${cx.racesKept}</b><span>Kept</span></div><div class="stat"><b class="down">${cx.racesLost}</b><span>Lost</span></div>${statCell(cSprW,'Spr Wins')}${statCell(cSprP,'Spr Poles')}</div>
+        <div class="arc"><div class="arc-h"><span class="arc-t"><span>Points per round</span>${(()=>{const cs=[...cars].sort((a,b)=>b.points-a.points);return `<span class="clegend"><span class="cli"><i></i>${cs[0].family}<b>${cs[0].points}</b></span>${cs[1]?`<span class="cli b2"><i></i>${cs[1].family}<b>${cs[1].points}</b></span>`:''}</span>`;})()}</span><span class="l">${c.points} total</span></div>${stackChartHTML(cars)}</div>
+      </div>
+    </div>
+    <div class="panel gpcard con">
+      <div class="gphead"><b>Season 2026</b><span>${DATA.meta.round} of ${DATA.calendar.length} rounds · tap a GP</span></div>
+      <div class="gpcols"><span></span><span></span><span>Grand Prix</span><span>${cars[0]?cars[0].code:''}</span><span>${cars[1]?cars[1].code:''}</span><span>Pts</span><span class="h-hl">HL</span></div>
+      <div class="gps">${rows}</div>
+    </div>
+  </div>`;
+}
+
+function stackChartHTML(cars){
+  const sorted=[...cars].sort((a,b)=>b.points-a.points);
+  const n=DATA.rounds.length;
+  const p1=sorted[0].prog, p2=sorted[1]?sorted[1].prog:new Array(n).fill(0);
+  const tot=p1.map((v,i)=>v+(p2[i]||0)), max=Math.max(...tot,1);
+  const px=i=> n===1?50:(5+90*i/(n-1));
+  const TOP=22,BOT=98, py=v=> BOT-(BOT-TOP)*(v/max);
+  const line=arr=>arr.map((v,i)=>(i?'L':'M')+px(i).toFixed(1)+' '+py(v).toFixed(1)).join(' ');
+  const line1=line(p1), lineT=line(tot);
+  const area1=`${line1} L ${px(n-1).toFixed(1)} 100 L ${px(0).toFixed(1)} 100 Z`;
+  let a2='M '+px(0).toFixed(1)+' '+py(tot[0]).toFixed(1);
+  for(let i=1;i<n;i++) a2+=' L '+px(i).toFixed(1)+' '+py(tot[i]).toFixed(1);
+  for(let i=n-1;i>=0;i--) a2+=' L '+px(i).toFixed(1)+' '+py(p1[i]).toFixed(1);
+  a2+=' Z';
+  const grid=DATA.rounds.map((r,i)=>`<span class="cx" style="left:${px(i)}%"></span>`).join('');
+  const dots=tot.map((v,i)=>`<span class="cval" style="left:${px(i)}%;top:${py(v)}%">${v}</span><span class="cdot" style="left:${px(i)}%;top:${py(v)}%"></span>`).join('');
+  const flags=DATA.rounds.map((r,i)=>`<span class="cflag" style="left:${px(i)}%" title="R${r.r} ${r.gp}">${r.flag}</span>`).join('');
+  return `<div class="chart2"><div class="cplot">${grid}
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="${area1}" fill="var(--c)" fill-opacity=".44"/>
+      <path d="${a2}" fill="var(--c)" fill-opacity=".17"/>
+      <path d="${line1}" fill="none" stroke="var(--c)" stroke-opacity=".6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <path d="${lineT}" fill="none" stroke="var(--c)" stroke-width="1.4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+    </svg>${dots}</div>
+    <div class="cxaxis">${flags}</div></div>`;
+}
+
+function driverStackChart(d){
+  const n=DATA.rounds.length, byr={}; d.races.forEach(r=>byr[r.r]=r);
+  let cr=0,cs=0; const cumR=[],cumT=[];
+  for(let k=1;k<=n;k++){const r=byr[k]; cr+=r?r.rpts:0; cs+=(r&&r.spr)?r.spr:0; cumR.push(cr); cumT.push(cr+cs);}
+  const raceTot=cr, sprTot=cs;
+  if(sprTot===0) return chartHTML(d.prog);
+  const max=Math.max(...cumT,1);
+  const px=i=> n===1?50:(5+90*i/(n-1));
+  const TOP=22,BOT=98, py=v=> BOT-(BOT-TOP)*(v/max);
+  const line=arr=>arr.map((v,i)=>(i?'L':'M')+px(i).toFixed(1)+' '+py(v).toFixed(1)).join(' ');
+  const lineR=line(cumR), lineT=line(cumT);
+  const areaR=`${lineR} L ${px(n-1).toFixed(1)} 100 L ${px(0).toFixed(1)} 100 Z`;
+  let aS='M '+px(0).toFixed(1)+' '+py(cumT[0]).toFixed(1);
+  for(let i=1;i<n;i++) aS+=' L '+px(i).toFixed(1)+' '+py(cumT[i]).toFixed(1);
+  for(let i=n-1;i>=0;i--) aS+=' L '+px(i).toFixed(1)+' '+py(cumR[i]).toFixed(1);
+  aS+=' Z';
+  const grid=DATA.rounds.map((r,i)=>`<span class="cx" style="left:${px(i)}%"></span>`).join('');
+  const dots=cumT.map((v,i)=>`<span class="cval" style="left:${px(i)}%;top:${py(v)}%">${v}</span><span class="cdot" style="left:${px(i)}%;top:${py(v)}%"></span>`).join('');
+  const flags=DATA.rounds.map((r,i)=>`<span class="cflag" style="left:${px(i)}%" title="R${r.r} ${r.gp}">${r.flag}</span>`).join('');
+  return `<div class="chart2"><div class="cplot">${grid}
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="${areaR}" fill="var(--c)" fill-opacity=".42"/>
+      <path d="${aS}" fill="#ff3d9a" fill-opacity=".5"/>
+      <path d="${lineR}" fill="none" stroke="var(--c)" stroke-opacity=".6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <path d="${lineT}" fill="none" stroke="#ff3d9a" stroke-width="1.4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+    </svg>${dots}</div>
+    <div class="cxaxis">${flags}</div></div>`;
+}
+
+function raceCard(r){
+  const teamName={}; C.forEach(t=>teamName[t.teamId]=t.name);
+  const raceLaps=DATA.raceLaps&&DATA.raceLaps[r.r];
+  const flRank={}, pitBy={}, lapInfo={}; D.forEach(d=>{ const rr=d.races.find(x=>x.r===r.r); if(rr){ if(rr.flrank!=null) flRank[d.code]=rr.flrank; pitBy[d.code]=rr.pits; lapInfo[d.code]={status:rr.status,laps:rr.laps}; } });
+  const cls=r.cls.map(c=>{
+    const isNum=/^\d+$/.test(c.pos);
+    const li=lapInfo[c.code];
+    const posLbl=isNum?('P'+c.pos):'NC';                 // F1: <90% of winner's distance = Not Classified
+    // TIME/RETIRED: lead-lap keeps its time; lapped (classified or NC) shows deficit; retired=DNF; non-starter=DNS
+    let result=c.result;
+    if(li && li.status==='Lapped' && raceLaps && li.laps!=null){ const down=raceLaps-li.laps; if(down>0) result=`+${down} lap${down>1?'s':''}`; }
+    else if(li && li.status==='Retired') result='DNF';
+    else if(li && li.status==='Did not start') result='DNS';
+    let delta='', dcls='flat';
+    if(isNum&&c.grid){ const g=c.grid-(+c.pos); delta=g>0?('+'+g):(g<0?(''+g):'='); dcls=g>0?'up':(g<0?'down':'flat'); }
+    const frk=flRank[c.code];
+    const flCell=frk==null?`<span class="mut">—</span>`:(frk===1?`<em class="fl1">FL</em>`:('P'+frk));
+    return `<div class="clsrow ${c.pos==='1'?'win':''}" style="--cc:${c.color||'#888'}">
+      <span class="clspos ${isNum?'':(li&&li.status==='Did not start'?'dns':'nc')}">${posLbl}</span>
+      <span class="clsbar"></span>
+      <span class="clsname"><b>${c.family}</b><em>${teamName[c.teamId]||''}</em></span>
+      <span class="clsgrid">${c.grid?('P'+c.grid):'—'}</span>
+      <span class="clsdelta ${dcls}">${delta}</span>
+      <span class="clsfl ${frk===1?'is':''}">${flCell}</span>
+      <span class="clspit">${pitBy[c.code]==null?'—':pitBy[c.code]}</span>
+      <span class="clsres">${result}</span>
+      <span class="clspts">${c.pts>0?c.pts:''}</span></div>`;}).join('');
+  return `<div class="card enter" style="--c:${r.winner.color}">
+    <div class="panel racemeta">
+      <div class="rc-head">
+        <div class="rc-round">Round ${r.r} · ${r.flag} ${r.short}</div>
+        <h2 class="rc-full">${r.full}</h2>
+        <div class="rc-sub">${r.circuit} · ${r.locality} · ${fmtDate(r.date)}</div>
+        ${(()=>{const ci=DATA.circuits&&DATA.circuits[r.r]; return ci?`<div class="rc-stats">
+          <div><b>${ci.length}<i>km</i></b><em>Length</em></div>
+          <div><b>${ci.laps}</b><em>Laps</em></div>
+          <div><b>${ci.distance}<i>km</i></b><em>Distance</em></div></div>`:'';})()}
+      </div>
+      <div class="rc-map"><img src="img/circuits/${r.r}.png" alt="${r.circuit}" onerror="this.style.display='none'"></div>
+      <div class="rc-bottom">
+        <div class="rc-summary">
+          <div class="rc-row"><span>Winner</span><b><em class="wl">${r.winner.family}</em></b></div>
+          <div class="rc-row"><span>Pole position</span><b>${r.pole?r.pole.family:'—'}</b></div>
+          <div class="rc-row"><span>Fastest lap</span><b>${r.fl?`${r.fl.family} · ${r.fl.time}`:'—'}</b></div>
+          <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');if(s.red)p.push(s.red+' Red');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
+        </div>
+        ${(()=>{const vid=DATA.highlights&&DATA.highlights[r.r];
+          return vid?`<a class="rc-hl" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer" title="Watch race highlights">
+            <img src="https://i.ytimg.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">
+            <span class="rc-hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a>`:'';})()}
+      </div>
+    </div>
+    <div class="panel raceres">
+      <div class="gphead"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="rc-view">
+        <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
+        <div class="rc-cls">${cls}</div>
+      </div>
+      <div class="rc-lc" hidden></div>
+    </div>
+  </div>`;
+}
+function worldMapCard(){
+  const [W,Hh]=DATA.worldVB;
+  const proj=g=>[(g.long+180)/360*W, (90-g.lat)/180*Hh];
+  const TOPc=76, BOTc=414, LEFc=140, RIGc=930;   // crop window (drop poles/Alaska/empty Pacific)
+  const cand=[]; [9,15,22,30,40,52,64].forEach(rad=>[-90,-55,-125,-25,-155,55,125,25,155,0,180].forEach(a=>
+    cand.push([Math.cos(a*Math.PI/180)*rad, Math.sin(a*Math.PI/180)*rad])));
+  const ov=(a,b)=>!(a.x+a.w<b.x||b.x+b.w<a.x||a.y+a.h<b.y||b.y+b.h<a.y);
+  const EU={x0:483,y0:98,x1:560,y1:145};         // Europe geo window (viewBox coords)
+  const inEU=(x,y)=>x>=EU.x0&&x<=EU.x1&&y>=EU.y0&&y<=EU.y1;
+  const IB={x:430,y:250,w:316,h:158};            // inset panel (S.Atlantic/W.Africa — clears Australia)
+  const winColor={}; (DATA.races||[]).forEach(r=>{ if(r.winner) winColor[r.r]=r.winner.color; });
+  const gtag=g=>{ const done=g.r<=DATA.meta.round, c=done&&winColor[g.r];
+    return `<g class="geo ${done?'done':'up'}"${c?` style="--gc:${c}"`:''}>`; };
+  const dot=(x,y,label,done,plc,minX,maxX,minY,maxY)=>{
+    const lw=6+label.length*4.4, lh=9; let ch=null;
+    for(const [dx,dy] of cand){ const box={x:x+dx-lw/2,y:y+dy-lh/2,w:lw,h:lh};
+      if(box.x<minX||box.x+lw>maxX||box.y<minY||box.y+lh>maxY) continue;
+      if(!plc.some(p=>ov(box,p))){ ch=[dx,dy,box]; break; } }
+    if(!ch) ch=[0,-9,{x:x-lw/2,y:y-13,w:lw,h:lh}];
+    plc.push(ch[2]);
+    const [dx,dy]=ch, lx=x+dx, ly=y+dy;
+    const line=Math.hypot(dx,dy)>11?`<line class="geoline" x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"/>`:'';
+    return `${line}<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${done?3.1:2.4}"/><text x="${lx.toFixed(1)}" y="${(ly+3).toFixed(1)}">${label}</text>`;
+  };
+  // ---- main map (Europe rounds drawn as bare dots; labelled in the inset) ----
+  const placed=[{x:IB.x,y:IB.y,w:IB.w,h:IB.h}];  // reserve inset area so labels avoid it
+  const main=DATA.geo.map(g=>{
+    const [x,y]=proj(g), done=g.r<=DATA.meta.round;
+    if(inEU(x,y)) return `${gtag(g)}<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${done?2.7:2.1}"/></g>`;
+    return `${gtag(g)}${dot(x,y,'R'+g.r,done,placed,LEFc+3,RIGc-3,TOPc+2,BOTc-2)}</g>`;
+  }).join('');
+  // ---- Europe inset ----
+  const s=Math.min(IB.w/(EU.x1-EU.x0),IB.h/(EU.y1-EU.y0));
+  const padx=(IB.w-(EU.x1-EU.x0)*s)/2, pady=(IB.h-(EU.y1-EU.y0)*s)/2;
+  const zx=x=>IB.x+padx+(x-EU.x0)*s, zy=y=>IB.y+pady+(y-EU.y0)*s;
+  const iplaced=[{x:IB.x,y:IB.y,w:66,h:22}];     // reserve title corner
+  const euItems=DATA.geo.filter(g=>{const[x,y]=proj(g);return inEU(x,y);}).map(g=>{
+    const [x,y]=proj(g), done=g.r<=DATA.meta.round;
+    return `${gtag(g)}${dot(zx(x),zy(y),'R'+g.r,done,iplaced,IB.x+3,IB.x+IB.w-3,IB.y+3,IB.y+IB.h-3)}</g>`;
+  }).join('');
+  const T=`translate(${(IB.x+padx).toFixed(2)},${(IB.y+pady).toFixed(2)}) scale(${s.toFixed(3)}) translate(${-EU.x0},${-EU.y0})`;
+  const inset=`<g class="euinset">
+      <rect class="euframe-src" x="${EU.x0}" y="${EU.y0}" width="${EU.x1-EU.x0}" height="${EU.y1-EU.y0}" rx="3"/>
+      <line class="eulink" x1="${EU.x1}" y1="${EU.y1}" x2="${IB.x+8}" y2="${IB.y}"/>
+      <clipPath id="euclip"><rect x="${IB.x}" y="${IB.y}" width="${IB.w}" height="${IB.h}" rx="8"/></clipPath>
+      <rect class="eubg" x="${IB.x}" y="${IB.y}" width="${IB.w}" height="${IB.h}" rx="8"/>
+      <g clip-path="url(#euclip)"><path class="land euland" transform="${T}" d="${DATA.worldPath}"/>${euItems}</g>
+      <rect class="euborder" x="${IB.x}" y="${IB.y}" width="${IB.w}" height="${IB.h}" rx="8"/>
+      <text class="eutitle" x="${IB.x+11}" y="${IB.y+17}">EUROPE</text>
+    </g>`;
+  return `<div class="card enter"><div class="panel worldcard">
+    <h2>Season Map — 2026</h2><div class="gsub">All ${DATA.geo.length} Grands Prix · ${DATA.meta.round} run</div>
+    <div class="worldwrap"><svg viewBox="${LEFc} ${TOPc} ${RIGc-LEFc} ${BOTc-TOPc}" preserveAspectRatio="xMidYMid meet">
+      <path class="land" d="${DATA.worldPath}"/>${main}${inset}</svg></div>
+  </div></div>`;
+}
+
+function barCard(kind){
+  const laps=kind==='laps';
+  const sset=new Set(); D.forEach(d=>d.races.forEach(r=>{ if(r.spr!=null) sset.add(r.r); }));
+  const sprRds=[...sset].sort((a,b)=>a-b);
+  const val=d=>laps ? d.races.reduce((a,r)=>a+(r.laps||0),0) : d.races.reduce((a,r)=>a+(r.spr>0?r.spr:0),0);
+  let rows=D.map(d=>({d,v:val(d)}));
+  if(!laps) rows=rows.filter(r=>r.v>0);               // sprint: non-zero drivers only
+  rows.sort((a,b)=>b.v-a.v || a.d.family.localeCompare(b.d.family));
+  const mx=Math.max(1,...rows.map(r=>r.v)), mn=Math.min(...rows.map(r=>r.v));
+  const totalLaps=laps ? Object.keys(DATA.raceLaps||{}).filter(k=>+k<=DATA.meta.round).reduce((a,k)=>a+DATA.raceLaps[k],0) : 0;
+  const title=laps?'Laps Completed':'Sprint Points';
+  const sub=laps
+    ? `Total racing laps completed (${totalLaps} run) · bars scaled from the lowest (${mn}) · after Round ${DATA.meta.round} of ${DATA.meta.totalRounds}`
+    : `Points from the ${sprRds.length} sprint races · Rounds ${sprRds.join(', ')}`;
+  if(isMob()){
+    const rowsH=rows.map((r,i)=>{const w=laps?(mx===mn?100:8+92*(r.v-mn)/(mx-mn)):Math.max(2,100*r.v/mx);
+      const pct=laps&&totalLaps?Math.round(r.v/totalLaps*100):0;
+      return mobRow(i+1,r.d.family,r.d.color,r.d.pos-1,w,r.v, laps?`<span class="hpct">${pct}%</span>`:'');}).join('');
+    return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div><div class="hstand mstand">${rowsH}</div></div></div>`;
+  }
+  const cols=rows.map((r,i)=>{const e=r.d, total=r.v||1;
+    // laps: baseline at the lowest total (exaggerate gaps) + solid bar, no per-race split
+    const h=laps ? (mx===mn?100:8+92*(r.v-mn)/(mx-mn)) : Math.max(1.5,100*r.v/mx);
+    const pct=laps&&totalLaps ? Math.round(r.v/totalLaps*100) : 0;
+    const segs=laps
+      ? `<span class="seg" style="height:100%" title="${r.v} laps"></span><span class="barpct">${pct}%</span>`
+      : e.races.map(s=>{ const sv=s.spr>0?s.spr:0; if(sv<=0) return '';
+          return `<span class="seg" style="height:${(100*sv/total).toFixed(2)}%" title="R${s.r} ${s.gp} · ${sv} pts">${sv>=2?`<em>R${s.r}</em>`:''}</span>`;
+        }).join('');
+    return `<div class="col ${i===0?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
+      <img class="face" src="${IMG(e.slug)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'face fb',textContent:'${initials(e.given+' '+e.family)}'}))">
+      <span class="barpts">${r.v}</span><div class="bar" style="height:${h.toFixed(2)}%">${segs}</div>
+      <span class="code">${e.code}</span><span class="rk">P${e.pos}</span></div>`;
+  }).join('');
+  return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div><div class="chart">${cols}</div></div></div>`;
+}
+function constructorBarCard(kind){
+  const laps=kind==='laps';
+  const sset=new Set(); D.forEach(d=>d.races.forEach(r=>{ if(r.spr!=null) sset.add(r.r); }));
+  const sprRds=[...sset].sort((a,b)=>a-b);
+  const agg={}; D.forEach(d=>{ const t=agg[d.teamId]||(agg[d.teamId]={laps:0,spr:0,sprR:{}});
+    d.races.forEach(r=>{ t.laps+=(r.laps||0); if(r.spr>0){ t.spr+=r.spr; t.sprR[r.r]=(t.sprR[r.r]||0)+r.spr; } }); });
+  let rows=C.map(e=>({e, v:laps?(agg[e.teamId]?.laps||0):(agg[e.teamId]?.spr||0), sprR:agg[e.teamId]?.sprR||{}}));
+  if(!laps) rows=rows.filter(r=>r.v>0);                 // sprint: non-zero constructors only
+  rows.sort((a,b)=>b.v-a.v || a.e.name.localeCompare(b.e.name));
+  const mx=Math.max(1,...rows.map(r=>r.v)), mn=Math.min(...rows.map(r=>r.v));
+  const totalLaps=laps ? Object.keys(DATA.raceLaps||{}).filter(k=>+k<=DATA.meta.round).reduce((a,k)=>a+DATA.raceLaps[k],0)*2 : 0;
+  const rowsH=rows.map((r,i)=>{const e=r.e, total=r.v||1;
+    const w=laps ? (mx===mn?100:15+85*(r.v-mn)/(mx-mn)) : Math.max(2,100*r.v/mx);   // floor keeps % legible in shortest bar
+    const pct=laps&&totalLaps ? Math.round(r.v/totalLaps*100) : 0;
+    const segs=laps
+      ? `<span class="hseg" style="width:100%"></span><span class="hpct">${pct}%</span>`
+      : sprRds.map(rd=>{ const sv=r.sprR[rd]||0; if(sv<=0) return '';
+          return `<span class="hseg" style="width:${(100*sv/total).toFixed(2)}%" title="R${rd} · ${sv} pts">${sv>=2?`<em>R${rd}</em>`:''}</span>`; }).join('');
+    return `<div class="hrow" style="--cc:${e.color}" data-jump="${e.pos-1}">
+      <div class="hlabel"><span class="hpos">${i+1}</span><span class="hname">${e.name}</span></div>
+      <div class="htrack"><div class="hbar" style="width:${w.toFixed(2)}%">${segs}</div>
+        <span class="hpts">${r.v}</span>
+        <img class="hcar" src="${CAR(e.teamId)}" alt="" loading="lazy" onerror="this.remove()"></div>
+    </div>`;}).join('');
+  const title=laps?'Laps Completed — Constructors':'Sprint Points — Constructors';
+  const sub=laps
+    ? `Total racing laps, both cars (${totalLaps} run) · bars scaled from the lowest (${mn}) · after Round ${DATA.meta.round} of ${DATA.meta.totalRounds}`
+    : `Sprint points (both cars) · from the ${sprRds.length} sprint races · Rounds ${sprRds.join(', ')}`;
+  return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div><div class="hstand">${rowsH}</div></div></div>`;
+}
+const isMob=()=>matchMedia('(max-width:900px)').matches;
+// mobile: clean horizontal bar rows (label · bar · value) — no cars, no per-race segments
+const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?'lead':''}" style="--cc:${color}" data-jump="${jump}">
+  <div class="hlabel"><span class="hpos">${pos}</span><span class="hname">${family}</span></div>
+  <div class="htrack"><div class="hbar" style="width:${w.toFixed(1)}%">${extra}</div><span class="hpts">${val}</span></div></div>`;
+function gridCard(){
+  const L=list(), mx=mode==='drivers'?gmaxD:gmaxC;
+  const title=mode==='drivers'?"Standings — Drivers":"Standings — Constructors";
+  const sub=(mode==='drivers'?"Drivers'":"Constructors'")+` Championship · points after Round ${DATA.meta.round} of ${DATA.meta.totalRounds}`;
+  let body;
+  if(mode==='drivers' && isMob()){
+    body=`<div class="hstand mstand">${L.map(e=>mobRow(e.pos,e.family,e.color,e.pos-1,100*e.points/gmaxD,e.points)).join('')}</div>`;
+  } else if(mode==='drivers'){
+    const cols=L.map(e=>{const h=Math.max(1.5,100*e.points/mx);
+      const total=e.points||1;
+      const segs=e.races.map(s=> s.pts>0 ? `<span class="seg" style="height:${(100*s.pts/total).toFixed(2)}%" title="R${s.r} ${s.gp} · ${s.pts} pts">${s.pts>=6?`<em>R${s.r}</em>`:''}</span>` : '').join('');
+      return `<div class="col ${e.pos===1?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
+        <img class="face" src="${IMG(e.slug)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'face fb',textContent:'${initials(e.given+' '+e.family)}'}))">
+        <span class="barpts">${e.points}</span><div class="bar" style="height:${h}%">${segs}</div>
+        <span class="code">${e.code}</span><span class="rk">P${e.pos}</span></div>`;}).join('');
+    body=`<div class="chart">${cols}</div>`;
+  } else {
+    const rowsH=L.map(e=>{const total=e.points||1;
+      const segs=teamRounds(e).map(t=> t.pts>0 ? `<span class="hseg" style="width:${(100*t.pts/total).toFixed(2)}%" title="R${t.rd.r} ${t.rd.gp} · ${t.pts} pts">${t.pts>=14?`<em>R${t.rd.r}</em>`:''}</span>` : '').join('');
+      return `<div class="hrow ${e.pos===1?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
+        <div class="hlabel"><span class="hpos">${e.pos}</span><span class="hname">${e.name}</span></div>
+        <div class="htrack"><div class="hbar" style="width:${(100*e.points/mx).toFixed(2)}%">${segs}</div>
+          <span class="hpts">${e.points}</span>
+          <img class="hcar" src="${CAR(e.teamId)}" alt="" loading="lazy" onerror="this.remove()"></div>
+      </div>`;}).join('');
+    body=`<div class="hstand">${rowsH}</div>`;
+  }
+  return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div>${body}</div></div>`;
+}
+
+// ===== lap-chart timing tower (loaded on demand per race) =====
+const _lcCache={};
+let lcTab='res';   // remembered active race-panel tab (res|lap) — sticky across race navigation
+let lcSeekLap=0, lcCurLap=0;   // lap-evo lap: one-shot seek target on reload + live value written to the URL
+let pendingRace=null, pendingTeamRace=null;   // driver / constructor race deep-dive: round to reopen from the URL on load/hashchange
+function lcHash(){ try{ const t=(mode==='races'&&lcTab==='lap')?('/lap'+(lcCurLap>0?'/'+lcCurLap:'')):''; history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
+// followed drivers persist across races + sessions (keyed by stable driver code)
+const _lcFollowKey='f1viz.follow';
+function loadFollow(){try{return new Set(JSON.parse(localStorage.getItem(_lcFollowKey)||'[]'));}catch(e){return new Set();}}
+function saveFollow(s){try{localStorage.setItem(_lcFollowKey,JSON.stringify([...s]));}catch(e){}}
+function mountLapChart(round, host){
+  host.innerHTML='<div class="lc-msg">Loading lap data…</div>';
+  if(_lcCache[round]){ buildLapChart(_lcCache[round], host); return; }
+  fetch(`data/laps/r${round}.json${IMGV}`).then(r=>{if(!r.ok)throw 0;return r.json();})
+    .then(j=>{ _lcCache[round]=j; buildLapChart(j, host); })
+    .catch(()=>{ host.innerHTML='<div class="lc-msg">Lap data unavailable for this round.</div>'; });
+}
+function buildLapChart(LD, host){
+  const nL=LD.nLaps, grid=LD.grid, order=LD.order, times=LD.times, pit=LD.pit||{}, pitTime=LD.pitTime||{}, flags=LD.flags||{};
+  const codes=grid.slice();
+  const DR={}; D.forEach(d=>DR[d.code]={col:d.color,fam:d.family});
+  // final status per driver (shown in RACE col when a car drops out of the running order)
+  const outLabel={}, retiredSet=new Set();
+  D.forEach(d=>{ const rr=d.races.find(x=>x.r===LD.round); if(!rr) return;
+    if(rr.status==='Retired'){ outLabel[d.code]='DNF'; retiredSet.add(d.code); }
+    else if(rr.status==='Did not start'){ outLabel[d.code]='DNS'; retiredSet.add(d.code); }
+    else { const down=nL-(rr.laps!=null?rr.laps:nL); if(down>0) outLabel[d.code]='+'+down+' Lap'+(down>1?'s':''); } });
+  const colOf=c=>(DR[c]&&DR[c].col)||'#888', famOf=c=>(DR[c]&&DR[c].fam)||c;
+  const sec=t=>{const p=String(t).split(':');return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]);};
+  const pad=n=>n<10?'0'+n:''+n;
+  const fmtTot=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s-h*3600-m*60;let xs=x.toFixed(3);if(x<10)xs='0'+xs;return h>0?h+':'+pad(m)+':'+xs:m+':'+xs;};
+  const fmtGap=g=>{if(g<60)return g.toFixed(3);const m=Math.floor(g/60),x=g-m*60;let xs=x.toFixed(3);if(x<10)xs='0'+xs;return m+':'+xs;};
+  const mix=h=>{const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return `rgb(${Math.round(r*.72+72)},${Math.round(g*.72+72)},${Math.round(b*.72+72)})`;};
+  // ---- precompute per-lap frames (index 0 = grid) ----
+  const frames=[];
+  let cum={},pb={},pbS={},best={},worst={},prevT={},obest=1e9,holder=null,lastPos={};
+  grid.forEach((c,i)=>lastPos[c]=i);
+  const g0={}; grid.forEach((c,i)=>{g0[c]={pl:'P'+(i+1),bs:'P'+(i+1),ws:'P'+(i+1),pc:0,pn:false,pd:'',rt:'',gp:'',ld:i===0,lp:'',lc:'',dl:'',ds:0,ft:'—',hd:false};});
+  frames.push({ord:grid.slice(),out:new Set(),rows:g0,fl:null});
+  for(let l=1;l<=nL;l++){
+    const arr=order[l-1],tm=times[l-1],rows={};
+    arr.forEach((c,i)=>{const pos=i+1;best[c]=best[c]==null?pos:Math.min(best[c],pos);worst[c]=worst[c]==null?pos:Math.max(worst[c],pos);
+      let lp='',lc='',dl='',ds=0;const ts=tm[c];
+      if(ts!=null){const sv=sec(ts);cum[c]=(cum[c]||0)+sv;lp=ts;
+        if(prevT[c]!=null){const dd=sv-prevT[c];ds=dd<0?-1:1;dl=(dd<0?'−':'+')+Math.abs(dd).toFixed(3);}
+        if(sv<(pb[c]==null?1e9:pb[c])){pb[c]=sv;pbS[c]=ts;lc='pb';}
+        if(sv<obest){obest=sv;holder=c;lc='ov';}
+        prevT[c]=sv;}
+      rows[c]={pos,lp,lc,dl,ds};});
+    const prevOrder=l===1?grid:order[l-2],pIdx={};prevOrder.forEach((cc,ii)=>pIdx[cc]=ii);
+    arr.forEach((c,i)=>{const r=rows[c];r.chg=(pIdx[c]!=null?pIdx[c]:i)-i;
+      if(i===0){r.ld=true;r.rt=cum[c]!=null?fmtTot(cum[c]):'';}
+      else{const a=arr[i-1];const g=(cum[c]!=null&&cum[a]!=null)?cum[c]-cum[a]:null;r.rt=(g!=null&&g>=0)?'+'+fmtGap(g):'—';}});
+    const inA=new Set(arr),out=codes.filter(c=>!inA.has(c));out.sort((a,b)=>(lastPos[a]??99)-(lastPos[b]??99));
+    arr.forEach((c,i)=>lastPos[c]=i);
+    out.forEach(c=>{rows[c]={pos:null,lp:'',lc:'',dl:'',ds:0,ld:false,gp:'',rt:''};});
+    const ord=arr.concat(out);
+    ord.forEach(c=>{const r=rows[c],pl=pit[c]||[];r.bs=best[c]!=null?'P'+best[c]:'—';r.ws=worst[c]!=null?'P'+worst[c]:'—';
+      r.pc=pl.filter(x=>x<=l).length;r.pn=pl.indexOf(l)>=0;
+      r.pd=(r.pn&&pitTime[c]&&pitTime[c][String(l)])?parseFloat(pitTime[c][String(l)]).toFixed(1):'';
+      r.ft=pbS[c]||'—';r.hd=(c===holder);r.pl=inA.has(c)?'P'+r.pos:'—';});
+    frames.push({ord,out:new Set(out),rows,fl:flags[String(l)]||null});
+  }
+  // ---- DOM ----
+  host.innerHTML=`<div class="lc-ctrl"><button class="rs" title="restart">↺</button><button class="bk" title="step back">‹</button><button class="pp play" title="play / pause"></button><button class="fw" title="step forward">›</button>`
+    +`<span class="lc-slider"><input type="range" min="0" max="${nL}" value="0" step="1" aria-label="lap"><span class="lc-lapdot">GRID</span></span>`
+    +`<span class="lc-total"><b>${nL}</b><i>laps</i></span></div>`
+    +`<div class="lc-head"><span></span><span></span><span></span><span>Driver</span><span>+/−</span><span class="h-gr">Grid</span><span class="h-bs">Best</span><span class="h-ws">Wrst</span><span class="h-pt">Pit</span><span class="h-st">Stop</span><span class="h-rt">Race</span><span>Lap</span><span class="h-ft">Fastest</span></div>`
+    +`<div class="lc-tk"></div>`;
+  const tk=host.querySelector('.lc-tk'), lapDot=host.querySelector('.lc-lapdot'), bnEl=host.closest('.raceres').querySelector('.lc-banner'),
+        slider=host.querySelector('input'), ppBtn=host.querySelector('.pp');
+  const SVGplay='<svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>';
+  const SVGpause='<svg viewBox="0 0 24 24" width="13" height="13"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+  const sel=loadFollow(), chips={};
+  codes.forEach(c=>{const el=document.createElement('div');el.className='lc-row';el.style.setProperty('--cc',colOf(c));
+    el.innerHTML=`<span class="p"></span><span class="bar"></span><span class="cd" style="color:${mix(colOf(c))}">${c}</span>`
+      +`<span class="nm">${famOf(c)}</span><span class="chg"></span><span class="gr"></span><span class="bs"></span><span class="ws"></span>`
+      +`<span class="pt"></span><span class="pd"></span><span class="rt"></span>`
+      +`<span class="lapc"><b class="lp"></b><small class="dl"></small></span><span class="ft"></span>`;
+    el.onclick=()=>{ if(sel.has(c))sel.delete(c); else sel.add(c); saveFollow(sel); paintSel(); };
+    tk.appendChild(el);chips[c]=el;});
+  function paintSel(){codes.forEach(c=>{const el=chips[c];if(sel.has(c)){el.style.setProperty('--selc',colOf(c));el.classList.add('sel');}else el.classList.remove('sel');});}
+  let RH=22;
+  function measure(){const h=tk.clientHeight||440;RH=Math.max(17,h/codes.length);codes.forEach(c=>chips[c].style.height=(RH-3)+'px');}
+  function placeDot(){const w=slider.clientWidth||1,TH=16,frac=nL?cur/nL:0;let x=TH/2+frac*(w-TH);const half=(lapDot.offsetWidth||22)/2;x=Math.max(half,Math.min(w-half,x));lapDot.style.left=x+'px';}
+  function frameRender(fi){const f=frames[fi],g0=fi===0;
+    codes.forEach(c=>{const el=chips[c],r=f.rows[c],ix=f.ord.indexOf(c),o=f.out.has(c);
+      el.style.transform=`translateY(${(ix*RH).toFixed(1)}px)`;el.classList.toggle('out',o);
+      el.querySelector('.p').textContent=r.pl||'';
+      const chg=el.querySelector('.chg');
+      if(g0||o){chg.textContent='';}
+      else if(r.chg>0){chg.textContent='▲'+r.chg;chg.style.color='#4ad991';}
+      else if(r.chg<0){chg.textContent='▼'+(-r.chg);chg.style.color='#ff6b6b';}
+      else{chg.textContent='–';chg.style.color='var(--muted-2)';}
+      el.querySelector('.gr').textContent=g0?'':'P'+(grid.indexOf(c)+1);
+      el.querySelector('.bs').textContent=g0?'':(r.bs||'');el.querySelector('.ws').textContent=g0?'':(r.ws||'');
+      const pt=el.querySelector('.pt'),pn=!g0&&r.pn;pt.textContent=g0?'':(r.pc||0);pt.style.background=pn?'#f5a623':'transparent';pt.style.color=pn?'#160f02':'var(--muted)';pt.style.fontWeight=pn?'700':'400';
+      el.querySelector('.pd').textContent=g0?'':(r.pd||'');
+      const rt=el.querySelector('.rt');
+      if(o){ rt.textContent=outLabel[c]||'—'; rt.style.color=retiredSet.has(c)?'var(--bad)':'#e0a24a'; rt.style.fontWeight='600'; }
+      else { rt.textContent=g0?'':(r.rt||''); rt.style.color=r.ld?'var(--ink)':'var(--muted)'; rt.style.fontWeight=r.ld?'600':'400'; }
+      const lp=el.querySelector('.lp');lp.textContent=g0?'':(r.lp||'—');lp.style.color=r.lc==='ov'?'#c9a3ff':r.lc==='pb'?'#4ad991':(r.lp?'var(--ink)':'var(--muted-2)');
+      const dl=el.querySelector('.dl');dl.textContent=g0?'':(r.dl||'');dl.style.color=r.ds<0?'#5fbf95':r.ds>0?'#e0808f':'transparent';
+      const ft=el.querySelector('.ft');ft.textContent=g0?'':(r.ft||'');ft.style.color=r.hd?'#c9a3ff':'var(--muted-2)';ft.style.fontWeight=r.hd?'700':'400';});
+    lapDot.textContent=g0?'GRID':fi;placeDot();
+    const fl=f.fl;bnEl.className='lc-banner'+(fl==='S'?' sc':fl==='V'?' vsc':'');bnEl.textContent=fl==='S'?'● SAFETY CAR':fl==='V'?'◆ VSC':'';
+    slider.value=fi;lcCurLap=fi;lcHash();}
+  let cur=0,playing=false,timer=null;
+  const stop=()=>{clearInterval(timer);timer=null;playing=false;ppBtn.classList.add('play');ppBtn.innerHTML=SVGplay;};
+  const start=()=>{clearInterval(timer);timer=setInterval(()=>{cur=(cur+1)%(nL+1);frameRender(cur);},2000);playing=true;ppBtn.classList.remove('play');ppBtn.innerHTML=SVGpause;};
+  const goTo=i=>{cur=Math.max(0,Math.min(nL,i));frameRender(cur);};
+  ppBtn.onclick=()=>playing?stop():start();
+  host.querySelector('.bk').onclick=()=>{stop();goTo(cur-1);};
+  host.querySelector('.fw').onclick=()=>{stop();goTo(cur+1);};
+  host.querySelector('.rs').onclick=()=>{stop();goTo(0);};
+  slider.oninput=e=>{stop();goTo(+e.target.value);};
+  window.__lcStep=(d)=>{stop();goTo(cur+d);};
+  window.__lcStop=()=>{clearInterval(timer);window.__lcStop=null;window.__lcStep=null;};
+  try{const ro=new ResizeObserver(()=>{measure();frameRender(cur);});ro.observe(tk);}catch(e){}
+  requestAnimationFrame(()=>{measure();cur=Math.max(0,Math.min(nL,lcSeekLap||0));lcSeekLap=0;frameRender(cur);paintSel();ppBtn.classList.add('play');ppBtn.innerHTML=SVGplay;});
+}
+function render(dir){
+  if(window.__lcStop) window.__lcStop();
+  if(idx<N()){
+    const e=list()[idx];
+    if(mode==='races'){
+      wrap.innerHTML=raceCard(e);
+      document.documentElement.style.setProperty('--c',e.winner.color);
+      document.documentElement.dataset.team=e.winner.teamId||'';
+      $('#cwho').textContent=`R${e.r} ${e.short}`;
+      const tabs=[...wrap.querySelectorAll('.rc-tab')];
+      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
+        const meta=wrap.querySelector('.lc-meta'), date=wrap.querySelector('.rc-date');
+        const setTab=t=>{ lcTab=t; tabs.forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+          if(t==='lap'){ date.setAttribute('hidden',''); meta.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.removeAttribute('hidden'); mountLapChart(lcRound, lc); }
+          else { if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); lc.setAttribute('hidden',''); lc.innerHTML=''; view.removeAttribute('hidden'); lcCurLap=0; } lcHash(); };
+        tabs.forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+        if(lcTab==='lap') setTab('lap');   // stay on Lap evolution when navigating between races
+      }
+    } else {
+      wrap.innerHTML = mode==='drivers'?driverCard(e):constructorCard(e);
+      document.documentElement.style.setProperty('--c',e.color);
+      document.documentElement.dataset.team=e.teamId||'';
+      $('#cwho').textContent=`P${e.pos} ${mode==='drivers'?e.family:e.name}`;
+      if(mode==='drivers') wrap.querySelectorAll('.gp[data-gp]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openRace(+g.dataset.gp-1);});
+      else wrap.querySelectorAll('.gp[data-tr]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openTeamRace(+g.dataset.tr-1);});
+    }
+  } else {
+    document.documentElement.style.setProperty('--c','#00D7B6');
+    document.documentElement.dataset.team='';
+    if(mode==='drivers'){
+      const k=idx-N();
+      wrap.innerHTML = k===0?gridCard():k===1?barCard('laps'):barCard('sprint');
+      $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':'Sprint points';
+      wrap.querySelectorAll('.col,.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump));
+    } else if(mode==='constructors'){
+      const k=idx-N();
+      wrap.innerHTML = k===0?gridCard():k===1?constructorBarCard('laps'):constructorBarCard('sprint');
+      $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':'Sprint points';
+      wrap.querySelectorAll('.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump));
+    } else if(mode==='races'){
+      wrap.innerHTML = worldMapCard();
+      $('#cwho').textContent = 'Season map';
+    }
+  }
+  gpSel=-1;
+  $('#cnum').textContent=idx+1; $('#ctot').textContent=TOT();
+  updatePeek();
+  lcHash();
+}
+// sticky-mobile peek: current identity label + re-observe the anchor that toggles it
+function updatePeek(){
+  let pk='';
+  if(idx<N()){ const e=list()[idx];
+    pk = mode==='drivers' ? `<em class="pk-pos">P${e.pos}</em><em class="pk-pts">${e.points}<small>pts</small></em><u>${e.flag}</u><b>#${e.num||''}</b><span>${e.family}</span><i>${e.team}</i>`
+       : mode==='constructors' ? `<em class="pk-pos">P${e.pos}</em><em class="pk-pts">${e.points}<small>pts</small></em><u>${e.flag}</u><span>${e.name}</span>`
+       : `<b>R${e.r}</b><span>${e.flag} ${e.short}</span>`;
+  } else { pk = `<span>${$('#cwho').textContent}</span>`; }
+  $('#peek').innerHTML=pk;
+  if(peekIO){ peekIO.disconnect(); const a=peekAnchor(); if(a) peekIO.observe(a); }
+}
+const peekAnchor=()=>wrap.querySelector('.idstack .f, .cstrip .cname, .rc-full, .gridcard h2, .worldcard h2');
+let peekIO=null;
+try{ peekIO=new IntersectionObserver(es=>{ document.querySelector('.topbar').classList.toggle('stuck', !es[0].isIntersecting); }, {rootMargin:'-52px 0px 0px 0px'}); }catch(e){}
+function go(i){ idx=(i+TOT())%TOT(); render(); }
+let _wasMob=isMob(); addEventListener('resize',()=>{ const m=isMob(); if(m!==_wasMob){ _wasMob=m; render(); } });
+let gpSel=-1;
+const gpRows=()=>[...wrap.querySelectorAll('.gp')];
+function selGP(delta){
+  const rows=gpRows(); if(!rows.length)return; setPlay(false);
+  gpSel = gpSel<0 ? (delta>0?0:rows.length-1) : Math.max(0,Math.min(rows.length-1,gpSel+delta));
+  rows.forEach((r,i)=>r.classList.toggle('sel',i===gpSel));
+  rows[gpSel].scrollIntoView({block:'nearest'});
+}
+function openSelGP(){
+  const row=gpRows()[gpSel]; if(!row)return;
+  if(row.dataset.gp) openRace(+row.dataset.gp-1);
+  else if(row.dataset.tr) openTeamRace(+row.dataset.tr-1);
+}
+function applyHash(){
+  const m=(location.hash||'').replace(/^#/,'').split('/');
+  if(CTXA[m[0]] && m[0]!==mode){ mode=m[0];
+    document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode));
+    $('#ctxA').textContent=CTXA[mode];
+  }
+  const i=parseInt(m[1],10); idx=isNaN(i)?0:Math.max(0,Math.min(TOT()-1,i));
+  const onLap = m[0]==='races' && m[2]==='lap';
+  lcTab = onLap ? 'lap' : 'res';
+  lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
+  pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
+  pendingTeamRace = (m[0]==='constructors' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;
+}
+// render, then reopen a race deep-dive (driver or constructor) if the URL points at one
+function applyView(){ render();
+  if(pendingRace!=null && mode==='drivers' && D[idx]){ const gi=D[idx].races.findIndex(x=>x.r===pendingRace); if(gi>=0) openRace(gi); pendingRace=null; }
+  if(pendingTeamRace!=null && mode==='constructors'){ const ti=DATA.rounds.findIndex(x=>x.r===pendingTeamRace); if(ti>=0) openTeamRace(ti); pendingTeamRace=null; }
+}
+const MODES=['drivers','constructors','races'];
+function gotoMode(m,last){ mode=m;
+  document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  $('#ctxA').textContent=CTXA[m];
+  idx = last ? TOT()-1 : 0; render();       // TOT() now reflects the new mode
+}
+// at a film's last card, next() rolls to the next tab's first card (and prev() the reverse)
+function next(){ if(idx>=TOT()-1) gotoMode(MODES[(MODES.indexOf(mode)+1)%3],false); else go(idx+1); }
+function prev(){ if(idx<=0) gotoMode(MODES[(MODES.indexOf(mode)+2)%3],true); else go(idx-1); }
+function setMode(m){ if(m===mode)return; setPlay(false); gotoMode(m,false); }
+document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+
+/* autoplay */
+function setPlay(p){ playing=p; clearInterval(timer);
+  $('#playIcon').innerHTML=p?'<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>':'<path d="M7 5v14l12-7z"/>';
+  if(p) timer=setInterval(()=>{ if(mode==='races'&&idx>=TOT()-1){setPlay(false);return;} next(); },4600);
+}
+$('#play').onclick=()=>setPlay(!playing);
+$('#next').onclick=()=>{next();if(playing)setPlay(true);};
+$('#prev').onclick=()=>{prev();if(playing)setPlay(true);};
+// restart: to first card of this series; if already there, jump to the previous series' first card
+function restart(){ if(idx>0) go(0); else gotoMode(MODES[(MODES.indexOf(mode)+2)%3],false); if(playing)setPlay(true); }
+$('#restart').onclick=restart;
+$('#fs').onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();};
+
+/* jump popover */
+const jump=$('#jumppop');
+function buildJump(){
+  const items = mode==='races'
+    ? list().map((e,i)=>`<div class="jitem" style="--jc:${e.winner.color}" data-j="${i}"><span class="jp">R${e.r}</span><span class="jb"></span><b>${e.short}</b></div>`).join('')
+    : list().map(e=>`<div class="jitem" style="--jc:${e.color}" data-j="${e.pos-1}"><span class="jp">${e.pos}</span><span class="jb"></span><b>${mode==='drivers'?e.family:e.name}</b></div>`).join('');
+  const tail = (mode==='drivers'||mode==='constructors')
+    ? `<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">▦</span><span class="jb"></span><b>Standings</b></div>
+       <div class="jitem" style="--jc:#00D7B6" data-j="${N()+1}"><span class="jp">◷</span><span class="jb"></span><b>Laps completed</b></div>
+       <div class="jitem" style="--jc:#00D7B6" data-j="${N()+2}"><span class="jp">⚡</span><span class="jb"></span><b>Sprint points</b></div>`
+    : mode==='races'
+      ? `<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">▦</span><span class="jb"></span><b>Season map</b></div>`
+      : `<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">▦</span><span class="jb"></span><b>Standings</b></div>`;
+  $('#jgrid').innerHTML = items + tail;
+  $('#jgrid').querySelectorAll('.jitem').forEach(it=>it.onclick=()=>{go(+it.dataset.j);jump.hidden=true;});
+}
+$('#counter').onclick=()=>{ if(jump.hidden){buildJump();
+  $('#jgrid').querySelectorAll('.jitem').forEach(it=>it.classList.toggle('on',+it.dataset.j===idx));jump.hidden=false;}else jump.hidden=true; };
+document.addEventListener('click',e=>{ if(!jump.hidden && !e.target.closest('#jumppop') && !e.target.closest('#counter')) jump.hidden=true; });
+
+/* modal */
+const modal=$('#modal'), mbox=$('#mbox');
+let modalKind='driver';
+function hlBlock(round){
+  const vid=DATA.highlights&&DATA.highlights[round]; if(!vid) return '';
+  return `<a class="ythl" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer">
+    <span class="hl-thumb"><img src="https://i.ytimg.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy"><span class="hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></span>
+    <span class="hl-txt"><b>Race highlights ↗</b><i>Official F1 · YouTube</i></span></a>`;
+}
+function ytMini(round){const vid=DATA.highlights&&DATA.highlights[round];
+  if(!vid) return `<span class="ytmini"></span>`;
+  return `<a class="ytmini" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Watch race highlights"><svg viewBox="0 0 24 24"><path d="M23 12s0-3.8-.5-5.6a2.9 2.9 0 0 0-2-2C18.7 4 12 4 12 4s-6.7 0-8.5.4a2.9 2.9 0 0 0-2 2C1 8.2 1 12 1 12s0 3.8.5 5.6a2.9 2.9 0 0 0 2 2C5.3 20 12 20 12 20s6.7 0 8.5-.4a2.9 2.9 0 0 0 2-2C23 15.8 23 12 23 12z" fill="#ff0000"/><path d="M10 15.5l6-3.5-6-3.5z" fill="#fff"/></svg></a>`;
+}
+// ===== driver race deep-dive (inline, full-width — replaces the GP modal) =====
+function lcFetch(round){ return _lcCache[round]?Promise.resolve(_lcCache[round]):fetch(`data/laps/r${round}.json${IMGV}`).then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{_lcCache[round]=j;return j;}); }
+function parseSec(t){const p=String(t).split(':');return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]);}
+function lit(h,m){h=h.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return `rgb(${Math.round(r+(255-r)*m)},${Math.round(g+(255-g)*m)},${Math.round(b+(255-b)*m)})`;}
+function rdvRow(k,v){return `<div style="display:flex;justify-content:space-between;padding:6px 2px;border-bottom:1px solid var(--line-2);font-size:12px;"><span style="color:var(--muted);">${k}</span><b>${v}</b></div>`;}
+function openRace(gi){ setPlay(false); const d=D[idx], r=d.races[gi]; if(!r)return;
+  try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r);}catch(e){}
+  document.documentElement.style.setProperty('--c',d.color); document.documentElement.dataset.team=d.teamId||'';
+  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}"><div class="rdv-msg">Loading race…</div></div></div>`;
+  lcFetch(r.r).then(LD=>renderRace(d,gi,r,LD)).catch(()=>renderRace(d,gi,r,null)); }
+function renderRace(d,gi,r,LD){
+  const code=d.code, cal=calR[r.r]||r, raceLaps=(DATA.raceLaps&&DATA.raceLaps[r.r])||r.laps||0;
+  let trace=[], gridPos=r.grid||1, pits=[], pitTimes={}, flags={}, nL=raceLaps, flLap=null, flStr=r.flTime||null, led=0, ledFrom=0, ledTo=0;
+  if(LD){ nL=LD.nLaps; gridPos=(LD.grid.indexOf(code)+1)||gridPos;
+    trace=LD.order.map(o=>{const i=o.indexOf(code);return i>=0?i+1:null;});
+    pits=LD.pit[code]||[]; pitTimes=LD.pitTime[code]||{}; flags=LD.flags||{};
+    led=trace.filter(p=>p===1).length; if(led){ledFrom=trace.indexOf(1)+1;ledTo=trace.lastIndexOf(1)+1;}
+    let best=1e9; LD.times.forEach((tm,i)=>{const t=tm[code];if(t){const s=parseSec(t);if(s<best){best=s;flLap=i+1;flStr=t;}}}); }
+  const f=finLabel(r), delta=(r.fin!=null&&r.grid)?(r.grid-r.fin):null;
+  const deltaTxt=delta==null?'':(delta>0?`▲${delta} from P${r.grid}`:(delta<0?`▼${-delta} from P${r.grid}`:`held P${r.grid}`));
+  const deltaCol=delta>0?'#4ad991':delta<0?'#ff6b6b':'var(--muted)';
+  const badges=[];
+  if(r.fin===1) badges.push(['🏆 Win','var(--gold)']); else if(r.fin&&r.fin<=3) badges.push(['Podium','var(--pod)']);
+  if(r.quali===1||r.grid===1) badges.push(['Started pole',d.color]);
+  if(r.fl) badges.push(['◆ Fastest lap','#c9a3ff']);
+  const badgeHTML=badges.map(([t,c])=>`<span style="font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:${c};background:color-mix(in srgb,${c} 13%,transparent);border:1px solid color-mix(in srgb,${c} 30%,transparent);padding:3px 8px;border-radius:6px;white-space:nowrap;">${t}</span>`).join('');
+  const pitHTML = pits.length? pits.map(l=>{const dur=pitTimes[String(l)],sv=dur?parseSec(dur):0,bad=sv>=38,w=Math.min(100,Math.round(sv/45*100));
+     return `<div style="display:flex;align-items:center;gap:9px;font-size:12px;"><span style="width:34px;color:${bad?'#ff8f8f':'var(--muted-2)'};font-variant-numeric:tabular-nums;font-weight:${bad?700:400};">L${l}</span><span style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,${bad?'#ff6b6b':'#f5a623'} ${w}%,var(--line) ${w}%);"></span><b style="width:58px;text-align:right;font-variant-numeric:tabular-nums;color:${bad?'#ff8f8f':'var(--ink)'};">${dur?sv.toFixed(1)+'s':''}${bad?' ⚠':''}</b></div>`;}).join('')
+     : `<div style="font-size:12px;color:var(--muted-2);">No stops recorded</div>`;
+  const rl=d.races.length;
+  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}">
+    <div class="rdv-head">
+      <button class="rdv-nav rdv-back">‹ Season</button>
+      <button class="rdv-nav rdv-prev" title="Previous race (↑)">‹</button>
+      <button class="rdv-nav rdv-next" title="Next race (↓)">›</button>
+      <div class="rdv-ht"><div class="rdv-round">Round ${r.r} · ${cal.flag} ${cal.country}</div>
+        <div class="rdv-gp">${fullName(r.r)} <small>· ${cal.circuit} · ${cal.date}</small></div></div>
+      <div class="rdv-drv">
+        <img class="rdv-face" src="${IMG(d.slug)}" alt="" onerror="this.style.visibility='hidden'">
+        <div class="rdv-dtxt"><em>#${d.num||''}</em><b>${d.family}</b><i>${d.team}</i></div>
+        <img class="rdv-car" src="${CAR(d.teamId)}" alt="" onerror="this.remove()">
+      </div>
+    </div>
+    <div class="rdv-body">
+      <div class="rdv-left">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex:0 0 auto;">
+          <div style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:600;">Race trace · position by lap</div>
+          <div style="font-size:10px;color:var(--muted-2);">${nL} laps</div></div>
+        <div class="rdv-chart" id="rdvChart">${LD?'':'<div class="rdv-msg" style="padding:20px">Lap-by-lap data unavailable for this round</div>'}</div>
+        <div class="rdv-lg">
+          <span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span>
+          <span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span>
+          <span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span>
+          <span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>
+        </div>
+      </div>
+      <div class="rdv-right">
+        <div style="display:flex;align-items:flex-end;gap:12px;">
+          <div><div style="font-size:38px;font-weight:800;font-style:italic;letter-spacing:-.03em;line-height:.85;${f.cls==='p1'?'color:var(--gold);':(r.fin==null?'color:var(--bad);':'')}">${f.t}</div>
+            <div style="font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted-2);margin-top:4px;">Finish${deltaTxt?` · <span style="color:${deltaCol}">${deltaTxt}</span>`:''}</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-left:auto;align-items:flex-end;">${badgeHTML}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:9px;overflow:hidden;">
+          ${[['P'+(r.grid||'—'),'Grid'],['P'+(r.quali||'—'),'Quali'],[(pits.length||r.pits||0),'Stops'],[r.pts,'Points']].map((c,i)=>`<div style="background:var(--panel-b);padding:8px 4px;text-align:center;"><div style="font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;${i===3?'color:color-mix(in srgb,var(--gold) 82%,#fff);':''}">${c[0]}</div><div style="font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);margin-top:2px;">${c[1]}</div></div>`).join('')}
+        </div>
+        <div>
+          ${rdvRow('Status',r.status)}
+          ${rdvRow('Fastest lap', r.flrank?`<span style="color:${r.flrank===1?'#c9a3ff':'var(--ink)'}">P${r.flrank}${flStr?' · '+flStr:''}</span>`:'—')}
+          ${LD&&led?rdvRow('Laps led', `${led} <span style="color:var(--muted-2);font-weight:400;">(${led===nL?'all':'L'+ledFrom+'–'+ledTo})</span>`):''}
+          ${rdvRow('Laps completed', `${r.laps} / ${raceLaps}`)}
+          ${r.time?rdvRow('Race time', r.time):''}
+        </div>
+        <div>
+          <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px;">Pit stops</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">${pitHTML}</div>
+        </div>
+        <div style="margin-top:auto;">${hlBlock(r.r)}</div>
+      </div>
+    </div>
+  </div></div>`;
+  wrap.querySelector('.rdv-back').onclick=()=>render();
+  wrap.querySelector('.rdv-prev').onclick=()=>openRace((gi-1+rl)%rl);
+  wrap.querySelector('.rdv-next').onclick=()=>openRace((gi+1)%rl);
+  if(LD) rdvTrace(d,r,{trace,gridPos,pits,pitTimes,flags,nL,flLap});
+}
+function rdvTrace(d,r,S){
+  const {trace,gridPos,pits,pitTimes,flags,nL,flLap}=S, col=d.color, led=lit(col,.5);
+  const present=trace.filter(p=>p!=null), maxP=Math.max(gridPos||1, ...present, (r.fin||0));
+  const yMax=Math.min(22, Math.max(maxP+1, 6));
+  const host=document.getElementById('rdvChart'); if(!host)return;
+  const W=Math.max(340,host.clientWidth), H=Math.max(220,host.clientHeight), L=40, Rr=W-14, T=14, B=H-22, x=l=>L+(l/nL)*(Rr-L), y=p=>T+((p-1)/(yMax-1))*(B-T), NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('preserveAspectRatio','none');
+  const mk=(n,a,t)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;return e;};
+  let s=null;for(let l=1;l<=nL;l++){const fl=flags[l];if(fl&&s===null)s={from:l,type:fl};if((!fl||l===nL)&&s!==null){const to=fl?l:l-1;svg.appendChild(mk('rect',{x:x(s.from-.5),y:T,width:x(to+.5)-x(s.from-.5),height:B-T,fill:s.type==='S'?'rgba(245,200,35,.15)':'rgba(245,200,35,.07)'}));s=null;}}
+  for(let p=1;p<=yMax;p++){const mj=(p===1||p%5===0);svg.appendChild(mk('line',{x1:L,y1:y(p),x2:Rr,y2:y(p),stroke:mj?'rgba(150,166,205,.13)':'rgba(150,166,205,.05)','stroke-width':1}));svg.appendChild(mk('text',{x:L-6,y:y(p)+3,fill:mj?'#7d879e':'#59627a','font-size':8.5,'text-anchor':'end'},'P'+p));}
+  const ticks=[0];for(let l=10;l<nL-5;l+=10)ticks.push(l);ticks.push(nL);
+  ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#5f6a80','font-size':9.5,'text-anchor':'middle'},l===0?'Grid':l)));
+  let seg=null;trace.forEach((p,i)=>{const lap=i+1;if(p===1&&seg===null)seg=lap;if(p!==1&&seg!==null){svg.appendChild(mk('line',{x1:x(seg-1),y1:y(1),x2:x(lap-1),y2:y(1),stroke:led,'stroke-width':4,'stroke-linecap':'round',opacity:.5}));seg=null;}});
+  if(seg!==null)svg.appendChild(mk('line',{x1:x(seg-1),y1:y(1),x2:x(nL),y2:y(1),stroke:led,'stroke-width':4,'stroke-linecap':'round',opacity:.5}));
+  let dp=`M ${x(0)} ${y(gridPos||1)}`,lastLap=0,lastPos=gridPos||1;
+  for(let i=0;i<trace.length;i++){const p=trace[i];if(p==null)break;dp+=` L ${x(i+1)} ${y(p)}`;lastLap=i+1;lastPos=p;}
+  svg.appendChild(mk('path',{d:dp,fill:'none',stroke:col,'stroke-width':2.4,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  const retired=r.status==='Retired'||r.status==='Did not start';
+  if(retired&&lastLap>0){svg.appendChild(mk('circle',{cx:x(lastLap),cy:y(lastPos),r:4.5,fill:'#ff6b6b'}));svg.appendChild(mk('text',{x:x(lastLap),y:y(lastPos)-9,fill:'#ff8f8f','font-size':9,'text-anchor':'middle','font-weight':700},'DNF'));}
+  else if(r.fin!=null&&r.fin!==lastPos){const fy=y(Math.min(r.fin,yMax));svg.appendChild(mk('line',{x1:x(lastLap),y1:y(lastPos),x2:x(nL),y2:fy,stroke:col,'stroke-width':1.6,'stroke-dasharray':'3 3',opacity:.7}));svg.appendChild(mk('circle',{cx:x(nL),cy:fy,r:4,fill:'#0b0e15',stroke:col,'stroke-width':1.8}));svg.appendChild(mk('text',{x:x(nL)-5,y:fy+3.5,fill:'#9aa6cd','font-size':9,'text-anchor':'end'},'P'+r.fin));}
+  svg.appendChild(mk('circle',{cx:x(0),cy:y(gridPos||1),r:4,fill:'#0b0e15',stroke:col,'stroke-width':2}));
+  pits.forEach(l=>{const p=trace[l-1];if(p==null)return;const dur=pitTimes[String(l)],bad=dur&&parseSec(dur)>=38;svg.appendChild(mk('rect',{x:x(l)-3.5,y:y(p)-3.5,width:7,height:7,rx:1.5,fill:bad?'#ff6b6b':'#f5a623',transform:`rotate(45 ${x(l)} ${y(p)})`}));});
+  if(flLap&&trace[flLap-1]!=null){const p=trace[flLap-1];svg.appendChild(mk('circle',{cx:x(flLap),cy:y(p),r:4.5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5}));svg.appendChild(mk('text',{x:x(flLap),y:y(p)+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},'FL'));}
+  host.innerHTML='';host.appendChild(svg);
+}
+// ---- constructor race deep-dive (both cars) ----
+function raceDeriv(code,r,LD,raceLaps){
+  let trace=[],gridPos=(r&&r.grid)||1,pits=[],pitTimes={},nL=raceLaps,flLap=null,flStr=(r&&r.flTime)||null,led=0,ledFrom=0,ledTo=0;
+  if(LD){ nL=LD.nLaps; gridPos=(LD.grid.indexOf(code)+1)||gridPos;
+    trace=LD.order.map(o=>{const i=o.indexOf(code);return i>=0?i+1:null;});
+    pits=LD.pit[code]||[]; pitTimes=LD.pitTime[code]||{};
+    led=trace.filter(p=>p===1).length; if(led){ledFrom=trace.indexOf(1)+1;ledTo=trace.lastIndexOf(1)+1;}
+    let best=1e9; LD.times.forEach((tm,i)=>{const t=tm[code];if(t){const s=parseSec(t);if(s<best){best=s;flLap=i+1;flStr=t;}}}); }
+  return {trace,gridPos,pits,pitTimes,nL,flLap,flStr,led,ledFrom,ledTo};
+}
+function openTeamRace(ti){ setPlay(false); const c=list()[idx], rd=DATA.rounds[ti]; if(!c||!rd)return;
+  try{history.replaceState(null,'','#constructors/'+idx+'/race/'+rd.r);}catch(e){}
+  document.documentElement.style.setProperty('--c',c.color); document.documentElement.dataset.team=c.teamId||'';
+  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${c.color}"><div class="rdv-msg">Loading race…</div></div></div>`;
+  lcFetch(rd.r).then(LD=>renderTeamRace(c,ti,rd,LD)).catch(()=>renderTeamRace(c,ti,rd,null)); }
+function renderTeamRace(c,ti,rd,LD){
+  const cars=teamCars(c.teamId), cal=calR[rd.r]||rd, raceLaps=(DATA.raceLaps&&DATA.raceLaps[rd.r])||0;
+  const entries=cars.map(d=>({d, r:d.races.find(x=>x.r===rd.r)||null})); entries.forEach(e=>e.dv=raceDeriv(e.d.code,e.r,LD,raceLaps));
+  const teamPts=entries.reduce((s,e)=>s+((e.r&&e.r.pts)||0),0), nL=LD?LD.nLaps:raceLaps, rl=DATA.rounds.length;
+  const boxes=entries.map((e,i)=>{const {d,r,dv}=e, f=r?finLabel(r):{t:'—',cls:''}, delta=(r&&isFinished(r)&&r.grid)?(r.grid-r.fin):null;
+    const dTxt=delta==null?'':(delta>0?`▲${delta}`:(delta<0?`▼${-delta}`:'=')), dCol=delta>0?'#4ad991':delta<0?'#ff6b6b':'var(--muted)';
+    const pit=dv.pits.length?dv.pits.map(l=>{const u=dv.pitTimes[String(l)];return u?`L${l} ${parseSec(u).toFixed(1)}s`:'L'+l;}).join(' · '):'—';
+    return `<div class="rdv-box" style="--dc:${d.color}">
+      <div class="rbh"><img class="rbface" src="${IMG(d.slug)}" onerror="this.style.visibility='hidden'"><span class="rbline" style="${i===1?'border-top-style:dashed':''}"></span>
+        <div class="rbname">${d.family} <em class="rbnum">#${d.num||''}</em></div>
+        <div class="rbfin ${f.cls}" style="margin-left:auto">${f.t}${dTxt?` <span style="font-size:11px;font-style:normal;font-weight:700;color:${dCol}">${dTxt}</span>`:''}</div></div>
+      <div class="rbg">${[['P'+((r&&r.grid)||'—'),'Grid'],['P'+((r&&r.quali)||'—'),'Quali'],[dv.pits.length||(r&&r.pits)||0,'Stops'],[(r&&r.pts)||0,'Pts']].map((cc,ix)=>`<span><b style="${ix===3?'color:color-mix(in srgb,var(--gold) 82%,#fff)':''}">${cc[0]}</b><i>${cc[1]}</i></span>`).join('')}</div>
+      <div class="rbr"><span>Fastest lap</span><b style="${r&&r.flrank===1?'color:#c9a3ff':''}">${r&&r.flrank?('P'+r.flrank+(dv.flStr?' · '+dv.flStr:'')):'—'}</b></div>
+      <div class="rbr"><span>Pit stops</span><b>${pit}</b></div></div>`;}).join('');
+  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${c.color}">
+    <div class="rdv-head">
+      <button class="rdv-nav rdv-back">‹ Season</button>
+      <button class="rdv-nav rdv-prev" title="Previous race (↑)">‹</button>
+      <button class="rdv-nav rdv-next" title="Next race (↓)">›</button>
+      <div class="rdv-ht"><div class="rdv-round">Round ${rd.r} · ${cal.flag} ${cal.country}</div>
+        <div class="rdv-gp">${fullName(rd.r)} <small>· ${cal.circuit} · ${cal.date}</small></div></div>
+      <div class="rdv-team">
+        <div class="rdv-tpts"><b>${teamPts}</b><em>pts</em></div>
+        <div class="rdv-facepair">${entries.map(e=>`<img class="rdv-face2" src="${IMG(e.d.slug)}" title="${e.d.family}" onerror="this.style.visibility='hidden'">`).join('')}</div>
+        <div class="rdv-dtxt"><b>${c.name}</b><i>${entries.map(e=>e.d.code).join(' · ')}</i></div>
+        <img class="rdv-car" src="${CAR(c.teamId)}" onerror="this.remove()">
+      </div>
+    </div>
+    <div class="rdv-body">
+      <div class="rdv-left">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex:0 0 auto;">
+          <div style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:600;">Race trace · both cars</div>
+          <div style="font-size:10px;color:var(--muted-2);">${nL} laps</div></div>
+        <div class="rdv-chart" id="rdvChart">${LD?'':'<div class="rdv-msg" style="padding:20px">Lap-by-lap data unavailable</div>'}</div>
+        <div class="rdv-lg">${entries.map((e,i)=>`<span><i style="width:16px;height:0;border-top:2px ${i===1?'dashed '+lit(e.d.color,.4):'solid '+e.d.color};"></i>${e.d.family}</span>`).join('')}
+          <span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span>
+          <span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span></div>
+      </div>
+      <div class="rdv-right rdv-boxes">${boxes}${hlBlock(rd.r)}</div>
+    </div>
+  </div></div>`;
+  wrap.querySelector('.rdv-back').onclick=()=>render();
+  wrap.querySelector('.rdv-prev').onclick=()=>openTeamRace((ti-1+rl)%rl);
+  wrap.querySelector('.rdv-next').onclick=()=>openTeamRace((ti+1)%rl);
+  if(LD) rdvTraceTeam(entries,rd,nL,LD.flags||{});
+}
+function rdvTraceTeam(entries,rd,nL,flags){
+  const host=document.getElementById('rdvChart'); if(!host)return;
+  const allP=[]; entries.forEach(e=>{e.dv.trace.forEach(p=>{if(p!=null)allP.push(p);});allP.push(e.dv.gridPos||1);if(e.r&&e.r.fin!=null)allP.push(e.r.fin);});
+  const maxP=Math.max(1,...allP), yMax=Math.min(22,Math.max(maxP+1,6));
+  const W=Math.max(340,host.clientWidth), H=Math.max(220,host.clientHeight), L=40, Rr=W-14, T=14, B=H-22, x=l=>L+(l/nL)*(Rr-L), y=p=>T+((p-1)/(yMax-1))*(B-T), NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('preserveAspectRatio','none');
+  const mk=(n,a,t)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;return e;};
+  let s=null;for(let l=1;l<=nL;l++){const fl=flags[l];if(fl&&s===null)s={from:l,type:fl};if((!fl||l===nL)&&s!==null){const to=fl?l:l-1;svg.appendChild(mk('rect',{x:x(s.from-.5),y:T,width:x(to+.5)-x(s.from-.5),height:B-T,fill:s.type==='S'?'rgba(245,200,35,.15)':'rgba(245,200,35,.07)'}));s=null;}}
+  for(let p=1;p<=yMax;p++){const mj=(p===1||p%5===0);svg.appendChild(mk('line',{x1:L,y1:y(p),x2:Rr,y2:y(p),stroke:mj?'rgba(150,166,205,.13)':'rgba(150,166,205,.05)','stroke-width':1}));svg.appendChild(mk('text',{x:L-6,y:y(p)+3,fill:mj?'#7d879e':'#59627a','font-size':8.5,'text-anchor':'end'},'P'+p));}
+  const ticks=[0];for(let l=10;l<nL-5;l+=10)ticks.push(l);ticks.push(nL);
+  ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#5f6a80','font-size':9.5,'text-anchor':'middle'},l===0?'Grid':l)));
+  entries.forEach((e,ei)=>{const {d,r,dv}=e, col=ei===1?lit(d.color,.4):d.color, dash=ei===1;
+    let dp=`M ${x(0)} ${y(dv.gridPos||1)}`,lastLap=0,lastPos=dv.gridPos||1;
+    for(let i=0;i<dv.trace.length;i++){const p=dv.trace[i];if(p==null)break;dp+=` L ${x(i+1)} ${y(p)}`;lastLap=i+1;lastPos=p;}
+    const pa={d:dp,fill:'none',stroke:col,'stroke-width':2.2,'stroke-linejoin':'round','stroke-linecap':'round'}; if(dash)pa['stroke-dasharray']='5 4';
+    svg.appendChild(mk('path',pa));
+    svg.appendChild(mk('circle',{cx:x(0),cy:y(dv.gridPos||1),r:3.5,fill:'#0b0e15',stroke:col,'stroke-width':1.8}));
+    const retired=r&&(r.status==='Retired'||r.status==='Did not start');
+    if(retired&&lastLap>0){svg.appendChild(mk('circle',{cx:x(lastLap),cy:y(lastPos),r:4,fill:'#ff6b6b'}));svg.appendChild(mk('text',{x:x(lastLap),y:y(lastPos)-8,fill:'#ff8f8f','font-size':8.5,'text-anchor':'middle','font-weight':700},'DNF'));}
+    else if(r&&r.fin!=null&&r.fin!==lastPos){const fy=y(Math.min(r.fin,yMax));svg.appendChild(mk('line',{x1:x(lastLap),y1:y(lastPos),x2:x(nL),y2:fy,stroke:col,'stroke-width':1.4,'stroke-dasharray':'3 3',opacity:.6}));svg.appendChild(mk('circle',{cx:x(nL),cy:fy,r:3.5,fill:'#0b0e15',stroke:col,'stroke-width':1.6}));lastLap=nL;lastPos=Math.min(r.fin,yMax);}
+    const near=x(lastLap)>Rr-26; svg.appendChild(mk('text',{x:near?x(lastLap)-6:x(lastLap)+6,y:y(lastPos)+3,fill:col,'font-size':9.5,'font-weight':700,'text-anchor':near?'end':'start'},d.code));
+    dv.pits.forEach(l=>{const p=dv.trace[l-1];if(p==null)return;const u=dv.pitTimes[String(l)],bad=u&&parseSec(u)>=38;svg.appendChild(mk('rect',{x:x(l)-3,y:y(p)-3,width:6,height:6,rx:1.3,fill:bad?'#ff6b6b':'#f5a623',transform:`rotate(45 ${x(l)} ${y(p)})`}));});
+  });
+  host.innerHTML='';host.appendChild(svg);
+}
+function openGP(gi){ modalKind='driver'; curGP=gi; setPlay(false); renderGP(); modal.hidden=false; }
+function openTeamGP(gi){ modalKind='team'; curGP=gi; setPlay(false); renderTeamGP(); modal.hidden=false; }
+function closeGP(){ modal.hidden=true; }
+function renderGP(){
+  const d=D[idx], r=d.races[curGP], f=finLabel(r), badges=[];
+  if(r.fin===1) badges.push('<span class="badge win">🏆 Winner</span>');
+  else if(r.fin&&r.fin<=3) badges.push('<span class="badge pod">Podium</span>');
+  if(r.quali===1) badges.push('<span class="badge pole">Pole</span>');
+  if(r.fl) badges.push('<span class="badge fl">Fastest Lap</span>');
+  if(r.fin==null) badges.push('<span class="badge dnf">'+f.t+'</span>');
+  const delta=(r.fin!=null&&r.grid)?(r.grid-r.fin):null;
+  const deltaTxt=delta==null?'—':(delta>0?`+${delta} gained`:(delta<0?`${delta} lost`:'held'));
+  mbox.innerHTML=`
+    <div class="mhead" style="--c:${d.color}">
+      <button class="mclose" onclick="closeGP()">×</button>
+      <div class="mround">Round ${r.r} · ${r.flag} ${r.country}</div>
+      <h2>${fullName(r.r)}</h2>
+      <div class="mcirc">${r.circuit} · ${r.locality} · ${r.date}</div>
+      <div class="tagline">${badges.join('')}</div>
+    </div>
+    <div class="mbody">
+      <div class="mgrid">
+        <div class="mcell hl"><b class="${f.cls==='p1'?'':''}">${f.t}</b><span>Finish</span></div>
+        <div class="mcell"><b>P${r.grid||'—'}</b><span>Grid</span></div>
+        <div class="mcell"><b>${r.quali?('P'+r.quali):'—'}</b><span>Qualifying</span></div>
+        <div class="mcell hl"><b>${r.pts}</b><span>Points</span></div>
+      </div>
+      <div class="mrow"><span>Status</span><b>${r.status}</b></div>
+      <div class="mrow"><span>Grid → Finish</span><b>${deltaTxt}</b></div>
+      <div class="mrow"><span>Laps completed</span><b>${r.laps} / ${(DATA.raceLaps&&DATA.raceLaps[r.r])||r.laps}</b></div>
+      <div class="mrow"><span>Fastest lap</span><b>${r.flrank?('P'+r.flrank+(r.flTime?' · '+r.flTime:'')):'—'}</b></div>
+      ${r.time?`<div class="mrow"><span>Race time</span><b>${r.time}</b></div>`:''}
+      ${hlBlock(r.r)}
+    </div>`;
+  document.documentElement.style.setProperty('--c',d.color);
+}
+function renderTeamGP(){
+  const c=list()[idx], cars=teamCars(c.teamId), rd=DATA.rounds[curGP];
+  const entries=cars.map(d=>({d,r:d.races.find(x=>x.r===rd.r)}));
+  const teamPts=entries.reduce((s,e)=>s+(e.r?e.r.pts:0),0);
+  const win=entries.some(e=>e.r&&e.r.fin===1);
+  const rowsHtml=entries.map(e=>{const r=e.r, f=r?finLabel(r):{t:'—',cls:''}, badges=[];
+    if(r&&r.quali===1)badges.push('<span class="badge pole">Pole</span>');
+    if(r&&r.fl)badges.push('<span class="badge fl">FL</span>');
+    const delta=(r&&r.fin!=null&&r.grid)?(r.grid-r.fin):null;
+    return `<div class="mdrow"><span class="mdc">${e.d.num||''}</span>
+      <span class="mdn">${e.d.family} ${badges.join(' ')}</span>
+      <span class="mdg">grid P${r?r.grid:'—'}${delta!=null?` · ${delta>0?'+'+delta:delta}`:''}</span>
+      <span class="mdf ${f.cls}">${f.t}</span><span class="mdp">${r?r.pts:0}</span></div>`;}).join('');
+  mbox.innerHTML=`
+    <div class="mhead" style="--c:${c.color}">
+      <button class="mclose" onclick="closeGP()">×</button>
+      <div class="mround">Round ${rd.r} · ${rd.flag} ${rd.country}</div>
+      <h2>${fullName(rd.r)}</h2>
+      <div class="mcirc">${rd.circuit} · ${rd.locality} · ${rd.date}</div>
+      <div class="tagline">${win?'<span class="badge win">🏆 Race Win</span>':''}</div>
+    </div>
+    <div class="mbody">
+      <div class="mgrid" style="grid-template-columns:1fr 1fr">
+        <div class="mcell hl"><b>${c.name}</b><span>Constructor</span></div>
+        <div class="mcell hl"><b>${teamPts}</b><span>Team points this race</span></div>
+      </div>${rowsHtml}${hlBlock(rd.r)}
+    </div>`;
+  document.documentElement.style.setProperty('--c',c.color);
+}
+function modalLen(){ return modalKind==='driver'?D[idx].races.length:DATA.rounds.length; }
+function modalDraw(){ modalKind==='driver'?renderGP():renderTeamGP(); }
+$('#mPrev').onclick=()=>{curGP=(curGP-1+modalLen())%modalLen();modalDraw();};
+$('#mNext').onclick=()=>{curGP=(curGP+1)%modalLen();modalDraw();};
+$('.modal__ov').onclick=closeGP;
+
+/* keyboard + swipe */
+addEventListener('keydown',e=>{
+  if(!modal.hidden){ if(e.key==='Escape')closeGP(); if(e.key==='ArrowLeft')$('#mPrev').click(); if(e.key==='ArrowRight')$('#mNext').click(); return; }
+  if(wrap.querySelector('.rdv')){ if(e.key==='Escape'){e.preventDefault();render();return;} if(e.key==='ArrowDown'){e.preventDefault();wrap.querySelector('.rdv-next').click();return;} if(e.key==='ArrowUp'){e.preventDefault();wrap.querySelector('.rdv-prev').click();return;} }
+  if(window.__lcStep && (e.key==='ArrowUp'||e.key==='ArrowDown')){ e.preventDefault(); window.__lcStep(e.key==='ArrowUp'?1:-1); return; }  // lap-evolution: ↑/↓ step the current lap
+  if(e.key==='ArrowRight'){next();if(playing)setPlay(true);}
+  if(e.key==='ArrowLeft'){prev();if(playing)setPlay(true);}
+  if(e.key==='ArrowDown'){e.preventDefault();selGP(1);}
+  if(e.key==='ArrowUp'){e.preventDefault();selGP(-1);}
+  if(e.key==='Enter'){e.preventDefault();openSelGP();}
+  if(e.key===' '){e.preventDefault();setPlay(!playing);}
+  if(e.key==='Home')restart();
+  if(e.key.toLowerCase()==='f')$('#fs').click();
+});
+let x0=null,y0=null;
+wrap.addEventListener('pointerdown',e=>{x0=e.clientX;y0=e.clientY;});
+wrap.addEventListener('pointerup',e=>{ if(x0==null)return; const dx=e.clientX-x0,dy=e.clientY-y0;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); if(playing)setPlay(true);} x0=null;});
+
+addEventListener('hashchange',()=>{ if(!modal.hidden)closeGP(); applyHash(); applyView(); });
+applyHash(); applyView();
+</script>
+</body>
+</html>
