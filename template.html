@@ -409,6 +409,20 @@ button{font-family:inherit}
 .controls button{width:38px;height:33px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .controls button:hover{color:var(--ink);border-color:color-mix(in srgb,var(--c) 55%,var(--line))}
 .controls svg{width:17px;height:17px;fill:currentColor}
+.controls .kbdbtn svg{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+/* keyboard-shortcuts hint pill (desktop only) */
+.kbdhint{position:fixed;left:50%;bottom:64px;transform:translate(-50%,10px);z-index:70;display:flex;align-items:center;gap:15px;
+  padding:9px 8px 9px 16px;border-radius:13px;background:color-mix(in srgb,var(--panel-a) 94%,#0b0e15);border:1px solid var(--line);
+  box-shadow:0 12px 36px rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-size:11.5px;color:var(--muted);opacity:0;pointer-events:none;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.7,.2,1);white-space:nowrap}
+.kbdhint.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.kbdhint .g{display:inline-flex;align-items:center;gap:6px}
+.kbdhint b{font-weight:500;color:var(--muted-2);letter-spacing:.01em}
+.kbdhint kbd{font-family:inherit;font-size:10.5px;font-weight:600;color:var(--ink);min-width:19px;height:20px;padding:0 5px;
+  display:inline-flex;align-items:center;justify-content:center;border-radius:6px;background:rgba(255,255,255,.07);
+  border:1px solid var(--line);border-bottom:2px solid rgba(0,0,0,.5)}
+.kbdhint .kx{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted-2);cursor:pointer;font-size:12px;flex:0 0 auto}
+.kbdhint .kx:hover{color:var(--ink);background:rgba(255,255,255,.06)}
 .controls .play{width:44px;height:37px;background:var(--c);color:#05070d;border-color:transparent}
 .controls .play:hover{color:#05070d;filter:brightness(1.07)}
 .counter{display:flex;align-items:center;gap:7px;padding:0 14px;height:33px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;user-select:none;width:250px;box-sizing:border-box;justify-content:center}
@@ -497,6 +511,7 @@ button{font-family:inherit}
   .chart2 .cplot{flex:0 0 auto;height:96px}.chart2 .cflag{font-size:12px}.chart2 .cval{font-size:8px}
   .gpcard{min-height:60vh}
   .controls{position:sticky;bottom:0;background:var(--bg)}
+  #kbdbtn{display:none}   /* no physical keyboard on mobile */
   .counter{width:auto}.counter .who{display:none}
   .gridcard .chart{overflow-x:auto}.col{flex:0 0 42px}
   /* standings/laps/sprint as horizontal bars on mobile — no cars, no per-race detail */
@@ -557,6 +572,7 @@ button{font-family:inherit}
     <div class="counter" id="counter" title="Jump to…"><b id="cnum">1</b><span class="lbl">/ <span id="ctot">23</span></span><span class="who" id="cwho"></span></div>
     <div class="sep"></div>
     <button id="fs" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 3v-3h2v5h-5v-2z"/></svg></button>
+    <button id="kbdbtn" class="kbdbtn" title="Keyboard shortcuts (?)"><svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="19" height="11" rx="2.2"/><path d="M6 10h0M9.5 10h0M13 10h0M16.5 10h0M6 13.4h0M18 13.4h0M9 13.4h6"/></svg></button>
     <div class="jumppop" id="jumppop" hidden><div class="jgrid" id="jgrid"></div></div>
   </div>
 </div>
@@ -1595,6 +1611,31 @@ wrap.addEventListener('pointerup',e=>{ if(x0==null)return; const dx=e.clientX-x0
 
 addEventListener('hashchange',()=>{ if(!modal.hidden)closeGP(); applyHash(); applyView(); });
 applyHash(); applyView();
+
+// ===== keyboard-shortcuts hint (desktop only): first-run pill + ? / button recall =====
+(function(){
+  if(isMob()) return;                                   // laptops/desktops (physical keyboard) only
+  const hint=document.createElement('div'); hint.className='kbdhint';
+  hint.innerHTML=`<span class="g"><kbd>←</kbd><kbd>→</kbd><b>Prev / Next</b></span>`
+    +`<span class="g"><kbd>↑</kbd><kbd>↓</kbd><b>Browse</b></span>`
+    +`<span class="g"><kbd>↵</kbd><b>Open</b></span>`
+    +`<span class="g"><kbd>esc</kbd><b>Back</b></span>`
+    +`<span class="g"><kbd>space</kbd><b>Play</b></span>`
+    +`<span class="kx" title="Dismiss">✕</span>`;
+  document.body.appendChild(hint);
+  let vis=false, t=null;
+  const show=()=>{hint.classList.add('show');vis=true;clearTimeout(t);t=setTimeout(hide,7000);};
+  const hide=()=>{hint.classList.remove('show');vis=false;clearTimeout(t);};
+  hint.querySelector('.kx').onclick=hide;
+  const btn=document.getElementById('kbdbtn'); if(btn) btn.onclick=()=>vis?hide():show();
+  addEventListener('keydown',e=>{
+    if(e.key==='?'){ e.preventDefault(); vis?hide():show(); return; }
+    if(vis && ['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter','Escape',' '].includes(e.key)) hide();
+  });
+  try{ const n=+(localStorage.getItem('f1viz.kbd')||0);   // auto-show for the first 2 visits, then it's on the ⌨ button / ?
+    if(n<2){ setTimeout(show,1500); localStorage.setItem('f1viz.kbd', n+1); }
+  }catch(_){ setTimeout(show,1500); }
+})();
 </script>
 </body>
 </html>
