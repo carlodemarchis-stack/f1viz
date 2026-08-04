@@ -1542,7 +1542,8 @@ function rdvPace(d,r,S){
     const baseY=y(secs[refLap-1]);
     const arr=[];for(let l=prevEnd+1;l<nextStart;l++){const s=secs[l-1];if(s!=null&&s<RED)arr.push({l,s});}
     if(!arr.length)continue;
-    if(arr.length<=3){ arr.forEach((o,i)=>{const ax=x(o.l),ay=Math.max(T+9,baseY-14-i*11);arrow(ax,ay);svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(o.s),'L'+o.l+' · '+Ff(o.s)));}); }
+    if(arr.length<=3){ const mn=Math.min(...arr.map(o=>o.s)), rng=(Math.max(...arr.map(o=>o.s))-mn)||1;
+      arr.forEach(o=>{const ax=x(o.l), ay=Math.max(T+9, baseY-14-(o.s-mn)/rng*20);arrow(ax,ay);svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(o.s),'L'+o.l+' · '+Ff(o.s)));}); }
     else { const mn=arr.reduce((a,b)=>b.s<a.s?b:a), mx=arr.reduce((a,b)=>b.s>a.s?b:a), ax=x(Math.round((prevEnd+nextStart)/2)), ay=Math.max(T+11,baseY-14);
       arrow(ax,ay);
       svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(mn.s)+'–'+F(mx.s),arr.length+' flagged laps · '+Ff(mn.s)+' (L'+mn.l+') to '+Ff(mx.s)+' (L'+mx.l+') — hover each top marker for its time')); }}
