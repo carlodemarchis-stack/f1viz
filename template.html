@@ -1528,21 +1528,19 @@ function rdvPace(d,r,S){
   (pits||[]).forEach(p=>{const vv=[p,p+1].filter(l=>l>=1&&l<=nL&&secs[l-1]!=null);const ol=vv.length?vv.reduce((a,b)=>secs[b-1]>secs[a-1]?b:a):Math.min(Math.max(p,1),nL);const t=secs[ol-1],yy=T-4;
     svg.appendChild(mk('line',{x1:x(ol),y1:T,x2:x(ol),y2:B,stroke:'rgba(245,166,35,.14)','stroke-width':1,'stroke-dasharray':'2 3'}));
     svg.appendChild(mk('rect',{x:x(ol)-3.3,y:yy-3.3,width:6.6,height:6.6,rx:1.3,fill:'#f5a623',transform:`rotate(45 ${x(ol)} ${yy})`},null,'L'+ol+' · Pit'+(t!=null?' · '+Ff(t):'')));});
-  // top markers: red-flag ⚑ · SC/VSC · start/slow dots (pits handled above)
+  // top markers: red-flag ⚑ only (SC/VSC shown by shaded bands; flagged laps by the span-lines below; pits handled above)
   const RED=300;   // >5min lap = red-flag / stoppage artifact, not a real lap time
-  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;
-    if(s2>=RED){svg.appendChild(mk('text',{x:x(l),y:T-4,fill:'#e77b83','font-size':11,'text-anchor':'middle','dominant-baseline':'central'},'⚑','L'+l+' · Red flag · '+F(s2)));
-      svg.appendChild(mk('text',{x:x(l),y:T+8,fill:'#e0949a','font-size':8,'text-anchor':'middle','font-weight':600},F(s2)));return;}
-    let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
-    svg.appendChild(mk('line',{x1:x(l),y1:T,x2:x(l),y2:B,stroke:'rgba(230,194,74,.05)','stroke-width':1,'stroke-dasharray':'2 3'}));
-    svg.appendChild(mk('circle',{cx:x(l),cy:T-4,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
+  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1)||s2<RED)return;const l=i+1;
+    svg.appendChild(mk('text',{x:x(l),y:T-4,fill:'#e77b83','font-size':11,'text-anchor':'middle','dominant-baseline':'central'},'⚑','L'+l+' · Red flag · '+F(s2)));
+    svg.appendChild(mk('text',{x:x(l),y:T+8,fill:'#e0949a','font-size':8,'text-anchor':'middle','font-weight':600},F(s2)));});
   // flagged-lap times above the adjacent green lap: individual ↑+time when a zone has ≤3, else one "slowest ×N" summary (avoids a noisy ladder). Red-flag laps skipped (shown as ⚑ above).
   const arrow=(ax,ay)=>svg.appendChild(mk('path',{d:`M ${ax} ${ay-3.5} L ${ax-3} ${ay+2.5} L ${ax+3} ${ay+2.5} Z`,fill:'#b7c0d4'}));
   // white span-line under the ▲(s) marking the laps a flagged zone covers (only when it spans >1 lap)
   const span=(prevEnd,nextStart,ly)=>{if(nextStart-1<=prevEnd+1)return;const x0=x(prevEnd+1), x1=x(nextStart-1);
     svg.appendChild(mk('line',{x1:x0,y1:ly,x2:x1,y2:ly,stroke:'#c9d2e6','stroke-width':1.4,'stroke-linecap':'round'},null,'laps L'+(prevEnd+1)+'–L'+(nextStart-1)));
     svg.appendChild(mk('line',{x1:x0,y1:ly-2.5,x2:x0,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));
-    svg.appendChild(mk('line',{x1:x1,y1:ly-2.5,x2:x1,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));};
+    svg.appendChild(mk('line',{x1:x1,y1:ly-2.5,x2:x1,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));
+    if(nextStart-prevEnd-1>=3)for(let l=prevEnd+2;l<=nextStart-2;l++){const xx=x(l);svg.appendChild(mk('line',{x1:xx,y1:ly-1.8,x2:xx,y2:ly+1.8,stroke:'#c9d2e6','stroke-width':1},null,'L'+l));}};
   for(let k=0;k<=stints.length;k++){const prevEnd=k>0?stints[k-1][stints[k-1].length-1]:0, nextStart=k<stints.length?stints[k][0]:nL+1;
     if(nextStart-prevEnd<=1)continue;
     const refLap=prevEnd>=1?prevEnd:nextStart; if(refLap<1||refLap>nL||secs[refLap-1]==null)continue;
