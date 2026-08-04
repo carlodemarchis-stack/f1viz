@@ -1487,6 +1487,7 @@ function rdvTrace(d,r,S){
   let dp=`M ${x(0)} ${y(gridPos||1)}`,lastLap=0,lastPos=gridPos||1;
   for(let i=0;i<trace.length;i++){const p=trace[i];if(p==null)break;dp+=` L ${x(i+1)} ${y(p)}`;lastLap=i+1;lastPos=p;}
   svg.appendChild(mk('path',{d:dp,fill:'none',stroke:col,'stroke-width':2.4,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  for(let i=0;i<trace.length;i++){const p=trace[i];if(p==null)break;svg.appendChild(mk('circle',{cx:x(i+1),cy:y(p),r:2.3,fill:col,opacity:.75}));}
   const retired=r.status==='Retired'||r.status==='Did not start';
   if(retired&&lastLap>0){svg.appendChild(mk('circle',{cx:x(lastLap),cy:y(lastPos),r:4.5,fill:'#ff6b6b'}));svg.appendChild(mk('text',{x:x(lastLap),y:y(lastPos)-9,fill:'#ff8f8f','font-size':9,'text-anchor':'middle','font-weight':700},'DNF'));}
   else if(r.fin!=null&&r.fin!==lastPos){const fy=y(Math.min(r.fin,yMax));svg.appendChild(mk('line',{x1:x(lastLap),y1:y(lastPos),x2:x(nL),y2:fy,stroke:col,'stroke-width':1.6,'stroke-dasharray':'3 3',opacity:.7}));svg.appendChild(mk('circle',{cx:x(nL),cy:fy,r:4,fill:'#0b0e15',stroke:col,'stroke-width':1.8}));svg.appendChild(mk('text',{x:x(nL)-5,y:fy+3.5,fill:'#9aa6cd','font-size':9,'text-anchor':'end'},'P'+r.fin));}
@@ -1529,7 +1530,7 @@ function rdvPace(d,r,S){
   for(let l=1;l<=nL;l++){const h=l%10===0?7:(l%5===0?5:2.5);svg.appendChild(mk('line',{x1:x(l),y1:B,x2:x(l),y2:B+h,stroke:l%5===0?'rgba(213,220,234,.5)':'rgba(150,166,205,.28)','stroke-width':l%10===0?1.3:1}));}
   // pace line: one solid segment per green stint — flagged laps leave an empty GAP (no bridge)
   let stints=[],cur=[];secs.forEach((s2,i)=>{if(!anom[i])cur.push(i+1);else if(cur.length){stints.push(cur);cur=[];}});if(cur.length)stints.push(cur);
-  stints.forEach(sT=>{let dd='M '+x(sT[0])+' '+y(secs[sT[0]-1]);for(let k=1;k<sT.length;k++)dd+=' L '+x(sT[k])+' '+y(secs[sT[k]-1]);svg.appendChild(mk('path',{d:dd,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));sT.forEach(l=>svg.appendChild(mk('circle',{cx:x(l),cy:y(secs[l-1]),r:1.8,fill:col,opacity:.6},null,'L'+l+' · '+Ff(secs[l-1]))));});
+  stints.forEach(sT=>{let dd='M '+x(sT[0])+' '+y(secs[sT[0]-1]);for(let k=1;k<sT.length;k++)dd+=' L '+x(sT[k])+' '+y(secs[sT[k]-1]);svg.appendChild(mk('path',{d:dd,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));sT.forEach(l=>svg.appendChild(mk('circle',{cx:x(l),cy:y(secs[l-1]),r:2.3,fill:col,opacity:.75},null,'L'+l+' · '+Ff(secs[l-1]))));});
   // pit diamonds at top — one per stop (slowest of in/out lap; ALWAYS drawn), no inline time
   (pits||[]).forEach(p=>{const vv=[p,p+1].filter(l=>l>=1&&l<=nL&&secs[l-1]!=null);const ol=vv.length?vv.reduce((a,b)=>secs[b-1]>secs[a-1]?b:a):Math.min(Math.max(p,1),nL);const t=secs[ol-1],yy=T-4;
     svg.appendChild(mk('line',{x1:x(ol),y1:T,x2:x(ol),y2:B,stroke:'rgba(245,166,35,.14)','stroke-width':1,'stroke-dasharray':'2 3'}));
@@ -1570,12 +1571,15 @@ function rdvGap(d,r,S){
   const codes=Object.keys(times[0]||{}), cum={}; codes.forEach(c=>cum[c]=[]);
   for(let Lp=0;Lp<nL;Lp++)codes.forEach(c=>{const t=times[Lp]&&times[Lp][c],pv=cum[c].length?cum[c][cum[c].length-1]:0;cum[c].push(t?pv+parseSec(t):null);});
   const CC={}; D.forEach(v=>{CC[v.code]=v.color;});                            // code → team colour
+  const RED=300;                                                               // >5min single-lap time = red-flag stoppage artifact (not a real gap)
   const gap=[],lead=[],ref=[],dpos=[];                                          // ref = who's on the top line (leader / car ahead); dpos = driver's own position
   for(let Lp=0;Lp<nL;Lp++){const ord=order[Lp]||[],pos=ord.indexOf(code);
     if(pos<0||cum[code][Lp]==null){gap.push(null);lead.push(false);ref.push(null);dpos.push(null);continue;}
     lead.push(pos===0);dpos.push(pos+1);
-    if(mode==='ldr'){const ldr=ord[0];gap.push(cum[ldr][Lp]!=null?cum[code][Lp]-cum[ldr][Lp]:null);ref.push(ldr);}
-    else{const ah=pos>0?ord[pos-1]:null;ref.push(ah);gap.push(pos===0?0:(ah&&cum[ah][Lp]!=null?cum[code][Lp]-cum[ah][Lp]:null));} }   // gap 0 while leading → line stays connected through P1
+    const refC=mode==='ldr'?ord[0]:(pos>0?ord[pos-1]:null); ref.push(refC);
+    const stop=(times[Lp][code]&&parseSec(times[Lp][code])>=RED)||(refC&&times[Lp][refC]&&parseSec(times[Lp][refC])>=RED);   // a red-flag stoppage lap makes the cumulative diff meaningless → break the trace over it (kept out of the y-scale)
+    let g; if(mode==='ldr')g=cum[refC][Lp]!=null?cum[code][Lp]-cum[refC][Lp]:null; else g=pos===0?0:(refC&&cum[refC][Lp]!=null?cum[code][Lp]-cum[refC][Lp]:null);   // gap 0 while leading → line stays connected through P1
+    gap.push(stop?null:g); }
   const valid=gap.filter(v=>v!=null);
   if(!valid.length && !lead.some(Boolean)){ host.innerHTML='<div class="rdv-msg" style="padding:20px">No gap data</div>'; return; }
   const gMax=Math.max(3,(valid.length?Math.max(...valid):3)*1.08);
@@ -1587,7 +1591,7 @@ function rdvGap(d,r,S){
   const F=s=>{const n=Math.abs(s),m=Math.floor(n/60),ss=n-m*60;return m?m+':'+(ss<10?'0':'')+ss.toFixed(1):ss.toFixed(1)+'s';};
   let bd=null;for(let l=1;l<=nL;l++){const f=flags[l];if(f&&bd==null)bd={f:l,t:f};if((!f||l===nL)&&bd){const to=f?l:l-1;svg.appendChild(mk('rect',{x:x(bd.f)-4,y:T,width:x(to)-x(bd.f)+8,height:B-T,fill:bd.t==='S'?'rgba(230,194,74,.13)':'rgba(230,194,74,.06)'}));svg.appendChild(mk('line',{x1:x(bd.f),y1:T-4,x2:x(to),y2:T-4,stroke:'#e6c24a','stroke-width':bd.t==='S'?3.6:1.6,'stroke-linecap':'round'},null,(bd.t==='S'?'Safety car':'VSC')+' · L'+bd.f+(to>bd.f?'–L'+to:'')));bd=null;}}
   if(mode==='ahd'&&gMax>1){svg.appendChild(mk('rect',{x:L,y:T,width:Rr-L,height:y(1)-T,fill:'rgba(74,217,145,.07)'}));svg.appendChild(mk('text',{x:Rr-4,y:y(1)-4,fill:'#5fb79a','font-size':9,'text-anchor':'end'},'within 1.0s'));}
-  const step=gMax>40?10:gMax>18?5:gMax>8?2:1;
+  const step=gMax>300?60:gMax>120?30:gMax>40?10:gMax>18?5:gMax>8?2:1;
   for(let g=0;g<=gMax+.001;g+=step){svg.appendChild(mk('line',{x1:L,y1:y(g),x2:Rr,y2:y(g),stroke:g===0?'rgba(150,166,205,.28)':'rgba(150,166,205,.09)','stroke-width':g===0?1.3:1}));svg.appendChild(mk('text',{x:L-7,y:y(g)+3.5,fill:'#d5dcea','font-size':9.5,'text-anchor':'end','font-weight':600},g===0?'0':'+'+g));}
   svg.appendChild(mk('text',{x:L-7,y:RL+9,fill:'#7b86a3','font-size':8,'text-anchor':'end'},mode==='ldr'?'LEADER':'AHEAD'));
   const xt=[1];for(let l=10;l<nL-4;l+=10)xt.push(l);xt.push(nL);
