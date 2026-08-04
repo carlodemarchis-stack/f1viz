@@ -449,6 +449,22 @@ button{font-family:inherit}
 .mhead{padding:18px 22px 15px;border-bottom:1px solid var(--line-2);position:relative;
   background:radial-gradient(420px 150px at 88% -40%,color-mix(in srgb,var(--c) 22%,transparent),transparent)}
 .mclose{position:absolute;top:13px;right:13px;width:29px;height:29px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:15px}
+/* footer credit line + credits modal */
+.foot{flex:0 0 auto;text-align:center;padding:7px 12px 9px;font-size:10.5px;color:var(--muted-2);border-top:1px solid var(--line-2);letter-spacing:.02em;z-index:6}
+.foot a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;cursor:pointer}
+.foot a:hover{color:var(--ink);border-bottom-color:color-mix(in srgb,var(--c) 55%,var(--line))}
+.credits{position:fixed;inset:0;z-index:65;display:none;align-items:center;justify-content:center;padding:20px}
+.credits.show{display:flex}
+.cbox{position:relative;z-index:1;width:min(560px,93vw);max-height:88vh;overflow-y:auto;border-radius:18px;background:linear-gradient(180deg,#0e121b,#0a0d14);border:1px solid var(--line);box-shadow:0 30px 70px #000c}
+.chead{padding:20px 24px 14px;position:sticky;top:0;background:#0e121b;border-bottom:1px solid var(--line-2);z-index:2}
+.chead h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.csub{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 82%,#fff);margin-top:5px;font-weight:600}
+.cbody{padding:4px 24px 22px}
+.csec{padding:15px 0;border-bottom:1px solid var(--line-2)}
+.csec h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:7px}
+.csec p{font-size:13px;line-height:1.62;color:var(--ink);opacity:.92;margin:0}
+.csec a{color:color-mix(in srgb,var(--c) 82%,#fff);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--c) 32%,transparent)}
+.csign{padding:16px 2px 4px;font-size:12.5px;color:var(--muted);font-style:italic}
 .mhead .mround{font-weight:700;font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--c) 85%,#fff);text-transform:uppercase}
 .mhead h2{font-weight:700;font-size:22px;letter-spacing:-.01em;margin:3px 0}
 .mhead .mcirc{font-size:12px;color:var(--muted-2);letter-spacing:.01em}
@@ -575,6 +591,7 @@ button{font-family:inherit}
     <button id="kbdbtn" class="kbdbtn" title="Keyboard shortcuts (?)"><svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="19" height="11" rx="2.2"/><path d="M6 10h0M9.5 10h0M13 10h0M16.5 10h0M6 13.4h0M18 13.4h0M9 13.4h6"/></svg></button>
     <div class="jumppop" id="jumppop" hidden><div class="jgrid" id="jgrid"></div></div>
   </div>
+  <div class="foot">Produced with passion by <a href="https://aguywithascarf.substack.com/" target="_blank" rel="noopener noreferrer">A guy with a scarf</a> · <a id="creditsLink">Credits</a></div>
 </div>
 
 <div class="modal" id="modal" hidden>
@@ -582,6 +599,20 @@ button{font-family:inherit}
   <button class="mnav" id="mPrev" aria-label="Previous GP">‹</button>
   <div class="mbox" id="mbox"></div>
   <button class="mnav" id="mNext" aria-label="Next GP">›</button>
+</div>
+
+<div class="credits" id="credits">
+  <div class="modal__ov" id="creditsOv"></div>
+  <div class="cbox">
+    <div class="chead"><button class="mclose" onclick="closeCredits()" aria-label="Close">×</button><h2>Credits</h2><div class="csub">F1viz · 2026 Season Film</div></div>
+    <div class="cbody">
+      <div class="csec"><h3>Design &amp; Build</h3><p>Designed and built by <b>Carlo De Marchis</b> — “A guy with a scarf”. The concept, the ranking-ordered card-film layout, the visual language and the interactions — the season films, the per-driver position traces, the self-playing lap-evolution timing tower — are my own. An alternative, more playful way to move through a Formula 1 season, told in my own style.</p></div>
+      <div class="csec"><h3>Data &amp; Images</h3><p>Every number and image here comes from official and open sources, and belongs entirely to them. Results, classifications, pit-stop data, circuit maps, driver &amp; car imagery and race-highlights links are from <b>Formula 1</b> (<a href="https://www.formula1.com" target="_blank" rel="noopener noreferrer">formula1.com</a>) — property of the Formula One group. Lap-by-lap timing, positions and lap times come from <b>jolpica-f1</b> (the community Ergast successor); safety-car &amp; VSC data from <b>OpenF1</b> (<a href="https://openf1.org" target="_blank" rel="noopener noreferrer">openf1.org</a>). All of it is used here only to power this fan experience — the credit belongs to the rights-holders.</p></div>
+      <div class="csec"><h3>Built With</h3><p>Designed and developed with <b>Claude</b> (Anthropic) — Claude Code for the build. A single self-contained page in vanilla JavaScript, hosted on GitHub Pages, with privacy-friendly Cloudflare Web Analytics.</p></div>
+      <div class="csec"><h3>A Note &amp; A Disclaimer</h3><p>This is an independent, non-commercial fan project. I made it purely for the love of Formula 1, of data-visualisation, and of interactive fan experiences on digital — as a way to show that there are alternative, engaging ways to tell a story on top of data and visuals that already exist, in one’s own style. I have no commercial intent whatsoever. “F1”, “FORMULA 1” and related marks are trademarks of the Formula One group; everything shown is the property of the respective rights-holders, used with respect and gratitude. If you hold the rights to anything here and would rather it wasn’t shown, just get in touch and I’ll take it down right away.</p></div>
+      <div class="csign">Made with love. — Carlo De Marchis, “A guy with a scarf”</div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1592,6 +1623,7 @@ $('.modal__ov').onclick=closeGP;
 
 /* keyboard + swipe */
 addEventListener('keydown',e=>{
+  if(document.getElementById('credits').classList.contains('show')){ if(e.key==='Escape')closeCredits(); return; }
   if(!modal.hidden){ if(e.key==='Escape')closeGP(); if(e.key==='ArrowLeft')$('#mPrev').click(); if(e.key==='ArrowRight')$('#mNext').click(); return; }
   if(wrap.querySelector('.rdv')){ if(e.key==='Escape'){e.preventDefault();render();return;} if(e.key==='ArrowDown'){e.preventDefault();wrap.querySelector('.rdv-next').click();return;} if(e.key==='ArrowUp'){e.preventDefault();wrap.querySelector('.rdv-prev').click();return;} }
   if(window.__lcStep && (e.key==='ArrowUp'||e.key==='ArrowDown')){ e.preventDefault(); window.__lcStep(e.key==='ArrowUp'?1:-1); return; }  // lap-evolution: ↑/↓ step the current lap
@@ -1611,6 +1643,11 @@ wrap.addEventListener('pointerup',e=>{ if(x0==null)return; const dx=e.clientX-x0
 
 addEventListener('hashchange',()=>{ if(!modal.hidden)closeGP(); applyHash(); applyView(); });
 applyHash(); applyView();
+
+// ===== credits =====
+function openCredits(){ document.getElementById('credits').classList.add('show'); }
+function closeCredits(){ document.getElementById('credits').classList.remove('show'); }
+$('#creditsLink').onclick=openCredits; $('#creditsOv').onclick=closeCredits;
 
 // ===== keyboard-shortcuts hint (desktop only): first-run pill + ? / button recall =====
 (function(){
