@@ -917,7 +917,8 @@ function raceCard(r){
           <div class="rc-row"><span>Winner</span><b><em class="wl">${r.winner.family}</em></b></div>
           <div class="rc-row"><span>Pole position</span><b>${r.pole?r.pole.family:'—'}</b></div>
           <div class="rc-row"><span>Fastest lap</span><b>${r.fl?`${r.fl.family} · ${r.fl.time}`:'—'}</b></div>
-          <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');if(s.red)p.push(s.red+' Red');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
+          <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
+      ${(()=>{const red=(r.safety||{}).red||0;return red>0?`<div class="rc-row"><span>Red flag</span><b style="color:var(--bad)">⚑ ${red>1?red+' stoppages':'Yes'}</b></div>`:'';})()}
         </div>
         ${(()=>{const vid=DATA.highlights&&DATA.highlights[r.r];
           return vid?`<a class="rc-hl" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer" title="Watch race highlights">
