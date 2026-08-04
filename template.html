@@ -1304,6 +1304,7 @@ function applyHash(){
   lcTab = onLap ? 'lap' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
+  if(pendingRace!=null) rdvChartTab = (m[4]==='pace') ? 'pace' : 'pos';                    // + which chart tab
   pendingTeamRace = (m[0]==='constructors' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;
 }
 // render, then reopen a race deep-dive (driver or constructor) if the URL points at one
@@ -1454,6 +1455,7 @@ function renderRace(d,gi,r,LD){
     const posLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span><span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
     const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:8px;height:8px;border-radius:50%;background:#e6c24a;"></i>SC/VSC</span><span><span style="color:#e77b83;font-weight:700;">⚑</span> red flag</span>`;
     const drawChart=tab=>{ rdvChartTab=tab;
+      try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r+(tab==='pace'?'/pace':''));}catch(e){}
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
       const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
       if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
