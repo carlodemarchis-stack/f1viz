@@ -625,6 +625,7 @@ button{font-family:inherit}
     <div class="sep"></div>
     <button id="fs" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5v2H6v3zm11-5h5v5h-2V6h-3zM6 15v3h3v2H4v-5zm12 3v-3h2v5h-5v-2z"/></svg></button>
     <button id="kbdbtn" class="kbdbtn" title="Keyboard shortcuts (?)"><svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="19" height="11" rx="2.2"/><path d="M6 10h0M9.5 10h0M13 10h0M16.5 10h0M6 13.4h0M18 13.4h0M9 13.4h6"/></svg></button>
+    <button id="helpbtn" class="kbdbtn" title="Guide — how it works"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.4 9.4a2.7 2.7 0 0 1 5.1 1.2c0 1.8-2.5 1.9-2.5 3.2"/><circle cx="12" cy="16.9" r=".55" style="fill:currentColor;stroke:none"/></svg></button>
     <div class="jumppop" id="jumppop" hidden><div class="jgrid" id="jgrid"></div></div>
   </div>
   <div class="foot">Produced with passion by <a href="https://aguywithascarf.substack.com/" target="_blank" rel="noopener noreferrer">A guy with a scarf</a> · <a id="creditsLink">Credits</a></div>
@@ -1393,6 +1394,7 @@ $('#prev').onclick=()=>{prev();if(playing)setPlay(true);};
 function restart(){ if(idx>0) go(0); else gotoMode(MODES[(MODES.indexOf(mode)+2)%3],false); if(playing)setPlay(true); }
 $('#restart').onclick=restart;
 $('#fs').onclick=()=>{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();};
+$('#helpbtn').onclick=()=>window.open('help/','_blank','noopener');
 
 /* jump popover */
 const jump=$('#jumppop');

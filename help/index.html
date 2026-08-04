@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F1viz — Guide</title>
+<meta name="description" content="How to read and navigate F1viz — the 2026 Formula 1 season told as three films of cards.">
+<style>
+  :root{
+    --bg:#06080d; --panel-a:#0e1220; --panel-b:#0a0d15; --ink:#e8ecf6; --muted:#9aa6cd;
+    --muted2:#6b758a; --line:#1c2230; --line2:#141922; --acc:#45e0b0; --acc2:#00D7B6;
+    --gold:#f5c542; --red:#E80020; --orange:#FF8000; --blue:#3671C6; --purple:#c9a3ff; --scyellow:#e6c24a;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:
+      radial-gradient(1200px 600px at 80% -10%, color-mix(in srgb,var(--acc2) 10%,transparent), transparent 60%),
+      var(--bg);
+    color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--acc)}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+  /* header */
+  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);
+    background:linear-gradient(180deg,rgba(6,8,13,.92),rgba(6,8,13,.7));border-bottom:1px solid var(--line)}
+  .hbar{display:flex;align-items:center;gap:16px;height:56px}
+  .logo{font-weight:800;letter-spacing:.02em;font-size:19px}
+  .logo b{color:var(--acc)} .logo span{color:var(--muted)}
+  .hbar .sep{flex:1}
+  .backapp{font-size:12.5px;font-weight:700;text-decoration:none;color:var(--ink);
+    border:1px solid var(--line);border-radius:9px;padding:7px 13px;transition:.15s;white-space:nowrap}
+  .backapp:hover{border-color:var(--acc);color:var(--acc)}
+
+  /* hero */
+  .hero{padding:54px 0 26px}
+  .kick{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  .hero h1{font-size:clamp(30px,6vw,52px);line-height:1.05;margin:12px 0 14px;letter-spacing:-.02em;font-weight:800}
+  .hero p{font-size:16.5px;color:var(--muted);max-width:680px;margin:0}
+  .hero .lede b{color:var(--ink)}
+
+  /* table of contents */
+  .toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:30px 0 8px}
+  .toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);
+    background:linear-gradient(180deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);
+    border-radius:12px;padding:12px 14px;font-size:13.5px;font-weight:600;transition:.15s}
+  .toc a:hover{border-color:var(--acc);transform:translateY(-1px)}
+  .toc a i{font-style:normal;color:var(--muted2);font-variant-numeric:tabular-nums;font-size:12px}
+
+  /* sections */
+  section{padding:44px 0;border-top:1px solid var(--line2)}
+  section:first-of-type{border-top:0}
+  .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:6px}
+  h2{font-size:clamp(22px,3.4vw,30px);margin:0 0 6px;letter-spacing:-.01em;font-weight:800}
+  h3{font-size:17px;margin:26px 0 6px;font-weight:700}
+  p{margin:10px 0;color:#c4cbdd}
+  section > .wrap > p:first-of-type{color:var(--muted);font-size:15.5px}
+  strong{color:var(--ink)}
+  ul{margin:10px 0;padding-left:0;list-style:none}
+  li{position:relative;padding:5px 0 5px 22px;color:#c4cbdd}
+  li::before{content:"";position:absolute;left:2px;top:14px;width:6px;height:6px;border-radius:2px;background:var(--acc);opacity:.8}
+  li b{color:var(--ink)}
+
+  /* figures */
+  figure{margin:22px 0}
+  figure img{width:100%;display:block;border-radius:14px;border:1px solid var(--line);
+    box-shadow:0 24px 60px -30px #000}
+  figcaption{margin-top:9px;font-size:12.5px;color:var(--muted2);text-align:center}
+  figcaption b{color:var(--muted)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.duo{grid-template-columns:1fr}}
+
+  /* callout */
+  .note{background:linear-gradient(180deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);
+    border-left:3px solid var(--acc);border-radius:12px;padding:14px 18px;margin:20px 0;font-size:14px;color:#cdd4e6}
+  .note b{color:var(--ink)}
+
+  /* keys */
+  kbd{font-family:inherit;font-size:12px;font-weight:700;background:#12151d;border:1px solid var(--line);
+    border-bottom-width:2px;border-radius:6px;padding:2px 8px;color:var(--ink);white-space:nowrap;display:inline-block}
+
+  /* legend grid */
+  .legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:18px 0}
+  .lg{display:flex;gap:11px;align-items:flex-start;background:linear-gradient(180deg,var(--panel-a),var(--panel-b));
+    border:1px solid var(--line);border-radius:11px;padding:12px 13px}
+  .lg .sw{flex:0 0 auto;margin-top:3px}
+  .lg .t{font-size:13px}
+  .lg .t b{display:block;color:var(--ink);font-size:13px;margin-bottom:1px}
+  .lg .t span{color:var(--muted2);font-size:12px}
+  .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+  .dia{width:11px;height:11px;border-radius:2px;display:inline-block;transform:rotate(45deg)}
+  .bar{width:22px;height:4px;border-radius:2px;display:inline-block}
+  .band{width:20px;height:13px;border-radius:3px;display:inline-block}
+
+  /* tab chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .chip{font-size:12.5px;font-weight:700;letter-spacing:.02em;border:1px solid var(--line);border-radius:8px;
+    padding:6px 12px;color:var(--muted);background:#0a0d16}
+  .chip.on{color:var(--acc);border-color:color-mix(in srgb,var(--acc) 40%,var(--line));background:color-mix(in srgb,var(--acc) 12%,transparent)}
+
+  footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--muted2);font-size:13px}
+  footer a{color:var(--muted)}
+  .backtop{display:inline-block;margin-top:8px;font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hbar">
+    <span class="logo"><b>F1</b><span>viz</span></span>
+    <span class="sep"></span>
+    <a class="backapp" href="../">‹ Back to the app</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kick">Guide · How it works</div>
+    <h1>A Formula 1 season,<br>told as three films.</h1>
+    <p class="lede">F1viz turns the 2026 season into a set of <b>cards you flip through</b> — one film for the <b>Drivers</b>, one for the <b>Constructors</b>, one for the <b>Races</b>. Every card is a small data-story you can read at a glance or dig into. This guide walks through every screen and every marker.</p>
+    <div class="note" style="margin-top:22px"><b>Best experienced in landscape</b> — on a laptop or an iPad, where the charts have room to breathe. It's <b>great on mobile</b> too: the layouts stack and you swipe between cards.</div>
+  </div>
+
+  <nav class="toc">
+    <a href="#basics"><i>01</i> Getting around</a>
+    <a href="#drivers"><i>02</i> The Drivers film</a>
+    <a href="#deepdive"><i>03</i> Race deep-dive</a>
+    <a href="#reading"><i>04</i> Reading the charts</a>
+    <a href="#summary"><i>05</i> Season summaries</a>
+    <a href="#constructors"><i>06</i> The Constructors film</a>
+    <a href="#races"><i>07</i> The Races film</a>
+    <a href="#tips"><i>08</i> Tips &amp; sharing</a>
+  </nav>
+
+</div>
+
+<!-- ============ BASICS ============ -->
+<section id="basics"><div class="wrap">
+  <div class="eyebrow">01 · Getting around</div>
+  <h2>Three films, one control bar</h2>
+  <p>The three tabs at the top — <strong>Drivers</strong>, <strong>Constructors</strong>, <strong>Races</strong> — each open a film of cards. Everything else you do from the <strong>control bar</strong> along the bottom.</p>
+
+  <ul>
+    <li><b>◀ / ▶|</b> — previous / next card.</li>
+    <li><b>▶ Play</b> — auto-advance through the film hands-free (press again to pause).</li>
+    <li><b>↻ Restart</b> — jump back to the first card of the film.</li>
+    <li><b>The counter</b> (e.g. <em>5 / 26 · P5 Norris</em>) — <b>click it</b> to open a jump menu and hop straight to any card.</li>
+    <li><b>⛶ Fullscreen</b> — great for presenting on a big screen (hidden on phones).</li>
+    <li><b>⌨ Shortcuts</b> — shows the keyboard cheatsheet.</li>
+  </ul>
+
+  <div class="note">
+    <b>Keyboard:</b> <kbd>←</kbd> <kbd>→</kbd> flip cards · <kbd>Enter</kbd> open the selected Grand Prix · <kbd>Esc</kbd> step back.
+    Inside a race deep-dive, <kbd>↑</kbd> <kbd>↓</kbd> jump to the previous / next race.<br>
+    <b>On a phone:</b> <b>swipe</b> left / right to change cards, and <b>tap</b> a Grand Prix row to open its race view. Layouts stack automatically.
+  </div>
+</div></section>
+
+<!-- ============ DRIVERS ============ -->
+<section id="drivers"><div class="wrap">
+  <div class="eyebrow">02 · The Drivers film</div>
+  <h2>The driver card</h2>
+  <p>Each driver gets one card, ordered by championship position. The left half is the driver; the right half is their whole season, round by round.</p>
+
+  <figure>
+    <img src="img/01.jpg" alt="Driver card — Antonelli" loading="lazy">
+    <figcaption><b>Left:</b> championship position + points, driver identity, and season tallies (wins · podiums · poles · fastest laps · DNFs, then places gained / kept / lost and sprint results), with a points-per-round chart. <b>Right:</b> every round — grid→finish, fastest lap, pit stops, finish, race &amp; sprint points, and a highlights link.</figcaption>
+  </figure>
+
+  <p>The bars in the points chart split <b>race</b> vs <b>sprint</b> points, and the flags along the bottom mark each round. On the right, <b>tap any Grand Prix row</b> to open that race's deep-dive.</p>
+</div></section>
+
+<!-- ============ DEEP DIVE ============ -->
+<section id="deepdive"><div class="wrap">
+  <div class="eyebrow">03 · Race deep-dive</div>
+  <h2>Four ways to read a race</h2>
+  <p>Tapping a Grand Prix opens the driver's race in full width. The whole view <b>recolours to the driver's team</b>, and four tabs give four angles on the same race. The panel on the right always summarises the result.</p>
+
+  <div class="chips">
+    <span class="chip on">Position</span>
+    <span class="chip">Lap times</span>
+    <span class="chip">Gap: leader</span>
+    <span class="chip">Gap: ahead</span>
+  </div>
+
+  <h3>Position — where they ran, lap by lap</h3>
+  <figure>
+    <img src="img/02.jpg" alt="Position tab" loading="lazy">
+    <figcaption>The line is track position over the race. Pit stops are <b>amber diamonds</b>, Safety-Car / VSC windows are <b>shaded bands</b>, the <b>purple dot</b> is the driver's fastest lap, and a dashed tail reconciles to the classified finish when a penalty or a lap down changed it.</figcaption>
+  </figure>
+
+  <h3>Lap times — the green-lap pace</h3>
+  <figure>
+    <img src="img/03.jpg" alt="Lap times tab" loading="lazy">
+    <figcaption>Only clean “green” laps are plotted (lower = faster). Pit, Safety-Car and outlier laps aren't drawn — they're <b>flagged along the top with their time</b> so the pace line stays readable and simply breaks over them. A <b>POS track</b> runs across the top showing the driver's position through the race.</figcaption>
+  </figure>
+
+  <h3>Gap: leader &amp; Gap: ahead</h3>
+  <p>These two plot time gaps built from every car's cumulative lap times. <b>Zero is the top line.</b> The trace drops as the gap grows and snaps back at a Safety Car or when rivals pit.</p>
+  <div class="duo">
+    <figure>
+      <img src="img/04.jpg" alt="Gap to leader" loading="lazy">
+      <figcaption><b>Gap: leader</b> — distance to whoever leads the race. The top <b>reference lane</b> names the leader (team-coloured) and a bold bar on the 0-line marks laps <b>this</b> driver led.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/05.jpg" alt="Gap to car ahead" loading="lazy">
+      <figcaption><b>Gap: ahead</b> — distance to the car directly in front. Inside the shaded band the driver is <b>within ~1s (DRS range)</b>; the label shows who's ahead, and a bold LEADING bar marks laps with no car in front.</figcaption>
+    </figure>
+  </div>
+
+  <h3>The result panel</h3>
+  <p>On the right: the finish (gold for a win, red for a DNF) and the move from grid, then grid · quali · stops · points, status, fastest lap, laps led, laps completed, race time, a <b>pit-stop timeline</b> (slow stops flagged), and a link to the official race highlights.</p>
+
+  <h3>Every team, its own colours</h3>
+  <p>Open a different driver and the whole app repaints — here Hamilton's Ferrari red. The charts also handle the messy races cleanly:</p>
+  <div class="duo">
+    <figure>
+      <img src="img/07.jpg" alt="Red flag on the pace chart" loading="lazy">
+      <figcaption>Monaco's <b>red-flag stoppage</b>: the ~37-minute “lap” is shown as a red ⚑ marker (not plotted), and dense flagged zones collapse to a single min–max range with a lap tick-line.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/08.jpg" alt="Gap chart with SC bunching" loading="lazy">
+      <figcaption>On the gap charts the same events show as big swings — the field <b>bunches back up</b> under a Safety Car or red flag, then stretches out again at the restart.</figcaption>
+    </figure>
+  </div>
+</div></section>
+
+<!-- ============ READING ============ -->
+<section id="reading"><div class="wrap">
+  <div class="eyebrow">04 · Reading the charts</div>
+  <h2>Every marker, decoded</h2>
+  <p>The same visual language runs across all the race charts:</p>
+  <div class="legend">
+    <div class="lg"><span class="sw"><span class="dia" style="background:#f5a623"></span></span><span class="t"><b>Pit stop</b><span>Amber diamond, on the top line — one per stop.</span></span></div>
+    <div class="lg"><span class="sw"><span class="bar" style="background:var(--scyellow);height:4px"></span></span><span class="t"><b>Safety Car / VSC</b><span>Yellow line at the top + a shaded band over those laps.</span></span></div>
+    <div class="lg"><span class="sw"><span style="color:#e77b83;font-weight:800;font-size:15px">⚑</span></span><span class="t"><b>Red flag</b><span>A stoppage — its huge “lap” is flagged, never plotted.</span></span></div>
+    <div class="lg"><span class="sw"><span class="dot" style="background:var(--purple)"></span></span><span class="t"><b>Fastest lap</b><span>Purple dot at the driver's quickest lap.</span></span></div>
+    <div class="lg"><span class="sw"><span class="dot" style="background:#ff6b6b"></span></span><span class="t"><b>DNF</b><span>Red marker where a retirement ends the line.</span></span></div>
+    <div class="lg"><span class="sw"><span class="bar" style="background:var(--acc);height:5px"></span></span><span class="t"><b>Leading</b><span>A bold bar (in the driver's colour) on the 0-line = laps led.</span></span></div>
+    <div class="lg"><span class="sw"><span class="band" style="background:rgba(74,217,145,.25)"></span></span><span class="t"><b>Within 1.0s</b><span>Shaded band on “gap to ahead” = DRS range.</span></span></div>
+    <div class="lg"><span class="sw"><span class="bar" style="background:#8ea0c8;height:3px"></span></span><span class="t"><b>POS track</b><span>Top line on the pace chart — position, labelled where it changes.</span></span></div>
+  </div>
+</div></section>
+
+<!-- ============ SUMMARY ============ -->
+<section id="summary"><div class="wrap">
+  <div class="eyebrow">05 · Season summaries</div>
+  <h2>The four closing cards</h2>
+  <p>After the individual cards, each film ends with four whole-season views.</p>
+
+  <div class="duo">
+    <figure><img src="img/11.jpg" alt="Standings — Drivers" loading="lazy"><figcaption><b>Standings</b> — the championship as stacked bars, each block a round's haul. Tap a bar to jump to that driver.</figcaption></figure>
+    <figure><img src="img/12.jpg" alt="Laps Completed" loading="lazy"><figcaption><b>Laps completed</b> — total racing laps run, a quick read on reliability and race distance.</figcaption></figure>
+  </div>
+  <div class="duo">
+    <figure><img src="img/13.jpg" alt="Sprint Points" loading="lazy"><figcaption><b>Sprint points</b> — points from the sprint races only, round by round.</figcaption></figure>
+    <figure><img src="img/14.jpg" alt="Leading Laps" loading="lazy"><figcaption><b>Leading laps</b> — who led every lap of every Grand Prix, one row per race on a shared lap axis, with a laps-led ranking.</figcaption></figure>
+  </div>
+</div></section>
+
+<!-- ============ CONSTRUCTORS ============ -->
+<section id="constructors"><div class="wrap">
+  <div class="eyebrow">06 · The Constructors film</div>
+  <h2>Both cars, together</h2>
+  <p>The Constructors film mirrors the Drivers one, but per team — the card shows the car, both drivers, and their combined season.</p>
+
+  <div class="duo">
+    <figure><img src="img/15.jpg" alt="Mercedes team card" loading="lazy"><figcaption>The team card: car, both drivers, combined points (each driver's share stacked), and every round's result for both cars.</figcaption></figure>
+    <figure><img src="img/16.jpg" alt="Constructor race deep-dive" loading="lazy"><figcaption>The race deep-dive plots <b>both cars at once</b> — one solid line, one dashed — with a result box for each driver.</figcaption></figure>
+  </div>
+  <p>The same closing cards follow — <b>Standings</b>, <b>Laps completed</b>, <b>Sprint points</b> and <b>Leading laps</b> — grouped by team (teammate stints merge into one team colour).</p>
+  <div class="duo">
+    <figure><img src="img/18.jpg" alt="Constructor standings" loading="lazy"><figcaption>Constructor standings — horizontal bars with each car's livery.</figcaption></figure>
+    <figure><img src="img/21.jpg" alt="Constructor leading laps" loading="lazy"><figcaption>Leading laps by team — MER · FER · MCL · RBR through the season.</figcaption></figure>
+  </div>
+</div></section>
+
+<!-- ============ RACES ============ -->
+<section id="races"><div class="wrap">
+  <div class="eyebrow">07 · The Races film</div>
+  <h2>Every Grand Prix, replayed</h2>
+  <p>The Races film is one card per round. The left is the circuit and the facts; the right is the classification — and a play-along replay.</p>
+
+  <figure>
+    <img src="img/22.jpg" alt="Race card — results" loading="lazy">
+    <figcaption>The <b>Results</b> tab: circuit map, race distance, winner · pole · fastest lap · safety-car count, official highlights, and the full finishing order (grid, positions gained, fastest lap, pit stops, gap, points).</figcaption>
+  </figure>
+
+  <h3>Lap Evolution — the timing tower</h3>
+  <p>Switch to the <b>Lap Evolution</b> tab for a self-playing timing tower. Press play and the order rearranges lap by lap; scrub the lap slider to any point; <b>tap a driver to follow</b> them up and down the order.</p>
+  <div class="duo">
+    <figure><img src="img/23.jpg" alt="Lap evolution at the grid" loading="lazy"><figcaption>At the grid, before lights out.</figcaption></figure>
+    <figure><img src="img/25.jpg" alt="Lap evolution mid-race with a pit stop" loading="lazy"><figcaption>Mid-race — live gaps and lap times, with pit stops (amber), personal bests (green) and the fastest lap (purple) highlighted as they happen.</figcaption></figure>
+  </div>
+
+  <h3>The season map</h3>
+  <figure>
+    <img src="img/27.jpg" alt="Season map" loading="lazy">
+    <figcaption>The film closes on the <b>Season map</b> — all 23 Grands Prix on the globe (with a Europe inset), each dot coloured by the winning team; upcoming rounds sit greyed out.</figcaption>
+  </figure>
+</div></section>
+
+<!-- ============ TIPS ============ -->
+<section id="tips"><div class="wrap">
+  <div class="eyebrow">08 · Tips &amp; sharing</div>
+  <h2>Get the most out of it</h2>
+  <ul>
+    <li><b>Jump anywhere</b> — click the counter in the control bar for a grid of every card in the film.</li>
+    <li><b>Present it</b> — go fullscreen and hit play to let a film run itself.</li>
+    <li><b>Share a link</b> — the address bar tracks exactly where you are (driver, race and chart tab), so a copied link reopens the very same view.</li>
+    <li><b>Compare tabs</b> — Position, Lap times and the two Gap views describe the <b>same</b> race; flicking between them is the fastest way to understand what happened.</li>
+  </ul>
+
+  <div class="note">
+    <b>Where the numbers come from.</b> Results, classifications, pit data, circuit maps and highlights are from <b>Formula 1</b>. Lap-by-lap timing and positions come from <b>jolpica-f1</b> (the community Ergast successor); Safety-Car &amp; VSC data from <b>OpenF1</b>. Everything here is used only to power this fan experience — the credit belongs to the rights-holders.
+  </div>
+
+  <p><a class="backapp" href="../" style="display:inline-block;margin-top:10px">‹ Back to the app</a></p>
+</div></section>
+
+<footer><div class="wrap">
+  Produced with passion by <a href="https://tennis.aguywithascarf.com">A guy with a scarf</a>.
+  <a class="backtop" href="#">↑ Back to top</a>
+</div></footer>
+
+</body>
+</html>
