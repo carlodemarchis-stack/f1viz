@@ -1305,7 +1305,7 @@ function applyHash(){
   lcTab = onLap ? 'lap' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
-  if(pendingRace!=null) rdvChartTab = (m[4]==='pace') ? 'pace' : 'pos';                    // + which chart tab
+  if(pendingRace!=null) rdvChartTab = m[4]==='pace'?'pace':m[4]==='gap-leader'?'gapL':m[4]==='gap-ahead'?'gapA':'pos';   // + which chart tab
   pendingTeamRace = (m[0]==='constructors' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;
 }
 // render, then reopen a race deep-dive (driver or constructor) if the URL points at one
@@ -1418,7 +1418,7 @@ function renderRace(d,gi,r,LD){
     <div class="rdv-body">
       <div class="rdv-left">
         <div class="rdv-ltabs">
-          <div class="rdv-ltset"><button class="rdv-lt" data-lt="pos">Position</button><button class="rdv-lt" data-lt="pace">Lap times</button></div>
+          <div class="rdv-ltset"><button class="rdv-lt" data-lt="pos">Position</button><button class="rdv-lt" data-lt="pace">Lap times</button><button class="rdv-lt" data-lt="gapL">Gap: leader</button><button class="rdv-lt" data-lt="gapA">Gap: ahead</button></div>
           <div class="rdv-lsub" id="rdvSub"></div>
         </div>
         <div class="rdv-cap" id="rdvCap"></div>
@@ -1455,11 +1455,16 @@ function renderRace(d,gi,r,LD){
   if(LD){
     const posLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span><span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
     const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span><span><span style="color:#e77b83;font-weight:700;">⚑</span> red flag</span>`;
+    const gapLLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>gap to leader</span><span><i style="width:12px;height:5px;border-radius:3px;background:#4ad991;"></i>led this lap</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span>`;
+    const gapALg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>gap to car ahead</span><span><i style="width:12px;height:8px;border-radius:2px;background:rgba(74,217,145,.22);"></i>within 1.0s</span><span><i style="width:12px;height:5px;border-radius:3px;background:#4ad991;"></i>leading</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span>`;
     const drawChart=tab=>{ rdvChartTab=tab;
-      try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r+(tab==='pace'?'/pace':''));}catch(e){}
+      const suf=tab==='pace'?'/pace':tab==='gapL'?'/gap-leader':tab==='gapA'?'/gap-ahead':'';
+      try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r+suf);}catch(e){}
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
       const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
       if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
+      else if(tab==='gapL'){ sub.textContent='gap to leader · '+nL+' laps'; cap.textContent='Zero (top) is the race leader. The trace drops as the gap grows and snaps back at a Safety Car or when rivals pit. The green band marks laps this driver led; diamonds are their own pit stops.'; lg.innerHTML=gapLLg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ldr'}); }
+      else if(tab==='gapA'){ sub.textContent='gap to car ahead · '+nL+' laps'; cap.textContent='Zero (top) is the gearbox of the car ahead; inside the shaded band the driver is within ~1s (DRS range). The label shows who is ahead — a green LEADING band marks laps with no car in front.'; lg.innerHTML=gapALg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ahd'}); }
       else { sub.textContent='position by lap · '+nL+' laps'; cap.textContent=''; lg.innerHTML=posLg; rdvTrace(d,r,{trace,gridPos,pits,pitTimes,flags,nL,flLap}); } };
     wrap.querySelectorAll('.rdv-lt').forEach(b=>b.onclick=()=>drawChart(b.dataset.lt));
     drawChart(rdvChartTab);
@@ -1556,6 +1561,43 @@ function rdvPace(d,r,S){
       svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(mn.s)+'–'+F(mx.s),arr.length+' flagged laps · '+Ff(mn.s)+' (L'+mn.l+') to '+Ff(mx.s)+' (L'+mx.l+') — hover each top marker for its time'));
       span(prevEnd,nextStart,ay+5); }}
   if(flLap&&secs[flLap-1]!=null){svg.appendChild(mk('circle',{cx:x(flLap),cy:y(secs[flLap-1]),r:5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5},null,'Fastest lap · L'+flLap+' · '+Ff(secs[flLap-1])));svg.appendChild(mk('text',{x:x(flLap),y:y(secs[flLap-1])+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},Ff(secs[flLap-1])));}
+  host.innerHTML='';host.appendChild(svg);
+}
+// driver deep-dive alt charts: GAP to leader / GAP to car ahead — cumulative-time gaps, lap by lap
+function rdvGap(d,r,S){
+  const {order,times,code,pits,flags,nL,mode}=S;                 // mode: 'ldr' (to leader) | 'ahd' (to car ahead)
+  const host=document.getElementById('rdvChart'); if(!host)return;
+  const codes=Object.keys(times[0]||{}), cum={}; codes.forEach(c=>cum[c]=[]);
+  for(let Lp=0;Lp<nL;Lp++)codes.forEach(c=>{const t=times[Lp]&&times[Lp][c],pv=cum[c].length?cum[c][cum[c].length-1]:0;cum[c].push(t?pv+parseSec(t):null);});
+  const gap=[],ahead=[],lead=[];
+  for(let Lp=0;Lp<nL;Lp++){const ord=order[Lp]||[],pos=ord.indexOf(code);
+    if(pos<0||cum[code][Lp]==null){gap.push(null);ahead.push(null);lead.push(false);continue;}
+    lead.push(pos===0);
+    if(mode==='ldr'){const ldr=ord[0];gap.push(cum[ldr][Lp]!=null?cum[code][Lp]-cum[ldr][Lp]:null);ahead.push(null);}
+    else{const ah=pos>0?ord[pos-1]:null;ahead.push(ah);gap.push(pos===0?null:(ah&&cum[ah][Lp]!=null?cum[code][Lp]-cum[ah][Lp]:null));} }
+  const valid=gap.filter(v=>v!=null);
+  if(!valid.length && !lead.some(Boolean)){ host.innerHTML='<div class="rdv-msg" style="padding:20px">No gap data</div>'; return; }
+  const gMax=Math.max(3,(valid.length?Math.max(...valid):3)*1.08);
+  const W=Math.max(340,host.clientWidth), H=Math.max(240,host.clientHeight), L=48, Rr=W-12, T=40, B=H-30, col=d.color;
+  const x=l=>L+((l-1)/(nL-1))*(Rr-L), y=g=>T+(Math.min(Math.max(g,0),gMax)/gMax)*(B-T);
+  const NS='http://www.w3.org/2000/svg', svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('preserveAspectRatio','none');
+  const mk=(n,a,t,tip)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;if(tip){const ti=document.createElementNS(NS,'title');ti.textContent=tip;e.appendChild(ti);}return e;};
+  const F=s=>{const n=Math.abs(s),m=Math.floor(n/60),ss=n-m*60;return m?m+':'+(ss<10?'0':'')+ss.toFixed(1):ss.toFixed(1)+'s';};
+  let bd=null;for(let l=1;l<=nL;l++){const f=flags[l];if(f&&bd==null)bd={f:l,t:f};if((!f||l===nL)&&bd){const to=f?l:l-1;svg.appendChild(mk('rect',{x:x(bd.f)-4,y:T,width:x(to)-x(bd.f)+8,height:B-T,fill:bd.t==='S'?'rgba(230,194,74,.13)':'rgba(230,194,74,.06)'}));svg.appendChild(mk('line',{x1:x(bd.f),y1:T-4,x2:x(to),y2:T-4,stroke:'#e6c24a','stroke-width':bd.t==='S'?3.6:1.6,'stroke-linecap':'round'},null,(bd.t==='S'?'Safety car':'VSC')+' · L'+bd.f+(to>bd.f?'–L'+to:'')));bd=null;}}
+  if(mode==='ahd'&&gMax>1){svg.appendChild(mk('rect',{x:L,y:T,width:Rr-L,height:y(1)-T,fill:'rgba(74,217,145,.07)'}));svg.appendChild(mk('text',{x:Rr-4,y:y(1)-4,fill:'#5fb79a','font-size':9,'text-anchor':'end'},'within 1.0s'));}
+  const step=gMax>40?10:gMax>18?5:gMax>8?2:1;
+  for(let g=0;g<=gMax+.001;g+=step){svg.appendChild(mk('line',{x1:L,y1:y(g),x2:Rr,y2:y(g),stroke:g===0?'rgba(150,166,205,.28)':'rgba(150,166,205,.09)','stroke-width':g===0?1.3:1}));svg.appendChild(mk('text',{x:L-7,y:y(g)+3.5,fill:'#d5dcea','font-size':9.5,'text-anchor':'end','font-weight':600},g===0?'0':'+'+g));}
+  svg.appendChild(mk('text',{x:L-7,y:T-7,fill:'#7b86a3','font-size':8,'text-anchor':'end'},mode==='ldr'?'LEADER':'AHEAD'));
+  const xt=[1];for(let l=10;l<nL-4;l+=10)xt.push(l);xt.push(nL);
+  xt.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#d5dcea','font-size':9.5,'text-anchor':'middle','font-weight':600},l)));
+  for(let l=1;l<=nL;l++){const h=l%10===0?7:l%5===0?5:2.5;svg.appendChild(mk('line',{x1:x(l),y1:B,x2:x(l),y2:B+h,stroke:l%5===0?'rgba(213,220,234,.5)':'rgba(150,166,205,.28)','stroke-width':l%10===0?1.3:1}));}
+  {let s=null;for(let i=0;i<=nL;i++){const ld=i<nL&&lead[i];if(ld&&s==null)s=i+1;if((!ld||i===nL)&&s!=null){const to=i,x0=x(s),x1=x(to);svg.appendChild(mk('line',{x1:x0,y1:y(0),x2:x1,y2:y(0),stroke:'#4ad991','stroke-width':5,'stroke-linecap':'round',opacity:.9},null,'Leading · L'+s+(to>s?'–L'+to:'')));if(x1-x0>34)svg.appendChild(mk('text',{x:(x0+x1)/2,y:y(0)-6,fill:'#4ad991','font-size':8.5,'font-weight':700,'text-anchor':'middle'},'LEADING'));s=null;}}}
+  let dd='',on=false;gap.forEach((g,i)=>{if(g==null){on=false;return;}const px=x(i+1),py=y(g);dd+=(on?' L ':'M ')+px+' '+py;on=true;});
+  svg.appendChild(mk('path',{d:dd,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  gap.forEach((g,i)=>{if(g!=null)svg.appendChild(mk('circle',{cx:x(i+1),cy:y(g),r:1.7,fill:col,opacity:.55},null,'L'+(i+1)+' · +'+F(g)+(ahead[i]?' to '+ahead[i]:'')));});
+  (pits||[]).forEach(l=>{const g=gap[l-1];if(g==null)return;svg.appendChild(mk('rect',{x:x(l)-3.3,y:y(g)-3.3,width:6.6,height:6.6,rx:1.3,fill:'#f5a623',transform:`rotate(45 ${x(l)} ${y(g)})`},null,'L'+l+' · Pit'));});
+  if(mode==='ahd'){let last=null,lastX=-99;ahead.forEach((c,i)=>{if(c&&gap[i]!=null&&c!==last&&x(i+1)-lastX>28){svg.appendChild(mk('text',{x:x(i+1),y:y(gap[i])-8,fill:'#8b95ad','font-size':8.5,'font-weight':700,'text-anchor':'middle'},c));last=c;lastX=x(i+1);}else if(c!==last)last=c;});}
   host.innerHTML='';host.appendChild(svg);
 }
 // ---- constructor race deep-dive (both cars) ----
