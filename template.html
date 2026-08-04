@@ -1452,7 +1452,7 @@ function renderRace(d,gi,r,LD){
   wrap.querySelector('.rdv-next').onclick=()=>openRace((gi+1)%rl);
   if(LD){
     const posLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span><span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
-    const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:8px;height:8px;border-radius:50%;background:#e6c24a;"></i>SC/VSC</span>`;
+    const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:8px;height:8px;border-radius:50%;background:#e6c24a;"></i>SC/VSC</span><span><span style="color:#e77b83;font-weight:700;">⚑</span> red flag</span>`;
     const drawChart=tab=>{ rdvChartTab=tab;
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
       const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
@@ -1524,19 +1524,22 @@ function rdvPace(d,r,S){
   (pits||[]).forEach(p=>{const vv=[p,p+1].filter(l=>l>=1&&l<=nL&&secs[l-1]!=null);const ol=vv.length?vv.reduce((a,b)=>secs[b-1]>secs[a-1]?b:a):Math.min(Math.max(p,1),nL);const t=secs[ol-1],yy=T-4;
     svg.appendChild(mk('line',{x1:x(ol),y1:T,x2:x(ol),y2:B,stroke:'rgba(245,166,35,.14)','stroke-width':1,'stroke-dasharray':'2 3'}));
     svg.appendChild(mk('rect',{x:x(ol)-3.3,y:yy-3.3,width:6.6,height:6.6,rx:1.3,fill:'#f5a623',transform:`rotate(45 ${x(ol)} ${yy})`},null,'L'+ol+' · Pit'+(t!=null?' · '+Ff(t):'')));});
-  // SC/VSC/start dots at top
-  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
+  // top markers: red-flag ⚑ · SC/VSC · start/slow dots (pits handled above)
+  const RED=300;   // >5min lap = red-flag / stoppage artifact, not a real lap time
+  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;
+    if(s2>=RED){svg.appendChild(mk('text',{x:x(l),y:T-4,fill:'#e77b83','font-size':11,'text-anchor':'middle','dominant-baseline':'central'},'⚑','L'+l+' · Red flag / stoppage'));return;}
+    let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
     svg.appendChild(mk('line',{x1:x(l),y1:T,x2:x(l),y2:B,stroke:'rgba(230,194,74,.05)','stroke-width':1,'stroke-dasharray':'2 3'}));
     svg.appendChild(mk('circle',{cx:x(l),cy:T-4,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
-  // per gap: small ↑ + the peak lap time, floated just above the adjacent green lap (not at the ceiling)
+  // EVERY flagged lap gets a small ↑ + its time, floated above the adjacent green lap (staircased within a zone). Red-flag laps skipped (garbage time — shown as ⚑ above).
   for(let k=0;k<=stints.length;k++){const prevEnd=k>0?stints[k-1][stints[k-1].length-1]:0, nextStart=k<stints.length?stints[k][0]:nL+1;
     if(nextStart-prevEnd<=1)continue;
-    let peakLap=-1,peakT=-1;for(let l=prevEnd+1;l<nextStart;l++){if(secs[l-1]!=null&&secs[l-1]>peakT){peakT=secs[l-1];peakLap=l;}}
-    if(peakLap<0)continue;
     const refLap=prevEnd>=1?prevEnd:nextStart; if(refLap<1||refLap>nL||secs[refLap-1]==null)continue;
-    const ax=x(peakLap), ay=Math.max(T+10, y(secs[refLap-1])-13);
-    svg.appendChild(mk('path',{d:`M ${ax} ${ay-3.5} L ${ax-3} ${ay+2.5} L ${ax+3} ${ay+2.5} Z`,fill:'#b7c0d4'},null,'L'+peakLap+' · '+Ff(peakT)));
-    svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(peakT)));}
+    const baseY=y(secs[refLap-1]); let i=0;
+    for(let l=prevEnd+1;l<nextStart;l++){const s=secs[l-1]; if(s==null||s>=RED)continue;
+      const ax=x(l), ay=Math.max(T+9, baseY-14-i*10); i++;
+      svg.appendChild(mk('path',{d:`M ${ax} ${ay-3.5} L ${ax-3} ${ay+2.5} L ${ax+3} ${ay+2.5} Z`,fill:'#b7c0d4'},null,'L'+l+' · '+Ff(s)));
+      svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8,'text-anchor':'middle','font-weight':600},F(s)));}}
   if(flLap&&secs[flLap-1]!=null){svg.appendChild(mk('circle',{cx:x(flLap),cy:y(secs[flLap-1]),r:5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5},null,'Fastest lap · L'+flLap+' · '+Ff(secs[flLap-1])));svg.appendChild(mk('text',{x:x(flLap),y:y(secs[flLap-1])+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},Ff(secs[flLap-1])));}
   host.innerHTML='';host.appendChild(svg);
 }
