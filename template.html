@@ -1547,7 +1547,11 @@ function rdvPace(d,r,S){
       arr.forEach(o=>{const ax=x(o.l), ay=Math.max(T+9, baseY-14-(o.s-mn)/rng*20);arrow(ax,ay);svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(o.s),'L'+o.l+' · '+Ff(o.s)));}); }
     else { const mn=arr.reduce((a,b)=>b.s<a.s?b:a), mx=arr.reduce((a,b)=>b.s>a.s?b:a), ax=x(Math.round((prevEnd+nextStart)/2)), ay=Math.max(T+11,baseY-14);
       arrow(ax,ay);
-      svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(mn.s)+'–'+F(mx.s),arr.length+' flagged laps · '+Ff(mn.s)+' (L'+mn.l+') to '+Ff(mx.s)+' (L'+mx.l+') — hover each top marker for its time')); }}
+      svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(mn.s)+'–'+F(mx.s),arr.length+' flagged laps · '+Ff(mn.s)+' (L'+mn.l+') to '+Ff(mx.s)+' (L'+mx.l+') — hover each top marker for its time'));
+      const x0=x(prevEnd+1), x1=x(nextStart-1), ly=ay+5;   // white span-line under the ▲ = laps this summary covers
+      svg.appendChild(mk('line',{x1:x0,y1:ly,x2:x1,y2:ly,stroke:'#c9d2e6','stroke-width':1.4,'stroke-linecap':'round'},null,'laps L'+(prevEnd+1)+'–L'+(nextStart-1)));
+      svg.appendChild(mk('line',{x1:x0,y1:ly-2.5,x2:x0,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));
+      svg.appendChild(mk('line',{x1:x1,y1:ly-2.5,x2:x1,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2})); }}
   if(flLap&&secs[flLap-1]!=null){svg.appendChild(mk('circle',{cx:x(flLap),cy:y(secs[flLap-1]),r:5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5},null,'Fastest lap · L'+flLap+' · '+Ff(secs[flLap-1])));svg.appendChild(mk('text',{x:x(flLap),y:y(secs[flLap-1])+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},Ff(secs[flLap-1])));}
   host.innerHTML='';host.appendChild(svg);
 }
