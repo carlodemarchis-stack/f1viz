@@ -1527,7 +1527,8 @@ function rdvPace(d,r,S){
   // top markers: red-flag ⚑ · SC/VSC · start/slow dots (pits handled above)
   const RED=300;   // >5min lap = red-flag / stoppage artifact, not a real lap time
   secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;
-    if(s2>=RED){svg.appendChild(mk('text',{x:x(l),y:T-4,fill:'#e77b83','font-size':11,'text-anchor':'middle','dominant-baseline':'central'},'⚑','L'+l+' · Red flag / stoppage'));return;}
+    if(s2>=RED){svg.appendChild(mk('text',{x:x(l),y:T-4,fill:'#e77b83','font-size':11,'text-anchor':'middle','dominant-baseline':'central'},'⚑','L'+l+' · Red flag · '+F(s2)));
+      svg.appendChild(mk('text',{x:x(l),y:T+8,fill:'#e0949a','font-size':8,'text-anchor':'middle','font-weight':600},F(s2)));return;}
     let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
     svg.appendChild(mk('line',{x1:x(l),y1:T,x2:x(l),y2:B,stroke:'rgba(230,194,74,.05)','stroke-width':1,'stroke-dasharray':'2 3'}));
     svg.appendChild(mk('circle',{cx:x(l),cy:T-4,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
