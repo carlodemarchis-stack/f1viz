@@ -1670,7 +1670,7 @@ function rdvGap(d,r,S){
   svg.appendChild(mk('path',{d:dd,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
   gap.forEach((g,i)=>{if(g!=null)svg.appendChild(mk('circle',{cx:x(i+1),cy:y(g),r:2.3,fill:col,opacity:.75},null,'L'+(i+1)+' · '+(g<=0?'leading':'+'+F(g))+(ref[i]&&!lead[i]?' to '+ref[i]:'')));});
   // driver's own position on the trace, printed where it changes
-  {let last=null,lastX=-99;for(let i=0;i<nL;i++){const g=gap[i],p=dpos[i];if(g==null||p==null)continue;if(p!==last&&x(i+1)-lastX>24){const ly=y(g)-7<T+2?y(g)+13:y(g)-7;svg.appendChild(mk('text',{x:x(i+1),y:ly,fill:'#c9d2e6','font-size':8.5,'font-weight':700,'text-anchor':'middle'},'P'+p,'L'+(i+1)+' · P'+p));last=p;lastX=x(i+1);}else if(p!==last)last=p;}}
+  {let lastP=null,lastX=-99;for(let i=0;i<nL;i++){const g=gap[i],p=dpos[i];if(g==null||p==null)continue;if(p!==lastP&&x(i+1)-lastX>24){const ly=y(g)-7<T+2?y(g)+13:y(g)-7;svg.appendChild(mk('text',{x:x(i+1),y:ly,fill:'#c9d2e6','font-size':8.5,'font-weight':700,'text-anchor':'middle'},'P'+p,'L'+(i+1)+' · P'+p));lastP=p;lastX=x(i+1);}}}   // track only the last PRINTED position — never a throttled one, so no "P2 … P2" with the intervening change swallowed
   host.innerHTML='';host.appendChild(svg);
 }
 // ---- constructor race deep-dive (both cars) ----
