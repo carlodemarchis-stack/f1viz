@@ -214,7 +214,12 @@ button{font-family:inherit}
 .llapcard{grid-column:1/-1;display:flex;flex-direction:column;padding:20px 26px 14px}
 .llapcard h2{font-weight:700;font-size:19px;letter-spacing:.01em}
 .llapcard .gsub{font-size:10.5px;color:var(--muted-2);letter-spacing:.14em;text-transform:uppercase;margin:3px 0 14px}
-.llap-body{flex:1;min-height:0;display:grid;grid-template-columns:1fr 148px;grid-template-rows:1fr;gap:22px}
+.llap-rank{display:flex;flex-wrap:wrap;gap:5px 18px;margin:-3px 0 12px;font-size:11.5px}
+.llap-rank .it{display:inline-flex;align-items:baseline;gap:5px}
+.llap-rank .rk{color:var(--muted-2);font-size:10px;font-variant-numeric:tabular-nums}
+.llap-rank .cd{font-weight:800;letter-spacing:.02em}
+.llap-rank .n{font-weight:700;font-variant-numeric:tabular-nums}
+.llap-body{flex:1;min-height:0;display:grid;grid-template-columns:1fr;grid-template-rows:1fr}
 .llap-grid{display:flex;flex-direction:column;min-height:0}
 .llap-rows{flex:1;display:flex;flex-direction:column;min-height:0}
 .llap-row{display:grid;grid-template-columns:88px 1fr;align-items:center;gap:10px;flex:1;min-height:15px}
@@ -225,14 +230,7 @@ button{font-family:inherit}
 .llap-ax{display:grid;grid-template-columns:88px 1fr;gap:10px;margin-top:6px}
 .llap-ticks{position:relative;height:12px}
 .llap-ticks .t{position:absolute;transform:translateX(-50%);font-size:9px;color:var(--muted-2)}
-.llap-side{border-left:1px solid var(--line-2);padding-left:20px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.llap-side h3{font-size:10px;letter-spacing:.13em;color:var(--muted);font-weight:700;margin:0 0 9px}
-.llap-lb{display:flex;flex-direction:column;gap:11px;padding-top:2px}
-.llap-lbr{display:grid;grid-template-columns:16px 1fr auto;align-items:baseline;gap:9px;font-size:12.5px}
-.llap-lbr .rk{color:var(--muted-2);text-align:right;font-size:10px;font-variant-numeric:tabular-nums}
-.llap-lbr .cd{font-weight:800;letter-spacing:.02em}
-.llap-lbr .n{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
-@media(max-width:900px){.llap-body{grid-template-columns:1fr;gap:12px}.llap-side{border-left:0;padding-left:0;border-top:1px solid var(--line-2);padding-top:10px}.llap-lb{gap:6px}}
+@media(max-width:900px){.llap-rank{gap:4px 12px;font-size:11px}}
 /* horizontal constructor standings */
 .hstand{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px;padding:6px 2px}
 .hrow{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:14px;cursor:pointer;padding:2px 6px;border-radius:8px;transition:background .13s}
@@ -1119,8 +1117,9 @@ function gridCard(){
 // ===== leading-laps season card (last card in the Drivers film) =====
 function leadLapsCard(){
   return `<div class="card enter"><div class="panel llapcard" style="--c:#00D7B6"><h2>Leading Laps</h2>`
-    +`<div class="gsub">Who led every lap · ${DATA.races.length} of ${DATA.calendar.length} run · shared lap axis</div>`
-    +`<div class="llap-body" id="llapBody"><div class="rdv-msg" style="grid-column:1/-1;padding:24px;color:var(--muted)">Loading lap data…</div></div></div></div>`;
+    +`<div class="gsub">Who led every lap · ${DATA.races.length} of ${DATA.calendar.length} run</div>`
+    +`<div class="llap-rank" id="llapRank"></div>`
+    +`<div class="llap-body" id="llapBody"><div class="rdv-msg" style="padding:24px;color:var(--muted)">Loading lap data…</div></div></div></div>`;
 }
 const TEAM_ABBR={mercedes:'MER',ferrari:'FER',mclaren:'MCL',red_bull:'RBR',rb:'RB',alpine:'ALP',haas:'HAA',audi:'AUD',williams:'WIL',aston_martin:'AMR',cadillac:'CAD'};
 function mountLeadLaps(){
@@ -1142,9 +1141,9 @@ function mountLeadLaps(){
         bar+=`<div class="llap-seg" style="left:${(from/maxLaps*100).toFixed(2)}%;width:${w.toFixed(2)}%;background:${colOf(k)}" title="${labOf(k)} · L${from+1}–L${i} (${len} lap${len>1?'s':''})">${w>3.4?labOf(k):''}</div>`;s=i;}}}
       return `<div class="llap-row"><div class="llap-nm${seq?'':' off'}">${c.short}</div><div class="llap-bar">${bar||'<span style="font-size:9px;color:#39404f;padding-left:3px;line-height:1.7">—</span>'}</div></div>`;}).join('');
     const ticks=[1,10,20,30,40,50,60,70,maxLaps].filter((v,i,a)=>a.indexOf(v)===i).map(l=>`<div class="t" style="left:${((l-1)/maxLaps*100).toFixed(2)}%">${l}</div>`).join('');
-    const lb=board.map(([k,n],i)=>`<div class="llap-lbr"><span class="rk">${i+1}</span><span class="cd" style="color:${colOf(k)}">${labOf(k)}</span><span class="n">${n}</span></div>`).join('');
-    body.innerHTML=`<div class="llap-grid"><div class="llap-rows">${rows}</div><div class="llap-ax"><div></div><div class="llap-ticks">${ticks}</div></div></div>`
-      +`<div class="llap-side"><h3>LAPS LED</h3><div class="llap-lb">${lb}</div></div>`;
+    const rank=board.map(([k,n],i)=>`<span class="it"><span class="rk">${i+1}.</span><span class="cd" style="color:${colOf(k)}">${labOf(k)}</span><span class="n">${n}</span></span>`).join('');
+    const rankEl=document.getElementById('llapRank'); if(rankEl) rankEl.innerHTML=rank;
+    body.innerHTML=`<div class="llap-grid"><div class="llap-rows">${rows}</div><div class="llap-ax"><div></div><div class="llap-ticks">${ticks}</div></div></div>`;
   });
 }
 
