@@ -1516,22 +1516,27 @@ function rdvPace(d,r,S){
   svg.appendChild(mk('text',{x:L-7,y:PLY+3,fill:'#5f6a80','font-size':8,'text-anchor':'end'},'POS'));
   for(let v=yMin+1;v<yMax;v+=1){svg.appendChild(mk('line',{x1:L,y1:y(v),x2:Rr,y2:y(v),stroke:'rgba(150,166,205,.09)','stroke-width':1}));svg.appendChild(mk('text',{x:L-7,y:y(v)+3.5,fill:'#d5dcea','font-size':9.5,'text-anchor':'end','font-weight':600},F(v)));}
   const ticks=[1];for(let l=10;l<nL-4;l+=10)ticks.push(l);ticks.push(nL);
-  ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#5f6a80','font-size':9.5,'text-anchor':'middle'},l)));
+  ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#d5dcea','font-size':9.5,'text-anchor':'middle','font-weight':600},l)));
   // pace line: one solid segment per green stint — flagged laps leave an empty GAP (no bridge)
   let stints=[],cur=[];secs.forEach((s2,i)=>{if(!anom[i])cur.push(i+1);else if(cur.length){stints.push(cur);cur=[];}});if(cur.length)stints.push(cur);
   stints.forEach(sT=>{let dd='M '+x(sT[0])+' '+y(secs[sT[0]-1]);for(let k=1;k<sT.length;k++)dd+=' L '+x(sT[k])+' '+y(secs[sT[k]-1]);svg.appendChild(mk('path',{d:dd,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));sT.forEach(l=>svg.appendChild(mk('circle',{cx:x(l),cy:y(secs[l-1]),r:1.8,fill:col,opacity:.6},null,'L'+l+' · '+Ff(secs[l-1]))));});
-  // flagged laps along the top: ONE pit diamond per stop (at the slowest of its in/out lap) + its time
-  let lastTx=-99;
-  (pits||[]).forEach(p=>{const cands=[p,p+1].filter(l=>l>=1&&l<=nL&&secs[l-1]!=null);if(!cands.length)return;
-    const ol=cands.reduce((a,b)=>secs[b-1]>secs[a-1]?b:a),yy=T-4;
+  // pit diamonds at top — one per stop (slowest of in/out lap; ALWAYS drawn), no inline time
+  (pits||[]).forEach(p=>{const vv=[p,p+1].filter(l=>l>=1&&l<=nL&&secs[l-1]!=null);const ol=vv.length?vv.reduce((a,b)=>secs[b-1]>secs[a-1]?b:a):Math.min(Math.max(p,1),nL);const t=secs[ol-1],yy=T-4;
     svg.appendChild(mk('line',{x1:x(ol),y1:T,x2:x(ol),y2:B,stroke:'rgba(245,166,35,.14)','stroke-width':1,'stroke-dasharray':'2 3'}));
-    svg.appendChild(mk('rect',{x:x(ol)-3.3,y:yy-3.3,width:6.6,height:6.6,rx:1.3,fill:'#f5a623',transform:`rotate(45 ${x(ol)} ${yy})`},null,'L'+ol+' · Pit · '+Ff(secs[ol-1])));
-    if(x(ol)-lastTx>34){svg.appendChild(mk('text',{x:x(ol),y:yy-6,fill:'#f0b45e','font-size':8.5,'text-anchor':'middle','font-weight':600},F(secs[ol-1])));lastTx=x(ol);}});
-  // start / SC-VSC / other slow laps (NOT pit — avoids double markers)
-  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;
-    let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
+    svg.appendChild(mk('rect',{x:x(ol)-3.3,y:yy-3.3,width:6.6,height:6.6,rx:1.3,fill:'#f5a623',transform:`rotate(45 ${x(ol)} ${yy})`},null,'L'+ol+' · Pit'+(t!=null?' · '+Ff(t):'')));});
+  // SC/VSC/start dots at top
+  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
     svg.appendChild(mk('line',{x1:x(l),y1:T,x2:x(l),y2:B,stroke:'rgba(230,194,74,.05)','stroke-width':1,'stroke-dasharray':'2 3'}));
     svg.appendChild(mk('circle',{cx:x(l),cy:T-4,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
+  // per gap: small ↑ + the peak lap time, floated just above the adjacent green lap (not at the ceiling)
+  for(let k=0;k<=stints.length;k++){const prevEnd=k>0?stints[k-1][stints[k-1].length-1]:0, nextStart=k<stints.length?stints[k][0]:nL+1;
+    if(nextStart-prevEnd<=1)continue;
+    let peakLap=-1,peakT=-1;for(let l=prevEnd+1;l<nextStart;l++){if(secs[l-1]!=null&&secs[l-1]>peakT){peakT=secs[l-1];peakLap=l;}}
+    if(peakLap<0)continue;
+    const refLap=prevEnd>=1?prevEnd:nextStart; if(refLap<1||refLap>nL||secs[refLap-1]==null)continue;
+    const ax=x(peakLap), ay=Math.max(T+10, y(secs[refLap-1])-13);
+    svg.appendChild(mk('path',{d:`M ${ax} ${ay-3.5} L ${ax-3} ${ay+2.5} L ${ax+3} ${ay+2.5} Z`,fill:'#b7c0d4'},null,'L'+peakLap+' · '+Ff(peakT)));
+    svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(peakT)));}
   if(flLap&&secs[flLap-1]!=null){svg.appendChild(mk('circle',{cx:x(flLap),cy:y(secs[flLap-1]),r:5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5},null,'Fastest lap · L'+flLap+' · '+Ff(secs[flLap-1])));svg.appendChild(mk('text',{x:x(flLap),y:y(secs[flLap-1])+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},Ff(secs[flLap-1])));}
   host.innerHTML='';host.appendChild(svg);
 }
