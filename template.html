@@ -377,7 +377,7 @@ button{font-family:inherit}
 .rbr{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;padding:1px 2px}
 .rbr span{color:var(--muted);flex:0 0 auto}
 .rbr b{text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rdv-body{flex:1;min-height:0;display:grid;grid-template-columns:1.32fr 1fr}
+.rdv-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px}   /* chart gets the room; info box stays minimal */
 .rdv-left{padding:13px 12px 12px 18px;border-right:1px solid var(--line-2);display:flex;flex-direction:column;min-width:0;min-height:0}
 .rdv-ltabs{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex:0 0 auto}
 .rdv-ltset{display:inline-flex;gap:3px;background:var(--line-2);border-radius:8px;padding:3px}
@@ -535,6 +535,11 @@ button{font-family:inherit}
   .controls{position:sticky;bottom:0;background:var(--bg)}
   #kbdbtn,#fs,.controls .sep{display:none}   /* no keyboard-hint / fullscreen on mobile */
   .foot{position:static;right:auto;bottom:auto;text-align:center;padding:9px 12px 11px;border-top:1px solid var(--line-2);font-size:10.5px}
+  /* deep-dive: stack chart over info box on mobile (was 2 cramped columns) */
+  .rdv-body{grid-template-columns:1fr}
+  .rdv-left{border-right:0;border-bottom:1px solid var(--line-2);min-height:auto}
+  .rdv-chart{flex:none;height:44vh;min-height:270px}
+  .rdv-right{overflow:visible}
   .counter{width:auto}.counter .who{display:none}
   .gridcard .chart{overflow-x:auto}.col{flex:0 0 42px}
   /* standings/laps/sprint as horizontal bars on mobile — no cars, no per-race detail */
