@@ -1538,21 +1538,24 @@ function rdvPace(d,r,S){
     svg.appendChild(mk('circle',{cx:x(l),cy:T-4,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
   // flagged-lap times above the adjacent green lap: individual ↑+time when a zone has ≤3, else one "slowest ×N" summary (avoids a noisy ladder). Red-flag laps skipped (shown as ⚑ above).
   const arrow=(ax,ay)=>svg.appendChild(mk('path',{d:`M ${ax} ${ay-3.5} L ${ax-3} ${ay+2.5} L ${ax+3} ${ay+2.5} Z`,fill:'#b7c0d4'}));
+  // white span-line under the ▲(s) marking the laps a flagged zone covers (only when it spans >1 lap)
+  const span=(prevEnd,nextStart,ly)=>{if(nextStart-1<=prevEnd+1)return;const x0=x(prevEnd+1), x1=x(nextStart-1);
+    svg.appendChild(mk('line',{x1:x0,y1:ly,x2:x1,y2:ly,stroke:'#c9d2e6','stroke-width':1.4,'stroke-linecap':'round'},null,'laps L'+(prevEnd+1)+'–L'+(nextStart-1)));
+    svg.appendChild(mk('line',{x1:x0,y1:ly-2.5,x2:x0,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));
+    svg.appendChild(mk('line',{x1:x1,y1:ly-2.5,x2:x1,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));};
   for(let k=0;k<=stints.length;k++){const prevEnd=k>0?stints[k-1][stints[k-1].length-1]:0, nextStart=k<stints.length?stints[k][0]:nL+1;
     if(nextStart-prevEnd<=1)continue;
     const refLap=prevEnd>=1?prevEnd:nextStart; if(refLap<1||refLap>nL||secs[refLap-1]==null)continue;
     const baseY=y(secs[refLap-1]);
     const arr=[];for(let l=prevEnd+1;l<nextStart;l++){const s=secs[l-1];if(s!=null&&s<RED)arr.push({l,s});}
     if(!arr.length)continue;
-    if(arr.length<=3){ const mn=Math.min(...arr.map(o=>o.s)), rng=(Math.max(...arr.map(o=>o.s))-mn)||1;
-      arr.forEach(o=>{const ax=x(o.l), ay=Math.max(T+9, baseY-14-(o.s-mn)/rng*20);arrow(ax,ay);svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(o.s),'L'+o.l+' · '+Ff(o.s)));}); }
+    if(arr.length<=3){ const mn=Math.min(...arr.map(o=>o.s)), rng=(Math.max(...arr.map(o=>o.s))-mn)||1; let maxAy=0;
+      arr.forEach(o=>{const ax=x(o.l), ay=Math.max(T+9, baseY-14-(o.s-mn)/rng*20);maxAy=Math.max(maxAy,ay);arrow(ax,ay);svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(o.s),'L'+o.l+' · '+Ff(o.s)));});
+      span(prevEnd,nextStart,maxAy+5); }
     else { const mn=arr.reduce((a,b)=>b.s<a.s?b:a), mx=arr.reduce((a,b)=>b.s>a.s?b:a), ax=x(Math.round((prevEnd+nextStart)/2)), ay=Math.max(T+11,baseY-14);
       arrow(ax,ay);
       svg.appendChild(mk('text',{x:ax,y:ay-6,fill:'#c9d2e6','font-size':8.5,'text-anchor':'middle','font-weight':600},F(mn.s)+'–'+F(mx.s),arr.length+' flagged laps · '+Ff(mn.s)+' (L'+mn.l+') to '+Ff(mx.s)+' (L'+mx.l+') — hover each top marker for its time'));
-      const x0=x(prevEnd+1), x1=x(nextStart-1), ly=ay+5;   // white span-line under the ▲ = laps this summary covers
-      svg.appendChild(mk('line',{x1:x0,y1:ly,x2:x1,y2:ly,stroke:'#c9d2e6','stroke-width':1.4,'stroke-linecap':'round'},null,'laps L'+(prevEnd+1)+'–L'+(nextStart-1)));
-      svg.appendChild(mk('line',{x1:x0,y1:ly-2.5,x2:x0,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2}));
-      svg.appendChild(mk('line',{x1:x1,y1:ly-2.5,x2:x1,y2:ly+2.5,stroke:'#c9d2e6','stroke-width':1.2})); }}
+      span(prevEnd,nextStart,ay+5); }}
   if(flLap&&secs[flLap-1]!=null){svg.appendChild(mk('circle',{cx:x(flLap),cy:y(secs[flLap-1]),r:5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5},null,'Fastest lap · L'+flLap+' · '+Ff(secs[flLap-1])));svg.appendChild(mk('text',{x:x(flLap),y:y(secs[flLap-1])+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},Ff(secs[flLap-1])));}
   host.innerHTML='';host.appendChild(svg);
 }
