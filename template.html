@@ -1499,7 +1499,7 @@ function rdvPace(d,r,S){
   const fastest=Math.min(...valid), sortd=[...valid].sort((a,b)=>a-b), median=sortd[Math.floor(sortd.length/2)], thr=median+2.5;
   const pitSet=new Set(); (pits||[]).forEach(p=>{pitSet.add(p);pitSet.add(p+1);});
   const anom=secs.map((s,i)=> s==null || i===0 || !!flags[i+1] || s>thr );          // lap1 start, SC/VSC, or > median+2.5s
-  const yMin=Math.floor(fastest), yMax=Math.ceil(thr)+0.4;
+  const yMin=Math.floor(fastest), grn=secs.filter((s,i)=>s!=null&&!anom[i]), pMax=grn.length?Math.max(...grn):Math.ceil(thr), yMax=pMax+Math.max(0.4,(pMax-yMin)*0.08);  // scale to the plotted green laps (+breathing), not the anomaly cutoff → no empty band up top
   const W=Math.max(340,host.clientWidth), H=Math.max(240,host.clientHeight), L=48, Rr=W-12, T=40, B=H-30;
   const x=l=>L+((l-1)/(nL-1))*(Rr-L), y=s=>B-(Math.min(s,yMax)-yMin)/(yMax-yMin)*(B-T);
   const NS='http://www.w3.org/2000/svg', svg=document.createElementNS(NS,'svg');
@@ -1508,7 +1508,7 @@ function rdvPace(d,r,S){
   const F=s=>{const m=Math.floor(s/60);return m+':'+String(Math.round(s-m*60)).padStart(2,'0');};
   const Ff=s=>{const m=Math.floor(s/60),ss=s-m*60;return m+':'+(ss<10?'0':'')+ss.toFixed(3);};
   let bd=null;for(let l=1;l<=nL;l++){const f=flags[l];if(f&&bd===null)bd={from:l,type:f};if((!f||l===nL)&&bd!==null){const to=f?l:l-1;svg.appendChild(mk('rect',{x:x(bd.from)-4,y:30,width:x(to)-x(bd.from)+8,height:B-30,fill:bd.type==='S'?'rgba(230,194,74,.13)':'rgba(230,194,74,.06)'}));
-    const yl=T-4,la=mk('line',{x1:x(bd.from),y1:yl,x2:x(to),y2:yl,stroke:'#e6c24a','stroke-width':3.5,'stroke-linecap':'round'},null,(bd.type==='S'?'Safety car':'VSC')+' · L'+bd.from+(to>bd.from?'–L'+to:''));if(bd.type!=='S')la.setAttribute('stroke-dasharray','1.5 4');svg.appendChild(la);bd=null;}}
+    const yl=T-4;svg.appendChild(mk('line',{x1:x(bd.from),y1:yl,x2:x(to),y2:yl,stroke:'#e6c24a','stroke-width':bd.type==='S'?3.6:1.6,'stroke-linecap':'round'},null,(bd.type==='S'?'Safety car':'VSC')+' · L'+bd.from+(to>bd.from?'–L'+to:'')));bd=null;}}
   // position track (top), labelled only where it changes
   const segs=[]; let s0=null;
   for(let i=0;i<nL;i++){const p=pos[i];if(p==null){if(s0!=null){segs.push({p:pos[s0],from:s0+1,to:i});s0=null;}continue;}if(s0==null)s0=i;else if(pos[i]!==pos[s0]){segs.push({p:pos[s0],from:s0+1,to:i});s0=i;}}
