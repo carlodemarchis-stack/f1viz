@@ -20,7 +20,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
-.app{display:flex;flex-direction:column;height:100dvh}
+.app{display:flex;flex-direction:column;height:100dvh;position:relative}
 button{font-family:inherit}
 
 /* ---------- top bar ---------- */
@@ -450,7 +450,7 @@ button{font-family:inherit}
   background:radial-gradient(420px 150px at 88% -40%,color-mix(in srgb,var(--c) 22%,transparent),transparent)}
 .mclose{position:absolute;top:13px;right:13px;width:29px;height:29px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);cursor:pointer;font-size:15px}
 /* footer credit line + credits modal */
-.foot{flex:0 0 auto;text-align:center;padding:7px 12px 9px;font-size:10.5px;color:var(--muted-2);border-top:1px solid var(--line-2);letter-spacing:.02em;z-index:6}
+.foot{position:absolute;right:16px;bottom:11px;z-index:7;text-align:right;font-size:10px;color:var(--muted-2);letter-spacing:.02em}
 .foot a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;cursor:pointer}
 .foot a:hover{color:var(--ink);border-bottom-color:color-mix(in srgb,var(--c) 55%,var(--line))}
 .credits{position:fixed;inset:0;z-index:65;display:none;align-items:center;justify-content:center;padding:20px}
@@ -528,6 +528,7 @@ button{font-family:inherit}
   .gpcard{min-height:60vh}
   .controls{position:sticky;bottom:0;background:var(--bg)}
   #kbdbtn{display:none}   /* no physical keyboard on mobile */
+  .foot{position:static;right:auto;bottom:auto;text-align:center;padding:9px 12px 11px;border-top:1px solid var(--line-2);font-size:10.5px}
   .counter{width:auto}.counter .who{display:none}
   .gridcard .chart{overflow-x:auto}.col{flex:0 0 42px}
   /* standings/laps/sprint as horizontal bars on mobile — no cars, no per-race detail */
