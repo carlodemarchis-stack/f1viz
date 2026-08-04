@@ -1576,10 +1576,16 @@ function rdvPace(d,r,S){
   const segs=[]; let s0=null;
   for(let i=0;i<nL;i++){const p=pos[i];if(p==null){if(s0!=null){segs.push({p:pos[s0],from:s0+1,to:i});s0=null;}continue;}if(s0==null)s0=i;else if(pos[i]!==pos[s0]){segs.push({p:pos[s0],from:s0+1,to:i});s0=i;}}
   if(s0!=null) segs.push({p:pos[s0],from:s0+1,to:nL});
-  const PLY=15; let lastLbl=-99;
-  segs.forEach((g,gi)=>{const a=x(g.from),b=x(g.to);svg.appendChild(mk('line',{x1:a,y1:PLY,x2:b,y2:PLY,stroke:'#727d96','stroke-width':2,'stroke-linecap':'round',opacity:.75}));
-    if(a-lastLbl>24){svg.appendChild(mk('text',{x:a+2,y:PLY-4,fill:'#c9d2e6','font-size':9,'font-weight':700},'P'+g.p));lastLbl=a;}
-    if(gi<segs.length-1)svg.appendChild(mk('line',{x1:b,y1:PLY-4,x2:b,y2:PLY+4,stroke:'#3a4254','stroke-width':1,opacity:.7}));});
+  const PLY=15;
+  // show EVERY position run's label — shrink the font when runs are tight, and shift right to avoid overlaps (never drop one)
+  let minGap=Infinity; for(let i=0;i<segs.length;i++){const nx=i<segs.length-1?x(segs[i+1].from):Rr; if(nx-x(segs[i].from)<minGap)minGap=nx-x(segs[i].from);}
+  const fs=minGap>=13?9:minGap>=10?8:minGap>=7.5?7:6.5, cw=fs*0.6;
+  let lastR=-1e9;
+  segs.forEach((g,gi)=>{const a0=x(g.from),b0=x(g.to);let a=a0,b=b0;if(b-a<7){const m=(a+b)/2;a=m-3.5;b=m+3.5;}   // 1-lap run → short visible segment, not a dot
+    svg.appendChild(mk('line',{x1:a,y1:PLY,x2:b,y2:PLY,stroke:col,'stroke-width':2.5,'stroke-linecap':'round',opacity:.85}));
+    if(gi<segs.length-1)svg.appendChild(mk('line',{x1:b0,y1:PLY-4,x2:b0,y2:PLY+4,stroke:'#3a4254','stroke-width':1,opacity:.7}));
+    const lbl='P'+g.p,w=lbl.length*cw+1; let lx=a0+2; if(lx<lastR+2)lx=lastR+2; if(lx+w>Rr)lx=Rr-w;
+    svg.appendChild(mk('text',{x:lx,y:PLY-4,fill:'#c9d2e6','font-size':fs,'font-weight':700},lbl,'L'+g.from+(g.to>g.from?'–L'+g.to:'')+' · P'+g.p));lastR=lx+w;});
   svg.appendChild(mk('text',{x:L-7,y:PLY+3,fill:'#5f6a80','font-size':8,'text-anchor':'end'},'POS'));
   for(let v=yMin+1;v<yMax;v+=1){svg.appendChild(mk('line',{x1:L,y1:y(v),x2:Rr,y2:y(v),stroke:'rgba(150,166,205,.09)','stroke-width':1}));svg.appendChild(mk('text',{x:L-7,y:y(v)+3.5,fill:'#d5dcea','font-size':9.5,'text-anchor':'end','font-weight':600},F(v)));}
   const ticks=[1];for(let l=10;l<nL-4;l+=10)ticks.push(l);ticks.push(nL);
