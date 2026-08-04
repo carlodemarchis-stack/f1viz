@@ -1636,6 +1636,26 @@ applyHash(); applyView();
     if(n<2){ setTimeout(show,1500); localStorage.setItem('f1viz.kbd', n+1); }
   }catch(_){ setTimeout(show,1500); }
 })();
+
+// ===== mobile: swipe left/right to move between cards (reliable — horizontal-only, never hijacks scroll) =====
+(function(){
+  let sx=0, sy=0, armed=false;
+  const NOSWIPE='input,button,a,.rc-tabset,.modes,.lc-ctrl,.lc-slider,.jumppop';   // let controls/sliders keep their own touch
+  wrap.addEventListener('touchstart',e=>{
+    armed=false;
+    if(!isMob() || e.touches.length!==1 || !modal.hidden) return;                  // mobile, single finger, no modal
+    if(e.target && e.target.closest && e.target.closest(NOSWIPE)) return;
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY; armed=true;
+  },{passive:true});
+  wrap.addEventListener('touchend',e=>{
+    if(!armed) return; armed=false;
+    const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy, ax=Math.abs(dx), ay=Math.abs(dy);
+    if(ax<50 || ax < ay*1.6) return;              // too short OR vertical-dominant (a scroll) → ignore, never navigate
+    const rdv=wrap.querySelector('.rdv');
+    if(rdv){ const b=wrap.querySelector(dx<0?'.rdv-next':'.rdv-prev'); if(b) b.click(); }   // in a deep-dive: swipe changes race
+    else { dx<0?next():prev(); if(playing) setPlay(true); }                                 // otherwise: move between cards
+  },{passive:true});
+})();
 </script>
 </body>
 </html>
