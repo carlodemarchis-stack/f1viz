@@ -385,6 +385,8 @@ button{font-family:inherit}
 .rdv-lt:hover{color:var(--muted)}
 .rdv-lt.on{color:var(--ink);background:color-mix(in srgb,var(--c) 30%,transparent)}
 .rdv-lsub{font-size:10px;letter-spacing:.02em;color:var(--muted-2);text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rdv-cap{font-size:10.5px;color:var(--muted-2);margin:-1px 0 6px;flex:0 0 auto;letter-spacing:.01em;line-height:1.35}
+.rdv-cap:empty{display:none}
 .rdv-chart{flex:1;min-height:0;position:relative}
 .rdv-chart svg{position:absolute;inset:0;width:100%;height:100%}
 .rdv-lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:9.5px;color:var(--muted-2);flex:0 0 auto}
@@ -1417,6 +1419,7 @@ function renderRace(d,gi,r,LD){
           <div class="rdv-ltset"><button class="rdv-lt" data-lt="pos">Position</button><button class="rdv-lt" data-lt="pace">Lap times</button></div>
           <div class="rdv-lsub" id="rdvSub"></div>
         </div>
+        <div class="rdv-cap" id="rdvCap"></div>
         <div class="rdv-chart" id="rdvChart">${LD?'':'<div class="rdv-msg" style="padding:20px">Lap-by-lap data unavailable for this round</div>'}</div>
         <div class="rdv-lg" id="rdvLg"></div>
       </div>
@@ -1449,12 +1452,12 @@ function renderRace(d,gi,r,LD){
   wrap.querySelector('.rdv-next').onclick=()=>openRace((gi+1)%rl);
   if(LD){
     const posLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span><span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
-    const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:14px;height:0;border-top:2px dashed #4a6b64;"></i>flagged</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:8px;height:8px;border-radius:50%;background:#e6c24a;"></i>SC/VSC</span>`;
+    const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:8px;height:8px;border-radius:50%;background:#e6c24a;"></i>SC/VSC</span>`;
     const drawChart=tab=>{ rdvChartTab=tab;
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
-      const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg');
-      if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
-      else { sub.textContent='position by lap · '+nL+' laps'; lg.innerHTML=posLg; rdvTrace(d,r,{trace,gridPos,pits,pitTimes,flags,nL,flLap}); } };
+      const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
+      if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
+      else { sub.textContent='position by lap · '+nL+' laps'; cap.textContent=''; lg.innerHTML=posLg; rdvTrace(d,r,{trace,gridPos,pits,pitTimes,flags,nL,flLap}); } };
     wrap.querySelectorAll('.rdv-lt').forEach(b=>b.onclick=()=>drawChart(b.dataset.lt));
     drawChart(rdvChartTab);
   }
@@ -1511,21 +1514,24 @@ function rdvPace(d,r,S){
     if(a-lastLbl>24){svg.appendChild(mk('text',{x:a+2,y:PLY-4,fill:'#c9d2e6','font-size':9,'font-weight':700},'P'+g.p));lastLbl=a;}
     if(gi<segs.length-1)svg.appendChild(mk('line',{x1:b,y1:PLY-4,x2:b,y2:PLY+4,stroke:'#3a4254','stroke-width':1,opacity:.7}));});
   svg.appendChild(mk('text',{x:L-7,y:PLY+3,fill:'#5f6a80','font-size':8,'text-anchor':'end'},'POS'));
-  for(let v=yMin+1;v<yMax;v+=1){svg.appendChild(mk('line',{x1:L,y1:y(v),x2:Rr,y2:y(v),stroke:'rgba(150,166,205,.07)','stroke-width':1}));svg.appendChild(mk('text',{x:L-7,y:y(v)+3.5,fill:'#5f6a80','font-size':9,'text-anchor':'end'},F(v)));}
+  for(let v=yMin+1;v<yMax;v+=1){svg.appendChild(mk('line',{x1:L,y1:y(v),x2:Rr,y2:y(v),stroke:'rgba(150,166,205,.09)','stroke-width':1}));svg.appendChild(mk('text',{x:L-7,y:y(v)+3.5,fill:'#d5dcea','font-size':9.5,'text-anchor':'end','font-weight':600},F(v)));}
   const ticks=[1];for(let l=10;l<nL-4;l+=10)ticks.push(l);ticks.push(nL);
   ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#5f6a80','font-size':9.5,'text-anchor':'middle'},l)));
-  // pace line: solid per green stint, dashed bridge across flagged gaps
+  // pace line: one solid segment per green stint — flagged laps leave an empty GAP (no bridge)
   let stints=[],cur=[];secs.forEach((s2,i)=>{if(!anom[i])cur.push(i+1);else if(cur.length){stints.push(cur);cur=[];}});if(cur.length)stints.push(cur);
-  for(let k=0;k<stints.length-1;k++){const a=stints[k][stints[k].length-1],b=stints[k+1][0];svg.appendChild(mk('line',{x1:x(a),y1:y(secs[a-1]),x2:x(b),y2:y(secs[b-1]),stroke:'#4a6b64','stroke-width':1.5,'stroke-dasharray':'3 3'}));}
   stints.forEach(sT=>{let dd='M '+x(sT[0])+' '+y(secs[sT[0]-1]);for(let k=1;k<sT.length;k++)dd+=' L '+x(sT[k])+' '+y(secs[sT[k]-1]);svg.appendChild(mk('path',{d:dd,fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));sT.forEach(l=>svg.appendChild(mk('circle',{cx:x(l),cy:y(secs[l-1]),r:1.8,fill:col,opacity:.6},null,'L'+l+' · '+Ff(secs[l-1]))));});
-  // flagged laps (only laps actually run): marker at top + pit time inline + hover tooltip for all
+  // flagged laps along the top: ONE pit diamond per stop (at the slowest of its in/out lap) + its time
   let lastTx=-99;
-  secs.forEach((s2,i)=>{if(!anom[i]||s2==null)return;const l=i+1;let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}else if(pitSet.has(l)){rz='Pit';cc='#f5a623';}
-    const yy=T-4, isPit=rz==='Pit';
-    svg.appendChild(mk('line',{x1:x(l),y1:T,x2:x(l),y2:B,stroke:isPit?'rgba(245,166,35,.13)':'rgba(230,194,74,.05)','stroke-width':1,'stroke-dasharray':'2 3'}));
-    if(isPit){svg.appendChild(mk('rect',{x:x(l)-3.3,y:yy-3.3,width:6.6,height:6.6,rx:1.3,fill:cc,transform:`rotate(45 ${x(l)} ${yy})`},null,'L'+l+' · Pit · '+Ff(s2)));
-      if(x(l)-lastTx>30){svg.appendChild(mk('text',{x:x(l),y:yy-6,fill:'#f0b45e','font-size':8.5,'text-anchor':'middle','font-weight':600},F(s2)));lastTx=x(l);}}
-    else svg.appendChild(mk('circle',{cx:x(l),cy:yy,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
+  (pits||[]).forEach(p=>{const cands=[p,p+1].filter(l=>l>=1&&l<=nL&&secs[l-1]!=null);if(!cands.length)return;
+    const ol=cands.reduce((a,b)=>secs[b-1]>secs[a-1]?b:a),yy=T-4;
+    svg.appendChild(mk('line',{x1:x(ol),y1:T,x2:x(ol),y2:B,stroke:'rgba(245,166,35,.14)','stroke-width':1,'stroke-dasharray':'2 3'}));
+    svg.appendChild(mk('rect',{x:x(ol)-3.3,y:yy-3.3,width:6.6,height:6.6,rx:1.3,fill:'#f5a623',transform:`rotate(45 ${x(ol)} ${yy})`},null,'L'+ol+' · Pit · '+Ff(secs[ol-1])));
+    if(x(ol)-lastTx>34){svg.appendChild(mk('text',{x:x(ol),y:yy-6,fill:'#f0b45e','font-size':8.5,'text-anchor':'middle','font-weight':600},F(secs[ol-1])));lastTx=x(ol);}});
+  // start / SC-VSC / other slow laps (NOT pit — avoids double markers)
+  secs.forEach((s2,i)=>{if(!anom[i]||s2==null||pitSet.has(i+1))return;const l=i+1;
+    let rz='Slow',cc='#8b95ad';if(l===1)rz='Start';else if(flags[l]){rz=flags[l]==='S'?'SC':'VSC';cc='#e6c24a';}
+    svg.appendChild(mk('line',{x1:x(l),y1:T,x2:x(l),y2:B,stroke:'rgba(230,194,74,.05)','stroke-width':1,'stroke-dasharray':'2 3'}));
+    svg.appendChild(mk('circle',{cx:x(l),cy:T-4,r:2.6,fill:cc},null,'L'+l+' · '+rz+' · '+Ff(s2)));});
   if(flLap&&secs[flLap-1]!=null){svg.appendChild(mk('circle',{cx:x(flLap),cy:y(secs[flLap-1]),r:5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5},null,'Fastest lap · L'+flLap+' · '+Ff(secs[flLap-1])));svg.appendChild(mk('text',{x:x(flLap),y:y(secs[flLap-1])+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},Ff(secs[flLap-1])));}
   host.innerHTML='';host.appendChild(svg);
 }
