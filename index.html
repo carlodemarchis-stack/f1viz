@@ -1454,7 +1454,7 @@ function renderRace(d,gi,r,LD){
   wrap.querySelector('.rdv-next').onclick=()=>openRace((gi+1)%rl);
   if(LD){
     const posLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span><span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
-    const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:8px;height:8px;border-radius:50%;background:#e6c24a;"></i>SC/VSC</span><span><span style="color:#e77b83;font-weight:700;">⚑</span> red flag</span>`;
+    const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span><span><span style="color:#e77b83;font-weight:700;">⚑</span> red flag</span>`;
     const drawChart=tab=>{ rdvChartTab=tab;
       try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r+(tab==='pace'?'/pace':''));}catch(e){}
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
@@ -1507,7 +1507,8 @@ function rdvPace(d,r,S){
   const mk=(n,a,t,tip)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;if(tip){const ti=document.createElementNS(NS,'title');ti.textContent=tip;e.appendChild(ti);}return e;};
   const F=s=>{const m=Math.floor(s/60);return m+':'+String(Math.round(s-m*60)).padStart(2,'0');};
   const Ff=s=>{const m=Math.floor(s/60),ss=s-m*60;return m+':'+(ss<10?'0':'')+ss.toFixed(3);};
-  let bd=null;for(let l=1;l<=nL;l++){const f=flags[l];if(f&&bd===null)bd={from:l,type:f};if((!f||l===nL)&&bd!==null){const to=f?l:l-1;svg.appendChild(mk('rect',{x:x(bd.from)-4,y:30,width:x(to)-x(bd.from)+8,height:B-30,fill:bd.type==='S'?'rgba(230,194,74,.13)':'rgba(230,194,74,.06)'}));bd=null;}}
+  let bd=null;for(let l=1;l<=nL;l++){const f=flags[l];if(f&&bd===null)bd={from:l,type:f};if((!f||l===nL)&&bd!==null){const to=f?l:l-1;svg.appendChild(mk('rect',{x:x(bd.from)-4,y:30,width:x(to)-x(bd.from)+8,height:B-30,fill:bd.type==='S'?'rgba(230,194,74,.13)':'rgba(230,194,74,.06)'}));
+    const yl=T-4,la=mk('line',{x1:x(bd.from),y1:yl,x2:x(to),y2:yl,stroke:'#e6c24a','stroke-width':3.5,'stroke-linecap':'round'},null,(bd.type==='S'?'Safety car':'VSC')+' · L'+bd.from+(to>bd.from?'–L'+to:''));if(bd.type!=='S')la.setAttribute('stroke-dasharray','1.5 4');svg.appendChild(la);bd=null;}}
   // position track (top), labelled only where it changes
   const segs=[]; let s0=null;
   for(let i=0;i<nL;i++){const p=pos[i];if(p==null){if(s0!=null){segs.push({p:pos[s0],from:s0+1,to:i});s0=null;}continue;}if(s0==null)s0=i;else if(pos[i]!==pos[s0]){segs.push({p:pos[s0],from:s0+1,to:i});s0=i;}}
