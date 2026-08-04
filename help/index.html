@@ -69,6 +69,12 @@
   figcaption b{color:var(--muted)}
   .duo{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:720px){.duo{grid-template-columns:1fr}}
+  /* phone screenshots row */
+  .phones{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0 6px}
+  .phones figure{margin:0}
+  .phones img{border-radius:18px}
+  .phones figcaption{margin-top:9px}
+  @media(max-width:560px){.phones{grid-template-columns:1fr;max-width:300px;margin-inline:auto}}
 
   /* callout */
   .note{background:linear-gradient(180deg,var(--panel-a),var(--panel-b));border:1px solid var(--line);
@@ -124,6 +130,7 @@
 
   <nav class="toc">
     <a href="#basics"><i>01</i> Getting around</a>
+    <a href="#mobile"><i>·</i> On mobile</a>
     <a href="#drivers"><i>02</i> The Drivers film</a>
     <a href="#deepdive"><i>03</i> Race deep-dive</a>
     <a href="#reading"><i>04</i> Reading the charts</a>
@@ -154,6 +161,18 @@
     <b>Keyboard:</b> <kbd>←</kbd> <kbd>→</kbd> flip cards · <kbd>Enter</kbd> open the selected Grand Prix · <kbd>Esc</kbd> step back.
     Inside a race deep-dive, <kbd>↑</kbd> <kbd>↓</kbd> jump to the previous / next race.<br>
     <b>On a phone:</b> <b>swipe</b> left / right to change cards, and <b>tap</b> a Grand Prix row to open its race view. Layouts stack automatically.
+  </div>
+</div></section>
+
+<!-- ============ MOBILE ============ -->
+<section id="mobile"><div class="wrap">
+  <div class="eyebrow">· On your phone</div>
+  <h2>Made for mobile too</h2>
+  <p>Everything reflows into a single tall column — the same cards, the same charts, just stacked. Swipe left/right to move through a film, tap a Grand Prix to open a race, and pinch-free scroll to read the rest of a card.</p>
+  <div class="phones">
+    <figure><img src="img/m1.jpg" alt="Driver card on mobile — Hamilton" loading="lazy"><figcaption>A <b>driver card</b> — Hamilton, in Ferrari red.</figcaption></figure>
+    <figure><img src="img/m2.jpg" alt="Race deep-dive on mobile — Verstappen, gap to leader" loading="lazy"><figcaption>A <b>race deep-dive</b> — Verstappen's gap to the leader; the chart sits on top, the result stacks below.</figcaption></figure>
+    <figure><img src="img/m3.jpg" alt="Team card on mobile — McLaren" loading="lazy"><figcaption>A <b>team card</b> — McLaren, both cars together.</figcaption></figure>
   </div>
 </div></section>
 
