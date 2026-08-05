@@ -1857,7 +1857,7 @@ wrap.addEventListener('pointerup',e=>{ if(x0==null)return; const dx=e.clientX-x0
   if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); if(playing)setPlay(true);} x0=null;});
 
 addEventListener('hashchange',()=>{ if(!modal.hidden)closeGP(); applyHash(); applyView(); });
-applyHash(); applyView();
+const _initHash=location.hash; applyHash(); applyView(); if(_initHash==='#credits') openCredits();   // deep-link to Credits (e.g. from the guide footer) — captured before applyView rewrites the hash
 
 // ===== credits =====
 function openCredits(){ document.getElementById('credits').classList.add('show'); }
