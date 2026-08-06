@@ -8,6 +8,19 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#070910">
+<meta name="description" content="The 2026 Formula 1 season told as three films of cards — Drivers, Constructors and Races. Explore every driver, team and Grand Prix, lap by lap.">
+<link rel="canonical" href="https://f1.aguywithascarf.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="F1viz — the 2026 F1 season, in films">
+<meta property="og:description" content="The 2026 Formula 1 season told as three films of cards — Drivers, Constructors and Races. Explore every driver, team and Grand Prix, lap by lap.">
+<meta property="og:url" content="https://f1.aguywithascarf.com/">
+<meta property="og:image" content="https://f1.aguywithascarf.com/img/og.png?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="F1viz — the 2026 F1 season, in films">
+<meta name="twitter:description" content="The 2026 Formula 1 season told as three films of cards — Drivers, Constructors and Races. Explore every driver, team and Grand Prix, lap by lap.">
+<meta name="twitter:image" content="https://f1.aguywithascarf.com/img/og.png?v=1">
 <style>
 :root{
   --bg:#070910; --ink:#eef1f8; --muted:#98a2ba; --muted-2:#606a82;
@@ -1867,6 +1880,7 @@ $('#creditsLink').onclick=openCredits; $('#creditsOv').onclick=closeCredits;
 // ===== keyboard-shortcuts hint (desktop only): first-run pill + ? / button recall =====
 (function(){
   if(isMob()) return;                                   // laptops/desktops (physical keyboard) only
+  if(/[?&](og|bare)(=|&|$)/.test(location.search)) return;   // clean capture for the OG / preview image
   const hint=document.createElement('div'); hint.className='kbdhint';
   hint.innerHTML=`<span class="g"><kbd>←</kbd><kbd>→</kbd><b>Prev / Next</b></span>`
     +`<span class="g"><kbd>↑</kbd><kbd>↓</kbd><b>Browse</b></span>`
