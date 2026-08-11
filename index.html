@@ -1180,7 +1180,7 @@ function mountLeadLaps(){
 const _lcCache={};
 let lcTab='res';   // remembered active race-panel tab (res|lap) — sticky across race navigation
 let lcSeekLap=0, lcCurLap=0;   // lap-evo lap: one-shot seek target on reload + live value written to the URL
-let pendingRace=null, pendingTeamRace=null;   // driver / constructor race deep-dive: round to reopen from the URL on load/hashchange
+let pendingRace=null, pendingTeamRace=null, pendingVs=null;   // driver / constructor race deep-dive: round (+ compare driver) to reopen from the URL on load/hashchange
 let rdvChartTab='pos';                         // driver deep-dive left chart: 'pos' (position trace) | 'pace' (lap times), sticky
 let rdvVs=null;                                // driver deep-dive COMPARE: 2nd driver's code overlaid on the chart (+ 2nd info box), null = off; reset per race
 function lcHash(){ try{ const t=(mode==='races'&&lcTab==='lap')?('/lap'+(lcCurLap>0?'/'+lcCurLap:'')):''; history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
@@ -1390,7 +1390,8 @@ function applyHash(){
   lcTab = onLap ? 'lap' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
-  if(pendingRace!=null) rdvChartTab = m[4]==='pace'?'pace':m[4]==='gap-leader'?'gapL':m[4]==='gap-ahead'?'gapA':'pos';   // + which chart tab
+  if(pendingRace!=null){ rdvChartTab = m[4]==='pace'?'pace':m[4]==='gap-leader'?'gapL':m[4]==='gap-ahead'?'gapA':'pos';   // + which chart tab
+    const vseg=m.find(s=>/^vs-/.test(s||'')); pendingVs = vseg?vseg.slice(3):null; }   // + optional compare driver
   pendingTeamRace = (m[0]==='constructors' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;
 }
 // render, then reopen a race deep-dive (driver or constructor) if the URL points at one
@@ -1468,7 +1469,7 @@ function openRace(gi){ setPlay(false); rdvVs=null; const d=D[idx], r=d.races[gi]
   try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r);}catch(e){}
   document.documentElement.style.setProperty('--c',d.color); document.documentElement.dataset.team=d.teamId||'';
   wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}"><div class="rdv-msg">Loading race…</div></div></div>`;
-  lcFetch(r.r).then(LD=>renderRace(d,gi,r,LD)).catch(()=>renderRace(d,gi,r,null)); }
+  lcFetch(r.r).then(LD=>{ if(pendingVs){rdvVs=pendingVs;pendingVs=null;} renderRace(d,gi,r,LD); }).catch(()=>renderRace(d,gi,r,null)); }
 function renderRace(d,gi,r,LD){
   const code=d.code, cal=calR[r.r]||r, raceLaps=(DATA.raceLaps&&DATA.raceLaps[r.r])||r.laps||0;
   let trace=[], secs=[], gridPos=r.grid||1, pits=[], pitTimes={}, flags={}, nL=raceLaps, flLap=null, flStr=r.flTime||null, led=0, ledFrom=0, ledTo=0;
@@ -1560,7 +1561,7 @@ function renderRace(d,gi,r,LD){
     const gapLLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>gap to leader</span><span><i style="width:12px;height:5px;border-radius:3px;background:var(--c);"></i>led this lap</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span>`;
     const gapALg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>gap to car ahead</span><span><i style="width:12px;height:8px;border-radius:2px;background:rgba(74,217,145,.22);"></i>within 1.0s</span><span><i style="width:12px;height:5px;border-radius:3px;background:var(--c);"></i>leading</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span>`;
     const drawChart=tab=>{ rdvChartTab=tab;
-      const suf=tab==='pace'?'/pace':tab==='gapL'?'/gap-leader':tab==='gapA'?'/gap-ahead':'';
+      const suf=(tab==='pace'?'/pace':tab==='gapL'?'/gap-leader':tab==='gapA'?'/gap-ahead':'')+((vs&&CMP_OK(tab))?'/vs-'+vs.d2.code:'');
       try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r+suf);}catch(e){}
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
       const cmpEl=document.getElementById('rdvCmp'); if(cmpEl) cmpEl.style.display=CMP_OK(tab)?'':'none';
