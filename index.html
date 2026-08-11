@@ -1301,6 +1301,7 @@ function buildLapChart(LD, host){
 }
 function render(dir){
   if(window.__lcStop) window.__lcStop();
+  rdvVs=null;                                    // leaving the deep-dive / changing driver clears compare (prev/next RACE keeps it — that goes through openRace, not render)
   if(idx<N()){
     const e=list()[idx];
     if(mode==='races'){
@@ -1465,7 +1466,7 @@ function lcFetch(round){ return _lcCache[round]?Promise.resolve(_lcCache[round])
 function parseSec(t){const p=String(t).split(':');return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]);}
 function lit(h,m){h=h.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return `rgb(${Math.round(r+(255-r)*m)},${Math.round(g+(255-g)*m)},${Math.round(b+(255-b)*m)})`;}
 function rdvRow(k,v){return `<div style="display:flex;justify-content:space-between;padding:6px 2px;border-bottom:1px solid var(--line-2);font-size:12px;"><span style="color:var(--muted);">${k}</span><b>${v}</b></div>`;}
-function openRace(gi){ setPlay(false); rdvVs=null; const d=D[idx], r=d.races[gi]; if(!r)return;
+function openRace(gi){ setPlay(false); const d=D[idx], r=d.races[gi]; if(!r)return;   // NOTE: rdvVs (compare) intentionally NOT reset here → prev/next race keeps the compare driver; render() resets it when leaving the deep-dive
   try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r);}catch(e){}
   document.documentElement.style.setProperty('--c',d.color); document.documentElement.dataset.team=d.teamId||'';
   wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}"><div class="rdv-msg">Loading race…</div></div></div>`;
@@ -1493,7 +1494,7 @@ function renderRace(d,gi,r,LD){
   const rl=d.races.length;
   // ---- COMPARE: optional 2nd-driver overlay ----
   const dvP = LD ? raceDeriv(code,r,LD,raceLaps) : null;
-  const vs = (LD && rdvVs && rdvVs!==code) ? (()=>{ const d2=D.find(x=>x.code===rdvVs); if(!d2)return null; const r2=(d2.races||[]).find(x=>x.r===r.r)||null; return {d2,r2,dv2:raceDeriv(rdvVs,r2,LD,raceLaps)}; })() : null;
+  const vs = (LD && rdvVs && rdvVs!==code && LD.order.some(o=>o.indexOf(rdvVs)>=0)) ? (()=>{ const d2=D.find(x=>x.code===rdvVs); if(!d2)return null; const r2=(d2.races||[]).find(x=>x.r===r.r)||null; return {d2,r2,dv2:raceDeriv(rdvVs,r2,LD,raceLaps)}; })() : null;   // guard: compare driver must actually be in this race (retained across races via openRace)
   const raceDrivers = LD ? D.filter(x=>x.code!==code && (x.races||[]).some(rr=>rr.r===r.r)) : [];
   raceDrivers.sort((a,b)=>{ const at=a.teamId===d.teamId?0:1, bt=b.teamId===d.teamId?0:1; if(at!==bt)return at-bt; const af=((a.races.find(rr=>rr.r===r.r)||{}).fin)??99, bf=((b.races.find(rr=>rr.r===r.r)||{}).fin)??99; return af-bf; });
   const cmpItems = raceDrivers.map(x=>`<button class="rdv-cmpi" data-vs="${x.code}"><span class="cdot" style="background:${x.color}"></span>${x.family} <em>${x.code}</em></button>`).join('');
