@@ -419,6 +419,20 @@ button{font-family:inherit}
 .rdv-lt{font:inherit;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2);background:transparent;border:0;border-radius:6px;padding:4px 10px;cursor:pointer;transition:.15s}
 .rdv-lt:hover{color:var(--muted)}
 .rdv-lt.on{color:var(--ink);background:color-mix(in srgb,var(--c) 30%,transparent)}
+.rdv-ltleft{display:flex;align-items:center;gap:8px;min-width:0}
+.rdv-cmp{position:relative;flex:0 0 auto}
+.rdv-cmpbtn{font:inherit;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--line-2);border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;transition:.15s}
+.rdv-cmpbtn:hover{color:var(--ink);border-color:color-mix(in srgb,var(--c) 50%,var(--line))}
+.rdv-cmpbtn.on{color:var(--ink);border-color:color-mix(in srgb,var(--c) 55%,var(--line));background:color-mix(in srgb,var(--c) 14%,transparent)}
+.rdv-cmpbtn .cx{margin-left:1px;opacity:.55;font-size:11px}
+.rdv-cmpbtn .cx:hover{opacity:1}
+.cdot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 auto}
+.rdv-cmppop{position:absolute;top:calc(100% + 6px);left:0;z-index:30;width:212px;max-height:280px;overflow-y:auto;background:#0b0e15;border:1px solid var(--line);border-radius:11px;padding:6px;box-shadow:0 20px 46px #000c}
+.rdv-cmppop[hidden]{display:none}
+.rdv-cmphd{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:700;padding:5px 8px 6px}
+.rdv-cmpi{display:flex;align-items:center;gap:9px;width:100%;font:inherit;font-size:12.5px;font-weight:600;color:var(--ink);background:transparent;border:0;border-radius:8px;padding:7px 9px;cursor:pointer;text-align:left}
+.rdv-cmpi:hover{background:var(--line-2)}
+.rdv-cmpi em{margin-left:auto;font-style:normal;font-size:10px;color:var(--muted-2);font-weight:700;letter-spacing:.03em}
 .rdv-lsub{font-size:10px;letter-spacing:.02em;color:var(--muted-2);text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rdv-cap{font-size:10.5px;color:var(--muted-2);margin:-1px 0 6px;flex:0 0 auto;letter-spacing:.01em;line-height:1.35}
 .rdv-cap:empty{display:none}
@@ -1168,6 +1182,7 @@ let lcTab='res';   // remembered active race-panel tab (res|lap) — sticky acro
 let lcSeekLap=0, lcCurLap=0;   // lap-evo lap: one-shot seek target on reload + live value written to the URL
 let pendingRace=null, pendingTeamRace=null;   // driver / constructor race deep-dive: round to reopen from the URL on load/hashchange
 let rdvChartTab='pos';                         // driver deep-dive left chart: 'pos' (position trace) | 'pace' (lap times), sticky
+let rdvVs=null;                                // driver deep-dive COMPARE: 2nd driver's code overlaid on the chart (+ 2nd info box), null = off; reset per race
 function lcHash(){ try{ const t=(mode==='races'&&lcTab==='lap')?('/lap'+(lcCurLap>0?'/'+lcCurLap:'')):''; history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
 // followed drivers persist across races + sessions (keyed by stable driver code)
 const _lcFollowKey='f1viz.follow';
@@ -1429,6 +1444,7 @@ function buildJump(){
 $('#counter').onclick=()=>{ if(jump.hidden){buildJump();
   $('#jgrid').querySelectorAll('.jitem').forEach(it=>it.classList.toggle('on',+it.dataset.j===idx));jump.hidden=false;}else jump.hidden=true; };
 document.addEventListener('click',e=>{ if(!jump.hidden && !e.target.closest('#jumppop') && !e.target.closest('#counter')) jump.hidden=true; });
+document.addEventListener('click',e=>{ const p=document.getElementById('rdvCmpPop'); if(p&&!p.hidden && !e.target.closest('#rdvCmp')) p.hidden=true; });   // close the compare dropdown on outside click
 
 /* modal */
 const modal=$('#modal'), mbox=$('#mbox');
@@ -1448,7 +1464,7 @@ function lcFetch(round){ return _lcCache[round]?Promise.resolve(_lcCache[round])
 function parseSec(t){const p=String(t).split(':');return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]);}
 function lit(h,m){h=h.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return `rgb(${Math.round(r+(255-r)*m)},${Math.round(g+(255-g)*m)},${Math.round(b+(255-b)*m)})`;}
 function rdvRow(k,v){return `<div style="display:flex;justify-content:space-between;padding:6px 2px;border-bottom:1px solid var(--line-2);font-size:12px;"><span style="color:var(--muted);">${k}</span><b>${v}</b></div>`;}
-function openRace(gi){ setPlay(false); const d=D[idx], r=d.races[gi]; if(!r)return;
+function openRace(gi){ setPlay(false); rdvVs=null; const d=D[idx], r=d.races[gi]; if(!r)return;
   try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r);}catch(e){}
   document.documentElement.style.setProperty('--c',d.color); document.documentElement.dataset.team=d.teamId||'';
   wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}"><div class="rdv-msg">Loading race…</div></div></div>`;
@@ -1474,31 +1490,19 @@ function renderRace(d,gi,r,LD){
      return `<div style="display:flex;align-items:center;gap:9px;font-size:12px;"><span style="width:34px;color:${bad?'#ff8f8f':'var(--muted-2)'};font-variant-numeric:tabular-nums;font-weight:${bad?700:400};">L${l}</span><span style="flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,${bad?'#ff6b6b':'#f5a623'} ${w}%,var(--line) ${w}%);"></span><b style="width:58px;text-align:right;font-variant-numeric:tabular-nums;color:${bad?'#ff8f8f':'var(--ink)'};">${dur?sv.toFixed(1)+'s':''}${bad?' ⚠':''}</b></div>`;}).join('')
      : `<div style="font-size:12px;color:var(--muted-2);">No stops recorded</div>`;
   const rl=d.races.length;
-  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}">
-    <div class="rdv-head">
-      <button class="rdv-nav rdv-back">‹ Season</button>
-      <button class="rdv-nav rdv-prev" title="Previous race (↑)">‹</button>
-      <button class="rdv-nav rdv-next" title="Next race (↓)">›</button>
-      <div class="rdv-ht"><div class="rdv-round">Round ${r.r} · ${cal.flag} ${cal.country}</div>
-        <div class="rdv-gp">${fullName(r.r)} <small>· ${cal.circuit} · ${cal.date}</small></div></div>
-      <div class="rdv-drv">
-        <img class="rdv-face" src="${IMG(d.slug)}" alt="" onerror="this.style.visibility='hidden'">
-        <div class="rdv-dtxt"><em>#${d.num||''}</em><b>${d.family}</b><i>${d.team}</i></div>
-        <img class="rdv-car" src="${CAR(d.teamId)}" alt="" onerror="this.remove()">
-      </div>
-    </div>
-    <div class="rdv-body">
-      <div class="rdv-left">
-        <div class="rdv-ltabs">
-          <div class="rdv-ltset"><button class="rdv-lt" data-lt="pos">Position</button><button class="rdv-lt" data-lt="pace">Lap times</button><button class="rdv-lt" data-lt="gapL">Gap: leader</button><button class="rdv-lt" data-lt="gapA">Gap: ahead</button></div>
-          <div class="rdv-lsub" id="rdvSub"></div>
-        </div>
-        <div class="rdv-cap" id="rdvCap"></div>
-        <div class="rdv-chart" id="rdvChart">${LD?'':'<div class="rdv-msg" style="padding:20px">Lap-by-lap data unavailable for this round</div>'}</div>
-        <div class="rdv-lg" id="rdvLg"></div>
-      </div>
-      <div class="rdv-right">
-        <div style="display:flex;align-items:flex-end;gap:12px;">
+  // ---- COMPARE: optional 2nd-driver overlay ----
+  const dvP = LD ? raceDeriv(code,r,LD,raceLaps) : null;
+  const vs = (LD && rdvVs && rdvVs!==code) ? (()=>{ const d2=D.find(x=>x.code===rdvVs); if(!d2)return null; const r2=(d2.races||[]).find(x=>x.r===r.r)||null; return {d2,r2,dv2:raceDeriv(rdvVs,r2,LD,raceLaps)}; })() : null;
+  const raceDrivers = LD ? D.filter(x=>x.code!==code && (x.races||[]).some(rr=>rr.r===r.r)) : [];
+  raceDrivers.sort((a,b)=>{ const at=a.teamId===d.teamId?0:1, bt=b.teamId===d.teamId?0:1; if(at!==bt)return at-bt; const af=((a.races.find(rr=>rr.r===r.r)||{}).fin)??99, bf=((b.races.find(rr=>rr.r===r.r)||{}).fin)??99; return af-bf; });
+  const cmpItems = raceDrivers.map(x=>`<button class="rdv-cmpi" data-vs="${x.code}"><span class="cdot" style="background:${x.color}"></span>${x.family} <em>${x.code}</em></button>`).join('');
+  const cmpCtrl = LD ? `<div class="rdv-cmp" id="rdvCmp">
+      <button class="rdv-cmpbtn${vs?' on':''}" id="rdvCmpBtn">${vs?`<span class="cdot" style="background:${vs.d2.color}"></span>vs ${vs.d2.code}<span class="cx" id="rdvCmpX" title="Remove">✕</span>`:'＋ Compare'}</button>
+      <div class="rdv-cmppop" id="rdvCmpPop" hidden><div class="rdv-cmphd">Add a driver</div>${cmpItems}</div>
+    </div>` : '';
+  const CMP_OK = t => t==='pos';                        // tabs where compare is active (grows to gapL, pace)
+  const twoBox = vs ? `${rdvMiniBox(d,r,dvP,false)}${rdvMiniBox(vs.d2,vs.r2,vs.dv2,true)}${hlBlock(r.r)}` : '';
+  const richRight = `<div style="display:flex;align-items:flex-end;gap:12px;">
           <div><div style="font-size:38px;font-weight:800;font-style:italic;letter-spacing:-.03em;line-height:.85;${f.cls==='p1'?'color:var(--gold);':(r.fin==null?'color:var(--bad);':'')}">${f.t}</div>
             <div style="font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted-2);margin-top:4px;">Finish${deltaTxt?` · <span style="color:${deltaCol}">${deltaTxt}</span>`:''}</div></div>
           <div style="display:flex;flex-direction:column;gap:4px;margin-left:auto;align-items:flex-end;">${badgeHTML}</div>
@@ -1517,13 +1521,39 @@ function renderRace(d,gi,r,LD){
           <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px;">Pit stops</div>
           <div style="display:flex;flex-direction:column;gap:5px;">${pitHTML}</div>
         </div>
-        <div style="margin-top:auto;">${hlBlock(r.r)}</div>
+        <div style="margin-top:auto;">${hlBlock(r.r)}</div>`;
+  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}">
+    <div class="rdv-head">
+      <button class="rdv-nav rdv-back">‹ Season</button>
+      <button class="rdv-nav rdv-prev" title="Previous race (↑)">‹</button>
+      <button class="rdv-nav rdv-next" title="Next race (↓)">›</button>
+      <div class="rdv-ht"><div class="rdv-round">Round ${r.r} · ${cal.flag} ${cal.country}</div>
+        <div class="rdv-gp">${fullName(r.r)} <small>· ${cal.circuit} · ${cal.date}</small></div></div>
+      <div class="rdv-drv">
+        <img class="rdv-face" src="${IMG(d.slug)}" alt="" onerror="this.style.visibility='hidden'">
+        <div class="rdv-dtxt"><em>#${d.num||''}</em><b>${d.family}</b><i>${d.team}</i></div>
+        <img class="rdv-car" src="${CAR(d.teamId)}" alt="" onerror="this.remove()">
       </div>
+    </div>
+    <div class="rdv-body">
+      <div class="rdv-left">
+        <div class="rdv-ltabs">
+          <div class="rdv-ltleft"><div class="rdv-ltset"><button class="rdv-lt" data-lt="pos">Position</button><button class="rdv-lt" data-lt="pace">Lap times</button><button class="rdv-lt" data-lt="gapL">Gap: leader</button><button class="rdv-lt" data-lt="gapA">Gap: ahead</button></div>${cmpCtrl}</div>
+          <div class="rdv-lsub" id="rdvSub"></div>
+        </div>
+        <div class="rdv-cap" id="rdvCap"></div>
+        <div class="rdv-chart" id="rdvChart">${LD?'':'<div class="rdv-msg" style="padding:20px">Lap-by-lap data unavailable for this round</div>'}</div>
+        <div class="rdv-lg" id="rdvLg"></div>
+      </div>
+      <div class="rdv-right" id="rdvRight">${richRight}</div>
     </div>
   </div></div>`;
   wrap.querySelector('.rdv-back').onclick=()=>render();
   wrap.querySelector('.rdv-prev').onclick=()=>openRace((gi-1+rl)%rl);
   wrap.querySelector('.rdv-next').onclick=()=>openRace((gi+1)%rl);
+  const cmpBtn=document.getElementById('rdvCmpBtn'), cmpPop=document.getElementById('rdvCmpPop');
+  if(cmpBtn){ cmpBtn.onclick=()=>{ if(vs){ rdvVs=null; renderRace(d,gi,r,LD); } else { cmpPop.hidden=!cmpPop.hidden; } };
+    wrap.querySelectorAll('.rdv-cmpi').forEach(b=>b.onclick=()=>{ rdvVs=b.dataset.vs; renderRace(d,gi,r,LD); }); }
   if(LD){
     const posLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>${d.family}</span><span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest lap</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
     const paceLg=`<span><i style="width:14px;height:2px;background:var(--c);"></i>green pace</span><span><i style="width:9px;height:9px;border-radius:50%;background:#c9a3ff;"></i>fastest</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span><span><span style="color:#e77b83;font-weight:700;">⚑</span> red flag</span>`;
@@ -1533,11 +1563,17 @@ function renderRace(d,gi,r,LD){
       const suf=tab==='pace'?'/pace':tab==='gapL'?'/gap-leader':tab==='gapA'?'/gap-ahead':'';
       try{history.replaceState(null,'','#drivers/'+idx+'/race/'+r.r+suf);}catch(e){}
       wrap.querySelectorAll('.rdv-lt').forEach(b=>b.classList.toggle('on',b.dataset.lt===tab));
+      const cmpEl=document.getElementById('rdvCmp'); if(cmpEl) cmpEl.style.display=CMP_OK(tab)?'':'none';
+      const rtEl=document.getElementById('rdvRight'); if(rtEl){ if(vs&&CMP_OK(tab)){ rtEl.className='rdv-right rdv-boxes'; rtEl.innerHTML=twoBox; } else { rtEl.className='rdv-right'; rtEl.innerHTML=richRight; } }
       const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
       if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
       else if(tab==='gapL'){ sub.textContent='gap to leader · '+nL+' laps'; cap.textContent='Zero (top) is the race leader. The trace drops as the gap grows and snaps back at a Safety Car or when rivals pit. The bold bar on the 0-line marks laps this driver led; diamonds are their own pit stops.'; lg.innerHTML=gapLLg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ldr'}); }
       else if(tab==='gapA'){ sub.textContent='gap to car ahead · '+nL+' laps'; cap.textContent='Zero (top) is the gearbox of the car ahead; inside the shaded band the driver is within ~1s (DRS range). The label shows who is ahead — a bold LEADING bar marks laps with no car in front.'; lg.innerHTML=gapALg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ahd'}); }
-      else { sub.textContent='position by lap · '+nL+' laps'; cap.textContent=''; lg.innerHTML=posLg; rdvTrace(d,r,{trace,gridPos,pits,pitTimes,flags,nL,flLap}); } };
+      else { sub.textContent='position by lap · '+nL+' laps'; cap.textContent='';
+        if(vs){ const entries=[{d,r,dv:dvP},{d:vs.d2,r:vs.r2,dv:vs.dv2}], st=d.teamId===vs.d2.teamId;
+          lg.innerHTML=entries.map((e,i)=>`<span><i style="width:16px;height:0;border-top:2px ${i===1?'dashed '+(st?lit(e.d.color,.4):e.d.color):'solid '+e.d.color};"></i>${e.d.family}</span>`).join('')+`<span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span><span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span>`;
+          rdvTraceTeam(entries,r,nL,flags);
+        } else { lg.innerHTML=posLg; rdvTrace(d,r,{trace,gridPos,pits,pitTimes,flags,nL,flLap}); } } };
     wrap.querySelectorAll('.rdv-lt').forEach(b=>b.onclick=()=>drawChart(b.dataset.lt));
     drawChart(rdvChartTab);
   }
@@ -1702,6 +1738,19 @@ function raceDeriv(code,r,LD,raceLaps){
     let best=1e9; LD.times.forEach((tm,i)=>{const t=tm[code];if(t){const s=parseSec(t);if(s<best){best=s;flLap=i+1;flStr=t;}}}); }
   return {trace,gridPos,pits,pitTimes,nL,flLap,flStr,led,ledFrom,ledTo};
 }
+// compact per-driver result box (shared by the constructor deep-dive & the driver COMPARE mode)
+function rdvMiniBox(d,r,dv,dashed){
+  const f=r?finLabel(r):{t:'—',cls:''}, delta=(r&&isFinished(r)&&r.grid)?(r.grid-r.fin):null;
+  const dTxt=delta==null?'':(delta>0?`▲${delta}`:(delta<0?`▼${-delta}`:'=')), dCol=delta>0?'#4ad991':delta<0?'#ff6b6b':'var(--muted)';
+  const pit=dv.pits.length?dv.pits.map(l=>{const u=dv.pitTimes[String(l)];return u?`L${l} ${parseSec(u).toFixed(1)}s`:'L'+l;}).join(' · '):'—';
+  return `<div class="rdv-box" style="--dc:${d.color}">
+    <div class="rbh"><img class="rbface" src="${IMG(d.slug)}" onerror="this.style.visibility='hidden'"><span class="rbline" style="${dashed?'border-top-style:dashed':''}"></span>
+      <div class="rbname">${d.family} <em class="rbnum">#${d.num||''}</em></div>
+      <div class="rbfin ${f.cls}" style="margin-left:auto">${f.t}${dTxt?` <span style="font-size:11px;font-style:normal;font-weight:700;color:${dCol}">${dTxt}</span>`:''}</div></div>
+    <div class="rbg">${[['P'+((r&&r.grid)||'—'),'Grid'],['P'+((r&&r.quali)||'—'),'Quali'],[dv.pits.length||(r&&r.pits)||0,'Stops'],[(r&&r.pts)||0,'Pts']].map((cc,ix)=>`<span><b style="${ix===3?'color:color-mix(in srgb,var(--gold) 82%,#fff)':''}">${cc[0]}</b><i>${cc[1]}</i></span>`).join('')}</div>
+    <div class="rbr"><span>Fastest lap</span><b style="${r&&r.flrank===1?'color:#c9a3ff':''}">${r&&r.flrank?('P'+r.flrank+(dv.flStr?' · '+dv.flStr:'')):'—'}</b></div>
+    <div class="rbr"><span>Pit stops</span><b>${pit}</b></div></div>`;
+}
 function openTeamRace(ti){ setPlay(false); const c=list()[idx], rd=DATA.rounds[ti]; if(!c||!rd)return;
   try{history.replaceState(null,'','#constructors/'+idx+'/race/'+rd.r);}catch(e){}
   document.documentElement.style.setProperty('--c',c.color); document.documentElement.dataset.team=c.teamId||'';
@@ -1764,7 +1813,8 @@ function rdvTraceTeam(entries,rd,nL,flags){
   for(let p=1;p<=yMax;p++){const mj=(p===1||p%5===0);svg.appendChild(mk('line',{x1:L,y1:y(p),x2:Rr,y2:y(p),stroke:mj?'rgba(150,166,205,.13)':'rgba(150,166,205,.05)','stroke-width':1}));svg.appendChild(mk('text',{x:L-6,y:y(p)+3,fill:mj?'#7d879e':'#59627a','font-size':8.5,'text-anchor':'end'},'P'+p));}
   const ticks=[0];for(let l=10;l<nL-5;l+=10)ticks.push(l);ticks.push(nL);
   ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#5f6a80','font-size':9.5,'text-anchor':'middle'},l===0?'Grid':l)));
-  entries.forEach((e,ei)=>{const {d,r,dv}=e, col=ei===1?lit(d.color,.4):d.color, dash=ei===1;
+  const sameTeam=entries[1]&&entries[0].d.teamId===entries[1].d.teamId;   // teammates share a colour → lighten the 2nd; different teams keep their own
+  entries.forEach((e,ei)=>{const {d,r,dv}=e, col=ei===1?(sameTeam?lit(d.color,.4):d.color):d.color, dash=ei===1;
     let dp=`M ${x(0)} ${y(dv.gridPos||1)}`,lastLap=0,lastPos=dv.gridPos||1;
     for(let i=0;i<dv.trace.length;i++){const p=dv.trace[i];if(p==null)break;dp+=` L ${x(i+1)} ${y(p)}`;lastLap=i+1;lastPos=p;}
     const pa={d:dp,fill:'none',stroke:col,'stroke-width':2.2,'stroke-linejoin':'round','stroke-linecap':'round'}; if(dash)pa['stroke-dasharray']='5 4';
