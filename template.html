@@ -1500,7 +1500,7 @@ function renderRace(d,gi,r,LD){
       <button class="rdv-cmpbtn${vs?' on':''}" id="rdvCmpBtn">${vs?`<span class="cdot" style="background:${vs.d2.color}"></span>vs ${vs.d2.code}<span class="cx" id="rdvCmpX" title="Remove">✕</span>`:'＋ Compare'}</button>
       <div class="rdv-cmppop" id="rdvCmpPop" hidden><div class="rdv-cmphd">Add a driver</div>${cmpItems}</div>
     </div>` : '';
-  const CMP_OK = t => t==='pos';                        // tabs where compare is active (grows to gapL, pace)
+  const CMP_OK = t => t==='pos'||t==='gapL';             // tabs where compare is active (pace next)
   const twoBox = vs ? `${rdvMiniBox(d,r,dvP,false)}${rdvMiniBox(vs.d2,vs.r2,vs.dv2,true)}${hlBlock(r.r)}` : '';
   const richRight = `<div style="display:flex;align-items:flex-end;gap:12px;">
           <div><div style="font-size:38px;font-weight:800;font-style:italic;letter-spacing:-.03em;line-height:.85;${f.cls==='p1'?'color:var(--gold);':(r.fin==null?'color:var(--bad);':'')}">${f.t}</div>
@@ -1567,7 +1567,11 @@ function renderRace(d,gi,r,LD){
       const rtEl=document.getElementById('rdvRight'); if(rtEl){ if(vs&&CMP_OK(tab)){ rtEl.className='rdv-right rdv-boxes'; rtEl.innerHTML=twoBox; } else { rtEl.className='rdv-right'; rtEl.innerHTML=richRight; } }
       const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
       if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
-      else if(tab==='gapL'){ sub.textContent='gap to leader · '+nL+' laps'; cap.textContent='Zero (top) is the race leader. The trace drops as the gap grows and snaps back at a Safety Car or when rivals pit. The bold bar on the 0-line marks laps this driver led; diamonds are their own pit stops.'; lg.innerHTML=gapLLg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ldr'}); }
+      else if(tab==='gapL'){ sub.textContent='gap to leader · '+nL+' laps'; cap.textContent='Zero (top) is the race leader. The trace drops as the gap grows and snaps back at a Safety Car or when rivals pit. The bold bar on the 0-line marks laps this driver led; diamonds are their own pit stops.';
+        if(vs){ const st=d.teamId===vs.d2.teamId, col2=st?lit(vs.d2.color,.4):vs.d2.color;
+          lg.innerHTML=`<span><i style="width:16px;height:0;border-top:2px solid var(--c);"></i>${d.family}</span><span><i style="width:16px;height:0;border-top:2px dashed ${col2};"></i>${vs.d2.family}</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span>`;
+          rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ldr',code2:vs.d2.code,col2,pits2:vs.dv2.pits});
+        } else { lg.innerHTML=gapLLg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ldr'}); } }
       else if(tab==='gapA'){ sub.textContent='gap to car ahead · '+nL+' laps'; cap.textContent='Zero (top) is the gearbox of the car ahead; inside the shaded band the driver is within ~1s (DRS range). The label shows who is ahead — a bold LEADING bar marks laps with no car in front.'; lg.innerHTML=gapALg; rdvGap(d,r,{order:LD.order,times:LD.times,code,pits,flags,nL,mode:'ahd'}); }
       else { sub.textContent='position by lap · '+nL+' laps'; cap.textContent='';
         if(vs){ const entries=[{d,r,dv:dvP},{d:vs.d2,r:vs.r2,dv:vs.dv2}], st=d.teamId===vs.d2.teamId;
@@ -1694,7 +1698,15 @@ function rdvGap(d,r,S){
     gap.push(stop?null:g); }
   const valid=gap.filter(v=>v!=null);
   if(!valid.length && !lead.some(Boolean)){ host.innerHTML='<div class="rdv-msg" style="padding:20px">No gap data</div>'; return; }
-  const gMax=Math.max(3,(valid.length?Math.max(...valid):3)*1.08);
+  // COMPARE: 2nd driver's gap-to-leader (only meaningful on the leader tab)
+  const code2=(mode==='ldr'&&S.code2&&S.code2!==code)?S.code2:null, col2=S.col2||'#9aa6cd';
+  let gap2=null;
+  if(code2){ gap2=[]; for(let Lp=0;Lp<nL;Lp++){ const ord=order[Lp]||[], ldr=ord[0], p2=ord.indexOf(code2);
+      if(p2<0||ldr==null||cum[code2][Lp]==null||cum[ldr][Lp]==null){gap2.push(null);continue;}
+      const stp=(times[Lp][code2]&&parseSec(times[Lp][code2])>=RED)||(times[Lp][ldr]&&parseSec(times[Lp][ldr])>=RED);
+      gap2.push(stp?null:cum[code2][Lp]-cum[ldr][Lp]); } }
+  const gAll = gap2 ? valid.concat(gap2.filter(v=>v!=null)) : valid;
+  const gMax=Math.max(3,(gAll.length?Math.max(...gAll):3)*1.08);
   const W=Math.max(340,host.clientWidth), H=Math.max(240,host.clientHeight), L=48, Rr=W-12, T=46, B=H-30, col=d.color, RL=T-16;   // RL = reference lane (top), T = 0-line
   const x=l=>L+((l-1)/(nL-1))*(Rr-L), y=g=>T+(Math.min(Math.max(g,0),gMax)/gMax)*(B-T);
   const NS='http://www.w3.org/2000/svg', svg=document.createElementNS(NS,'svg');
@@ -1726,6 +1738,14 @@ function rdvGap(d,r,S){
   gap.forEach((g,i)=>{if(g!=null)svg.appendChild(mk('circle',{cx:x(i+1),cy:y(g),r:2.3,fill:col,opacity:.75},null,'L'+(i+1)+' · '+(g<=0?'leading':'+'+F(g))+(ref[i]&&!lead[i]?' to '+ref[i]:'')));});
   // driver's own position on the trace, printed where it changes
   {let lastP=null,lastX=-99;for(let i=0;i<nL;i++){const g=gap[i],p=dpos[i];if(g==null||p==null)continue;if(p!==lastP&&x(i+1)-lastX>24){const ly=y(g)-7<T+2?y(g)+13:y(g)-7;svg.appendChild(mk('text',{x:x(i+1),y:ly,fill:'#c9d2e6','font-size':8.5,'font-weight':700,'text-anchor':'middle'},'P'+p,'L'+(i+1)+' · P'+p));lastP=p;lastX=x(i+1);}}}   // track only the last PRINTED position — never a throttled one, so no "P2 … P2" with the intervening change swallowed
+  if(gap2){ // COMPARE overlay: 2nd driver, dashed, in its colour
+    const endLbl=(arr,c,cd)=>{let le=-1;for(let i=nL-1;i>=0;i--){if(arr[i]!=null){le=i;break;}}if(le<0)return;const nearE=le+1>nL-4;svg.appendChild(mk('text',{x:nearE?x(le+1)-5:x(le+1)+5,y:y(arr[le])+3,fill:c,'font-size':9.5,'font-weight':700,'text-anchor':nearE?'end':'start'},cd));};
+    let dd2='',on2=false; gap2.forEach((g,i)=>{if(g==null){on2=false;return;}const px=x(i+1),py=y(g);dd2+=(on2?' L ':'M ')+px+' '+py;on2=true;});
+    svg.appendChild(mk('path',{d:dd2,fill:'none',stroke:col2,'stroke-width':2,'stroke-dasharray':'5 4','stroke-linejoin':'round','stroke-linecap':'round'}));
+    gap2.forEach((g,i)=>{if(g!=null)svg.appendChild(mk('circle',{cx:x(i+1),cy:y(g),r:1.9,fill:col2,opacity:.7},null,'L'+(i+1)+' · '+code2+' +'+F(g)));});
+    (S.pits2||[]).forEach(l=>{const g=gap2[l-1];if(g==null)return;svg.appendChild(mk('rect',{x:x(l)-3,y:y(g)-3,width:6,height:6,rx:1.2,fill:'#f5a623',transform:`rotate(45 ${x(l)} ${y(g)})`},null,'L'+l+' · Pit ('+code2+')'));});
+    endLbl(gap2,col2,code2); endLbl(gap,col,code);
+  }
   host.innerHTML='';host.appendChild(svg);
 }
 // ---- constructor race deep-dive (both cars) ----
