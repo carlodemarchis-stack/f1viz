@@ -1500,7 +1500,7 @@ function renderRace(d,gi,r,LD){
       <button class="rdv-cmpbtn${vs?' on':''}" id="rdvCmpBtn">${vs?`<span class="cdot" style="background:${vs.d2.color}"></span>vs ${vs.d2.code}<span class="cx" id="rdvCmpX" title="Remove">✕</span>`:'＋ Compare'}</button>
       <div class="rdv-cmppop" id="rdvCmpPop" hidden><div class="rdv-cmphd">Add a driver</div>${cmpItems}</div>
     </div>` : '';
-  const CMP_OK = t => t==='pos'||t==='gapL';             // tabs where compare is active (pace next)
+  const CMP_OK = t => t==='pos'||t==='gapL'||t==='pace';  // tabs where compare is active (all but gap-ahead)
   const twoBox = vs ? `${rdvMiniBox(d,r,dvP,false)}${rdvMiniBox(vs.d2,vs.r2,vs.dv2,true)}${hlBlock(r.r)}` : '';
   const richRight = `<div style="display:flex;align-items:flex-end;gap:12px;">
           <div><div style="font-size:38px;font-weight:800;font-style:italic;letter-spacing:-.03em;line-height:.85;${f.cls==='p1'?'color:var(--gold);':(r.fin==null?'color:var(--bad);':'')}">${f.t}</div>
@@ -1566,7 +1566,13 @@ function renderRace(d,gi,r,LD){
       const cmpEl=document.getElementById('rdvCmp'); if(cmpEl) cmpEl.style.display=CMP_OK(tab)?'':'none';
       const rtEl=document.getElementById('rdvRight'); if(rtEl){ if(vs&&CMP_OK(tab)){ rtEl.className='rdv-right rdv-boxes'; rtEl.innerHTML=twoBox; } else { rtEl.className='rdv-right'; rtEl.innerHTML=richRight; } }
       const sub=document.getElementById('rdvSub'), lg=document.getElementById('rdvLg'), cap=document.getElementById('rdvCap');
-      if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps'; cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); }
+      if(tab==='pace'){ sub.textContent='green-lap time · '+nL+' laps';
+        if(vs){ const st=d.teamId===vs.d2.teamId, col2=st?lit(vs.d2.color,.4):vs.d2.color;
+          const secs2=LD.times.map(tm=>{const t=tm[vs.d2.code];return t?parseSec(t):null;}), pos2=LD.order.map(o=>{const i=o.indexOf(vs.d2.code);return i>=0?i+1:null;});
+          cap.textContent='Green-lap pace for both drivers — pit / SC / outlier laps are dropped so each line breaks over them. Positions run along the top (you) and the bottom (rival).';
+          lg.innerHTML=`<span><i style="width:16px;height:0;border-top:2px solid var(--c);"></i>${d.family}</span><span><i style="width:16px;height:0;border-top:2px dashed ${col2};"></i>${vs.d2.family}</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span>`;
+          rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap,secs2,pos2,pits2:vs.dv2.pits,col2,code,code2:vs.d2.code});
+        } else { cap.textContent='Pit, safety-car and outlier laps are flagged along the top with their time — not plotted — so the green-lap pace stays clear. The line simply breaks over them.'; lg.innerHTML=paceLg; rdvPace(d,r,{secs,pos:trace,pits,pitTimes,flags,nL,flLap}); } }
       else if(tab==='gapL'){ sub.textContent='gap to leader · '+nL+' laps'; cap.textContent='Zero (top) is the race leader. The trace drops as the gap grows and snaps back at a Safety Car or when rivals pit. The bold bar on the 0-line marks laps this driver led; diamonds are their own pit stops.';
         if(vs){ const st=d.teamId===vs.d2.teamId, col2=st?lit(vs.d2.color,.4):vs.d2.color;
           lg.innerHTML=`<span><i style="width:16px;height:0;border-top:2px solid var(--c);"></i>${d.family}</span><span><i style="width:16px;height:0;border-top:2px dashed ${col2};"></i>${vs.d2.family}</span><span><i style="width:8px;height:8px;border-radius:2px;background:#f5a623;transform:rotate(45deg);"></i>pit</span><span><i style="width:14px;height:3px;border-radius:2px;background:#e6c24a;"></i>SC/VSC</span>`;
@@ -1612,6 +1618,33 @@ function rdvTrace(d,r,S){
 function rdvPace(d,r,S){
   const {secs,pos,pits,pitTimes,flags,nL,flLap}=S, col=d.color;
   const host=document.getElementById('rdvChart'); if(!host)return;
+  if(S.secs2){   // ===== COMPARE mode: clean two-line pace + POS track top (you) / bottom (rival). Single-driver code below is untouched. =====
+    const secs2=S.secs2, pos1=pos||[], pos2=S.pos2||[], col2=S.col2||'#9aa6cd', code1=S.code||d.code, code2=S.code2||'';
+    const NS='http://www.w3.org/2000/svg', mk=(n,a,t,tip)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;if(tip){const ti=document.createElementNS(NS,'title');ti.textContent=tip;e.appendChild(ti);}return e;};
+    const F=s=>{const m=Math.floor(s/60);return m+':'+String(Math.round(s-m*60)).padStart(2,'0');}, Ff=s=>{const m=Math.floor(s/60),ss=s-m*60;return m+':'+(ss<10?'0':'')+ss.toFixed(3);};
+    const anomOf=sc=>{const v=sc.filter(x=>x!=null);if(!v.length)return{anom:sc.map(()=>true),grn:[]};const sd=[...v].sort((a,b)=>a-b),med=sd[Math.floor(sd.length/2)],thr=med+2.5;const anom=sc.map((s,i)=>s==null||i===0||!!flags[i+1]||s>thr);return{anom,grn:sc.filter((s,i)=>s!=null&&!anom[i])};};
+    const A1=anomOf(secs),A2=anomOf(secs2),allGrn=A1.grn.concat(A2.grn);
+    if(!allGrn.length){host.innerHTML='<div class="rdv-msg" style="padding:20px">No lap-time data</div>';return;}
+    const yMin=Math.floor(Math.min(...allGrn)),pMax=Math.max(...allGrn),yMax=pMax+Math.max(0.4,(pMax-yMin)*0.08);
+    const W=Math.max(340,host.clientWidth),H=Math.max(240,host.clientHeight),L=48,Rr=W-12,T=28,B=H-42;
+    const x=l=>L+((l-1)/(nL-1))*(Rr-L),y=s=>B-(Math.min(Math.max(s,yMin),yMax)-yMin)/(yMax-yMin)*(B-T);
+    const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('preserveAspectRatio','none');
+    let bd=null;for(let l=1;l<=nL;l++){const f=flags[l];if(f&&bd===null)bd={from:l,type:f};if((!f||l===nL)&&bd!==null){const to=f?l:l-1;svg.appendChild(mk('rect',{x:x(bd.from)-4,y:T,width:x(to)-x(bd.from)+8,height:B-T,fill:bd.type==='S'?'rgba(230,194,74,.13)':'rgba(230,194,74,.06)'}));svg.appendChild(mk('line',{x1:x(bd.from),y1:T-4,x2:x(to),y2:T-4,stroke:'#e6c24a','stroke-width':bd.type==='S'?3.4:1.6,'stroke-linecap':'round'}));bd=null;}}
+    for(let v=yMin+1;v<yMax;v+=1){svg.appendChild(mk('line',{x1:L,y1:y(v),x2:Rr,y2:y(v),stroke:'rgba(150,166,205,.09)','stroke-width':1}));svg.appendChild(mk('text',{x:L-7,y:y(v)+3.5,fill:'#d5dcea','font-size':9.5,'text-anchor':'end','font-weight':600},F(v)));}
+    const xt=[1];for(let l=10;l<nL-4;l+=10)xt.push(l);xt.push(nL);
+    xt.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#d5dcea','font-size':9,'text-anchor':'middle','font-weight':600},l)));
+    for(let l=1;l<=nL;l++){const h=l%10===0?6:l%5===0?4:2;svg.appendChild(mk('line',{x1:x(l),y1:B,x2:x(l),y2:B+h,stroke:l%5===0?'rgba(213,220,234,.5)':'rgba(150,166,205,.28)','stroke-width':l%10===0?1.2:1}));}
+    const drawPace=(sc,anom,c,dash)=>{let stints=[],cur=[];sc.forEach((s,i)=>{if(!anom[i]&&s!=null)cur.push(i+1);else if(cur.length){stints.push(cur);cur=[];}});if(cur.length)stints.push(cur);
+      stints.forEach(st=>{let dd='M '+x(st[0])+' '+y(sc[st[0]-1]);for(let k=1;k<st.length;k++)dd+=' L '+x(st[k])+' '+y(sc[st[k]-1]);const pa={d:dd,fill:'none',stroke:c,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'};if(dash)pa['stroke-dasharray']='5 4';svg.appendChild(mk('path',pa));st.forEach(l=>svg.appendChild(mk('circle',{cx:x(l),cy:y(sc[l-1]),r:1.7,fill:c,opacity:.6},null,'L'+l+' · '+Ff(sc[l-1]))));});
+      let le=-1;for(let i=sc.length-1;i>=0;i--){if(!anom[i]&&sc[i]!=null){le=i;break;}}if(le>=0)svg.appendChild(mk('text',{x:le+1>nL-3?x(le+1)-5:x(le+1)+5,y:y(sc[le])+3,fill:c,'font-size':9.5,'font-weight':700,'text-anchor':le+1>nL-3?'end':'start'},sc===secs?code1:code2));};
+    drawPace(secs,A1.anom,col,false); drawPace(secs2,A2.anom,col2,true);
+    const posTrack=(parr,c,yl,cd,pts)=>{const segs=[];let s0=null;for(let i=0;i<nL;i++){const p=parr[i]!=null?parr[i]:null;if(p==null){if(s0!=null){segs.push({p:parr[s0],from:s0+1,to:i});s0=null;}continue;}if(s0==null)s0=i;else if(parr[i]!==parr[s0]){segs.push({p:parr[s0],from:s0+1,to:i});s0=i;}}if(s0!=null)segs.push({p:parr[s0],from:s0+1,to:nL});
+      svg.appendChild(mk('text',{x:L-7,y:yl+3,fill:c,'font-size':8,'font-weight':700,'text-anchor':'end'},cd));
+      let lastR=-1e9;segs.forEach((g,gi)=>{let a=x(g.from),b=x(g.to);if(b-a<7){const m=(a+b)/2;a=m-3.5;b=m+3.5;}svg.appendChild(mk('line',{x1:a,y1:yl,x2:b,y2:yl,stroke:c,'stroke-width':2.5,'stroke-linecap':'round',opacity:.85}));if(gi<segs.length-1)svg.appendChild(mk('line',{x1:x(g.to),y1:yl-3,x2:x(g.to),y2:yl+3,stroke:'#3a4254','stroke-width':1,opacity:.7}));const lbl='P'+g.p,w=lbl.length*5.4+1;let lx=x(g.from)+2;if(lx<lastR+2)lx=lastR+2;if(lx+w>Rr)lx=Rr-w;svg.appendChild(mk('text',{x:lx,y:yl-4,fill:'#c9d2e6','font-size':8.5,'font-weight':700},lbl,'L'+g.from+'–L'+g.to+' · P'+g.p));lastR=lx+w;});
+      (pts||[]).forEach(l=>{if(l<1||l>nL)return;svg.appendChild(mk('rect',{x:x(l)-3,y:yl-3,width:6,height:6,rx:1.2,fill:'#f5a623',transform:`rotate(45 ${x(l)} ${yl})`},null,cd+' · Pit L'+l));});};
+    posTrack(pos1,col,13,code1,pits); posTrack(pos2,col2,B+30,code2,S.pits2);
+    host.innerHTML='';host.appendChild(svg);return;
+  }
   const valid=secs.filter(v=>v!=null);
   if(!valid.length){ host.innerHTML='<div class="rdv-msg" style="padding:20px">No lap-time data</div>'; return; }
   const fastest=Math.min(...valid), sortd=[...valid].sort((a,b)=>a-b), median=sortd[Math.floor(sortd.length/2)], thr=median+2.5;
