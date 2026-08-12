@@ -246,14 +246,14 @@ button{font-family:inherit}
 .llap-ticks .t{position:absolute;transform:translateX(-50%);font-size:9px;color:var(--muted-2)}
 @media(max-width:900px){.llap-rank{gap:4px 12px;font-size:11px}}
 /* horizontal constructor standings */
-.hstand{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px;padding:6px 2px}
+.hstand{--hres:186px;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;gap:7px;padding:6px 2px}
 .hrow{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:14px;cursor:pointer;padding:2px 6px;border-radius:8px;transition:background .13s}
 .hrow:hover{background:rgba(255,255,255,.035)}
 .hlabel{display:flex;align-items:baseline;gap:9px;min-width:0}
 .hlabel .hpos{font-weight:800;font-style:italic;font-size:15px;color:color-mix(in srgb,var(--cc) 78%,#fff);opacity:.6;width:22px;text-align:right;font-variant-numeric:tabular-nums}
 .hlabel .hname{font-weight:700;font-size:14.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:color-mix(in srgb,var(--cc) 82%,#fff)}
 .htrack{position:relative;display:flex;align-items:center;height:30px}
-.hbar{position:relative;height:100%;border-radius:0 4px 4px 0;display:flex;overflow:hidden;min-width:3px;background:color-mix(in srgb,var(--cc) 20%,#0a0d14)}
+.hbar{position:relative;flex:0 0 auto;height:100%;border-radius:0 4px 4px 0;display:flex;overflow:hidden;min-width:3px;background:color-mix(in srgb,var(--cc) 20%,#0a0d14)}
 .hbar .hpct{position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;pointer-events:none;font-size:10.5px;font-weight:800;color:#000;text-shadow:0 1px 2px rgba(255,255,255,.22);font-variant-numeric:tabular-nums}
 .hbar .hseg{height:100%;flex:0 0 auto;background:var(--cc);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .hbar .hseg+.hseg{box-shadow:inset 1.5px 0 0 rgba(4,6,11,.7)}
@@ -596,7 +596,7 @@ button{font-family:inherit}
   /* standings/laps/sprint as horizontal bars on mobile — no cars, no per-race detail */
   .hcar{display:none}
   .hstand .hseg em{display:none}.hstand .hseg+.hseg{box-shadow:none}
-  .hstand{flex:none;justify-content:flex-start;gap:6px;padding:6px 2px 10px}
+  .hstand{--hres:44px;flex:none;justify-content:flex-start;gap:6px;padding:6px 2px 10px}
   .hrow{grid-template-columns:132px 1fr;gap:11px}
   .mstand .hbar{background:var(--cc)}
   /* driver per-GP list: only crucial columns fit — round · flag · name · Fin · Race (tap row for the rest) */
@@ -1099,7 +1099,7 @@ function constructorBarCard(kind){
           return `<span class="hseg" style="width:${(100*sv/total).toFixed(2)}%" title="R${rd} · ${sv} pts">${sv>=2?`<em>R${rd}</em>`:''}</span>`; }).join('');
     return `<div class="hrow" style="--cc:${e.color}" data-jump="${e.pos-1}">
       <div class="hlabel"><span class="hpos">${i+1}</span><span class="hname">${e.name}</span></div>
-      <div class="htrack"><div class="hbar" style="width:${w.toFixed(2)}%">${segs}</div>
+      <div class="htrack"><div class="hbar" style="width:max(3px,calc((100% - var(--hres,186px))*${(w/100).toFixed(4)}))">${segs}</div>
         <span class="hpts">${r.v}</span>
         <img class="hcar" src="${CAR(e.teamId)}" alt="" loading="lazy" onerror="this.remove()"></div>
     </div>`;}).join('');
@@ -1113,7 +1113,7 @@ const isMob=()=>matchMedia('(max-width:900px)').matches;
 // mobile: clean horizontal bar rows (label · bar · value) — no cars, no per-race segments
 const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?'lead':''}" style="--cc:${color}" data-jump="${jump}">
   <div class="hlabel"><span class="hpos">${pos}</span><span class="hname">${family}</span></div>
-  <div class="htrack"><div class="hbar" style="width:${w.toFixed(1)}%">${extra}</div><span class="hpts">${val}</span></div></div>`;
+  <div class="htrack"><div class="hbar" style="width:max(3px,calc((100% - var(--hres,44px))*${(w/100).toFixed(4)}))">${extra}</div><span class="hpts">${val}</span></div></div>`;
 function gridCard(){
   const L=list(), mx=mode==='drivers'?gmaxD:gmaxC;
   const title=mode==='drivers'?"Standings — Drivers":"Standings — Constructors";
@@ -1135,7 +1135,7 @@ function gridCard(){
       const segs=teamRounds(e).map(t=> t.pts>0 ? `<span class="hseg" style="width:${(100*t.pts/total).toFixed(2)}%" title="R${t.rd.r} ${t.rd.gp} · ${t.pts} pts">${t.pts>=14?`<em>R${t.rd.r}</em>`:''}</span>` : '').join('');
       return `<div class="hrow ${e.pos===1?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
         <div class="hlabel"><span class="hpos">${e.pos}</span><span class="hname">${e.name}</span></div>
-        <div class="htrack"><div class="hbar" style="width:${(100*e.points/mx).toFixed(2)}%">${segs}</div>
+        <div class="htrack"><div class="hbar" style="width:max(3px,calc((100% - var(--hres,186px))*${(e.points/mx).toFixed(4)}))">${segs}</div>
           <span class="hpts">${e.points}</span>
           <img class="hcar" src="${CAR(e.teamId)}" alt="" loading="lazy" onerror="this.remove()"></div>
       </div>`;}).join('');
