@@ -698,7 +698,7 @@ const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 $('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
 const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const REF=new Date(DATA.meta.captured+'T00:00:00Z');
+const REF=new Date(new Date().toISOString().slice(0,10)+'T00:00:00Z');   // today (UTC midnight) so the "in X weeks" countdown to the next race stays live (was frozen at DATA.meta.captured)
 const fmtDate=s=>{const d=new Date(s+'T00:00:00Z');return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
 const fmtRange=s=>{const e=new Date(s+'T00:00:00Z'),st=new Date(e.getTime()-2*86400000),sM=MON[st.getUTCMonth()],eM=MON[e.getUTCMonth()];
   return sM===eM?`${st.getUTCDate()}–${e.getUTCDate()} ${eM}`:`${st.getUTCDate()} ${sM} – ${e.getUTCDate()} ${eM}`;};
