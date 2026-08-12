@@ -216,7 +216,7 @@ button{font-family:inherit}
 .col .face{width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:top center;margin-bottom:7px;border:1.5px solid var(--cc);background:#12151d}
 .col .face.fb{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--cc)}
 .col .barpts{font-weight:700;font-size:12.5px;margin-bottom:4px;font-variant-numeric:tabular-nums;color:color-mix(in srgb,var(--cc) 80%,#fff)}
-.col .bar{position:relative;width:66%;max-width:28px;border-radius:4px 4px 0 0;overflow:hidden;display:flex;flex-direction:column-reverse;
+.col .bar{position:relative;flex:0 0 auto;width:66%;max-width:28px;border-radius:4px 4px 0 0;overflow:hidden;display:flex;flex-direction:column-reverse;
   background:color-mix(in srgb,var(--cc) 18%,#0a0d14);transition:height .55s cubic-bezier(.2,.7,.2,1)}
 .col .bar .barpct{position:absolute;top:5px;left:0;right:0;text-align:center;z-index:2;pointer-events:none;font-size:9px;font-weight:800;letter-spacing:.01em;color:#000;text-shadow:0 1px 2px rgba(255,255,255,.22)}
 .col .bar .seg{width:100%;flex:0 0 auto;background:var(--cc);display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -1074,7 +1074,7 @@ function barCard(kind){
         }).join('');
     return `<div class="col ${i===0?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
       <img class="face" src="${IMG(e.slug)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'face fb',textContent:'${initials(e.given+' '+e.family)}'}))">
-      <span class="barpts">${r.v}</span><div class="bar" style="height:${h.toFixed(2)}%">${segs}</div>
+      <span class="barpts">${r.v}</span><div class="bar" style="height:max(2px,calc((100% - 94px)*${(h/100).toFixed(4)}))">${segs}</div>
       <span class="code">${e.code}</span><span class="rk">P${e.pos}</span></div>`;
   }).join('');
   return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div><div class="chart">${cols}</div></div></div>`;
@@ -1127,7 +1127,7 @@ function gridCard(){
       const segs=e.races.map(s=> s.pts>0 ? `<span class="seg" style="height:${(100*s.pts/total).toFixed(2)}%" title="R${s.r} ${s.gp} · ${s.pts} pts">${s.pts>=6?`<em>R${s.r}</em>`:''}</span>` : '').join('');
       return `<div class="col ${e.pos===1?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
         <img class="face" src="${IMG(e.slug)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'face fb',textContent:'${initials(e.given+' '+e.family)}'}))">
-        <span class="barpts">${e.points}</span><div class="bar" style="height:${h}%">${segs}</div>
+        <span class="barpts">${e.points}</span><div class="bar" style="height:max(2px,calc((100% - 94px)*${(h/100).toFixed(4)}))">${segs}</div>
         <span class="code">${e.code}</span><span class="rk">P${e.pos}</span></div>`;}).join('');
     body=`<div class="chart">${cols}</div>`;
   } else {
