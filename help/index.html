@@ -45,7 +45,9 @@
   .backapp:hover{border-color:var(--acc);color:var(--acc)}
 
   /* hero */
-  .hero{padding:54px 0 26px}
+  .herobanner{margin:26px 0 2px;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 34px 80px -46px #000;line-height:0}
+  .herobanner img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+  .hero{padding:40px 0 26px}
   .kick{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);font-weight:700}
   .hero h1{font-size:clamp(30px,6vw,52px);line-height:1.05;margin:12px 0 14px;letter-spacing:-.02em;font-weight:800}
   .hero p{font-size:16.5px;color:var(--muted);max-width:680px;margin:0}
@@ -132,6 +134,8 @@
 </header>
 
 <div class="wrap">
+
+  <figure class="herobanner"><img src="img/hero.jpg" alt="F1viz — the 2026 Formula 1 season across the app: driver cards, race charts, standings, leading laps, the timing tower and the season map"></figure>
 
   <div class="hero">
     <div class="kick">Guide · How it works</div>
