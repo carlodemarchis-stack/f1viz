@@ -940,8 +940,10 @@ function driverStackChart(d){
 }
 
 let _recapRound=null;
+const AUDIO_DIR=(function(){try{var v=(new URLSearchParams(location.search).get('voice')||'').replace(/[^a-z0-9_-]/gi,'');return v?('audio-'+v+'/'):'audio/';}catch(e){return 'audio/';}})();
 function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
 function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
+function _recapSetOpen(box, open){ if(!box)return; box.classList.toggle('open', open); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded', open); }
 function toggleRecap(btn){ const box=btn.closest('.rc-recap'); if(!box)return; const open=box.classList.toggle('open'); btn.setAttribute('aria-expanded', open); }
 let _recapAudio=null;
 function stopRecap(){
@@ -950,11 +952,12 @@ function stopRecap(){
   _recapRound=null; _recapClear();
 }
 function speakRecap(round, btn){
-  if(_recapRound===round){ stopRecap(); return; }          // tap again to stop
+  const box=btn?btn.closest('.rc-recap'):null;
+  if(_recapRound===round){ stopRecap(); _recapSetOpen(box,false); return; }   // click again → stop + collapse (back to initial)
   stopRecap();
   _recapRound=round;
-  if(btn){ btn.classList.add('on'); const box=btn.closest('.rc-recap'); if(box){ box.classList.add('open'); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded','true'); } }   // reveal text on play
-  const a=new Audio('audio/r'+String(round).padStart(2,'0')+'.mp3');   // premium AI voice
+  if(btn){ btn.classList.add('on'); _recapSetOpen(box,true); }               // reveal text on play
+  const a=new Audio(AUDIO_DIR+'r'+String(round).padStart(2,'0')+'.mp3');     // premium AI voice
   a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); } });
   a.addEventListener('error', ()=>{ _recapAudio=null; _speakFallback(round, btn); });   // no clip → browser voice
   _recapAudio=a;

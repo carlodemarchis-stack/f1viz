@@ -12,11 +12,14 @@ if not KEY:
 
 VOICE_ID = os.environ.get("EL_VOICE_ID", "onwK4e9ZLuTAKqWW03F9")   # 'Daniel' — British news presenter
 MODEL    = os.environ.get("EL_MODEL", "eleven_multilingual_v2")
+STAB     = float(os.environ.get("EL_STABILITY", "0.30"))
+STYLE    = float(os.environ.get("EL_STYLE", "0.45"))
+OUT_DIR  = os.environ.get("EL_OUT", "audio")                       # variant folder, e.g. audio-antoni
 FMT      = "mp3_44100_128"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 recaps = json.load(open(os.path.join(ROOT, "data", "recaps.json")))["recaps"]
-os.makedirs(os.path.join(ROOT, "audio"), exist_ok=True)
+os.makedirs(os.path.join(ROOT, OUT_DIR), exist_ok=True)
 
 wanted = sys.argv[1:] or sorted(recaps, key=lambda k: int(k))
 for rnd in wanted:
@@ -28,12 +31,12 @@ for rnd in wanted:
         "text": entry["recap"],
         "model_id": MODEL,
         # lower stability + higher style = more expressive / passionate delivery
-        "voice_settings": {"stability": 0.30, "similarity_boost": 0.75, "style": 0.45, "use_speaker_boost": True},
+        "voice_settings": {"stability": STAB, "similarity_boost": 0.75, "style": STYLE, "use_speaker_boost": True},
     }).encode()
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}?output_format={FMT}"
     req = urllib.request.Request(url, data=body, method="POST",
         headers={"xi-api-key": KEY, "Content-Type": "application/json"})
-    out = os.path.join(ROOT, "audio", f"r{int(rnd):02d}.mp3")
+    out = os.path.join(ROOT, OUT_DIR, f"r{int(rnd):02d}.mp3")
     try:
         with urllib.request.urlopen(req, timeout=120) as r:
             data = r.read()
