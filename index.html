@@ -2061,12 +2061,15 @@ function openGP(gi){ modalKind='driver'; curGP=gi; setPlay(false); renderGP(); m
 function openTeamGP(gi){ modalKind='team'; curGP=gi; setPlay(false); renderTeamGP(); modal.hidden=false; }
 function closeGP(){ modal.hidden=true; }
 let _radioAudio=null, _radioCtx=null;
-function radioNav(dir){ if(!_radioCtx)return; const {d,r,list,ci}=_radioCtx, ni=ci+dir; if(ni<0||ni>=list.length)return; openRadioModal(d,r,list[ni]); }
-function openRadioModal(d,r,clip){
+function radioNav(dir){ if(!_radioCtx)return; const {r,list,ci}=_radioCtx, ni=ci+dir; if(ni<0||ni>=list.length)return; const e=list[ni]; openRadioModal(e.d,r,e.clip,{list,ci:ni}); }
+function openRadioModal(d,r,clip,nav){
   try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
   try{ if(_recapAudio) _recapAudio.pause(); }catch(e){}
   if(_radioAudio){ try{_radioAudio.pause();}catch(e){} _radioAudio=null; }
-  const list=rdvRadioClips(d,r); let ci=list.indexOf(clip); if(ci<0)ci=0; _radioCtx={d,r,list,ci};
+  let list, ci;
+  if(nav){ list=nav.list; ci=nav.ci; }
+  else { const cl=rdvRadioClips(d,r); list=cl.map(c=>({d,clip:c})); ci=Math.max(0,cl.indexOf(clip)); }
+  _radioCtx={r,list,ci};
   $('#rmPrev').disabled=ci<=0; $('#rmNext').disabled=ci>=list.length-1;
   const rm=$('#rmodal'), box=$('#rmbox');
   const cal=(DATA.calendar||[]).find(c=>c.r===r.r)||{}, gp=cal.gp||r.short||('R'+r.r), flag=cal.flag||r.flag||'';
@@ -2088,7 +2091,14 @@ function openRadioModal(d,r,clip){
 }
 function closeRadioModal(){ const rm=$('#rmodal'); if(rm)rm.hidden=true; if(_radioAudio){ try{_radioAudio.pause();}catch(e){} _radioAudio=null; } }
 function rdvRadioClips(d,r){ return (RADIO&&RADIO.radio&&RADIO.radio[r.r]&&RADIO.radio[r.r][d.code])||[]; }
-function openRaceRadio(round, code, ci){ const d=D.find(x=>x.code===code), r=(DATA.races||[]).find(x=>x.r===round), R=RADIO&&RADIO.radio&&RADIO.radio[round]; if(d&&r&&R&&R[code]&&R[code][ci]) openRadioModal(d, r, R[code][ci]); }
+function openRaceRadio(round, code, ci){   // from the Radio tab → arrows walk the whole race list (by lap), matching raceRadioList order
+  const r=(DATA.races||[]).find(x=>x.r===round), R=RADIO&&RADIO.radio&&RADIO.radio[round]; if(!r||!R)return;
+  const rows=[]; Object.keys(R).forEach(cc=>{ const d=D.find(x=>x.code===cc); if(d)(R[cc]||[]).forEach(c=>rows.push({d,clip:c,fam:d.family||cc})); });
+  rows.sort((a,b)=>(a.clip.lap||0)-(b.clip.lap||0) || a.fam.localeCompare(b.fam));
+  const list=rows.map(o=>({d:o.d,clip:o.clip})), target=R[code]&&R[code][ci];
+  let idx=list.findIndex(e=>e.clip===target); if(idx<0)idx=0;
+  openRadioModal(list[idx].d, r, list[idx].clip, {list, ci:idx});
+}
 function raceRadioList(r){
   const R=RADIO&&RADIO.radio&&RADIO.radio[r.r]; if(!R) return '';
   const esc=s=>String(s).replace(/[&<>]/g,c=>c==='&'?'&amp;':c==='<'?'&lt;':'&gt;');
