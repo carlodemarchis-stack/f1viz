@@ -531,7 +531,12 @@ button{font-family:inherit}
 .rm-wave{flex:1 1 auto;display:flex;align-items:center;gap:2px;height:34px}
 .rm-wave i{flex:1;background:var(--rmc,#e10600);border-radius:1px;min-width:2px;opacity:.5}
 .rm-el{flex:0 0 auto;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}
+.rm-cap{margin-top:14px;font-size:13px;line-height:1.5;color:#e6eaf3;font-style:italic;text-align:center}
 .rm-src{margin-top:14px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);text-align:center}
+.rm-nav{position:relative;z-index:1;flex:0 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:rgba(20,24,34,.8);color:var(--muted);font-size:18px;line-height:1;cursor:pointer;align-self:center;transition:background .13s,opacity .13s}
+.rm-nav:hover{background:rgba(30,36,50,.95);color:var(--ink)}
+.rm-nav:disabled{opacity:.25;cursor:default}
+.rmodal{gap:10px}
 .modal__ov{position:absolute;inset:0;background:rgba(5,7,13,.72);backdrop-filter:blur(6px)}
 .mnav{position:relative;z-index:2;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(15,18,26,.85);color:var(--ink);font-size:20px;cursor:pointer;flex:0 0 auto;margin:0 6px}
 .mnav:hover{border-color:var(--c)}
@@ -697,7 +702,7 @@ button{font-family:inherit}
   <div class="mbox" id="mbox"></div>
   <button class="mnav" id="mNext" aria-label="Next GP">›</button>
 </div>
-<div class="rmodal" id="rmodal" hidden><div class="rmodal__ov" id="rmOv"></div><div class="rmbox" id="rmbox"></div></div>
+<div class="rmodal" id="rmodal" hidden><div class="rmodal__ov" id="rmOv"></div><button class="rm-nav" id="rmPrev" aria-label="Previous clip">‹</button><div class="rmbox" id="rmbox"></div><button class="rm-nav" id="rmNext" aria-label="Next clip">›</button></div>
 
 <div class="credits" id="credits">
   <div class="modal__ov" id="creditsOv"></div>
@@ -1975,19 +1980,23 @@ function rdvTraceTeam(entries,rd,nL,flags){
 function openGP(gi){ modalKind='driver'; curGP=gi; setPlay(false); renderGP(); modal.hidden=false; }
 function openTeamGP(gi){ modalKind='team'; curGP=gi; setPlay(false); renderTeamGP(); modal.hidden=false; }
 function closeGP(){ modal.hidden=true; }
-let _radioAudio=null;
+let _radioAudio=null, _radioCtx=null;
+function radioNav(dir){ if(!_radioCtx)return; const {d,r,list,ci}=_radioCtx, ni=ci+dir; if(ni<0||ni>=list.length)return; openRadioModal(d,r,list[ni]); }
 function openRadioModal(d,r,clip){
   try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
   try{ if(_recapAudio) _recapAudio.pause(); }catch(e){}
   if(_radioAudio){ try{_radioAudio.pause();}catch(e){} _radioAudio=null; }
+  const list=rdvRadioClips(d,r); let ci=list.indexOf(clip); if(ci<0)ci=0; _radioCtx={d,r,list,ci};
+  $('#rmPrev').disabled=ci<=0; $('#rmNext').disabled=ci>=list.length-1;
   const rm=$('#rmodal'), box=$('#rmbox');
   const cal=(DATA.calendar||[]).find(c=>c.r===r.r)||{}, gp=cal.gp||r.short||('R'+r.r), flag=cal.flag||r.flag||'';
   const bars=Array.from({length:32},(_,i)=>`<i style="height:${18+Math.round(64*Math.abs(Math.sin(i*1.7)*Math.cos(i*0.5)))}%"></i>`).join('');
   document.documentElement.style.setProperty('--rmc', d.color||'#e10600');
   box.innerHTML=`<button class="rm-x" onclick="closeRadioModal()" aria-label="Close">✕</button>
-    <div class="rm-hd"><img class="rm-face" src="${IMG(d.slug)}" alt="" onerror="this.style.visibility='hidden'"><div><div class="rm-k">Team radio</div><div class="rm-t">${d.family}</div><div class="rm-s">${flag} R${r.r} ${gp} · Lap ${clip.lap}${clip.t?' · '+clip.t.slice(0,5):''}</div></div></div>
+    <div class="rm-hd"><img class="rm-face" src="${IMG(d.slug)}" alt="" onerror="this.style.visibility='hidden'"><div><div class="rm-k">Team radio</div><div class="rm-t">${d.family}</div><div class="rm-s">${flag} R${r.r} ${gp} · Lap ${clip.lap}${clip.t?' · '+clip.t.slice(0,5):''}${list.length>1?' · '+(ci+1)+'/'+list.length:''}</div></div></div>
     <div class="rm-pl"><button class="rm-play on" id="rmPlay" aria-label="Play"><svg viewBox="0 0 24 24" class="ic-play"><path d="M8 5v14l11-7z"/></svg><svg viewBox="0 0 24 24" class="ic-stop"><path d="M6 6h12v12H6z"/></svg></button><div class="rm-wave">${bars}</div><span class="rm-el" id="rmEl">0:00</span></div>
-    <div class="rm-src">F1 team radio · via OpenF1</div>`;
+    ${clip.cap?`<div class="rm-cap">“${clip.cap}”</div>`:''}
+    <div class="rm-src">F1 team radio · via OpenF1${clip.cap?' · auto-transcribed':''}</div>`;
   rm.hidden=false;
   const a=new Audio(clip.f?('audio-radio/'+clip.f):clip.url); _radioAudio=a;
   const pb=$('#rmPlay'), el=$('#rmEl'), fmt=s=>{s=Math.floor(s||0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
@@ -2085,11 +2094,12 @@ $('#mPrev').onclick=()=>{curGP=(curGP-1+modalLen())%modalLen();modalDraw();};
 $('#mNext').onclick=()=>{curGP=(curGP+1)%modalLen();modalDraw();};
 $('.modal__ov').onclick=closeGP;
 $('#rmOv').onclick=closeRadioModal;
+$('#rmPrev').onclick=()=>radioNav(-1); $('#rmNext').onclick=()=>radioNav(1);
 
 /* keyboard + swipe */
 addEventListener('keydown',e=>{
   if(document.getElementById('credits').classList.contains('show')){ if(e.key==='Escape')closeCredits(); return; }
-  if(!$('#rmodal').hidden){ if(e.key==='Escape')closeRadioModal(); return; }
+  if(!$('#rmodal').hidden){ if(e.key==='Escape')closeRadioModal(); else if(e.key==='ArrowLeft')radioNav(-1); else if(e.key==='ArrowRight')radioNav(1); return; }
   if(!modal.hidden){ if(e.key==='Escape')closeGP(); if(e.key==='ArrowLeft')$('#mPrev').click(); if(e.key==='ArrowRight')$('#mNext').click(); return; }
   if(wrap.querySelector('.rdv')){ if(e.key==='Escape'){e.preventDefault();render();return;} if(e.key==='ArrowDown'){e.preventDefault();wrap.querySelector('.rdv-next').click();return;} if(e.key==='ArrowUp'){e.preventDefault();wrap.querySelector('.rdv-prev').click();return;} }
   if(window.__lcStep && (e.key==='ArrowUp'||e.key==='ArrowDown')){ e.preventDefault(); window.__lcStep(e.key==='ArrowUp'?1:-1); return; }  // lap-evolution: ↑/↓ step the current lap
