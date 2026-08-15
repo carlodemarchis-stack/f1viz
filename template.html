@@ -1698,19 +1698,7 @@ function rdvTrace(d,r,S){
   svg.appendChild(mk('circle',{cx:x(0),cy:y(gridPos||1),r:4,fill:'#0b0e15',stroke:col,'stroke-width':2}));
   pits.forEach(l=>{const p=trace[l-1];if(p==null)return;const dur=pitTimes[String(l)],bad=dur&&parseSec(dur)>=38;svg.appendChild(mk('rect',{x:x(l)-3.5,y:y(p)-3.5,width:7,height:7,rx:1.5,fill:bad?'#ff6b6b':'#f5a623',transform:`rotate(45 ${x(l)} ${y(p)})`}));});
   if(flLap&&trace[flLap-1]!=null){const p=trace[flLap-1];svg.appendChild(mk('circle',{cx:x(flLap),cy:y(p),r:4.5,fill:'#c9a3ff',stroke:'#0b0e15','stroke-width':1.5}));svg.appendChild(mk('text',{x:x(flLap),y:y(p)+16,fill:'#c9a3ff','font-size':9,'text-anchor':'middle','font-weight':700},'FL'));}
-  if(hasR){                                          // radio lane: one clickable clip per lap it was radioed
-    svg.appendChild(mk('line',{x1:L,y1:radioY,x2:Rr,y2:radioY,stroke:'rgba(150,166,205,.12)','stroke-width':1}));
-    svg.appendChild(mk('text',{x:L-6,y:radioY+3.2,fill:'#8791a8','font-size':8.5,'text-anchor':'end'},'📻'));
-    const byLap={}; RC.forEach(c=>{(byLap[c.lap]=byLap[c.lap]||[]).push(c);});
-    RC.forEach(c=>{ const grp=byLap[c.lap], off=(grp.indexOf(c)-(grp.length-1)/2)*9, cx=Math.min(Rr,Math.max(L,x(c.lap)+off));
-      const g=mk('g',{style:'cursor:pointer'});
-      g.appendChild(mk('circle',{cx:cx,cy:radioY,r:6.2,fill:lit(col,.16),stroke:col,'stroke-width':1.4}));
-      g.appendChild(mk('path',{d:`M ${cx-1.7} ${radioY-2.7} L ${cx-1.7} ${radioY+2.7} L ${cx+2.9} ${radioY} Z`,fill:col}));
-      g.appendChild(mk('title',{},'Team radio · lap '+c.lap));
-      g.addEventListener('click',()=>openRadioModal(d,r,c));
-      svg.appendChild(g);
-    });
-  }
+  if(hasR) drawRadioLane(svg,mk,{x,L,Rr,y:radioY,col,RC,d,r,guideY:l=>{const p=trace[l-1];return p!=null?y(p)+4:null;}});
   host.innerHTML='';host.appendChild(svg);
 }
 // driver deep-dive alt chart: lap TIMES (pace) — anomalies (start/pit/SC/VSC/slow) removed & flagged, position track on top
@@ -1997,15 +1985,34 @@ function openRadioModal(d,r,clip){
     <div class="rm-pl"><button class="rm-play on" id="rmPlay" aria-label="Play"><svg viewBox="0 0 24 24" class="ic-play"><path d="M8 5v14l11-7z"/></svg><svg viewBox="0 0 24 24" class="ic-stop"><path d="M6 6h12v12H6z"/></svg></button><div class="rm-wave">${bars}</div><span class="rm-el" id="rmEl">0:00</span></div>
     <div class="rm-src">F1 team radio · via OpenF1</div>`;
   rm.hidden=false;
-  const a=new Audio(clip.url); _radioAudio=a;
+  const a=new Audio(clip.f?('audio-radio/'+clip.f):clip.url); _radioAudio=a;
   const pb=$('#rmPlay'), el=$('#rmEl'), fmt=s=>{s=Math.floor(s||0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
   a.addEventListener('timeupdate',()=>{ if(el)el.textContent=fmt(a.currentTime); });
   a.addEventListener('ended',()=>pb.classList.remove('on'));
-  a.addEventListener('error',()=>{ if(el)el.textContent='—'; });
+  a.addEventListener('error',()=>{ if(clip.f && clip.url && a.src.indexOf('audio-radio/')>=0){ a.src=clip.url; a.play().catch(()=>{}); return; } if(el)el.textContent='—'; });
   pb.onclick=()=>{ if(a.paused){a.play();pb.classList.add('on');}else{a.pause();pb.classList.remove('on');} };
   a.play().then(()=>pb.classList.add('on')).catch(()=>pb.classList.remove('on'));
 }
 function closeRadioModal(){ const rm=$('#rmodal'); if(rm)rm.hidden=true; if(_radioAudio){ try{_radioAudio.pause();}catch(e){} _radioAudio=null; } }
+function rdvRadioClips(d,r){ return (RADIO&&RADIO.radio&&RADIO.radio[r.r]&&RADIO.radio[r.r][d.code])||[]; }
+// shared radio lane for every deep-dive chart: 'RADIO' label + dark dots with a bright ▶; optional hover guide up to the data line
+function drawRadioLane(svg,mk,o){
+  const {x,L,Rr,y,col,RC,d,r}=o; if(!RC||!RC.length) return;
+  svg.appendChild(mk('line',{x1:L,y1:y,x2:Rr,y2:y,stroke:'rgba(150,166,205,.13)','stroke-width':1}));
+  svg.appendChild(mk('text',{x:L-6,y:y+3,fill:'#8791a8','font-size':7.5,'font-weight':700,'letter-spacing':'.09em','text-anchor':'end'},'RADIO'));
+  const byLap={}; RC.forEach(c=>{(byLap[c.lap]=byLap[c.lap]||[]).push(c);});
+  RC.forEach(c=>{ const grp=byLap[c.lap], off=(grp.indexOf(c)-(grp.length-1)/2)*9, cx=Math.min(Rr,Math.max(L,x(c.lap)+off));
+    const g=mk('g',{style:'cursor:pointer'});
+    let guide=null;
+    if(o.guideY){ const gy=o.guideY(c.lap); if(gy!=null){ guide=mk('line',{x1:cx,y1:y-6.6,x2:cx,y2:gy,stroke:col,'stroke-width':1,'stroke-dasharray':'2 3',opacity:0}); svg.appendChild(guide); } }
+    const circ=mk('circle',{cx:cx,cy:y,r:6.4,fill:'#0b0e15',stroke:col,'stroke-width':1.5}); g.appendChild(circ);
+    g.appendChild(mk('path',{d:`M ${cx-1.6} ${y-2.7} L ${cx-1.6} ${y+2.7} L ${cx+3} ${y} Z`,fill:col}));
+    g.appendChild(mk('title',{},'Team radio · lap '+c.lap+(c.cap?' — '+c.cap:'')));
+    g.addEventListener('click',()=>openRadioModal(d,r,c));
+    if(guide){ g.addEventListener('mouseenter',()=>{guide.setAttribute('opacity','.6');circ.setAttribute('r','7.3');}); g.addEventListener('mouseleave',()=>{guide.setAttribute('opacity','0');circ.setAttribute('r','6.4');}); }
+    svg.appendChild(g);
+  });
+}
 function renderGP(){
   const d=D[idx], r=d.races[curGP], f=finLabel(r), badges=[];
   if(r.fin===1) badges.push('<span class="badge win">🏆 Winner</span>');
