@@ -306,6 +306,18 @@ button{font-family:inherit}
 .rc-recap.open .rc-recap-txt{max-height:340px;overflow-y:auto;margin-top:9px}
 .raceres{display:flex;flex-direction:column;overflow:hidden}
 .rc-cls{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:2px 8px 6px}
+.rc-radio{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.rr-head{flex:0 0 auto;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2);padding:8px 12px;font-weight:700}
+.rr-list{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:1px;padding:0 6px 6px}
+.rr-row{display:grid;grid-template-columns:34px 3px 94px minmax(0,1fr) 28px;align-items:center;gap:11px;padding:7px 8px;border-radius:8px;cursor:pointer;transition:background .12s}
+.rr-row:hover{background:rgba(255,255,255,.045)}
+.rr-lap{font-weight:700;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rr-bar{width:3px;height:15px;border-radius:2px;background:var(--cc)}
+.rr-name{font-weight:700;font-size:12.5px;letter-spacing:-.01em;color:color-mix(in srgb,var(--cc) 82%,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr-cap{font-size:11px;color:var(--muted);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr-play{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1px solid color-mix(in srgb,var(--cc) 55%,transparent);background:color-mix(in srgb,var(--cc) 14%,#0a0d14);color:color-mix(in srgb,var(--cc) 85%,#fff);display:flex;align-items:center;justify-content:center}
+.rr-play svg{width:11px;height:11px;fill:currentColor}
+.rr-row:hover .rr-play{background:color-mix(in srgb,var(--cc) 30%,#0a0d14)}
 .clshead,.clsrow{display:grid;grid-template-columns:34px 4px minmax(0,1fr) 40px 42px 40px 34px 84px 26px;align-items:center;gap:10px}
 .clshead{padding:0 10px 6px;border-bottom:1px solid var(--line-2)}
 .clshead span{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2)}
@@ -1125,12 +1137,13 @@ function raceCard(r){
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="gphead"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}</div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
       <div class="rc-view">
         <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
         <div class="rc-cls">${cls}</div>
       </div>
       <div class="rc-lc" hidden></div>
+      <div class="rc-radio" hidden>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?raceRadioList(r):''}</div>
     </div>
   </div>`;
 }
@@ -1460,13 +1473,15 @@ function render(dir){
       document.documentElement.dataset.team=e.winner.teamId||'';
       $('#cwho').textContent=`R${e.r} ${e.short}`;
       const tabs=[...wrap.querySelectorAll('.rc-tab')];
-      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
+      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), rad=wrap.querySelector('.rc-radio'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
         const meta=wrap.querySelector('.lc-meta'), date=wrap.querySelector('.rc-date');
         const setTab=t=>{ lcTab=t; tabs.forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+          if(rad) rad.setAttribute('hidden','');
           if(t==='lap'){ date.setAttribute('hidden',''); meta.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.removeAttribute('hidden'); mountLapChart(lcRound, lc); }
+          else if(t==='radio'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(rad)rad.removeAttribute('hidden'); }
           else { if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); lc.setAttribute('hidden',''); lc.innerHTML=''; view.removeAttribute('hidden'); lcCurLap=0; } lcHash(); };
         tabs.forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
-        if(lcTab==='lap') setTab('lap');   // stay on Lap evolution when navigating between races
+        if(lcTab==='lap') setTab('lap'); else if(lcTab==='radio'&&rad) setTab('radio');   // keep the tab when navigating between races
       }
     } else {
       wrap.innerHTML = mode==='drivers'?driverCard(e):constructorCard(e);
@@ -2073,6 +2088,20 @@ function openRadioModal(d,r,clip){
 }
 function closeRadioModal(){ const rm=$('#rmodal'); if(rm)rm.hidden=true; if(_radioAudio){ try{_radioAudio.pause();}catch(e){} _radioAudio=null; } }
 function rdvRadioClips(d,r){ return (RADIO&&RADIO.radio&&RADIO.radio[r.r]&&RADIO.radio[r.r][d.code])||[]; }
+function openRaceRadio(round, code, ci){ const d=D.find(x=>x.code===code), r=(DATA.races||[]).find(x=>x.r===round), R=RADIO&&RADIO.radio&&RADIO.radio[round]; if(d&&r&&R&&R[code]&&R[code][ci]) openRadioModal(d, r, R[code][ci]); }
+function raceRadioList(r){
+  const R=RADIO&&RADIO.radio&&RADIO.radio[r.r]; if(!R) return '';
+  const esc=s=>String(s).replace(/[&<>]/g,c=>c==='&'?'&amp;':c==='<'?'&lt;':'&gt;');
+  const rows=[];
+  Object.keys(R).forEach(code=>{ (R[code]||[]).forEach((c,i)=>{ const d=D.find(x=>x.code===code)||{}; rows.push({code,i,lap:c.lap||0,fam:d.family||code,col:d.color||'#8891a7',cap:c.cap||''}); }); });
+  rows.sort((a,b)=>a.lap-b.lap || a.fam.localeCompare(b.fam));
+  const items=rows.map(o=>`<div class="rr-row" style="--cc:${o.col}" onclick="openRaceRadio(${r.r},'${o.code}',${o.i})">
+      <span class="rr-lap">L${o.lap}</span><span class="rr-bar"></span>
+      <span class="rr-name">${esc(o.fam)}</span>
+      <span class="rr-cap">${o.cap?'“'+esc(o.cap)+'”':''}</span>
+      <button class="rr-play" aria-label="Play radio" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div>`).join('');
+  return `<div class="rr-head">${rows.length} team-radio clip${rows.length!==1?'s':''} · by lap</div><div class="rr-list">${items}</div>`;
+}
 // shared radio lane for every deep-dive chart: 'RADIO' label + dark dots with a bright ▶; optional hover guide up to the data line
 function drawRadioLane(svg,mk,o){
   const {x,L,Rr,y,col,RC,d,r}=o; if(!RC||!RC.length) return;
