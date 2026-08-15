@@ -27,7 +27,8 @@ for rnd in wanted:
     body = json.dumps({
         "text": entry["recap"],
         "model_id": MODEL,
-        "voice_settings": {"stability": 0.45, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True},
+        # lower stability + higher style = more expressive / passionate delivery
+        "voice_settings": {"stability": 0.30, "similarity_boost": 0.75, "style": 0.45, "use_speaker_boost": True},
     }).encode()
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}?output_format={FMT}"
     req = urllib.request.Request(url, data=body, method="POST",

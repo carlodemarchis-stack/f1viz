@@ -1017,7 +1017,8 @@ function stopRecap(){
 function speakRecap(round, btn){
   if(_recapRound===round){ stopRecap(); return; }          // tap again to stop
   stopRecap();
-  _recapRound=round; if(btn) btn.classList.add('on');
+  _recapRound=round;
+  if(btn){ btn.classList.add('on'); const box=btn.closest('.rc-recap'); if(box){ box.classList.add('open'); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded','true'); } }   // reveal text on play
   const a=new Audio('audio/r'+String(round).padStart(2,'0')+'.mp3');   // premium AI voice
   a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); } });
   a.addEventListener('error', ()=>{ _recapAudio=null; _speakFallback(round, btn); });   // no clip → browser voice
