@@ -943,15 +943,28 @@ let _recapRound=null;
 function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
 function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
 function toggleRecap(btn){ const box=btn.closest('.rc-recap'); if(!box)return; const open=box.classList.toggle('open'); btn.setAttribute('aria-expanded', open); }
-function stopRecap(){ try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){} _recapRound=null; _recapClear(); }
+let _recapAudio=null;
+function stopRecap(){
+  try{ if(_recapAudio){ _recapAudio.pause(); _recapAudio.src=''; _recapAudio=null; } }catch(e){}
+  try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+  _recapRound=null; _recapClear();
+}
 function speakRecap(round, btn){
-  const synth=window.speechSynthesis; if(!synth){ return; }
   if(_recapRound===round){ stopRecap(); return; }          // tap again to stop
-  synth.cancel(); _recapClear();
+  stopRecap();
+  _recapRound=round; if(btn) btn.classList.add('on');
+  const a=new Audio('audio/r'+String(round).padStart(2,'0')+'.mp3');   // premium AI voice
+  a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); } });
+  a.addEventListener('error', ()=>{ _recapAudio=null; _speakFallback(round, btn); });   // no clip → browser voice
+  _recapAudio=a;
+  a.play().catch(()=>{ _recapAudio=null; _speakFallback(round, btn); });
+}
+function _speakFallback(round, btn){
+  const synth=window.speechSynthesis; if(!synth || _recapRound!==round) return;
   const rc=_recapText(round); if(!rc) return;
   const u=new SpeechSynthesisUtterance(rc); u.rate=1; u.pitch=1;
-  u.onend=u.onerror=()=>{ if(_recapRound===round){_recapRound=null;} _recapClear(); };
-  _recapRound=round; if(btn) btn.classList.add('on');
+  u.onend=u.onerror=()=>{ if(_recapRound===round){ _recapRound=null; _recapClear(); } };
+  if(btn) btn.classList.add('on');
   synth.speak(u);
 }
 function raceCard(r){
@@ -1009,7 +1022,7 @@ function raceCard(r){
       ${(()=>{const rc=_recapText(r.r); return rc?`<div class="rc-recap">
         <div class="rc-recap-hd"><button class="rc-recap-play" onclick="speakRecap(${r.r},this)" aria-label="Play race recap">
           <svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ic-stop" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg></button>
-          <button class="rc-recap-toggle" onclick="toggleRecap(this)" aria-expanded="false"><span class="rc-recap-lbl">Race recap</span><span class="rc-recap-note">preview voice</span><svg class="rc-recap-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button></div>
+          <button class="rc-recap-toggle" onclick="toggleRecap(this)" aria-expanded="false"><span class="rc-recap-lbl">Race recap</span><span class="rc-recap-note">AI voice</span><svg class="rc-recap-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button></div>
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
