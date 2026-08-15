@@ -1006,13 +1006,14 @@ function driverStackChart(d){
 
 let _recapRound=null;
 const AUDIO_DIR=(function(){try{var v=(new URLSearchParams(location.search).get('voice')||'').replace(/[^a-z0-9_-]/gi,'');return v?('audio-'+v+'/'):'audio/';}catch(e){return 'audio/';}})();
+const AUDIO_VER='2';   // bump when regenerating clips to bust the browser cache (same filenames)
 function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
 function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
 function _recapSetOpen(box, open){ if(!box)return; box.classList.toggle('open', open); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded', open); }
 function toggleRecap(btn){ const box=btn.closest('.rc-recap'); if(!box)return; const open=box.classList.toggle('open'); btn.setAttribute('aria-expanded', open); }
 let _recapAudio=null;
 function stopRecap(){
-  try{ if(_recapAudio){ _recapAudio.pause(); _recapAudio.src=''; _recapAudio=null; } }catch(e){}
+  try{ if(_recapAudio){ _recapAudio.pause(); _recapAudio.onended=null; _recapAudio.onerror=null; _recapAudio=null; } }catch(e){}
   try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
   _recapRound=null; _recapClear();
 }
@@ -1022,7 +1023,7 @@ function speakRecap(round, btn){
   stopRecap();
   _recapRound=round;
   if(btn){ btn.classList.add('on'); _recapSetOpen(box,true); }               // reveal text on play
-  const a=new Audio(AUDIO_DIR+'r'+String(round).padStart(2,'0')+'.mp3');     // premium AI voice
+  const a=new Audio(AUDIO_DIR+'r'+String(round).padStart(2,'0')+'.mp3?v='+AUDIO_VER);   // premium AI voice (versioned to bust cache)
   a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); _recapAdvance(); } });
   a.addEventListener('error', ()=>{ _recapAudio=null; _speakFallback(round, btn); });   // no clip → browser voice
   _recapAudio=a;
