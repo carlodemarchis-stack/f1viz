@@ -1,0 +1,66 @@
+{
+ "meta": {
+  "season": 2026,
+  "kind": "spoken-race-recaps",
+  "note": "~30s spoken recaps per Grand Prix, color-led, fact-checked against f1.json (results) and media sources (F1.com, Sky, ESPN, The Race, Motorsport.com, Wikipedia). Keyed by round.",
+  "throughRound": 11,
+  "count": 11
+ },
+ "recaps": {
+  "1": {
+   "short": "Australia",
+   "gp": "Australian",
+   "recap": "Formula One's new-rules era began at Albert Park, and it began badly for the home fans: Australia's own Oscar Piastri crashed on the way to the grid and never started his home race, while Nico Hülkenberg's Audi was wheeled away with a technical failure before the lights. George Russell controlled the race from pole for a Mercedes one-two with Kimi Antonelli second, Charles Leclerc third. But the main talking point was the cars themselves — several drivers complained the new energy-deployment machines made overtaking feel artificial. The standout on track was Max Verstappen, recovering from twentieth to sixth and grabbing the fastest lap."
+  },
+  "2": {
+   "short": "China",
+   "gp": "Chinese",
+   "recap": "Shanghai served up chaos before a wheel turned in anger. Four cars failed to start — most sensationally both McLarens, Norris and Piastri stopped by separate electrical faults, the team's first double non-start in over twenty years, and Piastri's second in a row after his Australia crash. Williams and Audi lost cars too, leaving the third row empty and just eighteen starters. From pole, Kimi Antonelli led almost throughout and set the fastest lap on his way to victory — at nineteen, the second-youngest Grand Prix winner in history and the first Italian to win since 2006. 'I'm about to cry,' he admitted. George Russell made it a Mercedes one-two in second, and Lewis Hamilton completed the podium with his first rostrum for Ferrari."
+  },
+  "3": {
+   "short": "Japan",
+   "gp": "Japanese",
+   "recap": "Suzuka wasn't the procession the result suggests. Kimi Antonelli buried his pole start with heavy wheelspin, tumbling to sixth and handing Oscar Piastri the lead. Then Oliver Bearman's Haas speared the barriers at Spoon in a fifty-G crash — he walked away — and the safety car it brought out swung the race Antonelli's way. Once ahead his pace was in a different league, and he cruised to a second win in a row, fastest lap included, becoming at nineteen the youngest driver ever to lead the championship. Piastri recovered to finish second, while the real scrap was for third — Charles Leclerc going around the outside at Turn One to hold off George Russell."
+  },
+  "4": {
+   "short": "Miami",
+   "gp": "Miami",
+   "recap": "Miami had drama at both ends. On the opening lap Antonelli, Verstappen and Leclerc went three-wide into Turn One; Verstappen spun a full three-sixty at Turn Two but survived, and moments later Pierre Gasly was flipped into the barriers after contact with Lawson. From pole, Kimi Antonelli won it in the pit lane: Mercedes undercut Lando Norris, who spent the closing laps within a second but never found a way past. 'I'm gutted — I think a win was possible,' said Norris, who'd won Saturday's sprint and set the fastest lap for nothing. Oscar Piastri completed the podium in third — and only after Charles Leclerc lost a place on it to a twenty-second track-limits penalty, tumbling from third to eighth."
+  },
+  "5": {
+   "short": "Canada",
+   "gp": "Canadian",
+   "recap": "Montreal looked set to be George Russell's. He'd taken pole, won Saturday's sprint, and was leading, trading it wheel-to-wheel with his own teammate Kimi Antonelli — until, a third of the way in, his Mercedes suffered a catastrophic battery failure. Russell parked it, pounded his fists on the car and climbed out, later investigated for throwing his head rest onto the track. That handed Antonelli a fourth straight win, fastest lap included, ahead of Lewis Hamilton second and Max Verstappen third. The reliability toll spread down the field: Norris's gearbox failed, Alonso's seat collapsed inside the car, and Pérez's suspension gave way."
+  },
+  "6": {
+   "short": "Monaco",
+   "gp": "Monaco",
+   "recap": "Monaco unravelled — and the track itself was part of the story. The newly-resurfaced final corner began breaking up under the cars, pitching first Lance Stroll and then home favourite Charles Leclerc into the wall; Leclerc blamed his brakes over the radio as his home race ended in the barriers. A red flag halted things while marshals patched the tarmac. Max Verstappen was out almost immediately, stalling at the start. Through it all Kimi Antonelli was unruffled — pole, fastest lap, victory. Lewis Hamilton came home second. But the saga ran for days: Pierre Gasly finished third for Alpine, was stripped of the podium for a pit-lane penalty, then had it restored on appeal when the timing data proved wrong."
+  },
+  "7": {
+   "short": "Spain",
+   "gp": "Spanish",
+   "recap": "Barcelona delivered the season's most emotional day: Lewis Hamilton won for the first time in Ferrari red, nearly two years since his last victory and, at forty-one, the oldest winner in over half a century. He'd beaten pole-sitter George Russell with an aggressive Ferrari strategy timed around a mid-race virtual safety car, and set the fastest lap to underline it, then completed an all-British podium with Russell second and Norris third — the first since nineteen-sixty-eight. 'Grazie to everyone at Ferrari, to Fred for believing in me,' Hamilton said. Even rivals warmed to it — Russell called him 'the Lewis I remember growing up.' The sting came late: championship leader Kimi Antonelli, running second, was stopped by an engine failure just four laps from home."
+  },
+  "8": {
+   "short": "Austria",
+   "gp": "Austrian",
+   "recap": "The Red Bull Ring gave the home crowd plenty to cheer, but not the win. Max Verstappen had crashed in qualifying and started fifth, yet carved through the order and, on fresher tyres late, reeled in pole-sitter George Russell — only to run out of road, finishing just over a second behind in second. Russell held on for his first win since the season opener, reigniting his title fight with teammate Kimi Antonelli, who took third, set the fastest lap, and nearly snatched second on the final lap. Both Cadillacs retired with overheating brakes. 'Incredible to be back on the top step,' Russell said. 'I'm going to enjoy this one.'"
+  },
+  "9": {
+   "short": "Britain",
+   "gp": "British",
+   "recap": "Silverstone had twist after twist. Kimi Antonelli started from pole, won the sprint, set the fastest lap and was leading — then clipped a kerb at Copse, broke his front wheel shield and, with a penalty on top, dropped out of the points. Charles Leclerc pounced for a redemptive win: his first at Silverstone, Ferrari's two-hundred-and-fiftieth, ending a long drought. 'Tough times never last, only tough people last,' he said. The finish was strange, though — Verstappen crashed out at Stowe, and a Race Control software error muddied the final-lap restart, so the race simply ended behind the safety car. George Russell finished second and Lewis Hamilton third to complete the podium for the home crowd."
+  },
+  "10": {
+   "short": "Belgium",
+   "gp": "Belgian",
+   "recap": "Spa stayed dry despite the threatening clouds, and it produced a proper fight. From pole, Kimi Antonelli lost the lead to Max Verstappen through Eau Rouge on lap one, took it back up the hill, then lost it again when Ferrari used a virtual safety car to leapfrog Charles Leclerc ahead. Antonelli hunted him down and repassed on the Kemmel Straight to win, with Leclerc second and Verstappen third. Lando Norris, recovering from a grid penalty, set the fastest lap. The drive of the day, though, was Isack Hadjar's — from twenty-first to sixth on an odd strategy of two pit stops in two laps; he called it his best race yet. George Russell's race ended in the gravel after Lewis Hamilton understeered into him, a clash that earned Hamilton a five-second penalty."
+  },
+  "11": {
+   "short": "Hungary",
+   "gp": "Hungarian",
+   "recap": "At the Hungaroring the story was McLaren's — and it cut both ways. Oscar Piastri pounced at Turn Two on the opening lap to lead and looked the likely winner, until a gearbox failure in the closing laps ended his race from second. He'd already fumed at being clattered by a lapped Carlos Sainz, a clash he called 'unacceptable.' Teammate Lando Norris, insisting over the radio he was quicker, converted pole and clear-air pace into McLaren's first win of the season. Max Verstappen took second with what many rated the overtake of the year on Hamilton, while Kimi Antonelli climbed from seventh to third. Charles Leclerc, fourth at the flag, set the fastest lap."
+  }
+ }
+}

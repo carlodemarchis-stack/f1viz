@@ -289,6 +289,21 @@ button{font-family:inherit}
 .rc-row span{color:var(--muted-2)}.rc-row b{font-weight:700}
 .rc-row .wl{font-style:normal;color:color-mix(in srgb,var(--c) 85%,#fff)}
 .rc-row .none{font-style:normal;color:var(--muted-2);font-weight:600}
+.rc-recap{flex:0 0 auto;display:flex;flex-direction:column;margin-top:14px;padding-top:13px;border-top:1px solid var(--line-2)}
+.rc-recap-hd{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.rc-recap-play{flex:0 0 auto;width:31px;height:31px;border-radius:50%;border:1px solid color-mix(in srgb,var(--c) 60%,transparent);background:color-mix(in srgb,var(--c) 15%,#0a0d14);color:color-mix(in srgb,var(--c) 85%,#fff);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.rc-recap-play:hover{background:color-mix(in srgb,var(--c) 32%,#0a0d14)}
+.rc-recap-play svg{width:12px;height:12px;fill:currentColor}
+.rc-recap-play .ic-stop{display:none}
+.rc-recap-play.on .ic-play{display:none}.rc-recap-play.on .ic-stop{display:block}
+.rc-recap-play.on{background:color-mix(in srgb,var(--c) 40%,#0a0d14)}
+.rc-recap-toggle{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left}
+.rc-recap-lbl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 78%,#fff)}
+.rc-recap-note{font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);padding:2px 6px;border:1px solid var(--line-2);border-radius:20px}
+.rc-recap-chev{width:16px;height:16px;fill:var(--muted-2);margin-left:auto;flex:0 0 auto;transition:transform .22s}
+.rc-recap.open .rc-recap-chev{transform:rotate(180deg)}
+.rc-recap-txt{margin:0;font-size:12px;line-height:1.55;color:var(--muted);max-height:0;overflow:hidden;transition:max-height .28s ease}
+.rc-recap.open .rc-recap-txt{max-height:340px;overflow-y:auto;margin-top:9px}
 .raceres{display:flex;flex-direction:column;overflow:hidden}
 .rc-cls{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;padding:2px 8px 6px}
 .clshead,.clsrow{display:grid;grid-template-columns:34px 4px minmax(0,1fr) 40px 42px 40px 34px 84px 26px;align-items:center;gap:10px}
@@ -681,6 +696,7 @@ button{font-family:inherit}
 
 <script>
 const DATA = /*__DATA__*/;
+const RECAPS = /*__RECAPS__*/;
 const D = DATA.drivers, C = DATA.constructors;
 const IMGV = '?v=28';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
@@ -923,6 +939,21 @@ function driverStackChart(d){
     <div class="cxaxis">${flags}</div></div>`;
 }
 
+let _recapRound=null;
+function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
+function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
+function toggleRecap(btn){ const box=btn.closest('.rc-recap'); if(!box)return; const open=box.classList.toggle('open'); btn.setAttribute('aria-expanded', open); }
+function stopRecap(){ try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){} _recapRound=null; _recapClear(); }
+function speakRecap(round, btn){
+  const synth=window.speechSynthesis; if(!synth){ return; }
+  if(_recapRound===round){ stopRecap(); return; }          // tap again to stop
+  synth.cancel(); _recapClear();
+  const rc=_recapText(round); if(!rc) return;
+  const u=new SpeechSynthesisUtterance(rc); u.rate=1; u.pitch=1;
+  u.onend=u.onerror=()=>{ if(_recapRound===round){_recapRound=null;} _recapClear(); };
+  _recapRound=round; if(btn) btn.classList.add('on');
+  synth.speak(u);
+}
 function raceCard(r){
   const teamName={}; C.forEach(t=>teamName[t.teamId]=t.name);
   const raceLaps=DATA.raceLaps&&DATA.raceLaps[r.r];
@@ -975,6 +1006,11 @@ function raceCard(r){
             <img src="https://i.ytimg.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">
             <span class="rc-hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a>`:'';})()}
       </div>
+      ${(()=>{const rc=_recapText(r.r); return rc?`<div class="rc-recap">
+        <div class="rc-recap-hd"><button class="rc-recap-play" onclick="speakRecap(${r.r},this)" aria-label="Play race recap">
+          <svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ic-stop" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg></button>
+          <button class="rc-recap-toggle" onclick="toggleRecap(this)" aria-expanded="false"><span class="rc-recap-lbl">Race recap</span><span class="rc-recap-note">preview voice</span><svg class="rc-recap-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button></div>
+        <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
       <div class="gphead"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
@@ -1301,7 +1337,8 @@ function buildLapChart(LD, host){
 }
 function render(dir){
   if(window.__lcStop) window.__lcStop();
-  rdvVs=null;                                    // leaving the deep-dive / changing driver clears compare (prev/next RACE keeps it — that goes through openRace, not render)
+  stopRecap();
+  rdvVs=null;                                 // leaving the deep-dive / changing driver clears compare (prev/next RACE keeps it — that goes through openRace, not render)
   if(idx<N()){
     const e=list()[idx];
     if(mode==='races'){
