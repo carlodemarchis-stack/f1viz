@@ -966,7 +966,7 @@ function driverStackChart(d){
 
 let _recapRound=null;
 const AUDIO_DIR=(function(){try{var v=(new URLSearchParams(location.search).get('voice')||'').replace(/[^a-z0-9_-]/gi,'');return v?('audio-'+v+'/'):'audio/';}catch(e){return 'audio/';}})();
-const AUDIO_VER='2';   // bump when regenerating clips to bust the browser cache (same filenames)
+const AUDIO_VER='3';   // bump when regenerating clips to bust the browser cache (same filenames)
 function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
 function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
 function _recapSetOpen(box, open){ if(!box)return; box.classList.toggle('open', open); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded', open); }

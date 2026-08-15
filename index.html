@@ -742,12 +742,12 @@ const RECAPS = {
   "3": {
    "short": "Japan",
    "gp": "Japanese",
-   "recap": "Suzuka wasn't the procession the result suggests. Kimi Antonelli buried his pole start with heavy wheelspin, tumbling to sixth and handing Oscar Piastri the lead. Then Oliver Bearman's Haas speared the barriers at Spoon in a fifty-G crash — he walked away — and the safety car it brought out swung the race Antonelli's way. Once ahead his pace was in a different league, and he cruised to a second win in a row, fastest lap included, becoming at nineteen the youngest driver ever to lead the championship. Piastri recovered to finish second, while the real scrap was for third — Charles Leclerc going around the outside at Turn One to hold off George Russell."
+   "recap": "Suzuka wasn't the procession the result suggests. Kimi Antonelli buried his pole start with heavy wheelspin, tumbling to sixth and handing Oscar Piastri the lead. Then Oliver Bearman's Haas hit the barriers at Spoon in a heavy fifty-G impact — he was unhurt — and the safety car it brought out swung the race Antonelli's way. Once ahead his pace was in a different league, and he cruised to a second win in a row, fastest lap included, becoming at nineteen the youngest driver ever to lead the championship. Piastri recovered to finish second, while the real scrap was for third — Charles Leclerc going around the outside at Turn One to hold off George Russell."
   },
   "4": {
    "short": "Miami",
    "gp": "Miami",
-   "recap": "Miami had drama at both ends. On the opening lap Antonelli, Verstappen and Leclerc went three-wide into Turn One; Verstappen spun a full three-sixty at Turn Two but survived, and moments later Pierre Gasly was flipped into the barriers after contact with Lawson. From pole, Kimi Antonelli won it in the pit lane: Mercedes undercut Lando Norris, who spent the closing laps within a second but never found a way past. 'I'm gutted — I think a win was possible,' said Norris, who'd won Saturday's sprint and set the fastest lap for nothing. Oscar Piastri completed the podium in third — and only after Charles Leclerc lost a place on it to a twenty-second track-limits penalty, tumbling from third to eighth."
+   "recap": "Miami had drama at both ends. On the opening lap Antonelli, Verstappen and Leclerc went three-wide into Turn One; Verstappen spun a full three-sixty at Turn Two but gathered it up and continued, and moments later Pierre Gasly was flipped into the barriers after contact with Lawson. From pole, Kimi Antonelli won it in the pit lane: Mercedes undercut Lando Norris, who spent the closing laps within a second but never found a way past. 'I'm gutted — I think a win was possible,' said Norris, who'd won Saturday's sprint and set the fastest lap for nothing. Oscar Piastri completed the podium in third — and only after Charles Leclerc lost a place on it to a twenty-second track-limits penalty, tumbling from third to eighth."
   },
   "5": {
    "short": "Canada",
@@ -1031,7 +1031,7 @@ function driverStackChart(d){
 
 let _recapRound=null;
 const AUDIO_DIR=(function(){try{var v=(new URLSearchParams(location.search).get('voice')||'').replace(/[^a-z0-9_-]/gi,'');return v?('audio-'+v+'/'):'audio/';}catch(e){return 'audio/';}})();
-const AUDIO_VER='2';   // bump when regenerating clips to bust the browser cache (same filenames)
+const AUDIO_VER='3';   // bump when regenerating clips to bust the browser cache (same filenames)
 function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
 function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
 function _recapSetOpen(box, open){ if(!box)return; box.classList.toggle('open', open); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded', open); }
