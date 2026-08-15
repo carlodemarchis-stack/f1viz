@@ -1023,7 +1023,7 @@ function speakRecap(round, btn){
   _recapRound=round;
   if(btn){ btn.classList.add('on'); _recapSetOpen(box,true); }               // reveal text on play
   const a=new Audio(AUDIO_DIR+'r'+String(round).padStart(2,'0')+'.mp3');     // premium AI voice
-  a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); } });
+  a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); _recapAdvance(); } });
   a.addEventListener('error', ()=>{ _recapAudio=null; _speakFallback(round, btn); });   // no clip → browser voice
   _recapAudio=a;
   a.play().catch(()=>{ _recapAudio=null; _speakFallback(round, btn); });
@@ -1032,10 +1032,14 @@ function _speakFallback(round, btn){
   const synth=window.speechSynthesis; if(!synth || _recapRound!==round) return;
   const rc=_recapText(round); if(!rc) return;
   const u=new SpeechSynthesisUtterance(rc); u.rate=1; u.pitch=1;
-  u.onend=u.onerror=()=>{ if(_recapRound===round){ _recapRound=null; _recapClear(); } };
+  u.onend=()=>{ if(_recapRound===round){ _recapRound=null; _recapClear(); _recapAdvance(); } };
+  u.onerror=()=>{ if(_recapRound===round){ _recapRound=null; _recapClear(); } };
   if(btn) btn.classList.add('on');
   synth.speak(u);
 }
+// races: play current card's recap; when a recap ends in play mode, advance to the next race
+function _autoPlayCurrentRecap(){ const btn=wrap.querySelector('.rc-recap-play'), e=list()[idx]; if(btn && e && e.r!=null && _recapRound!==e.r) speakRecap(e.r, btn); }
+function _recapAdvance(){ if(playing && mode==='races'){ if(idx<N()-1) go(idx+1); else setPlay(false); } }
 function raceCard(r){
   const teamName={}; C.forEach(t=>teamName[t.teamId]=t.name);
   const raceLaps=DATA.raceLaps&&DATA.raceLaps[r.r];
@@ -1419,8 +1423,9 @@ function buildLapChart(LD, host){
 }
 function render(dir){
   if(window.__lcStop) window.__lcStop();
+  const _wasPlayingRecap=(_recapRound!=null);      // continue the recap across navigation
   stopRecap();
-  rdvVs=null;                                 // leaving the deep-dive / changing driver clears compare (prev/next RACE keeps it — that goes through openRace, not render)
+  rdvVs=null;                               // leaving the deep-dive / changing driver clears compare (prev/next RACE keeps it — that goes through openRace, not render)
   if(idx<N()){
     const e=list()[idx];
     if(mode==='races'){
@@ -1469,6 +1474,7 @@ function render(dir){
   $('#cnum').textContent=idx+1; $('#ctot').textContent=TOT();
   updatePeek();
   lcHash();
+  if(mode==='races' && idx<N() && (playing || _wasPlayingRecap)){ if(playing) clearInterval(timer); _autoPlayCurrentRecap(); }   // play/continue the recap on this race
 }
 // sticky-mobile peek: current identity label + re-observe the anchor that toggles it
 function updatePeek(){
@@ -1534,7 +1540,9 @@ document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.da
 /* autoplay */
 function setPlay(p){ playing=p; clearInterval(timer);
   $('#playIcon').innerHTML=p?'<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>':'<path d="M7 5v14l12-7z"/>';
-  if(p) timer=setInterval(()=>{ if(mode==='races'&&idx>=TOT()-1){setPlay(false);return;} next(); },4600);
+  if(!p){ stopRecap(); return; }
+  if(mode==='races' && idx<N()){ _autoPlayCurrentRecap(); }                 // races: wait for each recap to finish, then advance
+  else timer=setInterval(()=>{ if(mode==='races'&&idx>=TOT()-1){setPlay(false);return;} next(); },4600);
 }
 $('#play').onclick=()=>setPlay(!playing);
 $('#next').onclick=()=>{next();if(playing)setPlay(true);};
