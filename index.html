@@ -838,7 +838,7 @@ const fmtRange=s=>{const e=new Date(s+'T00:00:00Z'),st=new Date(e.getTime()-2*86
   return sM===eM?`${st.getUTCDate()}–${e.getUTCDate()} ${eM}`:`${st.getUTCDate()} ${sM} – ${e.getUTCDate()} ${eM}`;};
 const daysTo=s=>Math.round((new Date(s+'T00:00:00Z')-REF)/86400000);
 const upRow=(cal,prev)=>{
-  const wk=n=>{const w=Math.round(n/7); return w<1?`${n} days`:`${w} week${w>1?'s':''}`;};  // approximate to weeks
+  const wk=n=>{const w=Math.round(n/7); return w<1?`${n} day${n>1?'s':''}`:`${w} week${w>1?'s':''}`;};  // approximate to weeks (singular day/week for 1)
   const first = cal.r===DATA.meta.round+1 || !prev;   // first race still to come
   let cd;
   if(first){ const dd=daysTo(cal.date); cd = dd>0?`in ${wk(dd)}`:'upcoming'; }
