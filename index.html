@@ -37,7 +37,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-
 button{font-family:inherit}
 
 /* ---------- top bar ---------- */
-.topbar{display:flex;align-items:center;gap:16px;padding:13px 26px;border-bottom:1px solid var(--line-2);z-index:5}
+.topbar{position:relative;display:flex;align-items:center;gap:16px;padding:13px 26px;border-bottom:1px solid var(--line-2);z-index:5}
 .brand{font-weight:800;font-size:19px;letter-spacing:.14em;display:flex;align-items:center;gap:2px}
 .brand span{color:var(--c);transition:color .4s}
 .modes{display:flex;gap:3px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:3px}
@@ -45,7 +45,8 @@ button{font-family:inherit}
   background:none;border:0;padding:7px 16px;border-radius:999px;cursor:pointer;transition:.2s}
 .modes button.on{color:#05070d;background:var(--c)}
 .ctx{margin-left:auto;text-align:right;font-size:11px;color:var(--muted-2);letter-spacing:.04em;line-height:1.45}
-.ctx-note{display:block;margin-top:3px;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#e6c24a;opacity:.92}
+.ctx-note{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#e6c24a;opacity:.9;pointer-events:none}
+@media(max-width:1180px){.ctx-note{display:none}}   /* not enough horizontal room to centre it without overlapping */
 .ctx b{color:var(--muted);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 .peek{display:none;align-items:baseline;gap:8px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:800;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
 .peek b{flex:0 0 auto;font-style:italic;font-size:.92em;color:color-mix(in srgb,var(--c) 82%,#fff)}
@@ -631,6 +632,7 @@ button{font-family:inherit}
 @media (max-width:900px){
   body{overflow:auto}.app{height:auto;min-height:100dvh}
   .topbar{flex-wrap:wrap;gap:10px;padding:11px 15px;position:sticky;top:0;z-index:20;background:var(--bg)}.ctx{width:100%;text-align:left;margin:0;order:5}
+  .ctx-note{display:block;position:static;transform:none;width:100%;order:6;text-align:left;white-space:normal;font-size:9.5px}
   /* once scrolled past the identity: drop the logo, show driver #num · name, keep the tabs */
   .topbar.stuck{padding-top:9px;padding-bottom:9px;border-bottom-color:var(--line);box-shadow:0 8px 18px rgba(0,0,0,.45)}
   .topbar.stuck{gap:8px}
@@ -705,7 +707,8 @@ button{font-family:inherit}
       <button data-mode="constructors">Constructors</button>
       <button data-mode="races">Races</button>
     </div>
-    <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span><span id="ctxNote" class="ctx-note"></span></div>
+    <div id="ctxNote" class="ctx-note"></div>
+    <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span></div>
   </header>
 
   <div class="stage"><div class="wrap" id="wrap"></div></div>
@@ -831,7 +834,7 @@ const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:1
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 
 $('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
-(()=>{ const nx=(DATA.calendar||[]).find(c=>c.r===DATA.meta.round+1); if(nx) $('#ctxNote').textContent = `↻ Updates after this weekend's ${nx.gp||nx.short} GP`; })();
+(()=>{ const nx=(DATA.calendar||[]).find(c=>c.r===DATA.meta.round+1); if(nx) $('#ctxNote').textContent = `↻ Data updates after this weekend's ${nx.gp||nx.short} GP`; })();
 const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const REF=new Date(new Date().toISOString().slice(0,10)+'T00:00:00Z');   // today (UTC midnight) so the "in X weeks" countdown to the next race stays live (was frozen at DATA.meta.captured)
