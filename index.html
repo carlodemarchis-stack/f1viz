@@ -707,7 +707,6 @@ button{font-family:inherit}
       <button data-mode="constructors">Constructors</button>
       <button data-mode="races">Races</button>
     </div>
-    <div id="ctxNote" class="ctx-note"></div>
     <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span></div>
   </header>
 
@@ -834,7 +833,6 @@ const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:1
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 
 $('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
-(()=>{ const nx=(DATA.calendar||[]).find(c=>c.r===DATA.meta.round+1); if(nx) $('#ctxNote').textContent = `↻ Data updates after this weekend's ${nx.gp||nx.short} GP`; })();
 const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const REF=new Date(new Date().toISOString().slice(0,10)+'T00:00:00Z');   // today (UTC midnight) so the "in X weeks" countdown to the next race stays live (was frozen at DATA.meta.captured)
