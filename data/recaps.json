@@ -3,8 +3,8 @@
   "season": 2026,
   "kind": "spoken-race-recaps",
   "note": "~30s spoken recaps per Grand Prix, color-led, fact-checked against f1.json (results) and media sources (F1.com, Sky, ESPN, The Race, Motorsport.com, Wikipedia). Keyed by round.",
-  "throughRound": 11,
-  "count": 11
+  "throughRound": 12,
+  "count": 12
  },
  "recaps": {
   "1": {
@@ -61,6 +61,11 @@
    "short": "Hungary",
    "gp": "Hungarian",
    "recap": "At the Hungaroring the story was McLaren's — and it cut both ways. Oscar Piastri pounced at Turn Two on the opening lap to lead and looked the likely winner, until a gearbox failure in the closing laps ended his race from second. He'd already fumed at being clattered by a lapped Carlos Sainz, a clash he called 'unacceptable.' Teammate Lando Norris, insisting over the radio he was quicker, converted pole and clear-air pace into McLaren's first win of the season. Max Verstappen took second with what many rated the overtake of the year on Hamilton, while Kimi Antonelli climbed from seventh to third. Charles Leclerc, fourth at the flag, set the fastest lap."
+  },
+  "12": {
+   "short": "Netherlands",
+   "gp": "Dutch",
+   "recap": "Zandvoort said goodbye with drama. On lap one, Max Verstappen dipped a wheel onto the white line at the final banked corner and clattered the wall at his home race — he was unhurt, but out, and the red flags flew. At the restart Kimi Antonelli launched beautifully and dived past pole-sitter Lando Norris into Turn One to lead for Mercedes. Norris was relentless, though: he reeled Antonelli back in the final third and retook the lead to win by over eleven seconds — a second victory in a row. Antonelli held on for second, George Russell third, the Mercedes pair flanking the McLaren. Charles Leclerc took the fastest lap, and Russell had won Saturday's sprint. Antonelli left the Netherlands still leading the championship."
   }
  }
 }
