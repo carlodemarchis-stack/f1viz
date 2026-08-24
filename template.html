@@ -754,7 +754,7 @@ const DATA = /*__DATA__*/;
 const RECAPS = /*__RECAPS__*/;
 const RADIO = /*__RADIO__*/;
 const D = DATA.drivers, C = DATA.constructors;
-const IMGV = '?v=28';   // bump when refreshing local images (cache-bust)
+const IMGV = '?v=29';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
 const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
 const CAR = tid => `img/cars/${tid}.png${IMGV}`;   // local official f1.com 2026 car cutouts (all 11 incl. Cadillac)
@@ -1070,7 +1070,7 @@ function raceCard(r){
           <div><b>${ci.laps}</b><em>Laps</em></div>
           <div><b>${ci.distance}<i>km</i></b><em>Distance</em></div></div>`:'';})()}
       </div>
-      <div class="rc-map"><img src="img/circuits/${r.r}.png" alt="${r.circuit}" onerror="this.style.display='none'"></div>
+      <div class="rc-map"><img src="img/circuits/${r.r}.png${IMGV}" alt="${r.circuit}" onerror="this.style.display='none'"></div>
       <div class="rc-bottom">
         <div class="rc-summary">
           <div class="rc-row"><span>Winner</span><b><em class="wl">${r.winner.family}</em></b></div>
@@ -1112,7 +1112,7 @@ function raceTip(r){
   return `<div class="wm-tip-hd"><b>R${r}</b>${cal.flag||''} ${cal.gp||cal.short||cal.country||''}</div>
     <div class="wm-tip-sub">${cal.circuit||''}${cal.locality?' · '+cal.locality:''}</div>
     <div class="wm-tip-sub">${fmtDate(cal.date)}${stat?' · '+stat:''}</div>
-    <img class="wm-tip-map" src="img/circuits/${r}.png" alt="" loading="lazy" onerror="this.style.display='none'"/>${foot}`;
+    <img class="wm-tip-map" src="img/circuits/${r}.png${IMGV}" alt="" loading="lazy" onerror="this.style.display='none'"/>${foot}`;
 }
 function wireSeasonMap(){
   const ww=wrap.querySelector('.worldwrap'), tip=ww&&ww.querySelector('.wm-tip'); if(!ww||!tip)return;
