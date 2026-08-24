@@ -483,7 +483,8 @@ button{font-family:inherit}
 @keyframes gxblinktx{0%,100%{fill:var(--muted-2)}50%{fill:#fff}}
 .geo.next circle{animation:gxblink 1.1s ease-in-out infinite}
 .geo.next text{opacity:1;animation:gxblinktx 1.1s ease-in-out infinite}
-.geo{cursor:pointer}
+.geo{cursor:pointer}.geo.up{cursor:default}
+.geo.done:hover circle{r:4.2;filter:drop-shadow(0 0 5px var(--gc,#54e8d1))}.geo.done:hover text{fill:#fff}
 .wm-tip{position:absolute;left:0;top:0;z-index:6;pointer-events:none;width:194px;background:rgba(13,16,23,.97);border:1px solid var(--line);border-radius:11px;padding:10px 11px;box-shadow:0 12px 34px rgba(0,0,0,.55);opacity:0;transition:opacity .1s}
 .wm-tip.on{opacity:1}
 .wm-tip-hd{font-weight:800;font-size:12.5px;color:var(--ink);letter-spacing:-.01em}
@@ -493,6 +494,7 @@ button{font-family:inherit}
 .wm-tip-map{width:100%;height:70px;object-fit:contain;margin:7px 0 3px;opacity:.95;filter:grayscale(1) brightness(1.06)}
 .wm-tip-win{margin-top:4px;font-size:11.5px;color:var(--muted-2);letter-spacing:.02em}
 .wm-tip-win b{color:color-mix(in srgb,var(--wc,#54e8d1) 82%,#fff);font-weight:800}
+.wm-tip-go{display:block;margin-top:3px;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-2);opacity:.85}
 .wm-tip-cd{margin-top:4px;font-size:12px;font-weight:800;color:#e6c24a;letter-spacing:.01em}
 .wm-tip-cd.next{color:#fff}
 .worldwrap svg{width:100%;height:100%}
@@ -1177,7 +1179,7 @@ function raceTip(r){
   const done=r<=DATA.meta.round, isNext=r===DATA.meta.round+1, ci=(DATA.circuits||{})[r]||{};
   const win=done?(((DATA.races||[]).find(x=>x.r===r)||{}).winner):null;
   const stat=[ci.laps?ci.laps+' laps':'', ci.length?ci.length+' km':''].filter(Boolean).join(' · ');
-  const foot=(done&&win)?`<div class="wm-tip-win" style="--wc:${win.color}">Winner · <b>${win.family}</b></div>`
+  const foot=(done&&win)?`<div class="wm-tip-win" style="--wc:${win.color}">Winner · <b>${win.family}</b><span class="wm-tip-go">Open race →</span></div>`
             :`<div class="wm-tip-cd${isNext?' next':''}">${cdText(cal.date)}</div>`;
   return `<div class="wm-tip-hd"><b>R${r}</b>${cal.flag||''} ${cal.gp||cal.short||cal.country||''}</div>
     <div class="wm-tip-sub">${cal.circuit||''}${cal.locality?' · '+cal.locality:''}</div>
@@ -1199,6 +1201,10 @@ function wireSeasonMap(){
     tip.style.left=px+'px'; tip.style.top=py+'px';
   });
   ww.addEventListener('mouseleave', ()=>tip.classList.remove('on'));
+  ww.addEventListener('click', e=>{
+    const g=e.target.closest('.geo.done'); if(!g||!g.dataset.r) return;   // finished races → open that race card
+    tip.classList.remove('on'); go(+g.dataset.r-1);
+  });
 }
 function worldMapCard(){
   const [W,Hh]=DATA.worldVB;
