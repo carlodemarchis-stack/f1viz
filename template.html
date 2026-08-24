@@ -351,6 +351,14 @@ button{font-family:inherit}
 .rc-lc{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 10px 8px;overflow:hidden}
 .lc-msg{margin:auto;color:var(--muted-2);font-size:12px}
 /* The Wall — full-width lap/position grid */
+.gph-l{display:flex;align-items:center;gap:12px;min-width:0}
+.wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.wpill{display:inline-flex;align-items:center;gap:3px;padding:2px 3px 2px 8px;border-radius:999px;background:color-mix(in srgb,var(--pc) 20%,transparent);border:1px solid color-mix(in srgb,var(--pc) 55%,transparent)}
+.wpill i{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;color:color-mix(in srgb,var(--pc) 72%,#fff)}
+.wpill-x{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:13px;line-height:1;padding:0 2px;border-radius:50%}
+.wpill-x:hover{color:var(--ink);background:rgba(255,255,255,.12)}
+.wall-reset{border:0;background:transparent;color:var(--muted-2);cursor:pointer;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;padding:2px 4px;margin-left:2px}
+.wall-reset:hover{color:var(--ink);text-decoration:underline}
 .card.wall-on{grid-template-columns:1fr}
 .card.wall-on .racemeta{display:none}
 .rc-tab.wall-tab.on{color:var(--ink);background:color-mix(in srgb,var(--c,#00D7B6) 42%,transparent)}
@@ -1117,7 +1125,7 @@ function raceCard(r){
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall">The Wall</button></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall">The Wall</button></div><div class="wall-pills" hidden></div></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
       <div class="rc-view">
         <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
         <div class="rc-cls">${cls}</div>
@@ -1525,10 +1533,22 @@ function buildWall(LD, host, round){
     tt.classList.add('on'); let x=e.clientX+14, y=e.clientY+14; const w=tt.offsetWidth||150,h=tt.offsetHeight||60;
     if(x+w>innerWidth-6)x=e.clientX-w-14; if(y+h>innerHeight-6)y=e.clientY-h-14; tt.style.left=x+'px'; tt.style.top=y+'px'; });
   g.addEventListener('mouseleave', ()=>tt.classList.remove('on'));
-  // click a driver (box or end code) to follow them
-  let sel=null;
-  function toggle(c){ sel=(sel===c)?null:c; g.classList.toggle('dim',!!sel);
-    g.querySelectorAll('.wcell,.wcode').forEach(e=>e.classList.toggle('sel',sel&&e.dataset.c===sel)); }
+  // click drivers (box or end code) to follow up to 4 — each gets a removable pill after the tabs
+  const selSet=new Set(), MAX=4;
+  const rr=host.closest('.raceres'), pillsEl=rr&&rr.querySelector('.wall-pills');
+  function renderPills(){ if(!pillsEl) return;
+    if(!selSet.size){ pillsEl.innerHTML=''; pillsEl.setAttribute('hidden',''); return; }
+    pillsEl.removeAttribute('hidden');
+    pillsEl.innerHTML=[...selSet].map(c=>`<span class="wpill" style="--pc:${(DR[c]||{}).col||'#888'}"><i>${c}</i><button class="wpill-x" data-x="${c}" aria-label="Remove ${c}">×</button></span>`).join('')
+      +`<button class="wall-reset" type="button">Reset</button>`;
+    pillsEl.querySelectorAll('.wpill-x').forEach(b=>b.onclick=()=>{ selSet.delete(b.dataset.x); paint(); });
+    pillsEl.querySelector('.wall-reset').onclick=()=>{ selSet.clear(); paint(); };
+  }
+  function paint(){ const on=selSet.size>0; g.classList.toggle('dim',on);
+    g.querySelectorAll('.wcell,.wcode').forEach(e=>e.classList.toggle('sel', on && selSet.has(e.dataset.c)));
+    renderPills(); }
+  function toggle(c){ if(selSet.has(c)) selSet.delete(c); else { if(selSet.size>=MAX) return; selSet.add(c); } paint(); }
+  renderPills();
 }
 function render(dir){
   if(window.__lcStop) window.__lcStop();
@@ -1548,6 +1568,7 @@ function render(dir){
         const setTab=t=>{ lcTab=t; tabs.forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
           if(rad) rad.setAttribute('hidden','');
           if(wl){ wl.setAttribute('hidden',''); wl.innerHTML=''; }               // reset The Wall (fresh mount each time)
+          const wpills=wrap.querySelector('.wall-pills'); if(wpills && t!=='wall'){ wpills.setAttribute('hidden',''); wpills.innerHTML=''; }
           if(card) card.classList.toggle('wall-on', t==='wall');                 // full-width takeover only for The Wall
           if(t==='lap'){ date.setAttribute('hidden',''); meta.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.removeAttribute('hidden'); mountLapChart(lcRound, lc); }
           else if(t==='radio'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(rad)rad.removeAttribute('hidden'); }
