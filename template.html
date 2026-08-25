@@ -359,19 +359,20 @@ button{font-family:inherit}
 .wpill-x:hover{color:var(--ink);background:rgba(255,255,255,.12)}
 .wall-reset{border:0;background:transparent;color:var(--muted-2);cursor:pointer;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;padding:2px 4px;margin-left:2px}
 .wall-reset:hover{color:var(--ink);text-decoration:underline}
+.wall-maxmsg{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#f5a623;white-space:nowrap}
 .card.wall-on{grid-template-columns:1fr}
 .card.wall-on .racemeta{display:none}
 .rc-tab.wall-tab.on{color:var(--ink);background:color-mix(in srgb,var(--c,#00D7B6) 42%,transparent)}
 .rc-wall{flex:1;min-height:0;overflow:auto;padding:6px 10px 8px}
 .wall{display:grid;gap:2px;width:100%;height:100%;min-height:0}
-.wcell{border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;writing-mode:vertical-rl;text-orientation:upright;font-size:8px;font-weight:800;line-height:.9;letter-spacing:-.5px;transition:opacity .12s,box-shadow .12s}
+.wcell{border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;writing-mode:vertical-rl;text-orientation:upright;font-size:8.5px;font-weight:800;line-height:.66;letter-spacing:-.5px;transition:opacity .12s,box-shadow .12s}
 .wcell:hover{box-shadow:0 0 0 1.5px #fff}
 .wall.dim .wcell:not(.sel){opacity:.1}
 .wall.dim .wcell.sel{opacity:1;box-shadow:0 0 0 1.4px rgba(255,255,255,.92)}
 .wpos{display:flex;align-items:center;justify-content:flex-end;padding-right:4px;font-size:10px;font-weight:800;color:var(--muted-2)}
 .wcode{display:flex;align-items:center;justify-content:center;border-radius:5px;background:var(--line-2);font-size:10px;font-weight:800;cursor:pointer;border:1.4px solid transparent;transition:.12s}
 .wcode:hover{border-color:var(--muted-2)}
-.wall.dim .wcode:not(.sel){opacity:.28}
+.wall.dim .wcode:not(.sel){opacity:1}   /* keep the start/finish axis codes bright so more drivers can be picked */
 .wcode.sel{border-color:#fff;box-shadow:0 0 0 1px #fff}
 .wlapn{display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:var(--muted-2)}
 .wcap{display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2)}
@@ -1125,7 +1126,7 @@ function raceCard(r){
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall">The Wall</button></div><div class="wall-pills" hidden></div></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall">The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
       <div class="rc-view">
         <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
         <div class="rc-cls">${cls}</div>
@@ -1490,8 +1491,10 @@ function mountWall(round, host){
 function buildWall(LD, host, round){
   const nLaps=LD.nLaps, grid=LD.grid, order=LD.order, times=LD.times||[], pit=LD.pit||{}, pitTime=LD.pitTime||{};
   const R=(DATA.races||[]).find(x=>x.r===round)||{}; const finishOrder=(R.cls||[]).map(c=>c.code);
-  const DR={}; D.forEach(d=>DR[d.code]={col:d.color,fam:d.family});
+  const DR={}; D.forEach(d=>DR[d.code]={col:d.color,fam:d.family,team:d.teamId});
   const maxP=grid.length, cols=nLaps+1;
+  // teammates share a team colour → 1st car (by grid) gets white text, 2nd gets black, to tell them apart
+  const teamSeen={}, teamText={}; grid.forEach(c=>{ const t=(DR[c]||{}).team||c; teamSeen[t]=(teamSeen[t]||0)+1; teamText[c]=teamSeen[t]===1?'#fff':'#000'; });
   const txt=hex=>{const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return (0.299*r+0.587*g+0.114*b)>150?'#0b0d13':'#fff';};
   const sec=t=>{const p=String(t).split(':');return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]);};
   const minLap={}, minVal={}, pitSet={}; let ovMin=1e9, ovCode=null, ovLap=null;
@@ -1514,7 +1517,7 @@ function buildWall(LD, host, round){
   for(let L=0;L<cols;L++){ const lbl=(L===0?'':(L===1?'1':(L%5===0?L:''))); if(lbl!==''){ add('wlapn',L+3,1,lbl); add('wlapn',L+3,maxP+2,lbl); } }
   for(let L=0;L<cols;L++){ const arr=L===0?grid:order[L-1];
     arr.forEach((c,i)=>{ const col=(DR[c]||{}).col||'#888';
-      const e=add('wcell',L+3,i+2,c,`background:${col};color:${txt(col)}`); e.dataset.c=c; e.dataset.l=L; e.dataset.p=i+1; e.onclick=()=>toggle(c);
+      const e=add('wcell',L+3,i+2,c,`background:${col};color:${teamText[c]||txt(col)}`); e.dataset.c=c; e.dataset.l=L; e.dataset.p=i+1; e.onclick=()=>toggle(c);
       (cellsByC[c]=cellsByC[c]||[]).push(e); }); }
   host.innerHTML=''; host.appendChild(g);
   // rich hover tooltip
@@ -1534,8 +1537,9 @@ function buildWall(LD, host, round){
     if(x+w>innerWidth-6)x=e.clientX-w-14; if(y+h>innerHeight-6)y=e.clientY-h-14; tt.style.left=x+'px'; tt.style.top=y+'px'; });
   g.addEventListener('mouseleave', ()=>tt.classList.remove('on'));
   // click drivers (box or end code) to follow up to 4 — each gets a removable pill after the tabs
-  const selSet=new Set(), MAX=4;
-  const rr=host.closest('.raceres'), pillsEl=rr&&rr.querySelector('.wall-pills');
+  const selSet=new Set(), MAX=5;
+  const rr=host.closest('.raceres'), pillsEl=rr&&rr.querySelector('.wall-pills'), maxMsgEl=rr&&rr.querySelector('.wall-maxmsg');
+  function showMax(){ if(!maxMsgEl)return; maxMsgEl.textContent=`Max ${MAX} drivers — remove one first`; maxMsgEl.hidden=false; clearTimeout(maxMsgEl._t); maxMsgEl._t=setTimeout(()=>{maxMsgEl.hidden=true;},2400); }
   function renderPills(){ if(!pillsEl) return;
     if(!selSet.size){ pillsEl.innerHTML=''; pillsEl.setAttribute('hidden',''); return; }
     pillsEl.removeAttribute('hidden');
@@ -1547,7 +1551,7 @@ function buildWall(LD, host, round){
   function paint(){ const on=selSet.size>0; g.classList.toggle('dim',on);
     g.querySelectorAll('.wcell,.wcode').forEach(e=>e.classList.toggle('sel', on && selSet.has(e.dataset.c)));
     renderPills(); }
-  function toggle(c){ if(selSet.has(c)) selSet.delete(c); else { if(selSet.size>=MAX) return; selSet.add(c); } paint(); }
+  function toggle(c){ if(selSet.has(c)) selSet.delete(c); else { if(selSet.size>=MAX){ showMax(); return; } selSet.add(c); if(maxMsgEl)maxMsgEl.hidden=true; } paint(); }
   renderPills();
 }
 function render(dir){
@@ -1568,7 +1572,7 @@ function render(dir){
         const setTab=t=>{ lcTab=t; tabs.forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
           if(rad) rad.setAttribute('hidden','');
           if(wl){ wl.setAttribute('hidden',''); wl.innerHTML=''; }               // reset The Wall (fresh mount each time)
-          const wpills=wrap.querySelector('.wall-pills'); if(wpills && t!=='wall'){ wpills.setAttribute('hidden',''); wpills.innerHTML=''; }
+          const wpills=wrap.querySelector('.wall-pills'); if(wpills && t!=='wall'){ wpills.setAttribute('hidden',''); wpills.innerHTML=''; const wmax=wrap.querySelector('.wall-maxmsg'); if(wmax)wmax.hidden=true; }
           if(card) card.classList.toggle('wall-on', t==='wall');                 // full-width takeover only for The Wall
           if(t==='lap'){ date.setAttribute('hidden',''); meta.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.removeAttribute('hidden'); mountLapChart(lcRound, lc); }
           else if(t==='radio'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(rad)rad.removeAttribute('hidden'); }
