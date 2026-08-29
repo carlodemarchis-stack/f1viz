@@ -1,0 +1,160 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>F1viz — Drivers' Standings Film</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🏁</text></svg>">
+<meta property="og:type" content="website">
+<meta property="og:title" content="F1viz — Drivers' Standings Film · 2026">
+<meta property="og:description" content="Watch the 2026 Formula 1 drivers' championship unfold race by race — every driver sized by points, animated round to round.">
+<meta property="og:image" content="https://f1.aguywithascarf.com/img/og.png">
+<meta property="og:url" content="https://f1.aguywithascarf.com/film.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="F1viz — Drivers' Standings Film · 2026">
+<meta name="twitter:description" content="The 2026 F1 drivers' championship, animated race by race.">
+<meta name="twitter:image" content="https://f1.aguywithascarf.com/img/og.png">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:radial-gradient(120% 90% at 50% 0%,#16244a 0%,#0c1430 42%,#070b1c 100%);color:#eef1f6;overflow:hidden}
+.film{position:relative;height:100vh;padding:26px 40px 104px;display:flex;flex-direction:column}
+.brand{font-size:19px;font-weight:800;letter-spacing:.14em;color:#fff;margin-bottom:10px;display:inline-flex;align-items:center;gap:2px}
+.brand span{color:#00D7B6}
+.hd .sub{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8ea0c0;margin-bottom:4px}
+.hd .kick{font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#7f8db0;display:flex;align-items:center;gap:6px}
+.hd .kick svg{height:12px;width:auto;border-radius:2px;display:inline-block}
+.hd h1{font-size:50px;line-height:1;margin:8px 0 0;font-weight:850;letter-spacing:-.02em;max-width:52vw}
+/* race-result inset top-right: full figures at podium heights + points scorers */
+.podium{position:absolute;top:22px;right:38px;width:512px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3}
+.podium .pttl{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9fb0c8;margin-bottom:12px;text-align:center}
+.pod-figs{display:flex;align-items:flex-end;justify-content:center;gap:24px;margin-bottom:14px}
+.pfig{display:flex;flex-direction:column;align-items:center;gap:2px;width:150px}
+.pfig img{display:block;width:auto;filter:drop-shadow(0 7px 14px rgba(0,0,0,.55))}
+.pfig .pnm{font-size:15px;font-weight:800;text-align:center;line-height:1.05;margin-top:5px;color:var(--sc)}
+.pfig .ptm{font-size:11px;font-weight:800;letter-spacing:.02em;text-align:center;line-height:1.1;color:var(--sc);opacity:.92}
+.pfig .ppts{font-size:14px;font-weight:800;color:#fff;margin-top:2px}
+.pod-list{display:flex;flex-wrap:wrap;gap:5px 15px;justify-content:center;border-top:1px solid rgba(255,255,255,.09);padding-top:12px;margin-top:2px}
+.pod-list .ps{font-size:10.5px;font-weight:700;color:#8ea0c0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pod-list .ps u{color:#5f7099;text-decoration:none;margin-right:3px}
+.pod-list .ps b{color:var(--pc);font-weight:800;margin-right:4px}
+.pod-list .ps i{color:#dbe4f4;font-style:normal}
+/* standings stage */
+.stage{flex:1;position:relative;min-height:0;margin-top:6px}
+.row{position:absolute;inset:0}
+.d{position:absolute;bottom:0;left:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  transition:transform .8s cubic-bezier(.4,0,.2,1),opacity .5s;will-change:transform}
+.d .pts{font-size:11px;font-weight:800;margin-bottom:5px;font-variant-numeric:tabular-nums;white-space:nowrap;padding:1.5px 6px;border-radius:5px;line-height:1.25;box-shadow:0 2px 7px rgba(0,0,0,.35)}
+.d .fig{display:block;width:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));transition:height .8s cubic-bezier(.4,0,.2,1)}
+.d .code{margin-top:6px;font-size:11px;font-weight:800;letter-spacing:.02em;color:var(--dc);white-space:nowrap;line-height:1}
+.d .rank{margin-top:3px;font-size:10px;font-weight:700;color:#7f8db0;line-height:1}
+.d.zero .pts{color:#5f7099}
+.d.zero .code{filter:saturate(.5) brightness(1.15);opacity:.7}
+.d.lead .glow{position:absolute;left:50%;bottom:20px;width:64%;height:70%;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(closest-side,var(--dc),transparent 72%);opacity:.32;filter:blur(8px);z-index:-1}
+.baseline{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);margin:0 40px}
+/* controls */
+.controls{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;
+  background:rgba(10,16,34,.82);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 12px;backdrop-filter:blur(8px);z-index:10}
+.controls button{border:0;background:transparent;color:#c7d2e6;cursor:pointer;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.controls button:hover{background:rgba(255,255,255,.1);color:#fff}
+.controls .play{width:44px;height:44px;background:#fff;color:#0c1430}
+.controls .play:hover{background:#fff}
+.controls svg{width:16px;height:16px;fill:currentColor}
+.controls .ctr{display:flex;align-items:baseline;gap:6px;padding:0 12px;font-weight:800;font-size:13px;color:#c7d2e6;white-space:nowrap}
+.controls .ctr small{color:#7f8db0;font-weight:700;font-size:11px}
+.controls .ctr .who{color:#7f8db0;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.controls .sep{width:1px;height:20px;background:rgba(255,255,255,.12);margin:0 2px}
+.credit{position:fixed;right:20px;bottom:26px;font-size:10px;color:#54648a;z-index:5;text-align:right;line-height:1.4}
+.credit b{color:#8ea0c0;font-weight:700}
+</style></head>
+<body><div class="film">
+  <div class="hd"><div class="brand">F1<span>viz</span></div><div class="sub">Drivers' Championship · Points · 2026</div><div class="kick" id="kick"></div><h1 id="ttl"></h1></div>
+  <div class="podium" id="podium"></div>
+  <div class="stage"><div class="row" id="row"></div></div>
+  <div class="baseline"></div>
+</div>
+<div class="controls">
+  <button id="restart" title="Restart"><svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+  <button id="prev" title="Previous"><svg viewBox="0 0 24 24"><path d="M15.5 5v14l-11-7z"/><rect x="16.5" y="5" width="2.4" height="14" rx="1"/></svg></button>
+  <button class="play" id="play" title="Play"><svg id="playIcon" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></button>
+  <button id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M8.5 5v14l11-7z"/><rect x="5.1" y="5" width="2.4" height="14" rx="1"/></svg></button>
+  <div class="ctr"><b id="cnum">1</b><small>/ <span id="ctot">12</span></small><span class="who" id="cwho"></span></div>
+  <div class="sep"></div>
+  <button id="fs" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+</div>
+<div class="credit">Produced with passion by <b>A guy with a scarf</b> (Carlo De Marchis)</div>
+<script src="_film_data.js"></script>
+<script>
+const F=window.FILM, DR=F.drivers, R=F.rounds, TOT=F.totalRounds;
+const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/full/'+s+'.png');
+const IMGC=s=>(window.FACEB64&&window.FACEB64[s])||('img/cut/'+s+'.png');
+const txt=hex=>{const h=(hex||'#888').replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return (0.299*r+0.587*g+0.114*b)>150?'#0b1120':'#fff';};
+const ASPECT=0.34, GAP=7, MINCOL=24;
+const row=document.getElementById('row'), stage=row.parentElement, pod=document.getElementById('podium');
+// build one persistent element per driver (union of all)
+const cells={};
+Object.keys(DR).forEach(code=>{
+  const d=DR[code], el=document.createElement('div'); el.className='d'; el.style.opacity=0; el.style.setProperty('--dc',d.col||'#888');
+  el.innerHTML=`<span class="glow"></span><span class="pts" style="background:${d.col||'#888'};color:${txt(d.col)}"></span>`
+    +`<img class="fig" src="${IMGF(d.slug)}" alt="${code}" style="height:0" onerror="this.style.visibility='hidden'">`
+    +`<span class="code">${code}</span><span class="rank"></span>`;
+  row.appendChild(el); cells[code]=el;
+});
+let cur=0, timer=null;
+function clean(gp){ return gp.replace(/^Grand Prix (de |du |of )?/,'').replace(/ Grand Prix$/,''); }
+function setRound(i, animate){
+  cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
+  document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.short||''} · ${rd.circuit||''}`;   // flag may be emoji or inline SVG
+  document.getElementById('ttl').textContent=rd.gp;
+  document.getElementById('cnum').textContent=cur+1;
+  document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
+  // fit: largest leader height where the whole row fits the width
+  const availW=stage.clientWidth-6, availH=Math.max(150, stage.clientHeight-46);   // fit within the stage (leaves room for the points label + code/rank)
+  const totalW=mh=>{ let w=0; st.forEach(s=>{ const h=mh*s.pts/maxPts; w+=(s.pts>0?Math.max(ASPECT*h,MINCOL):MINCOL); }); return w+(st.length-1)*GAP; };
+  let maxH=availH; for(let k=0;k<6;k++){ const tw=totalW(maxH); if(tw>availW) maxH=maxH*availW/tw; else break; }
+  const wOf=s=>{ const h=maxH*s.pts/maxPts; return s.pts>0?Math.max(ASPECT*h,MINCOL):MINCOL; };
+  const total=st.reduce((a,s)=>a+wOf(s),0)+(st.length-1)*GAP;
+  let x=(availW-total)/2+3; const seen={};
+  st.forEach(s=>{ const el=cells[s.code], h=Math.round(maxH*s.pts/maxPts), w=wOf(s); seen[s.code]=1;
+    el.style.opacity=1;
+    el.style.transform=`translateX(${(x+w/2).toFixed(1)}px) translateX(-50%)`;
+    el.classList.toggle('lead', s.pos===1); el.classList.toggle('zero', s.pts===0);
+    const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=s.pts>0?'visible':'hidden';
+    const ptsEl=el.querySelector('.pts'); ptsEl.textContent=s.pts>0?s.pts:''; ptsEl.style.display=s.pts>0?'':'none';
+    el.querySelector('.rank').textContent=s.pos;
+    x+=w+GAP;
+  });
+  Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
+  renderPodium(rd);
+}
+const MEDAL={1:'🥇',2:'🥈',3:'🥉'};
+function renderPodium(rd){
+  const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
+  const figs=order.map((p,i)=>{ if(!p)return''; const d=DR[p.code]||{};
+    return `<div class="pfig" style="--sc:${d.col||'#888'}">
+      <img src="${IMGF(d.slug)}" style="height:${figH[i]}px" onerror="this.style.visibility='hidden'">
+      <div class="pnm">${d.fam||p.code}</div>
+      <div class="ptm">${p.teamName||''}</div>
+      <div class="ppts">+${p.pts} pts</div></div>`;}).join('');
+  const rest=(rd.scorers||[]).slice(3);
+  const list=rest.map(s=>{ const d=DR[s.code]||{};
+    return `<span class="ps" style="--pc:${d.col||'#888'}"><u>${s.pos}</u><b>${s.code}</b><i>+${s.pts}</i></span>`;}).join('');
+  pod.innerHTML=`<div class="pttl">${rd.short||''} · Race result${rd.sprint?' · Sprint weekend':''}</div>`
+    +`<div class="pod-figs">${figs}</div>`
+    +(list?`<div class="pod-list">${list}</div>`:'');
+}
+// controls
+const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+function stop(){ clearInterval(timer); timer=null; document.getElementById('playIcon').innerHTML=playIc; }
+function play(){ if(timer){stop();return;} if(cur>=TOT-1) setRound(0,true);
+  document.getElementById('playIcon').innerHTML=pauseIc;
+  timer=setInterval(()=>{ if(cur>=TOT-1){stop();return;} setRound(cur+1,true); }, 2600); }
+document.getElementById('play').onclick=play;
+document.getElementById('next').onclick=()=>{stop();setRound(cur+1,true);};
+document.getElementById('prev').onclick=()=>{stop();setRound(cur-1,true);};
+document.getElementById('restart').onclick=()=>{stop();setRound(0,true);};
+document.getElementById('fs').onclick=()=>{ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); };
+addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();setRound(cur+1,true);} else if(e.key==='ArrowLeft'){stop();setRound(cur-1,true);} else if(e.key===' '){e.preventDefault();play();} });
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>setRound(cur,false),120);});
+document.getElementById('ctot').textContent=TOT;
+setRound(TOT-1,false);   // open on the latest completed round
+</script>
+</body></html>
