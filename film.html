@@ -192,8 +192,7 @@ function renderPodium(rd, compose){
   const rest=(rd.scorers||[]).slice(3);
   const list=rest.map(s=>{ const d=DR[s.code]||{};
     return `<span class="ps" style="--pc:${d.col||'#888'}"><u>${s.pos}</u><b>${s.code}</b><i>+${s.pts}</i></span>`;}).join('');
-  pod.innerHTML=`<div class="pttl">${rd.short||''} · Race result${rd.sprint?' · Sprint weekend':''}</div>`
-    +`<div class="pod-figs">${figs}</div>`
+  pod.innerHTML=`<div class="pod-figs">${figs}</div>`
     +(list?`<div class="pod-list${compose?' pi':''}"${compose?' style="animation-delay:540ms"':''}>${list}</div>`:'');
 }
 // controls — card 0 = welcome, 1..TOT = rounds
