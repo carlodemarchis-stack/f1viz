@@ -65,6 +65,10 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .welcome{position:absolute;top:15%;left:0;right:0;text-align:center;z-index:2;pointer-events:none}
 .welcome h2{font-size:60px;font-weight:850;letter-spacing:-.02em;line-height:1.03;margin:0}
 .welcome p{font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#8ea0c0;margin:16px 0 0}
+.team-logos{position:absolute;inset:0;pointer-events:none;z-index:2}
+.team-asset{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:piFade .6s backwards}
+.team-asset .tlogo{height:22px;width:auto;max-width:130px;object-fit:contain;opacity:.96}
+.team-asset .tcar{width:158px;height:auto;filter:drop-shadow(0 5px 9px rgba(0,0,0,.5))}
 /* controls */
 .controls{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;
   background:rgba(10,16,34,.82);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 12px;backdrop-filter:blur(8px);z-index:10}
@@ -84,7 +88,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
   <div class="podium" id="podium"></div>
   <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — round by round</p></div>
-  <div class="stage"><div class="row" id="row"></div></div>
+  <div class="stage"><div class="row" id="row"></div><div class="team-logos" id="teamLogos"></div></div>
   <div class="baseline"></div>
 </div>
 <div class="controls">
@@ -103,6 +107,8 @@ const F=window.FILM, DR=F.drivers, R=F.rounds, TOT=F.totalRounds;
 const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/full/'+s+'.png');
 const IMGC=s=>(window.FACEB64&&window.FACEB64[s])||('img/cut/'+s+'.png');
 const IMGCIRC=r=>(window.CIRCB64&&window.CIRCB64[r])||('img/circuits/'+r+'.png');
+const LOGO=t=>(window.LOGOB64&&window.LOGOB64[t])||('img/logos/'+t+'.webp');
+const CAR=t=>(window.CARB64&&window.CARB64[t])||('img/cars/'+t+'.png');
 const txt=hex=>{const h=(hex||'#888').replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return (0.299*r+0.587*g+0.114*b)>150?'#0b1120':'#fff';};
 const ASPECT=0.34, GAP=7, MINCOL=24;
 const row=document.getElementById('row'), stage=row.parentElement, pod=document.getElementById('podium');
@@ -118,7 +124,7 @@ Object.keys(DR).forEach(code=>{
 let cur=0, card=0, timer=null;
 function setRound(i, animate){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
-  document.getElementById('welcome').hidden=true; pod.style.display='';   // leaving the welcome card
+  document.getElementById('welcome').hidden=true; pod.style.display=''; document.getElementById('teamLogos').innerHTML='';   // leaving the welcome card
   document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
   document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
@@ -155,7 +161,7 @@ function renderWelcome(){
   let boundaries=0; for(let i=1;i<n;i++) if(DR[order[i]].team!==DR[order[i-1]].team) boundaries++;
   const gaps=(n-1-boundaries)*GW + boundaries*TW;
   const H=Math.min(availH, (availW-gaps)/(n*ASPECT)), fw=ASPECT*H;
-  let x=(availW-(n*fw+gaps))/2+3, prevTeam=null; const seen={};
+  let x=(availW-(n*fw+gaps))/2+3, prevTeam=null; const seen={}, teamX={};
   order.forEach(code=>{ const el=cells[code], d=DR[code]; seen[code]=1;
     if(prevTeam!==null) x += (d.team!==prevTeam?TW:GW); prevTeam=d.team;
     el.style.opacity=1; el.classList.remove('lead','zero');
@@ -163,9 +169,17 @@ function renderWelcome(){
     const img=el.querySelector('.fig'); img.style.height=Math.round(H)+'px'; img.style.visibility=img.dataset.broken?'hidden':'visible';
     el.querySelector('.pts').style.display='none';
     el.querySelector('.code').textContent=code; el.querySelector('.rank').textContent='';
+    if(!teamX[d.team]) teamX[d.team]={L:x,R:x+fw}; else teamX[d.team].R=x+fw;
     x+=fw;
   });
   Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });
+  // above each team's pair: the car, and above the car the team logo
+  const logos=document.getElementById('teamLogos'); logos.innerHTML='';
+  Object.keys(teamX).forEach((t,i)=>{ const {L,R}=teamX[t], cx=(L+R)/2;
+    const a=document.createElement('div'); a.className='team-asset'; a.style.left=cx.toFixed(1)+'px'; a.style.bottom=(H+16)+'px'; a.style.animationDelay=(i*45)+'ms';
+    a.innerHTML=`<img class="tlogo" src="${LOGO(t)}" onerror="this.style.display='none'"><img class="tcar" src="${CAR(t)}" onerror="this.style.display='none'">`;
+    logos.appendChild(a);
+  });
 }
 // staged podium reveal: RACE X → short name + circuit map → podium composing (1st, 2nd, 3rd, then the rest)
 let podTimers=[];
