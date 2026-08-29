@@ -23,7 +23,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .hd .kick svg{height:14px;width:auto;border-radius:2px;display:inline-block}
 .hd .sub{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7f8db0;padding-left:14px;border-left:1px solid rgba(255,255,255,.14)}
 /* race-result inset top-right: full figures at podium heights + points scorers */
-.podium{position:absolute;top:22px;right:38px;width:512px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3}
+.podium{position:absolute;top:22px;right:38px;width:512px;min-height:262px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3}
 .podium .pttl{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9fb0c8;margin-bottom:12px;text-align:center}
 .pod-figs{display:flex;align-items:flex-end;justify-content:center;gap:24px;margin-bottom:14px}
 .pfig{display:flex;flex-direction:column;align-items:center;gap:2px;width:150px}
@@ -36,6 +36,18 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .pod-list .ps u{color:#5f7099;text-decoration:none;margin-right:3px}
 .pod-list .ps b{color:var(--pc);font-weight:800;margin-right:4px}
 .pod-list .ps i{color:#dbe4f4;font-style:normal}
+/* podium panel intro animation */
+@keyframes piPop{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:none}}
+@keyframes piRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes piFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pod-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:230px;text-align:center;gap:6px}
+.pi-race{font-size:52px;font-weight:850;letter-spacing:.03em;animation:piPop .55s cubic-bezier(.2,.85,.25,1)}
+.pi-name{font-size:30px;font-weight:850;display:flex;gap:9px;align-items:center;justify-content:center;animation:piFade .5s}
+.pi-name svg{height:22px;width:auto;border-radius:2px}
+.pi-map{max-width:280px;max-height:130px;width:auto;filter:grayscale(1) brightness(1.12);margin-top:4px;animation:piFade .55s .05s backwards}
+.pi-sub{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#8ea0c0;animation:piFade .6s .1s backwards}
+.pfig.pi{animation:piRise .5s backwards}
+.pod-list.pi{animation:piFade .5s backwards}
 /* standings stage */
 .stage{flex:1;position:relative;min-height:0;margin-top:6px}
 .row{position:absolute;inset:0}
@@ -90,6 +102,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 const F=window.FILM, DR=F.drivers, R=F.rounds, TOT=F.totalRounds;
 const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/full/'+s+'.png');
 const IMGC=s=>(window.FACEB64&&window.FACEB64[s])||('img/cut/'+s+'.png');
+const IMGCIRC=r=>(window.CIRCB64&&window.CIRCB64[r])||('img/circuits/'+r+'.png');
 const txt=hex=>{const h=(hex||'#888').replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return (0.299*r+0.587*g+0.114*b)>150?'#0b1120':'#fff';};
 const ASPECT=0.34, GAP=7, MINCOL=24;
 const row=document.getElementById('row'), stage=row.parentElement, pod=document.getElementById('podium');
@@ -126,9 +139,10 @@ function setRound(i, animate){
     x+=w+GAP;
   });
   Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
-  renderPodium(rd);
+  playPodiumIntro(rd);
 }
 function renderWelcome(){
+  clearPodIntro();
   document.getElementById('welcome').hidden=false; pod.style.display='none';
   document.getElementById('kick').innerHTML='2026 Season · The full grid';
   document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
@@ -151,11 +165,24 @@ function renderWelcome(){
   });
   Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });
 }
-const MEDAL={1:'🥇',2:'🥈',3:'🥉'};
-function renderPodium(rd){
+// staged podium reveal: RACE X → short name + circuit map → podium composing (1st, 2nd, 3rd, then the rest)
+let podTimers=[];
+function clearPodIntro(){ podTimers.forEach(clearTimeout); podTimers=[]; }
+function playPodiumIntro(rd){
+  clearPodIntro();
+  pod.innerHTML=`<div class="pod-intro"><div class="pi-race">Race ${rd.round}</div></div>`;
+  podTimers.push(setTimeout(()=>{
+    pod.innerHTML=`<div class="pod-intro"><div class="pi-name">${rd.flag||''} ${rd.short||''}</div>`
+      +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
+      +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
+  }, 850));
+  podTimers.push(setTimeout(()=>{ renderPodium(rd, true); }, 1750));
+}
+function renderPodium(rd, compose){
   const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
   const figs=order.map((p,i)=>{ if(!p)return''; const d=DR[p.code]||{};
-    return `<div class="pfig" style="--sc:${d.col||'#888'}">
+    const dly=compose?`;animation-delay:${(p.pos-1)*160}ms`:'';
+    return `<div class="pfig${compose?' pi':''}" style="--sc:${d.col||'#888'}${dly}">
       <img src="${IMGF(d.slug)}" style="height:${figH[i]}px" onerror="this.style.visibility='hidden'">
       <div class="pnm">${d.fam||p.code}</div>
       <div class="ptm">${p.teamName||''}</div>
@@ -165,7 +192,7 @@ function renderPodium(rd){
     return `<span class="ps" style="--pc:${d.col||'#888'}"><u>${s.pos}</u><b>${s.code}</b><i>+${s.pts}</i></span>`;}).join('');
   pod.innerHTML=`<div class="pttl">${rd.short||''} · Race result${rd.sprint?' · Sprint weekend':''}</div>`
     +`<div class="pod-figs">${figs}</div>`
-    +(list?`<div class="pod-list">${list}</div>`:'');
+    +(list?`<div class="pod-list${compose?' pi':''}"${compose?' style="animation-delay:540ms"':''}>${list}</div>`:'');
 }
 // controls — card 0 = welcome, 1..TOT = rounds
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
