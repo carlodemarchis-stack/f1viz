@@ -133,7 +133,8 @@ function renderWelcome(){
   document.getElementById('kick').innerHTML='2026 Season · The full grid';
   document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
   const availW=stage.clientWidth-6, availH=Math.max(150, stage.clientHeight-46);
-  const order=Object.keys(DR).sort((a,b)=>{const ta=DR[a].teamName||'',tb=DR[b].teamName||'';return ta<tb?-1:ta>tb?1:((DR[a].fam||'')<(DR[b].fam||'')?-1:1);});
+  const startSet=new Set(R[0].standings.map(s=>s.code));   // season-opening grid only (excludes mid-season subs like TSU)
+  const order=Object.keys(DR).filter(c=>startSet.has(c)).sort((a,b)=>{const ta=DR[a].teamName||'',tb=DR[b].teamName||'';return ta<tb?-1:ta>tb?1:((DR[a].fam||'')<(DR[b].fam||'')?-1:1);});
   const n=order.length, GW=7, TW=22;
   let boundaries=0; for(let i=1;i<n;i++) if(DR[order[i]].team!==DR[order[i-1]].team) boundaries++;
   const gaps=(n-1-boundaries)*GW + boundaries*TW;
