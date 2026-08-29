@@ -16,12 +16,12 @@ html,body{height:100%}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   background:radial-gradient(120% 90% at 50% 0%,#16244a 0%,#0c1430 42%,#070b1c 100%);color:#eef1f6;overflow:hidden}
 .film{position:relative;height:100vh;padding:26px 40px 104px;display:flex;flex-direction:column}
-.brand{font-size:19px;font-weight:800;letter-spacing:.14em;color:#fff;margin-bottom:10px;display:inline-flex;align-items:center;gap:2px}
+.hd{display:flex;align-items:center;gap:16px}
+.brand{font-size:20px;font-weight:800;letter-spacing:.14em;color:#fff;display:inline-flex;align-items:center;gap:2px;padding-right:16px;border-right:1px solid rgba(255,255,255,.16)}
 .brand span{color:#00D7B6}
-.hd .sub{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8ea0c0;margin-bottom:4px}
-.hd .kick{font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#7f8db0;display:flex;align-items:center;gap:6px}
-.hd .kick svg{height:12px;width:auto;border-radius:2px;display:inline-block}
-.hd h1{font-size:50px;line-height:1;margin:8px 0 0;font-weight:850;letter-spacing:-.02em;max-width:52vw}
+.hd .kick{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#dbe4f4;display:flex;align-items:center;gap:8px}
+.hd .kick svg{height:14px;width:auto;border-radius:2px;display:inline-block}
+.hd .sub{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7f8db0;padding-left:14px;border-left:1px solid rgba(255,255,255,.14)}
 /* race-result inset top-right: full figures at podium heights + points scorers */
 .podium{position:absolute;top:22px;right:38px;width:512px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3}
 .podium .pttl{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9fb0c8;margin-bottom:12px;text-align:center}
@@ -66,7 +66,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .credit b{color:#8ea0c0;font-weight:700}
 </style></head>
 <body><div class="film">
-  <div class="hd"><div class="brand">F1<span>viz</span></div><div class="sub">Drivers' Championship · Points · 2026</div><div class="kick" id="kick"></div><h1 id="ttl"></h1></div>
+  <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
   <div class="podium" id="podium"></div>
   <div class="stage"><div class="row" id="row"></div></div>
   <div class="baseline"></div>
@@ -102,8 +102,7 @@ let cur=0, timer=null;
 function clean(gp){ return gp.replace(/^Grand Prix (de |du |of )?/,'').replace(/ Grand Prix$/,''); }
 function setRound(i, animate){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
-  document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.short||''} · ${rd.circuit||''}`;   // flag may be emoji or inline SVG
-  document.getElementById('ttl').textContent=rd.gp;
+  document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
   document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
   // fit: largest leader height where the whole row fits the width
