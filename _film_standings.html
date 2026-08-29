@@ -128,18 +128,20 @@ function setRound(i, animate){
   let maxH=availH; for(let k=0;k<6;k++){ const tw=totalW(maxH); if(tw>availW) maxH=maxH*availW/tw; else break; }
   const wOf=s=>{ const h=maxH*s.pts/maxPts; return s.pts>0?Math.max(ASPECT*h,MINCOL):MINCOL; };
   const total=st.reduce((a,s)=>a+wOf(s),0)+(st.length-1)*GAP;
-  let x=(availW-total)/2+3; const seen={};
-  st.forEach(s=>{ const el=cells[s.code], h=Math.round(maxH*s.pts/maxPts), w=wOf(s); seen[s.code]=1;
-    el.style.opacity=1;
-    el.style.transform=`translateX(${(x+w/2).toFixed(1)}px) translateX(-50%)`;
-    el.classList.toggle('lead', s.pos===1); el.classList.toggle('zero', s.pts===0);
-    const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=(!img.dataset.broken&&s.pts>0)?'visible':'hidden';
-    const ptsEl=el.querySelector('.pts'); ptsEl.textContent=s.pts>0?s.pts:''; ptsEl.style.display=s.pts>0?'':'none';
-    el.querySelector('.rank').textContent=s.pos;
-    x+=w+GAP;
-  });
-  Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
-  playPodiumIntro(rd);
+  const applyStandings=()=>{ let x=(availW-total)/2+3; const seen={};
+    st.forEach(s=>{ const el=cells[s.code], h=Math.round(maxH*s.pts/maxPts), w=wOf(s); seen[s.code]=1;
+      el.style.opacity=1;
+      el.style.transform=`translateX(${(x+w/2).toFixed(1)}px) translateX(-50%)`;
+      el.classList.toggle('lead', s.pos===1); el.classList.toggle('zero', s.pts===0);
+      const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=(!img.dataset.broken&&s.pts>0)?'visible':'hidden';
+      const ptsEl=el.querySelector('.pts'); ptsEl.textContent=s.pts>0?s.pts:''; ptsEl.style.display=s.pts>0?'':'none';
+      el.querySelector('.rank').textContent=s.pos;
+      x+=w+GAP;
+    });
+    Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
+  };
+  if(animate){ playPodiumIntro(rd, applyStandings); }              // standings hold, then shift when the podium composes
+  else { clearPodIntro(); applyStandings(); renderPodium(rd, false); }   // resize/instant: no intro
 }
 function renderWelcome(){
   clearPodIntro();
@@ -168,7 +170,7 @@ function renderWelcome(){
 // staged podium reveal: RACE X → short name + circuit map → podium composing (1st, 2nd, 3rd, then the rest)
 let podTimers=[];
 function clearPodIntro(){ podTimers.forEach(clearTimeout); podTimers=[]; }
-function playPodiumIntro(rd){
+function playPodiumIntro(rd, onCompose){
   clearPodIntro();
   pod.innerHTML=`<div class="pod-intro"><div class="pi-race">Race ${rd.round}</div></div>`;
   podTimers.push(setTimeout(()=>{
@@ -176,7 +178,7 @@ function playPodiumIntro(rd){
       +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
       +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
   }, 850));
-  podTimers.push(setTimeout(()=>{ renderPodium(rd, true); }, 1750));
+  podTimers.push(setTimeout(()=>{ onCompose&&onCompose(); renderPodium(rd, true); }, 1750));   // standings shift in sync with the podium composing
 }
 function renderPodium(rd, compose){
   const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
