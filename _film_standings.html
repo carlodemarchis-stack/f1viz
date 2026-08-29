@@ -66,9 +66,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .welcome h2{font-size:60px;font-weight:850;letter-spacing:-.02em;line-height:1.03;margin:0}
 .welcome p{font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#8ea0c0;margin:16px 0 0}
 .team-logos{position:absolute;inset:0;pointer-events:none;z-index:2}
-.team-asset{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:piFade .6s backwards}
-.team-asset .tlogo{height:22px;width:auto;max-width:130px;object-fit:contain;opacity:.96}
-.team-asset .tcar{width:158px;height:auto;filter:drop-shadow(0 5px 9px rgba(0,0,0,.5))}
+.team-asset{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:16px;animation:piFade .6s backwards}
+.team-asset .tlogo{height:22px;width:auto;max-width:120px;object-fit:contain;opacity:.96}
+.team-asset .tcar{width:112px;height:auto;filter:drop-shadow(0 5px 9px rgba(0,0,0,.5))}
 /* controls */
 .controls{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;
   background:rgba(10,16,34,.82);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 12px;backdrop-filter:blur(8px);z-index:10}
@@ -176,8 +176,8 @@ function renderWelcome(){
   // above each team's pair: the car, and above the car the team logo
   const logos=document.getElementById('teamLogos'); logos.innerHTML='';
   Object.keys(teamX).forEach((t,i)=>{ const {L,R}=teamX[t], cx=(L+R)/2;
-    const a=document.createElement('div'); a.className='team-asset'; a.style.left=cx.toFixed(1)+'px'; a.style.bottom=(H+16)+'px'; a.style.animationDelay=(i*45)+'ms';
-    a.innerHTML=`<img class="tlogo" src="${LOGO(t)}" onerror="this.style.display='none'"><img class="tcar" src="${CAR(t)}" onerror="this.style.display='none'">`;
+    const a=document.createElement('div'); a.className='team-asset'; a.style.left=cx.toFixed(1)+'px'; a.style.bottom=(H+34)+'px'; a.style.animationDelay=(i*45)+'ms';
+    a.innerHTML=`<img class="tcar" src="${CAR(t)}" onerror="this.style.display='none'"><img class="tlogo" src="${LOGO(t)}" onerror="this.style.display='none'">`;
     logos.appendChild(a);
   });
 }
