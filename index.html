@@ -38,6 +38,8 @@ button{font-family:inherit}
 
 /* ---------- top bar ---------- */
 .topbar{position:relative;display:flex;align-items:center;gap:16px;padding:13px 26px;border-bottom:1px solid var(--line-2);z-index:5}
+.racenote{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#f4d000;color:#161200;font-weight:800;font-size:11px;letter-spacing:.02em;padding:4px 13px;border-radius:999px;white-space:nowrap;pointer-events:none;z-index:1}
+@media (max-width:1280px){.racenote{display:none}}   /* only when there's empty middle space in landscape */
 .brand{font-weight:800;font-size:19px;letter-spacing:.14em;display:flex;align-items:center;gap:2px}
 .brand span{color:var(--c);transition:color .4s}
 .modes{display:flex;gap:3px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:3px}
@@ -742,6 +744,7 @@ button{font-family:inherit}
       <button data-mode="constructors">Constructors</button>
       <button data-mode="races">Races</button>
     </div>
+    <div class="racenote">Getting ready for Monza! This app will be updated after the race.</div>
     <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span></div>
   </header>
 
