@@ -50,6 +50,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .d.lead .glow{position:absolute;left:50%;bottom:20px;width:64%;height:70%;transform:translateX(-50%);border-radius:50%;
   background:radial-gradient(closest-side,var(--dc),transparent 72%);opacity:.32;filter:blur(8px);z-index:-1}
 .baseline{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);margin:0 40px}
+.welcome{position:absolute;top:15%;left:0;right:0;text-align:center;z-index:2;pointer-events:none}
+.welcome h2{font-size:60px;font-weight:850;letter-spacing:-.02em;line-height:1.03;margin:0}
+.welcome p{font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#8ea0c0;margin:16px 0 0}
 /* controls */
 .controls{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;
   background:rgba(10,16,34,.82);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 12px;backdrop-filter:blur(8px);z-index:10}
@@ -68,6 +71,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 <body><div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
   <div class="podium" id="podium"></div>
+  <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — round by round</p></div>
   <div class="stage"><div class="row" id="row"></div></div>
   <div class="baseline"></div>
 </div>
@@ -94,14 +98,14 @@ const cells={};
 Object.keys(DR).forEach(code=>{
   const d=DR[code], el=document.createElement('div'); el.className='d'; el.style.opacity=0; el.style.setProperty('--dc',d.col||'#888');
   el.innerHTML=`<span class="glow"></span><span class="pts" style="background:${d.col||'#888'};color:${txt(d.col)}"></span>`
-    +`<img class="fig" src="${IMGF(d.slug)}" alt="${code}" style="height:0" onerror="this.style.visibility='hidden'">`
+    +`<img class="fig" src="${IMGF(d.slug)}" alt="" style="height:0" onerror="this.dataset.broken='1';this.style.visibility='hidden'">`
     +`<span class="code">${code}</span><span class="rank"></span>`;
   row.appendChild(el); cells[code]=el;
 });
-let cur=0, timer=null;
-function clean(gp){ return gp.replace(/^Grand Prix (de |du |of )?/,'').replace(/ Grand Prix$/,''); }
+let cur=0, card=0, timer=null;
 function setRound(i, animate){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
+  document.getElementById('welcome').hidden=true; pod.style.display='';   // leaving the welcome card
   document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
   document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
@@ -116,13 +120,35 @@ function setRound(i, animate){
     el.style.opacity=1;
     el.style.transform=`translateX(${(x+w/2).toFixed(1)}px) translateX(-50%)`;
     el.classList.toggle('lead', s.pos===1); el.classList.toggle('zero', s.pts===0);
-    const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=s.pts>0?'visible':'hidden';
+    const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=(!img.dataset.broken&&s.pts>0)?'visible':'hidden';
     const ptsEl=el.querySelector('.pts'); ptsEl.textContent=s.pts>0?s.pts:''; ptsEl.style.display=s.pts>0?'':'none';
     el.querySelector('.rank').textContent=s.pos;
     x+=w+GAP;
   });
   Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
   renderPodium(rd);
+}
+function renderWelcome(){
+  document.getElementById('welcome').hidden=false; pod.style.display='none';
+  document.getElementById('kick').innerHTML='2026 Season · The full grid';
+  document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
+  const availW=stage.clientWidth-6, availH=Math.max(150, stage.clientHeight-46);
+  const order=Object.keys(DR).sort((a,b)=>{const ta=DR[a].teamName||'',tb=DR[b].teamName||'';return ta<tb?-1:ta>tb?1:((DR[a].fam||'')<(DR[b].fam||'')?-1:1);});
+  const n=order.length, GW=7, TW=22;
+  let boundaries=0; for(let i=1;i<n;i++) if(DR[order[i]].team!==DR[order[i-1]].team) boundaries++;
+  const gaps=(n-1-boundaries)*GW + boundaries*TW;
+  const H=Math.min(availH, (availW-gaps)/(n*ASPECT)), fw=ASPECT*H;
+  let x=(availW-(n*fw+gaps))/2+3, prevTeam=null; const seen={};
+  order.forEach(code=>{ const el=cells[code], d=DR[code]; seen[code]=1;
+    if(prevTeam!==null) x += (d.team!==prevTeam?TW:GW); prevTeam=d.team;
+    el.style.opacity=1; el.classList.remove('lead','zero');
+    el.style.transform=`translateX(${(x+fw/2).toFixed(1)}px) translateX(-50%)`;
+    const img=el.querySelector('.fig'); img.style.height=Math.round(H)+'px'; img.style.visibility=img.dataset.broken?'hidden':'visible';
+    el.querySelector('.pts').style.display='none';
+    el.querySelector('.code').textContent=code; el.querySelector('.rank').textContent='';
+    x+=fw;
+  });
+  Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });
 }
 const MEDAL={1:'🥇',2:'🥈',3:'🥉'};
 function renderPodium(rd){
@@ -140,20 +166,21 @@ function renderPodium(rd){
     +`<div class="pod-figs">${figs}</div>`
     +(list?`<div class="pod-list">${list}</div>`:'');
 }
-// controls
+// controls — card 0 = welcome, 1..TOT = rounds
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+function show(c){ card=Math.max(0,Math.min(TOT,c)); if(card===0) renderWelcome(); else setRound(card-1,true); }
 function stop(){ clearInterval(timer); timer=null; document.getElementById('playIcon').innerHTML=playIc; }
-function play(){ if(timer){stop();return;} if(cur>=TOT-1) setRound(0,true);
+function play(){ if(timer){stop();return;} if(card>=TOT) show(0);
   document.getElementById('playIcon').innerHTML=pauseIc;
-  timer=setInterval(()=>{ if(cur>=TOT-1){stop();return;} setRound(cur+1,true); }, 2600); }
+  timer=setInterval(()=>{ if(card>=TOT){stop();return;} show(card+1); }, 2600); }
 document.getElementById('play').onclick=play;
-document.getElementById('next').onclick=()=>{stop();setRound(cur+1,true);};
-document.getElementById('prev').onclick=()=>{stop();setRound(cur-1,true);};
-document.getElementById('restart').onclick=()=>{stop();setRound(0,true);};
+document.getElementById('next').onclick=()=>{stop();show(card+1);};
+document.getElementById('prev').onclick=()=>{stop();show(card-1);};
+document.getElementById('restart').onclick=()=>{stop();show(0);};
 document.getElementById('fs').onclick=()=>{ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); };
-addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();setRound(cur+1,true);} else if(e.key==='ArrowLeft'){stop();setRound(cur-1,true);} else if(e.key===' '){e.preventDefault();play();} });
-let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>setRound(cur,false),120);});
+addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} });
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,false); },120);});
 document.getElementById('ctot').textContent=TOT;
-setRound(TOT-1,false);   // open on the latest completed round
+show(0);   // open on the welcome card
 </script>
 </body></html>
