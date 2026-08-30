@@ -15,11 +15,12 @@
 html,body{height:100%}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   background:radial-gradient(120% 90% at 50% 0%,#16244a 0%,#0c1430 42%,#070b1c 100%);color:#eef1f6;overflow:hidden}
-.film{position:relative;z-index:1;height:100vh;padding:26px 40px 104px;display:flex;flex-direction:column}
-.bgvid{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.bgvid[hidden]{display:none}
-.bgvid video{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
-.bgvid::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,14,32,.52) 0%,rgba(9,14,32,.64) 52%,rgba(7,11,22,.92) 100%)}
+.film{position:relative;height:100vh;padding:26px 40px 104px;display:flex;flex-direction:column}
+.pod-bg,.pod-bg-dim{position:absolute;inset:0;display:none;z-index:0}
+.pod-bg{width:100%;height:100%;object-fit:cover}
+.pod-bg-dim{background:linear-gradient(180deg,rgba(9,14,32,.5) 0%,rgba(9,14,32,.62) 55%,rgba(7,11,22,.84) 100%)}
+.podium.has-vid .pod-bg,.podium.has-vid .pod-bg-dim{display:block}
+.pod-inner{position:relative;z-index:1}
 .hd{display:flex;align-items:center;gap:16px}
 .brand{font-size:20px;font-weight:800;letter-spacing:.14em;color:#fff;display:inline-flex;align-items:center;gap:2px;padding-right:16px;border-right:1px solid rgba(255,255,255,.16)}
 .brand span{color:#00D7B6}
@@ -27,7 +28,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .hd .kick svg{height:14px;width:auto;border-radius:2px;display:inline-block}
 .hd .sub{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7f8db0;padding-left:14px;border-left:1px solid rgba(255,255,255,.14)}
 /* race-result inset top-right: full figures at podium heights + points scorers */
-.podium{position:absolute;top:22px;right:38px;width:560px;min-height:262px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3}
+.podium{position:absolute;top:22px;right:38px;width:560px;min-height:262px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3;overflow:hidden}
 .podium .pttl{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9fb0c8;margin-bottom:12px;text-align:center}
 .pod-figs{display:flex;align-items:flex-end;justify-content:center;gap:24px;margin-bottom:14px}
 .pfig{display:flex;flex-direction:column;align-items:center;gap:2px;width:150px}
@@ -103,10 +104,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .credit{position:fixed;right:20px;bottom:26px;font-size:10px;color:#54648a;z-index:5;text-align:right;line-height:1.4}
 .credit b{color:#8ea0c0;font-weight:700}
 </style></head>
-<body><div class="bgvid" id="bgvid" hidden><video src="media/aus.mp4" muted loop playsinline preload="auto"></video></div>
-<div class="film">
+<body><div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
-  <div class="podium" id="podium"></div>
+  <div class="podium" id="podium"><video class="pod-bg" id="podVid" src="media/aus.mp4" muted loop playsinline preload="auto"></video><div class="pod-bg-dim"></div><div class="pod-inner" id="podInner"></div></div>
   <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — round by round</p></div>
   <div class="stage"><div class="row" id="row"></div><div class="team-logos" id="teamLogos"></div></div>
   <div class="baseline"></div>
@@ -132,8 +132,8 @@ const CAR=t=>(window.CARB64&&window.CARB64[t])||('img/cars/'+t+'.png');
 const txt=hex=>{const h=(hex||'#888').replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return (0.299*r+0.587*g+0.114*b)>150?'#0b1120':'#fff';};
 const ASPECT=0.34, GAP=7, MINCOL=24;
 const row=document.getElementById('row'), stage=row.parentElement, pod=document.getElementById('podium');
-const bgvid=document.getElementById('bgvid'), bgv=bgvid&&bgvid.querySelector('video');
-function setBg(on){ if(!bgvid)return; bgvid.hidden=!on; if(on){ try{bgv.currentTime=0;}catch(e){} bgv&&bgv.play&&bgv.play().catch(()=>{}); } else { try{bgv&&bgv.pause();}catch(e){} } }
+const podC=document.getElementById('podInner'), podVid=document.getElementById('podVid');
+function setBg(on){ if(!pod)return; pod.classList.toggle('has-vid', on); if(on){ podVid&&podVid.play&&podVid.play().catch(()=>{}); } else { try{podVid&&podVid.pause();}catch(e){} } }
 // build one persistent element per driver (union of all)
 const cells={};
 Object.keys(DR).forEach(code=>{
@@ -156,7 +156,7 @@ function setRound(i, dir){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
   document.getElementById('welcome').hidden=true; pod.style.display=''; document.getElementById('teamLogos').innerHTML='';   // leaving the welcome card
   [...row.querySelectorAll('.pt-pop')].forEach(p=>p.remove());
-  setBg(rd.round===1);   // cinematic race footage behind Round 1 only
+  setBg(true);   // cinematic race footage behind the podium panel (one clip reused for every round for now)
   const gained={}; (rd.scorers||[]).forEach(x=>gained[x.code]=x.pts);   // points won this round, for the floating popups
   document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
@@ -220,9 +220,9 @@ let podTimers=[];
 function clearPodIntro(){ podTimers.forEach(clearTimeout); podTimers=[]; }
 function playPodiumIntro(rd, onCompose){
   clearPodIntro();
-  pod.innerHTML=`<div class="pod-intro"><div class="pi-race">Race ${rd.round}</div></div>`;
+  podC.innerHTML=`<div class="pod-intro"><div class="pi-race">Race ${rd.round}</div></div>`;
   podTimers.push(setTimeout(()=>{
-    pod.innerHTML=`<div class="pod-intro"><div class="pi-name">${rd.flag||''} ${rd.short||''}</div>`
+    podC.innerHTML=`<div class="pod-intro"><div class="pi-name">${rd.flag||''} ${rd.short||''}</div>`
       +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
       +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
   }, 850));
@@ -241,7 +241,7 @@ function renderPodium(rd, compose){
   const rest=(rd.scorers||[]).slice(3);
   const list=rest.map(s=>{ const d=DR[s.code]||{};
     return `<span class="ps" style="--pc:${d.col||'#888'}"><u>${s.pos}</u><b>${s.code}</b><i>+${s.pts}</i></span>`;}).join('');
-  pod.innerHTML=`<div class="pod-figs">${figs}</div>`
+  podC.innerHTML=`<div class="pod-figs">${figs}</div>`
     +(list?`<div class="pod-list${compose?' pi':''}"${compose?' style="animation-delay:540ms"':''}>${list}</div>`:'');
 }
 // controls — card 0 = welcome, 1..TOT = rounds
