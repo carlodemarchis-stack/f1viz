@@ -151,8 +151,8 @@ Object.keys(DR).forEach(code=>{
   row.appendChild(el); cells[code]=el;
 });
 let cur=0, card=0, playing=false, composing=false, nextTimer=null;
-// reveal with or without the race clip (persisted; URL ?video=0 / ?video=1 overrides)
-let useVideo = localStorage.getItem('f1viz.filmvideo')!=='0';
+// reveal with or without the race clip — DEFAULT OFF (no clip); persisted; URL ?video=1 / ?video=0 overrides
+let useVideo = localStorage.getItem('f1viz.filmvideo')==='1';
 if(/[?&](video=0|novideo)/.test(location.search)) useVideo=false;
 if(/[?&]video=1/.test(location.search)) useVideo=true;
 // sequence timing (ms): Race X → circuit map → video (plays to its own end) → podium → standings
@@ -277,7 +277,14 @@ function renderPodium(rd, compose){
 }
 // controls — card 0 = welcome, 1..TOT = rounds
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0) renderWelcome(); else setRound(card-1, back?'back':'fwd'); }   // forward = full reveal, backward = direct
+function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0) renderWelcome(); else setRound(card-1, back?'back':'fwd'); syncHash(); }   // forward = full reveal, backward = direct
+// URL state: #<round> (or #0 = welcome) so a reload / shared link returns to the same card
+function syncHash(){ try{ history.replaceState(null,'','#'+card); }catch(e){} }
+function applyHash(){ const n=parseInt((location.hash||'').replace('#',''),10);
+  card=(isNaN(n)||n<=0)?0:Math.min(TOT,n);
+  if(card===0) renderWelcome(); else setRound(card-1,'instant');   // direct restore — don't replay the intro/clip
+}
+addEventListener('hashchange', ()=>{ stop(); applyHash(); });
 function stop(){ playing=false; clearTimeout(nextTimer); nextTimer=null; document.getElementById('playIcon').innerHTML=playIc; }
 function play(){ if(playing){ stop(); return; } playing=true; document.getElementById('playIcon').innerHTML=pauseIc;
   if(card>=TOT) show(0);                 // wrap back to the welcome card
@@ -322,6 +329,6 @@ document.getElementById('ctot').textContent=TOT;
   addEventListener('keydown',e=>{ if(e.key==='Escape')pop.hidden=true; });
 })();
 
-show(0);   // open on the welcome card
+applyHash();   // restore the card from the URL (or the welcome card if none)
 </script>
 </body></html>
