@@ -30,6 +30,10 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .hd .sub{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#7f8db0;padding-left:14px;border-left:1px solid rgba(255,255,255,.14)}
 /* race-result inset top-right: full figures at podium heights + points scorers */
 .podium{position:absolute;top:22px;right:38px;width:560px;min-height:262px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px 24px 16px;backdrop-filter:blur(4px);z-index:3;overflow:hidden}
+/* big, light race number to the left of the podium panel — reinforces which round at a glance */
+.race-tag{position:absolute;top:22px;right:632px;height:262px;display:flex;align-items:center;justify-content:flex-end;
+  font-weight:800;font-style:italic;letter-spacing:-.05em;line-height:.8;font-size:clamp(96px,16vh,196px);
+  color:rgba(255,255,255,.09);pointer-events:none;user-select:none;z-index:2;white-space:nowrap}
 .podium .pttl{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#9fb0c8;margin-bottom:12px;text-align:center}
 .pod-figs{display:flex;align-items:flex-end;justify-content:center;gap:24px;margin-bottom:14px}
 .pfig{display:flex;flex-direction:column;align-items:center;gap:2px;width:150px}
@@ -109,6 +113,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 </style></head>
 <body><div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · 2026</div></div>
+  <div class="race-tag" id="raceTag"></div>
   <div class="podium" id="podium"><video class="pod-bg" id="podVid" src="media/aus.mp4" muted playsinline preload="auto"></video><div class="pod-bg-dim"></div><div class="pod-inner" id="podInner"></div></div>
   <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — race by race</p></div>
   <div class="stage"><div class="row" id="row"></div><div class="team-logos" id="teamLogos"></div></div>
@@ -174,6 +179,7 @@ function setRound(i, dir){
   [...row.querySelectorAll('.pt-pop')].forEach(p=>p.remove());
   const gained={}; (rd.scorers||[]).forEach(x=>gained[x.code]=x.pts);   // points won this round, for the floating popups
   document.getElementById('kick').innerHTML=`Race ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // "Race" to match the reveal; flag may be emoji or inline SVG
+  document.getElementById('raceTag').textContent='R'+rd.round;   // big light round number left of the podium
   document.getElementById('cnum').textContent=cur+1;
   document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
   // fit: largest leader height where the whole row fits the width
@@ -202,6 +208,7 @@ function setRound(i, dir){
 }
 function renderWelcome(){
   clearPodIntro(); composing=false; setBg(false);
+  document.getElementById('raceTag').textContent='';
   document.getElementById('welcome').hidden=false; pod.style.display='none';
   document.getElementById('kick').innerHTML='2026 Season · The full grid';
   document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
