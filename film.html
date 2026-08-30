@@ -20,6 +20,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .pod-bg{width:100%;height:100%;object-fit:cover}
 .pod-bg-dim{background:linear-gradient(180deg,rgba(9,14,32,.5) 0%,rgba(9,14,32,.62) 55%,rgba(7,11,22,.84) 100%)}
 .podium.has-vid .pod-bg,.podium.has-vid .pod-bg-dim{display:block}
+.podium.clean .pod-bg-dim{display:none}   /* while the clip plays alone, nothing (not even the dim) sits on top */
 .pod-inner{position:relative;z-index:1}
 .hd{display:flex;align-items:center;gap:16px}
 .brand{font-size:20px;font-weight:800;letter-spacing:.14em;color:#fff;display:inline-flex;align-items:center;gap:2px;padding-right:16px;border-right:1px solid rgba(255,255,255,.16)}
@@ -46,7 +47,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 @keyframes piRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes piFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .pod-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:230px;text-align:center;gap:6px}
-.pi-race{font-size:52px;font-weight:850;letter-spacing:.03em;animation:piPop .55s cubic-bezier(.2,.85,.25,1)}
+.pi-race{font-size:82px;font-weight:850;letter-spacing:.01em;line-height:1;animation:piPop .55s cubic-bezier(.2,.85,.25,1)}
 .pi-name{font-size:30px;font-weight:850;display:flex;gap:9px;align-items:center;justify-content:center;animation:piFade .5s}
 .pi-name svg{height:22px;width:auto;border-radius:2px}
 .pi-map{max-width:280px;max-height:130px;width:auto;filter:grayscale(1) brightness(1.12);margin-top:4px;animation:piFade .55s .05s backwards}
@@ -145,7 +146,10 @@ Object.keys(DR).forEach(code=>{
     +`<span class="code">${code}</span><span class="rank"></span>`;
   row.appendChild(el); cells[code]=el;
 });
-let cur=0, card=0, timer=null;
+let cur=0, card=0, playing=false, composing=false, nextTimer=null;
+// sequence timing (ms): Race X → circuit map → video (plays to its own end) → podium → standings
+const RACE_MS=1000, MAP_MS=1900, PODIUM_MS=1300, DWELL=3200, VID_FALLBACK=15000;
+function advanceSoon(){ clearTimeout(nextTimer); nextTimer=setTimeout(()=>{ if(!playing)return; if(card>=TOT){stop();return;} show(card+1); }, card===0?600:DWELL); }
 let showPointsPop = !/[?&]pop=0/.test(location.search);   // floating "+pts" when drivers move — press "p" or ?pop=0 to disable
 function spawnPop(el, pts, col, idx){
   if(!showPointsPop||!el) return;
@@ -158,7 +162,6 @@ function setRound(i, dir){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
   document.getElementById('welcome').hidden=true; pod.style.display=''; document.getElementById('teamLogos').innerHTML='';   // leaving the welcome card
   [...row.querySelectorAll('.pt-pop')].forEach(p=>p.remove());
-  setBg(true);   // cinematic race footage behind the podium panel (one clip reused for every round for now)
   const gained={}; (rd.scorers||[]).forEach(x=>gained[x.code]=x.pts);   // points won this round, for the floating popups
   document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
@@ -182,11 +185,11 @@ function setRound(i, dir){
     });
     Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
   };
-  if(dir==='fwd'){ playPodiumIntro(rd, ()=>applyStandings(true)); }         // forward: full reveal, standings shift after compose, +pts popups
-  else { clearPodIntro(); applyStandings(false); renderPodium(rd, false); }   // backward / resize: direct — no intro, no popups, standings move now
+  if(dir==='fwd'){ composing=true; playPodiumIntro(rd, ()=>{ applyStandings(true); composing=false; if(playing) advanceSoon(); }); }  // forward: staged reveal, standings after the podium
+  else { clearPodIntro(); composing=false; setBg(true); applyStandings(false); renderPodium(rd, false); }   // backward / resize: direct — static podium over the clip, standings now
 }
 function renderWelcome(){
-  clearPodIntro(); setBg(false);
+  clearPodIntro(); composing=false; setBg(false);
   document.getElementById('welcome').hidden=false; pod.style.display='none';
   document.getElementById('kick').innerHTML='2026 Season · The full grid';
   document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
@@ -217,19 +220,35 @@ function renderWelcome(){
     logos.appendChild(a);
   });
 }
-// staged podium reveal: RACE X → short name + circuit map → podium composing (1st, 2nd, 3rd, then the rest)
-let podTimers=[];
-function clearPodIntro(){ podTimers.forEach(clearTimeout); podTimers=[]; }
-function playPodiumIntro(rd, onCompose){
+// staged reveal: RACE X (big) → circuit map (a bit longer) → the race clip plays CLEAN to its own end
+// (nothing on top) → podium animation → standings move.
+let podTimers=[], vidWait=null, vidFb=null;
+function clearVidWait(){ if(vidWait){ podVid.removeEventListener('ended', vidWait); vidWait=null; } if(vidFb){ clearTimeout(vidFb); vidFb=null; } }
+function clearPodIntro(){ podTimers.forEach(clearTimeout); podTimers=[]; clearVidWait(); pod.classList.remove('clean'); }
+function playPodiumIntro(rd, onStandings){
   clearPodIntro();
+  setBg(false);   // no clip yet — the Race X / map intro sits on the plain panel
+  // Stage A — Race X (big)
   podC.innerHTML=`<div class="pod-intro"><div class="pi-race">Race ${rd.round}</div></div>`;
+  // Stage B — circuit name + map + circuit (held a bit longer)
   podTimers.push(setTimeout(()=>{
     podC.innerHTML=`<div class="pod-intro"><div class="pi-name">${rd.flag||''} ${rd.short||''}</div>`
       +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
       +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
-  }, 850));
-  podTimers.push(setTimeout(()=>{ renderPodium(rd, true); }, 1750));    // podium composes: 1st, 2nd, 3rd, then the rest
-  podTimers.push(setTimeout(()=>{ onCompose&&onCompose(); }, 2800));    // once fully composed, the standings move
+  }, RACE_MS));
+  // Stage C — clear the panel (nothing on top) and let the clip play to its END
+  podTimers.push(setTimeout(()=>{
+    podC.innerHTML='';        // nothing over the video
+    pod.classList.add('clean'); setBg(true);   // start the clip from 0 (no loop → ends on its last frame), no dim
+    const toPodium=()=>{ clearVidWait(); pod.classList.remove('clean');
+      renderPodium(rd, true);                                                   // Stage D — podium animation
+      podTimers.push(setTimeout(()=>{ onStandings&&onStandings(); }, PODIUM_MS)); // Stage E — standings move
+    };
+    vidWait=()=>toPodium();
+    podVid.addEventListener('ended', vidWait, {once:true});
+    const dur=(podVid.duration && isFinite(podVid.duration) && podVid.duration>1) ? podVid.duration*1000+300 : VID_FALLBACK;
+    vidFb=setTimeout(toPodium, dur);   // safety net if 'ended' never fires (missing clip / blocked autoplay)
+  }, RACE_MS+MAP_MS));
 }
 function renderPodium(rd, compose){
   const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
@@ -249,10 +268,11 @@ function renderPodium(rd, compose){
 // controls — card 0 = welcome, 1..TOT = rounds
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
 function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0) renderWelcome(); else setRound(card-1, back?'back':'fwd'); }   // forward = full reveal, backward = direct
-function stop(){ clearInterval(timer); timer=null; document.getElementById('playIcon').innerHTML=playIc; }
-function play(){ if(timer){stop();return;} if(card>=TOT) show(0);
-  document.getElementById('playIcon').innerHTML=pauseIc;
-  timer=setInterval(()=>{ if(card>=TOT){stop();return;} show(card+1); }, 4200); }
+function stop(){ playing=false; clearTimeout(nextTimer); nextTimer=null; document.getElementById('playIcon').innerHTML=playIc; }
+function play(){ if(playing){ stop(); return; } playing=true; document.getElementById('playIcon').innerHTML=pauseIc;
+  if(card>=TOT) show(0);                 // wrap back to the welcome card
+  if(!composing) advanceSoon();          // if a round's sequence is already running, its finish will chain the next
+}
 document.getElementById('play').onclick=play;
 document.getElementById('next').onclick=()=>{stop();show(card+1);};
 document.getElementById('prev').onclick=()=>{stop();show(card-1);};
