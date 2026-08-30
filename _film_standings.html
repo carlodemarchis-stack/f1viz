@@ -111,7 +111,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 <body><div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
   <div class="podium" id="podium"><video class="pod-bg" id="podVid" src="media/aus.mp4" muted playsinline preload="auto"></video><div class="pod-bg-dim"></div><div class="pod-inner" id="podInner"></div></div>
-  <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — round by round</p></div>
+  <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — race by race</p></div>
   <div class="stage"><div class="row" id="row"></div><div class="team-logos" id="teamLogos"></div></div>
   <div class="baseline"></div>
 </div>
@@ -171,7 +171,7 @@ function setRound(i, dir){
   document.getElementById('welcome').hidden=true; pod.style.display=''; document.getElementById('teamLogos').innerHTML='';   // leaving the welcome card
   [...row.querySelectorAll('.pt-pop')].forEach(p=>p.remove());
   const gained={}; (rd.scorers||[]).forEach(x=>gained[x.code]=x.pts);   // points won this round, for the floating popups
-  document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
+  document.getElementById('kick').innerHTML=`Race ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // "Race" to match the reveal; flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
   document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
   // fit: largest leader height where the whole row fits the width
