@@ -47,11 +47,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .pod-list .ps b{color:var(--pc);font-weight:800;margin-right:4px}
 .pod-list .ps i{color:#dbe4f4;font-style:normal}
 /* podium panel intro animation */
-@keyframes piPop{from{opacity:0;transform:scale(.72)}to{opacity:1;transform:none}}
 @keyframes piRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes piFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .pod-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:230px;text-align:center;gap:6px}
-.pi-race{font-size:82px;font-weight:850;letter-spacing:.01em;line-height:1;animation:piPop .55s cubic-bezier(.2,.85,.25,1)}
 .pi-name{font-size:30px;font-weight:850;display:flex;gap:9px;align-items:center;justify-content:center;animation:piFade .5s}
 .pi-name svg{height:22px;width:auto;border-radius:2px}
 .pi-map{max-width:280px;max-height:130px;width:auto;filter:grayscale(1) brightness(1.12);margin-top:4px;animation:piFade .55s .05s backwards}
@@ -163,7 +161,7 @@ let fastMode = localStorage.getItem('f1viz.filmfast')==='1';
 if(/[?&]fast=1/.test(location.search)) fastMode=true;
 if(/[?&]fast=0/.test(location.search)) fastMode=false;
 // sequence timing (ms): Race X → circuit map → video (plays to its own end) → podium → standings
-const RACE_MS=1000, MAP_MS=900, PODIUM_MS=1300, DWELL=3200, VID_FALLBACK=15000;
+const MAP_MS=900, PODIUM_MS=1300, DWELL=3200, VID_FALLBACK=15000;
 function advanceSoon(){ clearTimeout(nextTimer); nextTimer=setTimeout(()=>{ if(!playing)return; if(card>=TOT){ card=0; show(1); return; } show(card+1); }, card===0?600:DWELL); }   // last GP → loop back to Race 1 (forward reveal), skipping the welcome card
 let showPointsPop = !/[?&]pop=0/.test(location.search);   // floating "+pts" when drivers move — press "p" or ?pop=0 to disable
 function spawnPop(el, pts, col, idx){
@@ -252,15 +250,11 @@ function playPodiumIntro(rd, onStandings){
     podTimers.push(setTimeout(()=>{ onStandings&&onStandings(); }, PODIUM_MS));
     return;
   }
-  // Stage A — Race X (big)
-  podC.innerHTML=`<div class="pod-intro"><div class="pi-race">Race ${rd.round}</div></div>`;
-  // Stage B — circuit name + map + circuit (held a bit longer)
-  podTimers.push(setTimeout(()=>{
-    podC.innerHTML=`<div class="pod-intro"><div class="pi-name">${rd.flag||''} ${rd.short||''}</div>`
-      +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
-      +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
-  }, RACE_MS));
-  // Stage C — WITH clip: clear the panel (nothing on top) and let it play to its END, then podium.
+  // Stage A — circuit name + map (the "Race X" card is gone; the big R<n> beside the panel marks the round)
+  podC.innerHTML=`<div class="pod-intro"><div class="pi-name">${rd.flag||''} ${rd.short||''}</div>`
+    +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
+    +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
+  // Stage B — WITH clip: clear the panel (nothing on top) and let it play to its END, then podium.
   //           WITHOUT clip: go straight from the map to the podium.
   const toPodium=()=>{ clearVidWait(); pod.classList.remove('clean');
     renderPodium(rd, true);                                                   // Stage D — podium animation
@@ -274,7 +268,7 @@ function playPodiumIntro(rd, onStandings){
     podVid.addEventListener('ended', vidWait, {once:true});
     const dur=(podVid.duration && isFinite(podVid.duration) && podVid.duration>1) ? podVid.duration*1000+300 : VID_FALLBACK;
     vidFb=setTimeout(toPodium, dur);   // safety net if 'ended' never fires (missing clip / blocked autoplay)
-  }, RACE_MS+MAP_MS));
+  }, MAP_MS));
 }
 function renderPodium(rd, compose){
   const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
