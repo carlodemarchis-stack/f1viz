@@ -152,6 +152,7 @@ button{font-family:inherit}
 .clegend .cli{display:flex;align-items:center;gap:5px}
 .clegend .cli i{width:11px;height:9px;border-radius:2px;background:var(--c);opacity:.85}
 .clegend .cli.b2 i{opacity:.32}
+.clegend .cli.b3 i{opacity:.16}
 .clegend .cli.spr i{background:#ff3d9a;opacity:.9}
 .clegend .cli b{color:var(--ink);font-weight:800;margin-left:3px;font-variant-numeric:tabular-nums}
 .chart2{flex:1;display:flex;flex-direction:column;min-height:0}
@@ -886,6 +887,15 @@ const teamRegulars = tid => teamCars(tid).filter(d=>d.code!==TEMP_R12[tid]);    
 const teamTemp = tid => { const c=TEMP_R12[tid]; return c ? D.find(x=>x.code===c) : null; };
 // drivers who actually raced FOR team `tid` in round `rnum` (respects the per-race tid seat swap)
 const teamRaceEntries = (tid,rnum) => D.map(d=>{ const r=d.races.find(x=>x.r===rnum && (x.tid||d.teamId)===tid); return r?{d,r}:null; }).filter(Boolean).sort((a,b)=>a.d.pos-b.d.pos);
+// points a driver scored FOR a given team (respecting tid) — total, and per-round cumulative over DATA.rounds
+const teamAttrPts = (d,tid) => d.races.reduce((s,r)=> s + (((r.tid||d.teamId)===tid)?(r.pts||0):0), 0);
+const teamCumProg = (d,tid) => { let cum=0; return DATA.rounds.map(rd=>{ const r=d.races.find(x=>x.r===rd.r && (x.tid||d.teamId)===tid); if(r) cum+=(r.pts||0); return cum; }); };
+// a team's scoring contributors (2 regulars + any temp), each with team-attributed total + cumulative, biggest first
+const teamContribs = c => { const l=[...teamRegulars(c.teamId)]; const t=teamTemp(c.teamId); if(t) l.push(t);
+  return l.map(d=>({d, tot:teamAttrPts(d,c.teamId), prog:teamCumProg(d,c.teamId)})).sort((a,b)=>b.tot-a.tot); };
+const T2COL = {}; C.forEach(x=>T2COL[x.teamId]=x.color);                              // teamId → colour
+const raceTid = (d,rnum) => { const r=d.races.find(x=>x.r===rnum); return (r&&r.tid)||d.teamId; };  // team a driver actually raced for that round
+const raceCol = (d,rnum) => { const t=raceTid(d,rnum); return (t!==d.teamId && T2COL[t])||d.color; };
 
 $('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
 const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -1054,7 +1064,7 @@ function constructorCard(c){
       <div class="idbody">
         <div class="statgrid r1">${c.wins>0?statCell(c.wins,'Wins'):statCell(c.best?('P'+c.best):'—','Best')}${statCell(c.podiums,'Podiums')}${c.poles>0?statCell(c.poles,'Poles'):statCell(cx.bestGrid?('P'+cx.bestGrid):'—','Best Grid')}${statCell(c.fl,'Fastest')}${statCell(cx.dnf,'DNF')}</div>
         <div class="statgrid r1"><div class="stat"><b class="up">${cx.racesGain}</b><span>Gained</span></div><div class="stat"><b>${cx.racesKept}</b><span>Kept</span></div><div class="stat"><b class="down">${cx.racesLost}</b><span>Lost</span></div>${statCell(cSprW,'Spr Wins')}${statCell(cSprP,'Spr Poles')}</div>
-        <div class="arc"><div class="arc-h"><span class="arc-t"><span>Points per round</span>${(()=>{const cs=[...cars].sort((a,b)=>b.points-a.points);return `<span class="clegend"><span class="cli"><i></i>${cs[0].family}<b>${cs[0].points}</b></span>${cs[1]?`<span class="cli b2"><i></i>${cs[1].family}<b>${cs[1].points}</b></span>`:''}</span>`;})()}</span><span class="l">${c.points} total</span></div>${stackChartHTML(cars)}</div>
+        <div class="arc"><div class="arc-h"><span class="arc-t"><span>Points per round</span>${(()=>{const L=teamContribs(c),cls=['','b2','b3'];return `<span class="clegend">${L.map((x,k)=>`<span class="cli ${cls[k]||'b3'}"><i></i>${x.d.family}<b>${x.tot}</b></span>`).join('')}</span>`;})()}</span><span class="l">${c.points} total</span></div>${stackChartHTML(c)}</div>
       </div>
     </div>
     <div class="panel gpcard con">
@@ -1065,28 +1075,31 @@ function constructorCard(c){
   </div>`;
 }
 
-function stackChartHTML(cars){
-  const sorted=[...cars].sort((a,b)=>b.points-a.points);
+function stackChartHTML(c){
   const n=DATA.rounds.length;
-  const p1=sorted[0].prog, p2=sorted[1]?sorted[1].prog:new Array(n).fill(0);
-  const tot=p1.map((v,i)=>v+(p2[i]||0)), max=Math.max(...tot,1);
+  const layers=teamContribs(c);                            // biggest-first, each with team-attributed cumulative prog (length n)
+  // cumulative stacked boundaries: cum[k] = running sum of layers 0..k
+  const cum=[]; let run=new Array(n).fill(0);
+  layers.forEach(L=>{ run=run.map((v,i)=>v+(L.prog[i]||0)); cum.push(run.slice()); });
+  const total=cum.length?cum[cum.length-1]:new Array(n).fill(0), max=Math.max(...total,1);
   const px=i=> n===1?50:(5+90*i/(n-1));
   const TOP=22,BOT=98, py=v=> BOT-(BOT-TOP)*(v/max);
   const line=arr=>arr.map((v,i)=>(i?'L':'M')+px(i).toFixed(1)+' '+py(v).toFixed(1)).join(' ');
-  const line1=line(p1), lineT=line(tot);
-  const area1=`${line1} L ${px(n-1).toFixed(1)} 100 L ${px(0).toFixed(1)} 100 Z`;
-  let a2='M '+px(0).toFixed(1)+' '+py(tot[0]).toFixed(1);
-  for(let i=1;i<n;i++) a2+=' L '+px(i).toFixed(1)+' '+py(tot[i]).toFixed(1);
-  for(let i=n-1;i>=0;i--) a2+=' L '+px(i).toFixed(1)+' '+py(p1[i]).toFixed(1);
-  a2+=' Z';
+  const band=(upper,lower)=>{ let d='M '+px(0).toFixed(1)+' '+py(upper[0]).toFixed(1);
+    for(let i=1;i<n;i++) d+=' L '+px(i).toFixed(1)+' '+py(upper[i]).toFixed(1);
+    if(lower){ for(let i=n-1;i>=0;i--) d+=' L '+px(i).toFixed(1)+' '+py(lower[i]).toFixed(1); }
+    else d+=' L '+px(n-1).toFixed(1)+' 100 L '+px(0).toFixed(1)+' 100';
+    return d+' Z'; };
+  const opac=[.44,.24,.13]; let bands='';
+  cum.forEach((b,k)=>{ bands+=`<path d="${band(b,k?cum[k-1]:null)}" fill="var(--c)" fill-opacity="${opac[k]||.1}"/>`; });
+  let blines=''; for(let k=0;k<cum.length-1;k++) blines+=`<path d="${line(cum[k])}" fill="none" stroke="var(--c)" stroke-opacity=".5" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+  const lineT=line(total);
   const grid=DATA.rounds.map((r,i)=>`<span class="cx" style="left:${px(i)}%"></span>`).join('');
-  const dots=tot.map((v,i)=>`<span class="cval" style="left:${px(i)}%;top:${py(v)}%">${v}</span><span class="cdot" style="left:${px(i)}%;top:${py(v)}%"></span>`).join('');
+  const dots=total.map((v,i)=>`<span class="cval" style="left:${px(i)}%;top:${py(v)}%">${v}</span><span class="cdot" style="left:${px(i)}%;top:${py(v)}%"></span>`).join('');
   const flags=DATA.rounds.map((r,i)=>`<span class="cflag" style="left:${px(i)}%" title="R${r.r} ${r.gp}">${r.flag}</span>`).join('');
   return `<div class="chart2"><div class="cplot">${grid}
     <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path d="${area1}" fill="var(--c)" fill-opacity=".44"/>
-      <path d="${a2}" fill="var(--c)" fill-opacity=".17"/>
-      <path d="${line1}" fill="none" stroke="var(--c)" stroke-opacity=".6" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      ${bands}${blines}
       <path d="${lineT}" fill="none" stroke="var(--c)" stroke-width="1.4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
     </svg>${dots}</div>
     <div class="cxaxis">${flags}</div></div>`;
@@ -1473,7 +1486,7 @@ function mountLapChart(round, host){
 function buildLapChart(LD, host){
   const nL=LD.nLaps, grid=LD.grid, order=LD.order, times=LD.times, pit=LD.pit||{}, pitTime=LD.pitTime||{}, flags=LD.flags||{};
   const codes=grid.slice();
-  const DR={}; D.forEach(d=>DR[d.code]={col:d.color,fam:d.family});
+  const DR={}; D.forEach(d=>DR[d.code]={col:raceCol(d,LD.round),fam:d.family});   // colour by the team driven for THIS round
   // final status per driver (shown in RACE col when a car drops out of the running order)
   const outLabel={}, retiredSet=new Set();
   D.forEach(d=>{ const rr=d.races.find(x=>x.r===LD.round); if(!rr) return;
@@ -1582,7 +1595,7 @@ function mountWall(round, host){
 function buildWall(LD, host, round){
   const nLaps=LD.nLaps, grid=LD.grid, order=LD.order, times=LD.times||[], pit=LD.pit||{}, pitTime=LD.pitTime||{};
   const R=(DATA.races||[]).find(x=>x.r===round)||{}; const finishOrder=(R.cls||[]).map(c=>c.code);
-  const DR={}; D.forEach(d=>DR[d.code]={col:d.color,fam:d.family,team:d.teamId});
+  const DR={}; D.forEach(d=>DR[d.code]={col:raceCol(d,round),fam:d.family,team:raceTid(d,round)});   // colour + teammate-grouping by the team driven for THIS round
   const maxP=grid.length, cols=nLaps+1;
   // teammates share a team colour → 1st car (by grid) gets white text, 2nd gets black, to tell them apart
   const teamSeen={}, teamText={}; grid.forEach(c=>{ const t=(DR[c]||{}).team||c; teamSeen[t]=(teamSeen[t]||0)+1; teamText[c]=teamSeen[t]===1?'#fff':'#000'; });
@@ -2181,12 +2194,12 @@ function openTeamRace(ti){ setPlay(false); const c=list()[idx], rd=DATA.rounds[t
 function renderTeamRace(c,ti,rd,LD){
   const cal=calR[rd.r]||rd, raceLaps=(DATA.raceLaps&&DATA.raceLaps[rd.r])||0;
   const entries=teamRaceEntries(c.teamId, rd.r);   // the drivers who actually raced for this team this round (Lawson, not Hadjar, in R12)
-  entries.forEach(e=>e.dv=raceDeriv(e.d.code,e.r,LD,raceLaps));
+  entries.forEach(e=>{ e.dv=raceDeriv(e.d.code,e.r,LD,raceLaps); e.col=raceCol(e.d, rd.r); });   // colour by the team driven for this race
   const teamPts=entries.reduce((s,e)=>s+((e.r&&e.r.pts)||0),0), nL=LD?LD.nLaps:raceLaps, rl=DATA.rounds.length;
   const boxes=entries.map((e,i)=>{const {d,r,dv}=e, f=r?finLabel(r):{t:'—',cls:''}, delta=(r&&isFinished(r)&&r.grid)?(r.grid-r.fin):null;
     const dTxt=delta==null?'':(delta>0?`▲${delta}`:(delta<0?`▼${-delta}`:'=')), dCol=delta>0?'#4ad991':delta<0?'#ff6b6b':'var(--muted)';
     const pit=dv.pits.length?dv.pits.map(l=>{const u=dv.pitTimes[String(l)];return u?`L${l} ${parseSec(u).toFixed(1)}s`:'L'+l;}).join(' · '):'—';
-    return `<div class="rdv-box" style="--dc:${d.color}">
+    return `<div class="rdv-box" style="--dc:${e.col}">
       <div class="rbh"><img class="rbface" src="${IMG(d.slug)}" onerror="this.style.visibility='hidden'"><span class="rbline" style="${i===1?'border-top-style:dashed':''}"></span>
         <div class="rbname">${d.family} <em class="rbnum">#${d.num||''}</em></div>
         <div class="rbfin ${f.cls}" style="margin-left:auto">${f.t}${dTxt?` <span style="font-size:11px;font-style:normal;font-weight:700;color:${dCol}">${dTxt}</span>`:''}</div></div>
@@ -2213,7 +2226,7 @@ function renderTeamRace(c,ti,rd,LD){
           <div style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:600;">Race trace · both cars</div>
           <div style="font-size:10px;color:var(--muted-2);">${nL} laps</div></div>
         <div class="rdv-chart" id="rdvChart">${LD?'':'<div class="rdv-msg" style="padding:20px">Lap-by-lap data unavailable</div>'}</div>
-        <div class="rdv-lg">${entries.map((e,i)=>`<span><i style="width:16px;height:0;border-top:2px ${i===1?'dashed '+lit(e.d.color,.4):'solid '+e.d.color};"></i>${e.d.family}</span>`).join('')}
+        <div class="rdv-lg">${entries.map((e,i)=>`<span><i style="width:16px;height:0;border-top:2px ${i===1?'dashed '+lit(e.col,.4):'solid '+e.col};"></i>${e.d.family}</span>`).join('')}
           <span><i style="width:9px;height:9px;border-radius:2px;background:#f5a623;"></i>pit</span>
           <span><i style="width:11px;height:9px;border-radius:2px;background:rgba(245,200,35,.22);border:1px solid rgba(245,200,35,.4);"></i>SC/VSC</span></div>
       </div>
@@ -2236,8 +2249,8 @@ function rdvTraceTeam(entries,rd,nL,flags){
   for(let p=1;p<=yMax;p++){const mj=(p===1||p%5===0);svg.appendChild(mk('line',{x1:L,y1:y(p),x2:Rr,y2:y(p),stroke:mj?'rgba(150,166,205,.13)':'rgba(150,166,205,.05)','stroke-width':1}));svg.appendChild(mk('text',{x:L-6,y:y(p)+3,fill:mj?'#7d879e':'#59627a','font-size':8.5,'text-anchor':'end'},'P'+p));}
   const ticks=[0];for(let l=10;l<nL-5;l+=10)ticks.push(l);ticks.push(nL);
   ticks.forEach(l=>svg.appendChild(mk('text',{x:x(l),y:B+16,fill:'#5f6a80','font-size':9.5,'text-anchor':'middle'},l===0?'Grid':l)));
-  const sameTeam=entries[1]&&entries[0].d.teamId===entries[1].d.teamId;   // teammates share a colour → lighten the 2nd; different teams keep their own
-  entries.forEach((e,ei)=>{const {d,r,dv}=e, col=ei===1?(sameTeam?lit(d.color,.4):d.color):d.color, dash=ei===1;
+  const sameTeam=entries[1]&&entries[0].col===entries[1].col;   // shared race colour → lighten the 2nd so the two lines stay distinct
+  entries.forEach((e,ei)=>{const {d,r,dv}=e, col=ei===1&&sameTeam?lit(e.col,.4):e.col, dash=ei===1;
     let dp=`M ${x(0)} ${y(dv.gridPos||1)}`,lastLap=0,lastPos=dv.gridPos||1;
     for(let i=0;i<dv.trace.length;i++){const p=dv.trace[i];if(p==null)break;dp+=` L ${x(i+1)} ${y(p)}`;lastLap=i+1;lastPos=p;}
     const pa={d:dp,fill:'none',stroke:col,'stroke-width':2.2,'stroke-linejoin':'round','stroke-linecap':'round'}; if(dash)pa['stroke-dasharray']='5 4';
