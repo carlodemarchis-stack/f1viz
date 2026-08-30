@@ -61,6 +61,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .d.zero .code{filter:saturate(.5) brightness(1.15);opacity:.7}
 .d.lead .glow{position:absolute;left:50%;bottom:20px;width:64%;height:70%;transform:translateX(-50%);border-radius:50%;
   background:radial-gradient(closest-side,var(--dc),transparent 72%);opacity:.32;filter:blur(8px);z-index:-1}
+.pt-pop{position:absolute;bottom:34%;transform:translateX(-50%);font-size:13px;font-weight:800;color:#fff;background:var(--pc,#888);padding:2px 7px;border-radius:6px;pointer-events:none;z-index:6;box-shadow:0 2px 8px rgba(0,0,0,.45);white-space:nowrap;animation:ptRise 1.5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes ptRise{0%{opacity:0;transform:translateX(-50%) translateY(12px) scale(.8)}18%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}70%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-66px)}}
 .baseline{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16),transparent);margin:0 40px}
 .welcome{position:absolute;top:15%;left:0;right:0;text-align:center;z-index:2;pointer-events:none}
 .welcome h2{font-size:60px;font-weight:850;letter-spacing:-.02em;line-height:1.03;margin:0}
@@ -122,9 +124,18 @@ Object.keys(DR).forEach(code=>{
   row.appendChild(el); cells[code]=el;
 });
 let cur=0, card=0, timer=null;
+let showPointsPop = !/[?&]pop=0/.test(location.search);   // floating "+pts" when drivers move — press "p" or ?pop=0 to disable
+function spawnPop(cx, pts, col, idx){
+  if(!showPointsPop) return;
+  const p=document.createElement('div'); p.className='pt-pop'; p.textContent='+'+pts;
+  p.style.setProperty('--pc', col||'#888'); p.style.left=cx.toFixed(1)+'px'; p.style.animationDelay=(idx*35)+'ms';
+  row.appendChild(p); setTimeout(()=>p.remove(), 1700+idx*35);
+}
 function setRound(i, animate){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
   document.getElementById('welcome').hidden=true; pod.style.display=''; document.getElementById('teamLogos').innerHTML='';   // leaving the welcome card
+  [...row.querySelectorAll('.pt-pop')].forEach(p=>p.remove());
+  const gained={}; (rd.scorers||[]).forEach(x=>gained[x.code]=x.pts);   // points won this round, for the floating popups
   document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
   document.getElementById('cwho').innerHTML='&nbsp;'+(rd.short||'');
@@ -135,13 +146,14 @@ function setRound(i, animate){
   const wOf=s=>{ const h=maxH*s.pts/maxPts; return s.pts>0?Math.max(ASPECT*h,MINCOL):MINCOL; };
   const total=st.reduce((a,s)=>a+wOf(s),0)+(st.length-1)*GAP;
   const applyStandings=()=>{ let x=(availW-total)/2+3; const seen={};
-    st.forEach(s=>{ const el=cells[s.code], h=Math.round(maxH*s.pts/maxPts), w=wOf(s); seen[s.code]=1;
+    st.forEach((s,idx)=>{ const el=cells[s.code], h=Math.round(maxH*s.pts/maxPts), w=wOf(s); seen[s.code]=1;
       el.style.opacity=1;
       el.style.transform=`translateX(${(x+w/2).toFixed(1)}px) translateX(-50%)`;
       el.classList.toggle('lead', s.pos===1); el.classList.toggle('zero', s.pts===0);
       const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=(!img.dataset.broken&&s.pts>0)?'visible':'hidden';
       const ptsEl=el.querySelector('.pts'); ptsEl.textContent=s.pts>0?s.pts:''; ptsEl.style.display=s.pts>0?'':'none';
       el.querySelector('.rank').textContent=s.pos;
+      if(gained[s.code]) spawnPop(x+w/2, gained[s.code], (DR[s.code]||{}).col, idx);   // floating "+pts"
       x+=w+GAP;
     });
     Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
@@ -192,7 +204,8 @@ function playPodiumIntro(rd, onCompose){
       +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
       +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
   }, 850));
-  podTimers.push(setTimeout(()=>{ onCompose&&onCompose(); renderPodium(rd, true); }, 1750));   // standings shift in sync with the podium composing
+  podTimers.push(setTimeout(()=>{ renderPodium(rd, true); }, 1750));    // podium composes: 1st, 2nd, 3rd, then the rest
+  podTimers.push(setTimeout(()=>{ onCompose&&onCompose(); }, 2800));    // once fully composed, the standings move
 }
 function renderPodium(rd, compose){
   const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
@@ -215,13 +228,13 @@ function show(c){ card=Math.max(0,Math.min(TOT,c)); if(card===0) renderWelcome()
 function stop(){ clearInterval(timer); timer=null; document.getElementById('playIcon').innerHTML=playIc; }
 function play(){ if(timer){stop();return;} if(card>=TOT) show(0);
   document.getElementById('playIcon').innerHTML=pauseIc;
-  timer=setInterval(()=>{ if(card>=TOT){stop();return;} show(card+1); }, 2600); }
+  timer=setInterval(()=>{ if(card>=TOT){stop();return;} show(card+1); }, 4200); }
 document.getElementById('play').onclick=play;
 document.getElementById('next').onclick=()=>{stop();show(card+1);};
 document.getElementById('prev').onclick=()=>{stop();show(card-1);};
 document.getElementById('restart').onclick=()=>{stop();show(0);};
 document.getElementById('fs').onclick=()=>{ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); };
-addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} });
+addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} else if(e.key==='p'||e.key==='P'){ showPointsPop=!showPointsPop; } });
 let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,false); },120);});
 document.getElementById('ctot').textContent=TOT;
 show(0);   // open on the welcome card
