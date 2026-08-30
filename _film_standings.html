@@ -80,10 +80,21 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .controls .play{width:44px;height:44px;background:#fff;color:#0c1430}
 .controls .play:hover{background:#fff}
 .controls svg{width:16px;height:16px;fill:currentColor}
-.controls .ctr{display:flex;align-items:baseline;gap:6px;padding:0 12px;font-weight:800;font-size:13px;color:#c7d2e6;white-space:nowrap}
+.controls .ctr{position:relative;cursor:pointer;display:flex;align-items:baseline;gap:6px;padding:4px 10px;border-radius:9px;font-weight:800;font-size:13px;color:#c7d2e6;white-space:nowrap}
+.controls .ctr:hover{background:rgba(255,255,255,.08)}
 .controls .ctr small{color:#7f8db0;font-weight:700;font-size:11px}
-.controls .ctr .who{color:#7f8db0;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.controls .ctr .who{display:inline-block;overflow:hidden;text-overflow:ellipsis;color:#7f8db0;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.controls .ctr .caret{font-size:9px;color:#5f6f92;transform:translateY(-1px)}
 .controls .sep{width:1px;height:20px;background:rgba(255,255,255,.12);margin:0 2px}
+/* round jump popover */
+.jump{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);max-height:min(60vh,420px);overflow:auto;
+  background:rgba(10,16,34,.97);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:1px;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);z-index:30;min-width:210px}
+.jump button{border:0;background:transparent;color:#c7d2e6;text-align:left;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:8px;font-family:inherit}
+.jump button:hover{background:rgba(255,255,255,.1);color:#fff}
+.jump button.on{background:rgba(255,255,255,.09);color:#fff}
+.jump button .rn{color:#7f8db0;font-weight:800;font-size:11px;min-width:26px}
+.jump button.on .rn{color:#c7d2e6}
 .credit{position:fixed;right:20px;bottom:26px;font-size:10px;color:#54648a;z-index:5;text-align:right;line-height:1.4}
 .credit b{color:#8ea0c0;font-weight:700}
 </style></head>
@@ -99,7 +110,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
   <button id="prev" title="Previous"><svg viewBox="0 0 24 24"><path d="M15.5 5v14l-11-7z"/><rect x="16.5" y="5" width="2.4" height="14" rx="1"/></svg></button>
   <button class="play" id="play" title="Play"><svg id="playIcon" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></button>
   <button id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M8.5 5v14l11-7z"/><rect x="5.1" y="5" width="2.4" height="14" rx="1"/></svg></button>
-  <div class="ctr"><b id="cnum">1</b><small>/ <span id="ctot">12</span></small><span class="who" id="cwho"></span></div>
+  <div class="ctr" id="ctr" title="Jump to a round"><b id="cnum">1</b><small>/ <span id="ctot">12</span></small><span class="who" id="cwho"></span><span class="caret">▾</span></div>
   <div class="sep"></div>
   <button id="fs" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
 </div>
@@ -107,7 +118,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 <script src="_film_data.js"></script>
 <script>
 const F=window.FILM, DR=F.drivers, R=F.rounds, TOT=F.totalRounds;
-const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/full/'+s+'.png');
+const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/figs/'+s+'.png');
 const IMGC=s=>(window.FACEB64&&window.FACEB64[s])||('img/cut/'+s+'.png');
 const IMGCIRC=r=>(window.CIRCB64&&window.CIRCB64[r])||('img/circuits/'+r+'.png');
 const LOGO=t=>(window.LOGOB64&&window.LOGOB64[t])||('img/logos/'+t+'.webp');
@@ -239,6 +250,30 @@ document.getElementById('fs').onclick=()=>{ if(!document.fullscreenElement)docum
 addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} else if(e.key==='p'||e.key==='P'){ showPointsPop=!showPointsPop; } });
 let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,false); },120);});
 document.getElementById('ctot').textContent=TOT;
+
+// ---- fixed-width name slot: reserve the width of the LONGEST round name so the bar never shifts ----
+(function fixWho(){
+  const who=document.getElementById('cwho'); const cs=getComputedStyle(who);
+  const probe=document.createElement('span');
+  probe.style.cssText=`position:absolute;visibility:hidden;white-space:nowrap;font:${cs.fontWeight} ${cs.fontSize}/1 ${cs.fontFamily};letter-spacing:${cs.letterSpacing};text-transform:${cs.textTransform}`;
+  document.body.appendChild(probe);
+  let max=0; ['Welcome',...R.map(r=>r.short||'')].forEach(n=>{ probe.textContent=' '+n; max=Math.max(max,probe.offsetWidth); });
+  probe.remove(); who.style.width=Math.ceil(max+2)+'px';
+})();
+
+// ---- round jump popover: click the counter to jump to any round (or the welcome card) ----
+(function jump(){
+  const ctr=document.getElementById('ctr'); const pop=document.createElement('div'); pop.className='jump'; pop.hidden=true;
+  pop.innerHTML=`<button data-c="0"><span class="rn">—</span>Welcome</button>`+
+    R.map((r,i)=>`<button data-c="${i+1}"><span class="rn">R${r.round}</span>${r.flag||''}&nbsp;${r.short||''}</button>`).join('');
+  ctr.appendChild(pop);
+  const markOn=()=>[...pop.children].forEach(b=>b.classList.toggle('on',+b.dataset.c===card));
+  ctr.addEventListener('click',e=>{ e.stopPropagation(); if(pop.hidden){markOn(); pop.hidden=false; const on=pop.querySelector('.on'); if(on)on.scrollIntoView({block:'nearest'});} else pop.hidden=true; });
+  pop.addEventListener('click',e=>{ const b=e.target.closest('button[data-c]'); if(!b)return; e.stopPropagation(); stop(); show(+b.dataset.c); pop.hidden=true; });
+  addEventListener('click',()=>{ pop.hidden=true; });
+  addEventListener('keydown',e=>{ if(e.key==='Escape')pop.hidden=true; });
+})();
+
 show(0);   // open on the welcome card
 </script>
 </body></html>
