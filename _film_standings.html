@@ -208,7 +208,7 @@ function renderWelcome(){
   clearPodIntro(); composing=false; setBg(false);
   document.getElementById('raceTag').textContent='';
   document.getElementById('welcome').hidden=false; pod.style.display='none';
-  document.getElementById('kick').innerHTML='2026 Season · The full grid';
+  document.getElementById('kick').innerHTML='';
   document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
   const availW=stage.clientWidth-6, availH=Math.max(150, stage.clientHeight-46);
   const startSet=new Set(R[0].standings.map(s=>s.code));   // season-opening grid only (excludes mid-season subs like TSU)
