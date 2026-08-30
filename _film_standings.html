@@ -158,7 +158,7 @@ let fastMode = localStorage.getItem('f1viz.filmfast')==='1';
 if(/[?&]fast=1/.test(location.search)) fastMode=true;
 if(/[?&]fast=0/.test(location.search)) fastMode=false;
 // sequence timing (ms): Race X → circuit map → video (plays to its own end) → podium → standings
-const RACE_MS=1000, MAP_MS=1900, PODIUM_MS=1300, DWELL=3200, VID_FALLBACK=15000;
+const RACE_MS=1000, MAP_MS=900, PODIUM_MS=1300, DWELL=3200, VID_FALLBACK=15000;
 function advanceSoon(){ clearTimeout(nextTimer); nextTimer=setTimeout(()=>{ if(!playing)return; if(card>=TOT){ card=0; show(1); return; } show(card+1); }, card===0?600:DWELL); }   // last GP → loop back to Race 1 (forward reveal), skipping the welcome card
 let showPointsPop = !/[?&]pop=0/.test(location.search);   // floating "+pts" when drivers move — press "p" or ?pop=0 to disable
 function spawnPop(el, pts, col, idx){
