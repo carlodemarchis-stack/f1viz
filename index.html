@@ -121,7 +121,11 @@ button{font-family:inherit}
 .cteam .cname{font-weight:800;font-size:clamp(22px,3.4vh,30px);letter-spacing:-.02em;line-height:.95}
 .cteam .cnat{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);letter-spacing:.01em;margin-top:2px}
 .cteam .cnat .flag{font-size:14px}
-.cdrivers{display:flex;gap:16px;margin-left:auto;flex:0 0 auto}
+.cdrivers{display:flex;flex-direction:column;align-items:flex-end;gap:7px;margin-left:auto;flex:0 0 auto}
+.cdrv-row{display:flex;gap:16px}
+.ctemp{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--muted);letter-spacing:.01em;white-space:nowrap}
+.ctemp .ctface{width:20px;height:20px;border-radius:50%;object-fit:cover;object-position:top center;border:1px dashed color-mix(in srgb,var(--c) 55%,#555);background:#12151d;opacity:.9;flex:0 0 auto}
+.ctemp b{font-weight:700;color:color-mix(in srgb,var(--c) 82%,#fff)}
 .cdrv{display:flex;align-items:center;gap:9px;white-space:nowrap}
 .cdrv .cface{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:top center;border:1.5px solid color-mix(in srgb,var(--c) 55%,#333);background:#12151d}
 .cdrv .cface.fb{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--c)}
@@ -197,6 +201,7 @@ button{font-family:inherit}
 .gp .cars .pod b{color:var(--pod)}.gp .cars .p1 b{color:var(--gold)}.gp .cars .out b{color:var(--bad)}
 .gp .fin{font-weight:800;font-size:16px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
 .gp .fin.p1{color:var(--gold)}.gp .fin.pod{color:var(--pod)}.gp .fin.out{color:var(--bad);font-size:13px;letter-spacing:.04em}
+.gp .fin.sub{text-decoration:underline dotted color-mix(in srgb,var(--c) 60%,#888);text-underline-offset:3px}   /* stand-in filled this seat */
 .gp .pts{font-weight:800;font-size:16px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
 .gp .pts em{font-style:normal;font-size:8.5px;color:var(--muted-2);letter-spacing:.08em;margin-left:2px}
 .gp .pts i{font-style:normal;color:rgba(150,166,205,.3);font-weight:400}
@@ -874,6 +879,13 @@ const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
 const N = () => list().length;
 const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:1);
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
+// One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
+// TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
+const TEMP_R12 = {red_bull:'LAW', rb:'TSU'};
+const teamRegulars = tid => teamCars(tid).filter(d=>d.code!==TEMP_R12[tid]);          // the 2 season drivers (photo chips + columns)
+const teamTemp = tid => { const c=TEMP_R12[tid]; return c ? D.find(x=>x.code===c) : null; };
+// drivers who actually raced FOR team `tid` in round `rnum` (respects the per-race tid seat swap)
+const teamRaceEntries = (tid,rnum) => D.map(d=>{ const r=d.races.find(x=>x.r===rnum && (x.tid||d.teamId)===tid); return r?{d,r}:null; }).filter(Boolean).sort((a,b)=>a.d.pos-b.d.pos);
 
 $('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
 const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -891,6 +903,8 @@ const upRow=(cal,prev)=>{
   else { const gap=Math.round((new Date(cal.date+'T00:00:00Z')-new Date(prev.date+'T00:00:00Z'))/86400000); cd = wk(gap); }
   return `<div class="gp up"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${cd}</span></div>`;
 };
+// a round already run that this driver did NOT contest (e.g. a mid-season debut / an injured driver) → empty result cells, not a future countdown
+const absentRow=cal=>`<div class="gp up absent"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span><span class="upcd gap didnot">did not race</span></div>`;
 const gmaxD = Math.max(...D.map(d=>d.points)), gmaxC = Math.max(...C.map(c=>c.points));
 const calR={}; DATA.calendar.forEach(c=>calR[c.r]=c);
 const fullName=r=>{const c=calR[r]; return c?c.full:'';};
@@ -953,7 +967,7 @@ function driverCard(d){
   const byR={}; d.races.forEach(r=>byR[r.r]=r);
   const x=xstats(d.races);
   const rows=DATA.calendar.map((cal,i)=>{const r=byR[cal.r];
-    if(!r) return upRow(cal, DATA.calendar[i-1]);
+    if(!r) return cal.r<=DATA.meta.round ? absentRow(cal) : upRow(cal, DATA.calendar[i-1]);
     const f=finLabel(r);
     const flap = r.flrank ? `<span class="flap ${r.fl?'best':''}">${r.fl?'FL':('P'+r.flrank)}</span>` : `<span class="flap">—</span>`;
     return `<div class="gp ${r.fin===1?'win':''}" data-gp="${r.r}">
@@ -998,22 +1012,26 @@ function driverCard(d){
 
 /* ----- constructor card ----- */
 function teamRounds(c){
-  const cars=teamCars(c.teamId);
+  const regs=teamRegulars(c.teamId);
   return DATA.rounds.map(rd=>{
-    const entries=cars.map(d=>({d,r:d.races.find(x=>x.r===rd.r)}));
-    const pts=entries.reduce((s,e)=>s+(e.r?e.r.pts:0),0);
-    const fins=entries.map(e=>e.r&&e.r.fin).filter(Boolean);
-    return {rd,entries,pts,win:entries.some(e=>e.r&&e.r.fin===1),best:fins.length?Math.min(...fins):null};
+    const drove=teamRaceEntries(c.teamId, rd.r);               // who actually raced for this team this round (by tid)
+    // align to the two regular columns; a stand-in fills an absent regular's slot
+    const cells=regs.map(rg=>drove.find(x=>x.d.code===rg.code)||null);
+    const subs=drove.filter(x=>!regs.some(rg=>rg.code===x.d.code));
+    for(let i=0;i<cells.length && subs.length;i++){ if(!cells[i]) cells[i]=subs.shift(); }
+    const pts=drove.reduce((s,e)=>s+(e.r?e.r.pts:0),0);
+    const fins=drove.map(e=>e.r&&e.r.fin).filter(Boolean);
+    return {rd,cells,pts,win:drove.some(e=>e.r&&e.r.fin===1),best:fins.length?Math.min(...fins):null};
   });
 }
 function constructorCard(c){
-  const cars=teamCars(c.teamId);
+  const cars=teamRegulars(c.teamId), temp=teamTemp(c.teamId);
   const trByR={}; teamRounds(c).forEach(t=>trByR[t.rd.r]=t);
   const rows=DATA.calendar.map((cal,i)=>{const t=trByR[cal.r];
     if(!t) return upRow(cal, DATA.calendar[i-1]);
-    const cs=cars.map(d=>{const e=t.entries.find(x=>x.d.code===d.code), r=e&&e.r;
+    const cs=t.cells.map((e,k)=>{const r=e&&e.r, sub=e&&cars[k]&&e.d.code!==cars[k].code;   // stand-in filled this regular's seat
       const cls=r&&r.fin===1?'p1':(r&&r.fin&&r.fin<=3?'pod':(r&&r.fin==null?'out':''));
-      return `<span class="fin ${cls}">${r?(r.fin?('P'+r.fin):'DNF'):'—'}</span>`;}).join('');
+      return `<span class="fin ${cls}${sub?' sub':''}"${e?` title="${e.d.family}${sub?' (temp)':''}"`:''}>${r?(r.fin?('P'+r.fin):'DNF'):'—'}</span>`;}).join('');
     return `<div class="gp ${t.win?'win':''}" data-tr="${t.rd.r}">
       <span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span>
       <span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span>
@@ -1022,7 +1040,7 @@ function constructorCard(c){
       ${ytMini(cal.r)}
     </div>`;}).join('');
   const carImg=CAR(c.teamId);
-  const cx=xstats(cars.flatMap(d=>d.races));
+  const cx=xstats(cars.flatMap(d=>d.races.filter(r=>(r.tid||d.teamId)===c.teamId)));   // only races driven for THIS team
   const cSprW=cars.reduce((a,d)=>a+(d.sprintWins||0),0), cSprP=cars.reduce((a,d)=>a+(d.sprintPoles||0),0);
   return `<div class="card enter" style="--c:${c.color}">
     <div class="panel idcard">
@@ -1030,7 +1048,7 @@ function constructorCard(c){
         <div class="cpos">P${c.pos}</div>
         <div class="cpts">·<b>${c.points}</b><em>pts</em></div>
         <div class="cteam"><span class="cname">${c.name}</span><span class="cnat"><span class="flag">${c.flag}</span>${c.nat}</span></div>
-        <div class="cdrivers">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>
+        <div class="cdrivers"><div class="cdrv-row">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>${temp?`<div class="ctemp"><img class="ctface" src="${IMG(temp.slug)}" alt="" onerror="this.remove()"><span>Temporary: <b>${temp.family}</b> (R12)</span></div>`:''}</div>
       </div>
       <div class="hero-car below"><img src="${carImg}" alt="${c.name}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'pfb',textContent:'${c.name.slice(0,2).toUpperCase()}'}))"></div>
       <div class="idbody">
@@ -1659,7 +1677,7 @@ function render(dir){
       document.documentElement.style.setProperty('--c',e.color);
       document.documentElement.dataset.team=e.teamId||'';
       $('#cwho').textContent=`P${e.pos} ${mode==='drivers'?e.family:e.name}`;
-      if(mode==='drivers') wrap.querySelectorAll('.gp[data-gp]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openRace(+g.dataset.gp-1);});
+      if(mode==='drivers') wrap.querySelectorAll('.gp[data-gp]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openRace(D[idx].races.findIndex(x=>x.r===+g.dataset.gp));});
       else wrap.querySelectorAll('.gp[data-tr]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openTeamRace(+g.dataset.tr-1);});
     }
   } else {
@@ -1715,7 +1733,7 @@ function selGP(delta){
 }
 function openSelGP(){
   const row=gpRows()[gpSel]; if(!row)return;
-  if(row.dataset.gp) openRace(+row.dataset.gp-1);
+  if(row.dataset.gp) openRace(D[idx].races.findIndex(x=>x.r===+row.dataset.gp));
   else if(row.dataset.tr) openTeamRace(+row.dataset.tr-1);
 }
 function applyHash(){
@@ -1813,6 +1831,9 @@ function openRace(gi){ setPlay(false); closeRadioModal(); const d=D[idx], r=d.ra
   lcFetch(r.r).then(LD=>{ if(pendingVs){rdvVs=pendingVs;pendingVs=null;} renderRace(d,gi,r,LD); }).catch(()=>renderRace(d,gi,r,null)); }
 function renderRace(d,gi,r,LD){
   const code=d.code, cal=calR[r.r]||r, raceLaps=(DATA.raceLaps&&DATA.raceLaps[r.r])||r.laps||0;
+  // a driver can race for a DIFFERENT team in a given round (e.g. Lawson: Racing Bulls all year, Red Bull for R12) → the deep-dive shows the REAL team/car/colour used that race
+  const rtid=r.tid||d.teamId, rC=C.find(c=>c.teamId===rtid)||null, rTeam=rC?rC.name:d.team, rColor=rC?rC.color:d.color, rCar=CAR(rtid);
+  document.documentElement.style.setProperty('--c',rColor); document.documentElement.dataset.team=rtid;
   let trace=[], secs=[], gridPos=r.grid||1, pits=[], pitTimes={}, flags={}, nL=raceLaps, flLap=null, flStr=r.flTime||null, led=0, ledFrom=0, ledTo=0;
   if(LD){ nL=LD.nLaps; gridPos=(LD.grid.indexOf(code)+1)||gridPos;
     trace=LD.order.map(o=>{const i=o.indexOf(code);return i>=0?i+1:null;});
@@ -1864,7 +1885,7 @@ function renderRace(d,gi,r,LD){
           <div style="display:flex;flex-direction:column;gap:5px;">${pitHTML}</div>
         </div>
         <div style="margin-top:auto;">${hlBlock(r.r)}</div>`;
-  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${d.color}">
+  wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${rColor}">
     <div class="rdv-head">
       <button class="rdv-nav rdv-back">‹ Season</button>
       <button class="rdv-nav rdv-prev" title="Previous race (↑)">‹</button>
@@ -1873,8 +1894,8 @@ function renderRace(d,gi,r,LD){
         <div class="rdv-gp">${fullName(r.r)} <small>· ${cal.circuit} · ${cal.date}</small></div></div>
       <div class="rdv-drv">
         <img class="rdv-face" src="${IMG(d.slug)}" alt="" onerror="this.style.visibility='hidden'">
-        <div class="rdv-dtxt"><em>#${d.num||''}</em><b>${d.family}</b><i>${d.team}</i></div>
-        <img class="rdv-car" src="${CAR(d.teamId)}" alt="" onerror="this.remove()">
+        <div class="rdv-dtxt"><em>#${d.num||''}</em><b>${d.family}</b><i>${rTeam}</i></div>
+        <img class="rdv-car" src="${rCar}" alt="" onerror="this.remove()">
       </div>
     </div>
     <div class="rdv-body">
@@ -1931,7 +1952,7 @@ function renderRace(d,gi,r,LD){
   }
 }
 function rdvTrace(d,r,S){
-  const {trace,gridPos,pits,pitTimes,flags,nL,flLap}=S, col=d.color, led=lit(col,.5);
+  const {trace,gridPos,pits,pitTimes,flags,nL,flLap}=S, col=(getComputedStyle(document.documentElement).getPropertyValue('--c').trim()||d.color), led=lit(col,.5);
   const present=trace.filter(p=>p!=null), maxP=Math.max(gridPos||1, ...present, (r.fin||0));
   const yMax=Math.min(22, Math.max(maxP+1, 6));
   const host=document.getElementById('rdvChart'); if(!host)return;
@@ -1960,7 +1981,7 @@ function rdvTrace(d,r,S){
 }
 // driver deep-dive alt chart: lap TIMES (pace) — anomalies (start/pit/SC/VSC/slow) removed & flagged, position track on top
 function rdvPace(d,r,S){
-  const {secs,pos,pits,pitTimes,flags,nL,flLap}=S, col=d.color;
+  const {secs,pos,pits,pitTimes,flags,nL,flLap}=S, col=(getComputedStyle(document.documentElement).getPropertyValue('--c').trim()||d.color);
   const host=document.getElementById('rdvChart'); if(!host)return;
   if(S.secs2){   // ===== COMPARE mode: clean two-line pace + POS track top (you) / bottom (rival). Single-driver code below is untouched. =====
     const secs2=S.secs2, pos1=pos||[], pos2=S.pos2||[], col2=S.col2||'#9aa6cd', code1=S.code||d.code, code2=S.code2||'';
@@ -2087,7 +2108,7 @@ function rdvGap(d,r,S){
   const gAll = gap2 ? valid.concat(gap2.filter(v=>v!=null)) : valid;
   const gMax=Math.max(3,(gAll.length?Math.max(...gAll):3)*1.08);
   const RC=rdvRadioClips(d,r), hasR=RC.length>0;
-  const W=Math.max(340,host.clientWidth), H=Math.max(240,host.clientHeight), L=48, Rr=W-12, T=46, B=H-(hasR?52:30), col=d.color, RL=T-16;   // RL = reference lane (top), T = 0-line
+  const W=Math.max(340,host.clientWidth), H=Math.max(240,host.clientHeight), L=48, Rr=W-12, T=46, B=H-(hasR?52:30), col=(getComputedStyle(document.documentElement).getPropertyValue('--c').trim()||d.color), RL=T-16;   // RL = reference lane (top), T = 0-line
   const x=l=>L+((l-1)/(nL-1))*(Rr-L), y=g=>T+(Math.min(Math.max(g,0),gMax)/gMax)*(B-T);
   const NS='http://www.w3.org/2000/svg', svg=document.createElementNS(NS,'svg');
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('preserveAspectRatio','none');
@@ -2158,8 +2179,9 @@ function openTeamRace(ti){ setPlay(false); const c=list()[idx], rd=DATA.rounds[t
   wrap.innerHTML=`<div class="card enter"><div class="panel rdv" style="--c:${c.color}"><div class="rdv-msg">Loading race…</div></div></div>`;
   lcFetch(rd.r).then(LD=>renderTeamRace(c,ti,rd,LD)).catch(()=>renderTeamRace(c,ti,rd,null)); }
 function renderTeamRace(c,ti,rd,LD){
-  const cars=teamCars(c.teamId), cal=calR[rd.r]||rd, raceLaps=(DATA.raceLaps&&DATA.raceLaps[rd.r])||0;
-  const entries=cars.map(d=>({d, r:d.races.find(x=>x.r===rd.r)||null})); entries.forEach(e=>e.dv=raceDeriv(e.d.code,e.r,LD,raceLaps));
+  const cal=calR[rd.r]||rd, raceLaps=(DATA.raceLaps&&DATA.raceLaps[rd.r])||0;
+  const entries=teamRaceEntries(c.teamId, rd.r);   // the drivers who actually raced for this team this round (Lawson, not Hadjar, in R12)
+  entries.forEach(e=>e.dv=raceDeriv(e.d.code,e.r,LD,raceLaps));
   const teamPts=entries.reduce((s,e)=>s+((e.r&&e.r.pts)||0),0), nL=LD?LD.nLaps:raceLaps, rl=DATA.rounds.length;
   const boxes=entries.map((e,i)=>{const {d,r,dv}=e, f=r?finLabel(r):{t:'—',cls:''}, delta=(r&&isFinished(r)&&r.grid)?(r.grid-r.fin):null;
     const dTxt=delta==null?'':(delta>0?`▲${delta}`:(delta<0?`▼${-delta}`:'=')), dCol=delta>0?'#4ad991':delta<0?'#ff6b6b':'var(--muted)';
@@ -2336,8 +2358,8 @@ function renderGP(){
   document.documentElement.style.setProperty('--c',d.color);
 }
 function renderTeamGP(){
-  const c=list()[idx], cars=teamCars(c.teamId), rd=DATA.rounds[curGP];
-  const entries=cars.map(d=>({d,r:d.races.find(x=>x.r===rd.r)}));
+  const c=list()[idx], rd=DATA.rounds[curGP];
+  const entries=teamRaceEntries(c.teamId, rd.r);
   const teamPts=entries.reduce((s,e)=>s+(e.r?e.r.pts:0),0);
   const win=entries.some(e=>e.r&&e.r.fin===1);
   const rowsHtml=entries.map(e=>{const r=e.r, f=r?finLabel(r):{t:'—',cls:''}, badges=[];
