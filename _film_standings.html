@@ -15,7 +15,11 @@
 html,body{height:100%}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   background:radial-gradient(120% 90% at 50% 0%,#16244a 0%,#0c1430 42%,#070b1c 100%);color:#eef1f6;overflow:hidden}
-.film{position:relative;height:100vh;padding:26px 40px 104px;display:flex;flex-direction:column}
+.film{position:relative;z-index:1;height:100vh;padding:26px 40px 104px;display:flex;flex-direction:column}
+.bgvid{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bgvid[hidden]{display:none}
+.bgvid video{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
+.bgvid::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,14,32,.52) 0%,rgba(9,14,32,.64) 52%,rgba(7,11,22,.92) 100%)}
 .hd{display:flex;align-items:center;gap:16px}
 .brand{font-size:20px;font-weight:800;letter-spacing:.14em;color:#fff;display:inline-flex;align-items:center;gap:2px;padding-right:16px;border-right:1px solid rgba(255,255,255,.16)}
 .brand span{color:#00D7B6}
@@ -99,7 +103,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .credit{position:fixed;right:20px;bottom:26px;font-size:10px;color:#54648a;z-index:5;text-align:right;line-height:1.4}
 .credit b{color:#8ea0c0;font-weight:700}
 </style></head>
-<body><div class="film">
+<body><div class="bgvid" id="bgvid" hidden><video src="media/aus.mp4" muted loop playsinline preload="auto"></video></div>
+<div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
   <div class="podium" id="podium"></div>
   <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — round by round</p></div>
@@ -127,6 +132,8 @@ const CAR=t=>(window.CARB64&&window.CARB64[t])||('img/cars/'+t+'.png');
 const txt=hex=>{const h=(hex||'#888').replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return (0.299*r+0.587*g+0.114*b)>150?'#0b1120':'#fff';};
 const ASPECT=0.34, GAP=7, MINCOL=24;
 const row=document.getElementById('row'), stage=row.parentElement, pod=document.getElementById('podium');
+const bgvid=document.getElementById('bgvid'), bgv=bgvid&&bgvid.querySelector('video');
+function setBg(on){ if(!bgvid)return; bgvid.hidden=!on; if(on){ try{bgv.currentTime=0;}catch(e){} bgv&&bgv.play&&bgv.play().catch(()=>{}); } else { try{bgv&&bgv.pause();}catch(e){} } }
 // build one persistent element per driver (union of all)
 const cells={};
 Object.keys(DR).forEach(code=>{
@@ -145,10 +152,11 @@ function spawnPop(el, pts, col, idx){
   p.style.color=col||'#dbe4f4'; p.style.animationDelay=(idx*35)+'ms';
   host.appendChild(p); setTimeout(()=>p.remove(), 1600+idx*35);
 }
-function setRound(i, animate){
+function setRound(i, dir){
   cur=Math.max(0,Math.min(TOT-1,i)); const rd=R[cur], st=rd.standings, maxPts=st[0].pts;
   document.getElementById('welcome').hidden=true; pod.style.display=''; document.getElementById('teamLogos').innerHTML='';   // leaving the welcome card
   [...row.querySelectorAll('.pt-pop')].forEach(p=>p.remove());
+  setBg(rd.round===1);   // cinematic race footage behind Round 1 only
   const gained={}; (rd.scorers||[]).forEach(x=>gained[x.code]=x.pts);   // points won this round, for the floating popups
   document.getElementById('kick').innerHTML=`Round ${rd.round} · ${rd.flag||''} ${rd.gp||rd.short||''}`;   // flag may be emoji or inline SVG
   document.getElementById('cnum').textContent=cur+1;
@@ -159,7 +167,7 @@ function setRound(i, animate){
   let maxH=availH; for(let k=0;k<6;k++){ const tw=totalW(maxH); if(tw>availW) maxH=maxH*availW/tw; else break; }
   const wOf=s=>{ const h=maxH*s.pts/maxPts; return s.pts>0?Math.max(ASPECT*h,MINCOL):MINCOL; };
   const total=st.reduce((a,s)=>a+wOf(s),0)+(st.length-1)*GAP;
-  const applyStandings=()=>{ let x=(availW-total)/2+3; const seen={};
+  const applyStandings=(pops)=>{ let x=(availW-total)/2+3; const seen={};
     st.forEach((s,idx)=>{ const el=cells[s.code], h=Math.round(maxH*s.pts/maxPts), w=wOf(s); seen[s.code]=1;
       el.style.opacity=1;
       el.style.transform=`translateX(${(x+w/2).toFixed(1)}px) translateX(-50%)`;
@@ -167,16 +175,16 @@ function setRound(i, animate){
       const img=el.querySelector('.fig'); img.style.height=h+'px'; img.style.visibility=(!img.dataset.broken&&s.pts>0)?'visible':'hidden';
       const ptsEl=el.querySelector('.pts'); ptsEl.textContent=s.pts>0?s.pts:''; ptsEl.style.display=s.pts>0?'':'none';
       el.querySelector('.rank').textContent=s.pos;
-      if(gained[s.code]) spawnPop(el, gained[s.code], (DR[s.code]||{}).col, idx);   // floating "+pts" beside the points
+      if(pops && gained[s.code]) spawnPop(el, gained[s.code], (DR[s.code]||{}).col, idx);   // floating "+pts" beside the points
       x+=w+GAP;
     });
     Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
   };
-  if(animate){ playPodiumIntro(rd, applyStandings); }              // standings hold, then shift when the podium composes
-  else { clearPodIntro(); applyStandings(); renderPodium(rd, false); }   // resize/instant: no intro
+  if(dir==='fwd'){ playPodiumIntro(rd, ()=>applyStandings(true)); }         // forward: full reveal, standings shift after compose, +pts popups
+  else { clearPodIntro(); applyStandings(false); renderPodium(rd, false); }   // backward / resize: direct — no intro, no popups, standings move now
 }
 function renderWelcome(){
-  clearPodIntro();
+  clearPodIntro(); setBg(false);
   document.getElementById('welcome').hidden=false; pod.style.display='none';
   document.getElementById('kick').innerHTML='2026 Season · The full grid';
   document.getElementById('cnum').textContent='—'; document.getElementById('cwho').innerHTML='&nbsp;Welcome';
@@ -238,7 +246,7 @@ function renderPodium(rd, compose){
 }
 // controls — card 0 = welcome, 1..TOT = rounds
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-function show(c){ card=Math.max(0,Math.min(TOT,c)); if(card===0) renderWelcome(); else setRound(card-1,true); }
+function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0) renderWelcome(); else setRound(card-1, back?'back':'fwd'); }   // forward = full reveal, backward = direct
 function stop(){ clearInterval(timer); timer=null; document.getElementById('playIcon').innerHTML=playIc; }
 function play(){ if(timer){stop();return;} if(card>=TOT) show(0);
   document.getElementById('playIcon').innerHTML=pauseIc;
@@ -249,7 +257,7 @@ document.getElementById('prev').onclick=()=>{stop();show(card-1);};
 document.getElementById('restart').onclick=()=>{stop();show(0);};
 document.getElementById('fs').onclick=()=>{ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); };
 addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} else if(e.key==='p'||e.key==='P'){ showPointsPop=!showPointsPop; } });
-let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,false); },120);});
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,'instant'); },120);});
 document.getElementById('ctot').textContent=TOT;
 
 // ---- fixed-width name slot: reserve the width of the LONGEST round name so the bar never shifts ----
