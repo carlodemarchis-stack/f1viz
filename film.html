@@ -92,6 +92,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .controls .ctr .who{display:inline-block;overflow:hidden;text-overflow:ellipsis;color:#7f8db0;font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .controls .ctr .caret{font-size:9px;color:#5f6f92;transform:translateY(-1px)}
 .controls .sep{width:1px;height:20px;background:rgba(255,255,255,.12);margin:0 2px}
+.controls #vidtog{position:relative;color:#00D7B6}   /* clip in the reveal: on = teal */
+.controls #vidtog.off{color:#6d7a9c}
+.controls #vidtog.off::after{content:'';position:absolute;left:7px;right:7px;top:50%;height:2px;border-radius:2px;background:currentColor;transform:rotate(-25deg)}   /* slashed = off */
 /* round jump popover */
 .jump{position:absolute;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);max-height:min(60vh,420px);overflow:auto;
   background:rgba(10,16,34,.97);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:1px;
@@ -119,6 +122,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
   <button id="next" title="Next"><svg viewBox="0 0 24 24"><path d="M8.5 5v14l11-7z"/><rect x="5.1" y="5" width="2.4" height="14" rx="1"/></svg></button>
   <div class="ctr" id="ctr" title="Jump to a round"><b id="cnum">1</b><small>/ <span id="ctot">12</span></small><span class="who" id="cwho"></span><span class="caret">▾</span></div>
   <div class="sep"></div>
+  <button id="vidtog" title="Race clip in the reveal"><svg viewBox="0 0 24 24"><path d="M3 6h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm14 4.2 5-3.2v10l-5-3.2z"/></svg></button>
   <button id="fs" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
 </div>
 <div class="credit">Produced with passion by <b>A guy with a scarf</b> (Carlo De Marchis)</div>
@@ -147,6 +151,10 @@ Object.keys(DR).forEach(code=>{
   row.appendChild(el); cells[code]=el;
 });
 let cur=0, card=0, playing=false, composing=false, nextTimer=null;
+// reveal with or without the race clip (persisted; URL ?video=0 / ?video=1 overrides)
+let useVideo = localStorage.getItem('f1viz.filmvideo')!=='0';
+if(/[?&](video=0|novideo)/.test(location.search)) useVideo=false;
+if(/[?&]video=1/.test(location.search)) useVideo=true;
 // sequence timing (ms): Race X → circuit map → video (plays to its own end) → podium → standings
 const RACE_MS=1000, MAP_MS=1900, PODIUM_MS=1300, DWELL=3200, VID_FALLBACK=15000;
 function advanceSoon(){ clearTimeout(nextTimer); nextTimer=setTimeout(()=>{ if(!playing)return; if(card>=TOT){stop();return;} show(card+1); }, card===0?600:DWELL); }
@@ -186,7 +194,7 @@ function setRound(i, dir){
     Object.keys(cells).forEach(c=>{ if(!seen[c]) cells[c].style.opacity=0; });   // not yet in the championship
   };
   if(dir==='fwd'){ composing=true; playPodiumIntro(rd, ()=>{ applyStandings(true); composing=false; if(playing) advanceSoon(); }); }  // forward: staged reveal, standings after the podium
-  else { clearPodIntro(); composing=false; setBg(true); applyStandings(false); renderPodium(rd, false); }   // backward / resize: direct — static podium over the clip, standings now
+  else { clearPodIntro(); composing=false; setBg(useVideo); applyStandings(false); renderPodium(rd, false); }   // backward / resize: direct — static podium (over the clip if enabled), standings now
 }
 function renderWelcome(){
   clearPodIntro(); composing=false; setBg(false);
@@ -236,14 +244,16 @@ function playPodiumIntro(rd, onStandings){
       +`<img class="pi-map" src="${IMGCIRC(rd.round)}" onerror="this.style.display='none'">`
       +`<div class="pi-sub">${rd.circuit||''}</div></div>`;
   }, RACE_MS));
-  // Stage C — clear the panel (nothing on top) and let the clip play to its END
+  // Stage C — WITH clip: clear the panel (nothing on top) and let it play to its END, then podium.
+  //           WITHOUT clip: go straight from the map to the podium.
+  const toPodium=()=>{ clearVidWait(); pod.classList.remove('clean');
+    renderPodium(rd, true);                                                   // Stage D — podium animation
+    podTimers.push(setTimeout(()=>{ onStandings&&onStandings(); }, PODIUM_MS)); // Stage E — standings move
+  };
   podTimers.push(setTimeout(()=>{
+    if(!useVideo){ toPodium(); return; }
     podC.innerHTML='';        // nothing over the video
     pod.classList.add('clean'); setBg(true);   // start the clip from 0 (no loop → ends on its last frame), no dim
-    const toPodium=()=>{ clearVidWait(); pod.classList.remove('clean');
-      renderPodium(rd, true);                                                   // Stage D — podium animation
-      podTimers.push(setTimeout(()=>{ onStandings&&onStandings(); }, PODIUM_MS)); // Stage E — standings move
-    };
     vidWait=()=>toPodium();
     podVid.addEventListener('ended', vidWait, {once:true});
     const dur=(podVid.duration && isFinite(podVid.duration) && podVid.duration>1) ? podVid.duration*1000+300 : VID_FALLBACK;
@@ -278,6 +288,13 @@ document.getElementById('next').onclick=()=>{stop();show(card+1);};
 document.getElementById('prev').onclick=()=>{stop();show(card-1);};
 document.getElementById('restart').onclick=()=>{stop();show(0);};
 document.getElementById('fs').onclick=()=>{ if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); };
+// race-clip toggle: two reveal modes — with the clip, or straight to the podium
+const vidtog=document.getElementById('vidtog');
+function syncVidTog(){ vidtog.classList.toggle('off', !useVideo); vidtog.title = useVideo ? 'Race clip: on — click to skip it' : 'Race clip: off — click to show it'; }
+vidtog.onclick=()=>{ useVideo=!useVideo; localStorage.setItem('f1viz.filmvideo', useVideo?'1':'0'); syncVidTog();
+  if(!useVideo){ if(vidWait) vidWait(); setBg(false); }   // turning off mid-clip → jump to the podium now and drop the video
+};
+syncVidTog();
 addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} else if(e.key==='p'||e.key==='P'){ showPointsPop=!showPointsPop; } });
 let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,'instant'); },120);});
 document.getElementById('ctot').textContent=TOT;
