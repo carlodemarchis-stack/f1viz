@@ -106,7 +106,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 </style></head>
 <body><div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · Points · 2026</div></div>
-  <div class="podium" id="podium"><video class="pod-bg" id="podVid" src="media/aus.mp4" muted loop playsinline preload="auto"></video><div class="pod-bg-dim"></div><div class="pod-inner" id="podInner"></div></div>
+  <div class="podium" id="podium"><video class="pod-bg" id="podVid" src="media/aus.mp4" muted playsinline preload="auto"></video><div class="pod-bg-dim"></div><div class="pod-inner" id="podInner"></div></div>
   <div class="welcome" id="welcome" hidden><h2>Welcome to the<br>2026 Formula One Season</h2><p>The Drivers' Championship — round by round</p></div>
   <div class="stage"><div class="row" id="row"></div><div class="team-logos" id="teamLogos"></div></div>
   <div class="baseline"></div>
@@ -133,7 +133,9 @@ const txt=hex=>{const h=(hex||'#888').replace('#','');const r=parseInt(h.slice(0
 const ASPECT=0.34, GAP=7, MINCOL=24;
 const row=document.getElementById('row'), stage=row.parentElement, pod=document.getElementById('podium');
 const podC=document.getElementById('podInner'), podVid=document.getElementById('podVid');
-function setBg(on){ if(!pod)return; pod.classList.toggle('has-vid', on); if(on){ podVid&&podVid.play&&podVid.play().catch(()=>{}); } else { try{podVid&&podVid.pause();}catch(e){} } }
+function setBg(on){ if(!pod)return; pod.classList.toggle('has-vid', on);
+  if(on && podVid){ podVid.pause(); try{podVid.currentTime=0;}catch(e){} const p=podVid.play(); if(p&&p.catch) p.catch(()=>{}); }   // restart from the top, play once (no loop → holds last frame)
+  else if(podVid){ try{podVid.pause();}catch(e){} } }
 // build one persistent element per driver (union of all)
 const cells={};
 Object.keys(DR).forEach(code=>{
