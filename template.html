@@ -358,6 +358,50 @@ button{font-family:inherit}
 .raceres [hidden]{display:none}
 .rc-lc{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 10px 8px;overflow:hidden}
 .lc-msg{margin:auto;color:var(--muted-2);font-size:12px}
+.gp.up.liveup{cursor:pointer;border-left:2px solid color-mix(in srgb,var(--c) 60%,transparent);background:color-mix(in srgb,var(--c) 7%,transparent)}
+.gp.up.liveup:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
+.gp.up.liveup .upcd{color:color-mix(in srgb,var(--c) 88%,#fff);font-weight:800}
+/* ---- weekend in progress (the round currently running) ---- */
+.lvinfo{display:flex;flex-direction:column;gap:11px;min-height:0}
+.lv-hd{display:flex;flex-direction:column;gap:2px;flex:0 0 auto}
+.lv-rd{font-size:10.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 82%,#fff);display:flex;align-items:center;gap:7px}
+.lv-live{display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:20px;background:rgba(255,61,61,.16);border:1px solid rgba(255,80,80,.45);color:#ff8f8f;font-size:9.5px;letter-spacing:.1em}
+.lv-live i{width:6px;height:6px;border-radius:50%;background:#ff4d4d;animation:lvPulse 1.4s infinite}
+@keyframes lvPulse{0%,100%{opacity:1}50%{opacity:.25}}
+.lv-gp{font-weight:800;font-size:clamp(21px,3.3vh,29px);letter-spacing:-.02em;line-height:1.02}
+.lv-sub{font-size:12px;color:var(--muted)}
+.lv-map{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:2px 0}
+.lv-map img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1) contrast(1.05);opacity:.95}
+.lv-stats{display:flex;gap:8px;flex:0 0 auto}
+.lv-stats span{flex:1;background:#0d111a;border:1px solid var(--line);border-radius:9px;padding:7px 4px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.lv-stats b{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.lv-stats i{font-style:normal;font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2)}
+.lv-sched{display:flex;flex-direction:column;gap:4px;flex:0 0 auto}
+.lv-ses{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:9px;padding:6px 10px;border-radius:9px;background:#0d111a;border:1px solid var(--line);font-size:12px}
+.lv-ses.done{opacity:.62}
+.lv-ses.now{border-color:rgba(255,80,80,.5);background:rgba(255,61,61,.09)}
+.lv-ses.next{border-color:color-mix(in srgb,var(--c) 45%,transparent);background:color-mix(in srgb,var(--c) 9%,#0d111a)}
+.lv-ses b{font-weight:700}
+.lv-ses em{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lv-tag{font-size:8.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:5px;white-space:nowrap}
+.lv-tag.d{background:rgba(120,220,170,.14);color:#6fd6a6}
+.lv-tag.n{background:color-mix(in srgb,var(--c) 22%,transparent);color:color-mix(in srgb,var(--c) 85%,#fff)}
+.lv-tag.w{background:rgba(150,166,205,.12);color:var(--muted-2)}
+.lv-tag.l{background:rgba(255,61,61,.2);color:#ff8f8f}
+.lv-empty{display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;color:var(--muted-2);font-size:13px;text-align:center;padding:22px;line-height:1.5}
+.rc-tab[disabled]{opacity:.32;cursor:default}
+.lvhead{display:grid;grid-template-columns:34px 1fr auto auto 52px;gap:9px;padding:0 12px 5px;font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2)}
+.lvrow{display:grid;grid-template-columns:34px 1fr auto auto 52px;gap:9px;align-items:center;padding:6px 12px;border-radius:9px;font-size:13px;border-left:3px solid var(--dc,#888)}
+.lvrow:nth-child(odd){background:rgba(255,255,255,.028)}
+.lvrow .lvp{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted-2)}
+.lvrow.p1 .lvp{color:var(--gold)}
+.lvrow .lvd b{font-weight:800;color:color-mix(in srgb,var(--dc,#888) 72%,#fff)}
+.lvrow .lvd span{color:var(--muted);font-size:11px;margin-left:6px}
+.lvrow .lvd u{text-decoration:none;font-size:8.5px;font-weight:800;letter-spacing:.08em;color:#f5a623;border:1px solid rgba(245,166,35,.45);border-radius:4px;padding:0 4px;margin-left:6px}
+.lvrow .lvt{font-weight:700;font-variant-numeric:tabular-nums}
+.lvrow .lvg{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;min-width:62px;text-align:right}
+.lvrow .lvl{text-align:right;color:var(--muted-2);font-variant-numeric:tabular-nums;font-size:12px}
+@media (orientation:portrait){.lvhead,.lvrow{grid-template-columns:28px 1fr auto auto;}.lvrow .lvl,.lvhead .h-lvl{display:none}}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -797,18 +841,21 @@ button{font-family:inherit}
 const DATA = /*__DATA__*/;
 const RECAPS = /*__RECAPS__*/;
 const RADIO = /*__RADIO__*/;
+const LIVE = /*__LIVE__*/;
 const D = DATA.drivers, C = DATA.constructors;
+// weekend in progress: only while its round is still ahead of the last completed one
+const hasLive = () => !!(LIVE && LIVE.round && LIVE.round > DATA.meta.round && (LIVE.sessions||[]).length);
 const IMGV = '?v=30';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
 const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
 const CAR = tid => `img/cars/${tid}.png${IMGV}`;   // local official f1.com 2026 car cutouts (all 11 incl. Cadillac)
 const $ = s => document.querySelector(s);
 const wrap = $('#wrap');
-let mode='drivers', idx=0, playing=false, timer=null, curGP=0;
+let mode='drivers', idx=0, playing=false, timer=null, curGP=0, lvSesKey='';
 const CTXA={drivers:"Drivers' Championship",constructors:"Constructors' Championship",races:"Grand Prix Results"};
 const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
 const N = () => list().length;
-const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:1);
+const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:(1+(hasLive()?1:0)));   // races: [+ weekend in progress] + season map
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
@@ -841,7 +888,8 @@ const upRow=(cal,prev)=>{
   let cd;
   if(first){ const dd=daysTo(cal.date); cd = dd>0?`in ${wk(dd)}`:'upcoming'; }
   else { const gap=Math.round((new Date(cal.date+'T00:00:00Z')-new Date(prev.date+'T00:00:00Z'))/86400000); cd = wk(gap); }
-  return `<div class="gp up"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${cd}</span></div>`;
+  const live = hasLive() && cal.r===LIVE.round;   // the weekend currently running → open its card
+  return `<div class="gp up${live?' liveup':''}"${live?' data-golive="1" title="Weekend in progress — open"':''}><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${live?'in progress →':cd}</span></div>`;
 };
 // a round already run that this driver did NOT contest (e.g. a mid-season debut / an injured driver) → empty result cells, not a future countdown
 const absentRow=cal=>`<div class="gp up absent"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span><span class="upcd gap didnot">did not race</span></div>`;
@@ -1171,6 +1219,65 @@ function raceCard(r){
     </div>
   </div>`;
 }
+/* ----- weekend in progress: schedule + each session's results as they land ----- */
+function lvState(sessions){                    // done / live / next / ahead, from the clock + captured results
+  const now=Date.now(); let nextSeen=false;
+  return sessions.map(s=>{
+    const st=Date.parse(s.start), en=s.end?Date.parse(s.end):(st+3600e3);
+    let k;
+    if(now>=st && now<=en) k='live';
+    else if((s.results&&s.results.length) || now>en) k='done';
+    else if(!nextSeen){ k='next'; nextSeen=true; }
+    else k='ahead';
+    return {...s, k, st};
+  });
+}
+const lvDay=ms=>new Date(ms).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
+const lvTime=ms=>new Date(ms).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+function liveCard(){
+  const L=LIVE, ses=lvState(L.sessions||[]);
+  const anyLive=ses.some(s=>s.k==='live');
+  const withRes=ses.filter(s=>s.results&&s.results.length);
+  const sel=lvSesKey && ses.find(s=>s.key===lvSesKey && s.results.length) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
+  const tabs=ses.filter(s=>s.key!=='race').map(s=>{
+    const on=s.key===sel, has=s.results&&s.results.length;
+    return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${s.name.replace('Practice ','FP')}</button>`;}).join('');
+  const cur=ses.find(s=>s.key===sel);
+  const isQ=cur&&(cur.key==='quali'||cur.key==='sq');
+  const body = cur&&cur.results.length ? `
+    <div class="lvhead"><span>Pos</span><span>Driver</span><span>${isQ?'Best':'Time'}</span><span>Gap</span><span class="h-lvl">Laps</span></div>
+    <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
+      <span class="lvp">${r.pos}</span>
+      <span class="lvd"><b>${r.code}</b><span>${r.name||''}${r.team?' · '+r.team:''}</span>${r.rookie?'<u>Rookie</u>':''}</span>
+      <span class="lvt">${r.time||'—'}</span>
+      <span class="lvg">${r.pos===1?'leader':(r.gap||'—')}</span>
+      <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
+    : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
+  const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
+  return `<div class="card enter" style="--c:${DATA.meta.color||'#00D7B6'}">
+    <div class="panel lvinfo">
+      <div class="lv-hd">
+        <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
+          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':'<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>Weekend in progress</span>'}</div>
+        <div class="lv-gp">${L.full||L.gp||''}</div>
+        <div class="lv-sub">${L.circuit||''}${L.locality?' · '+L.locality:''}</div>
+      </div>
+      <div class="lv-map"><img src="img/circuits/${L.round}.png${IMGV}" alt="${L.circuit||''}" onerror="this.closest('.lv-map').style.display='none'"></div>
+      <div class="lv-stats">${stat(L.laps,'Laps')}${stat(L.length?L.length+' km':'','Length')}${stat(L.distance?(+L.distance).toFixed(1)+' km':'','Distance')}</div>
+      <div class="lv-sched">${ses.map(s=>{
+        const tag=s.k==='done'?'<span class="lv-tag d">Done</span>':s.k==='live'?'<span class="lv-tag l">Live</span>':s.k==='next'?'<span class="lv-tag n">Next</span>':'<span class="lv-tag w">To come</span>';
+        return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
+    </div>
+    <div class="panel raceres">
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${cur?cur.name:'Sessions'} · results</span></div>
+      <div class="rc-view">${body}</div>
+    </div>
+  </div>`;
+}
+function wireLiveCard(){
+  wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
+    b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
+}
 function cdText(date){ if(!date)return ''; const dd=daysTo(date); if(dd<=0)return 'race weekend'; const w=Math.round(dd/7); return 'in '+(w<1?dd+' day'+(dd>1?'s':''):w+' week'+(w>1?'s':'')); }
 function raceTip(r){
   const cal=(DATA.calendar||[]).find(c=>c.r===r); if(!cal)return '';
@@ -1200,8 +1307,11 @@ function wireSeasonMap(){
   });
   ww.addEventListener('mouseleave', ()=>tip.classList.remove('on'));
   ww.addEventListener('click', e=>{
-    const g=e.target.closest('.geo.done'); if(!g||!g.dataset.r) return;   // finished races → open that race card
-    tip.classList.remove('on'); go(+g.dataset.r-1);
+    const g=e.target.closest('.geo'); if(!g||!g.dataset.r) return;
+    const r=+g.dataset.r;
+    if(hasLive() && r===LIVE.round){ tip.classList.remove('on'); goLive(); return; }   // weekend in progress
+    if(!g.classList.contains('done')) return;                                          // finished races → that race card
+    tip.classList.remove('on'); go(r-1);
   });
 }
 function worldMapCard(){
@@ -1622,6 +1732,7 @@ function render(dir){
       $('#cwho').textContent=`P${e.pos} ${mode==='drivers'?e.family:e.name}`;
       if(mode==='drivers') wrap.querySelectorAll('.gp[data-gp]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openRace(D[idx].races.findIndex(x=>x.r===+g.dataset.gp));});
       else wrap.querySelectorAll('.gp[data-tr]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openTeamRace(+g.dataset.tr-1);});
+      wrap.querySelectorAll('.gp[data-golive]').forEach(g=>g.onclick=()=>goLive());   // the in-progress weekend row
     }
   } else {
     document.documentElement.style.setProperty('--c','#00D7B6');
@@ -1639,9 +1750,9 @@ function render(dir){
         $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':'Sprint points';
         wrap.querySelectorAll('.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump)); }
     } else if(mode==='races'){
-      wrap.innerHTML = worldMapCard();
-      $('#cwho').textContent = 'Season map';
-      wireSeasonMap();
+      const k=idx-N();
+      if(hasLive() && k===0){ wrap.innerHTML=liveCard(); $('#cwho').textContent=`R${LIVE.round} ${LIVE.short||''}`; wireLiveCard(); }
+      else { wrap.innerHTML = worldMapCard(); $('#cwho').textContent = 'Season map'; wireSeasonMap(); }
     }
   }
   gpSel=-1;
@@ -1665,6 +1776,10 @@ const peekAnchor=()=>wrap.querySelector('.idstack .f, .cstrip .cname, .rc-full, 
 let peekIO=null;
 try{ peekIO=new IntersectionObserver(es=>{ document.querySelector('.topbar').classList.toggle('stuck', !es[0].isIntersecting); }, {rootMargin:'-52px 0px 0px 0px'}); }catch(e){}
 function go(i){ idx=(i+TOT())%TOT(); render(); }
+// jump straight to the weekend-in-progress card (it sits right after the last completed race)
+function goLive(){ if(!hasLive())return; setPlay(false); if(mode!=='races'){ mode='races';
+    document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='races')); $('#ctxA').textContent=CTXA.races; }
+  idx=DATA.races.length; render(); }
 let _wasMob=isMob(); addEventListener('resize',()=>{ const m=isMob(); if(m!==_wasMob){ _wasMob=m; render(); } });
 let gpSel=-1;
 const gpRows=()=>[...wrap.querySelectorAll('.gp')];

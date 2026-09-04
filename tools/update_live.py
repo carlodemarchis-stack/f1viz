@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""In-progress race weekend for F1viz -> data/live.json
+
+Builds the "weekend in progress" payload for the NEXT round (the first calendar round
+after meta.round), using the SAME sources as the race pipeline:
+  - jolpica-f1  : session schedule (FP1/FP2/FP3/Sprint/Quali/Race dates+times) + circuit
+  - OpenF1      : session keys, driver metadata (incl. FP-only rookies) and session_result
+
+  python3 tools/update_live.py            # refresh the in-progress round
+  python3 tools/update_live.py --round 13 # force a specific round
+  python3 tools/update_live.py --clear    # drop live.json (race done -> use update_round.py)
+
+Re-run it after each session (FP1, FP2, FP3, Quali), then rebuild index.html and push.
+Once the race has run, use update_round.py --apply <r> instead; live.json is ignored
+automatically as soon as meta.round reaches that round (and --clear empties it).
+"""
+import json, os, sys, subprocess, datetime
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+F1P = os.path.join(ROOT, "data", "f1.json")
+LIVEP = os.path.join(ROOT, "data", "live.json")
+YEAR = 2026
+
+# jolpica schedule key -> (our session key, label). Order defines display order.
+SESSION_MAP = [
+    ("FirstPractice",  "fp1",    "Practice 1"),
+    ("SecondPractice", "fp2",    "Practice 2"),
+    ("ThirdPractice",  "fp3",    "Practice 3"),
+    ("SprintQualifying", "sq",   "Sprint Qualifying"),
+    ("Sprint",         "sprint", "Sprint"),
+    ("Qualifying",     "quali",  "Qualifying"),
+    ("Race",           "race",   "Race"),
+]
+# our session key -> OpenF1 session_name
+OPENF1_NAME = {"fp1": "Practice 1", "fp2": "Practice 2", "fp3": "Practice 3",
+               "sq": "Sprint Qualifying", "sprint": "Sprint", "quali": "Qualifying", "race": "Race"}
+
+# f1.json['circuits'] only covers rounds already run, so upcoming tracks need a fallback
+# (official laps + length; distance = laps * length). Values cross-checked on formula1.com.
+CIRCUIT_INFO = {
+    "monza":       {"laps": 53, "length": 5.793, "distance": 306.720},
+    "madring":     {"laps": 57, "length": 5.474},
+    "baku":        {"laps": 51, "length": 6.003},
+    "sepang":      {"laps": 56, "length": 5.543},
+    "marina_bay":  {"laps": 62, "length": 4.940},
+    "americas":    {"laps": 56, "length": 5.513},
+    "rodriguez":   {"laps": 71, "length": 4.304},
+    "interlagos":  {"laps": 71, "length": 4.309},
+    "vegas":       {"laps": 50, "length": 6.201},
+    "losail":      {"laps": 57, "length": 5.419},
+    "yas_marina":  {"laps": 58, "length": 5.281},
+}
+
+
+def curl_json(url, timeout="30"):
+    out = subprocess.run(["curl", "-s", "--max-time", timeout, url], capture_output=True, text=True).stdout
+    try:
+        return json.loads(out)
+    except Exception:
+        return None
+
+
+def curl_list(url, tries=3):
+    """OpenF1 endpoints return a list; it can rate-limit and hand back a dict/string instead."""
+    import time
+    for i in range(tries):
+        v = curl_json(url)
+        if isinstance(v, list):
+            return v
+        time.sleep(1.5 * (i + 1))
+    return []
+
+
+def fmt_lap(sec):
+    """83.008 -> '1:23.008'  (None -> None)"""
+    if sec is None:
+        return None
+    try:
+        sec = float(sec)
+    except (TypeError, ValueError):
+        return None
+    m, s = divmod(sec, 60)
+    return ("%d:%06.3f" % (int(m), s)) if m >= 1 else ("%.3f" % s)
+
+
+def best_duration(d):
+    """Practice gives a scalar; qualifying gives [Q1,Q2,Q3] -> take the best set time."""
+    if isinstance(d, list):
+        vals = [x for x in d if isinstance(x, (int, float))]
+        return min(vals) if vals else None
+    return d if isinstance(d, (int, float)) else None
+
+
+def quali_segments(d):
+    """Qualifying [Q1,Q2,Q3] -> formatted per-segment times (None where not set)."""
+    if not isinstance(d, list):
+        return None
+    return [fmt_lap(x) if isinstance(x, (int, float)) else None for x in (list(d) + [None, None, None])[:3]]
+
+
+def main():
+    args = sys.argv[1:]
+    f1 = json.load(open(F1P))
+
+    if "--clear" in args:
+        json.dump({}, open(LIVEP, "w"))
+        print("cleared data/live.json")
+        return
+
+    done = int(f1["meta"]["round"])
+    if "--round" in args:
+        rnd = int(args[args.index("--round") + 1])
+    else:
+        nxt = [c for c in f1["calendar"] if int(c["r"]) > done]
+        if not nxt:
+            print("season complete - nothing in progress")
+            return
+        rnd = int(nxt[0]["r"])
+    if rnd <= done:
+        print("round %d already complete (meta.round=%d) - use update_round.py; run --clear" % (rnd, done))
+        return
+
+    cal = next((c for c in f1["calendar"] if int(c["r"]) == rnd), {})
+
+    # ---- schedule + circuit from jolpica ----
+    jd = curl_json("https://api.jolpi.ca/ergast/f1/%d/%d.json" % (YEAR, rnd))
+    races = (((jd or {}).get("MRData") or {}).get("RaceTable") or {}).get("Races") or []
+    if not races:
+        print("jolpica has no round %d yet" % rnd)
+        return
+    jr = races[0]
+
+    schedule = []
+    for jkey, skey, label in SESSION_MAP:
+        blk = jr.get(jkey) if jkey != "Race" else {"date": jr.get("date"), "time": jr.get("time")}
+        if not blk or not blk.get("date"):
+            continue
+        start = "%sT%s" % (blk["date"], (blk.get("time") or "00:00:00Z"))
+        schedule.append({"key": skey, "name": label, "start": start.replace("ZZ", "Z")})
+
+    # ---- OpenF1 sessions for this weekend (match on the race date's meeting) ----
+    sessions = curl_list("https://api.openf1.org/v1/sessions?year=%d" % YEAR)
+    days = {s["start"][:10] for s in schedule}
+    wk = [s for s in sessions if (s.get("date_start") or "")[:10] in days]
+    by_name = {}
+    for s in wk:
+        by_name[s.get("session_name")] = s
+
+    circ = (f1.get("circuits") or {}).get(str(rnd)) or {}
+    if not circ.get("laps"):                                   # upcoming track: fall back to the known layout
+        cid = jr.get("Circuit", {}).get("circuitId")
+        info = CIRCUIT_INFO.get(cid)
+        if info:
+            circ = {"laps": info["laps"], "length": "%.3f" % info["length"],
+                    "distance": "%.3f" % info.get("distance", info["laps"] * info["length"])}
+    live = {
+        "meta": {"season": YEAR, "round": rnd,
+                 "updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")},
+        "round": rnd,
+        "gp": jr.get("raceName") or cal.get("gp"),
+        "full": cal.get("full") or jr.get("raceName"),
+        "short": cal.get("short") or (jr.get("Circuit", {}).get("Location", {}) or {}).get("country"),
+        "flag": cal.get("flag", ""),
+        "country": cal.get("country") or (jr.get("Circuit", {}).get("Location", {}) or {}).get("country"),
+        "circuit": jr.get("Circuit", {}).get("circuitName") or cal.get("circuit"),
+        "locality": (jr.get("Circuit", {}).get("Location", {}) or {}).get("locality") or cal.get("locality"),
+        "date": jr.get("date"),
+        "laps": circ.get("laps"),
+        "length": circ.get("length"),
+        "distance": circ.get("distance"),
+        "sessions": [],
+    }
+
+    # driver fallbacks from f1.json (regulars); OpenF1 fills in FP-only rookies
+    bynum = {int(d["num"]): d for d in f1["drivers"] if d.get("num")}
+
+    for s in schedule:
+        of1 = by_name.get(OPENF1_NAME.get(s["key"], ""))
+        row = {"key": s["key"], "name": s["name"], "start": s["start"],
+               "end": (of1 or {}).get("date_end"), "results": []}
+        if not of1:
+            live["sessions"].append(row)
+            continue
+        sk = of1["session_key"]
+        res = curl_list("https://api.openf1.org/v1/session_result?session_key=%s" % sk)
+        drv = {x["driver_number"]: x for x in curl_list("https://api.openf1.org/v1/drivers?session_key=%s" % sk)}
+        out = []
+        for r in res:
+            n = r.get("driver_number")
+            pos = r.get("position")
+            od = drv.get(n, {})
+            fd = bynum.get(n)
+            code = (fd or {}).get("code") or od.get("name_acronym") or str(n)
+            col = (fd or {}).get("color") or ("#" + od["team_colour"] if od.get("team_colour") else "#888")
+            best = best_duration(r.get("duration"))
+            gap = r.get("gap_to_leader")
+            out.append({
+                "pos": pos,
+                "code": code,
+                "num": n,
+                "name": (fd or {}).get("family") or (od.get("full_name") or "").split(" ")[-1].title(),
+                "team": (fd or {}).get("team") or od.get("team_name") or "",
+                "col": col,
+                "time": fmt_lap(best),
+                "gap": (None if not gap else ("+%.3f" % float(gap))) if not isinstance(gap, str) else gap,
+                "laps": r.get("number_of_laps"),
+                "seg": quali_segments(r.get("duration")),
+                "out": bool(r.get("dnf") or r.get("dns") or r.get("dsq")),
+                "rookie": fd is None,
+            })
+        out = [x for x in out if x["pos"] is not None]
+        out.sort(key=lambda x: x["pos"])
+        row["results"] = out
+        live["sessions"].append(row)
+
+    json.dump(live, open(LIVEP, "w"), ensure_ascii=False, indent=1)
+    filled = [s["key"] for s in live["sessions"] if s["results"]]
+    print("wrote data/live.json - R%d %s | sessions: %s | with results: %s"
+          % (rnd, live["gp"], ", ".join(s["key"] for s in live["sessions"]), ", ".join(filled) or "none"))
+
+
+if __name__ == "__main__":
+    main()

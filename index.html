@@ -358,6 +358,50 @@ button{font-family:inherit}
 .raceres [hidden]{display:none}
 .rc-lc{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 10px 8px;overflow:hidden}
 .lc-msg{margin:auto;color:var(--muted-2);font-size:12px}
+.gp.up.liveup{cursor:pointer;border-left:2px solid color-mix(in srgb,var(--c) 60%,transparent);background:color-mix(in srgb,var(--c) 7%,transparent)}
+.gp.up.liveup:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
+.gp.up.liveup .upcd{color:color-mix(in srgb,var(--c) 88%,#fff);font-weight:800}
+/* ---- weekend in progress (the round currently running) ---- */
+.lvinfo{display:flex;flex-direction:column;gap:11px;min-height:0}
+.lv-hd{display:flex;flex-direction:column;gap:2px;flex:0 0 auto}
+.lv-rd{font-size:10.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 82%,#fff);display:flex;align-items:center;gap:7px}
+.lv-live{display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:20px;background:rgba(255,61,61,.16);border:1px solid rgba(255,80,80,.45);color:#ff8f8f;font-size:9.5px;letter-spacing:.1em}
+.lv-live i{width:6px;height:6px;border-radius:50%;background:#ff4d4d;animation:lvPulse 1.4s infinite}
+@keyframes lvPulse{0%,100%{opacity:1}50%{opacity:.25}}
+.lv-gp{font-weight:800;font-size:clamp(21px,3.3vh,29px);letter-spacing:-.02em;line-height:1.02}
+.lv-sub{font-size:12px;color:var(--muted)}
+.lv-map{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:2px 0}
+.lv-map img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1) contrast(1.05);opacity:.95}
+.lv-stats{display:flex;gap:8px;flex:0 0 auto}
+.lv-stats span{flex:1;background:#0d111a;border:1px solid var(--line);border-radius:9px;padding:7px 4px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.lv-stats b{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.lv-stats i{font-style:normal;font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted-2)}
+.lv-sched{display:flex;flex-direction:column;gap:4px;flex:0 0 auto}
+.lv-ses{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:9px;padding:6px 10px;border-radius:9px;background:#0d111a;border:1px solid var(--line);font-size:12px}
+.lv-ses.done{opacity:.62}
+.lv-ses.now{border-color:rgba(255,80,80,.5);background:rgba(255,61,61,.09)}
+.lv-ses.next{border-color:color-mix(in srgb,var(--c) 45%,transparent);background:color-mix(in srgb,var(--c) 9%,#0d111a)}
+.lv-ses b{font-weight:700}
+.lv-ses em{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lv-tag{font-size:8.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:5px;white-space:nowrap}
+.lv-tag.d{background:rgba(120,220,170,.14);color:#6fd6a6}
+.lv-tag.n{background:color-mix(in srgb,var(--c) 22%,transparent);color:color-mix(in srgb,var(--c) 85%,#fff)}
+.lv-tag.w{background:rgba(150,166,205,.12);color:var(--muted-2)}
+.lv-tag.l{background:rgba(255,61,61,.2);color:#ff8f8f}
+.lv-empty{display:flex;align-items:center;justify-content:center;height:100%;min-height:180px;color:var(--muted-2);font-size:13px;text-align:center;padding:22px;line-height:1.5}
+.rc-tab[disabled]{opacity:.32;cursor:default}
+.lvhead{display:grid;grid-template-columns:34px 1fr auto auto 52px;gap:9px;padding:0 12px 5px;font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2)}
+.lvrow{display:grid;grid-template-columns:34px 1fr auto auto 52px;gap:9px;align-items:center;padding:6px 12px;border-radius:9px;font-size:13px;border-left:3px solid var(--dc,#888)}
+.lvrow:nth-child(odd){background:rgba(255,255,255,.028)}
+.lvrow .lvp{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted-2)}
+.lvrow.p1 .lvp{color:var(--gold)}
+.lvrow .lvd b{font-weight:800;color:color-mix(in srgb,var(--dc,#888) 72%,#fff)}
+.lvrow .lvd span{color:var(--muted);font-size:11px;margin-left:6px}
+.lvrow .lvd u{text-decoration:none;font-size:8.5px;font-weight:800;letter-spacing:.08em;color:#f5a623;border:1px solid rgba(245,166,35,.45);border-radius:4px;padding:0 4px;margin-left:6px}
+.lvrow .lvt{font-weight:700;font-variant-numeric:tabular-nums}
+.lvrow .lvg{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;min-width:62px;text-align:right}
+.lvrow .lvl{text-align:right;color:var(--muted-2);font-variant-numeric:tabular-nums;font-size:12px}
+@media (orientation:portrait){.lvhead,.lvrow{grid-template-columns:28px 1fr auto auto;}.lvrow .lvl,.lvhead .h-lvl{display:none}}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -867,18 +911,694 @@ const RECAPS = {
  }
 };
 const RADIO = {"meta":{"season":2026,"source":"OpenF1 team_radio","note":"per-round per-driver-code clips mapped to lap; url hotlinks F1 livetiming; R1-R4 have no OpenF1 radio","throughRound":12,"total":217,"count":248},"radio":{"1":{},"2":{},"3":{},"4":{},"5":{"ANT":[{"lap":25,"t":"20:41:53","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/ANT_12_20260524_164112.mp3","f":"ANT_12_20260524_164112.mp3","cap":"Why made you push me off? And I was ahead like what's the point?"},{"lap":41,"t":"21:03:14","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/ANT_12_20260524_170305.mp3","f":"ANT_12_20260524_170305.mp3","cap":"What is this going to look fun?"},{"lap":68,"t":"21:39:51","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/ANT_12_20260524_173905.mp3","f":"ANT_12_20260524_173905.mp3","cap":"Nice work, Kimmy. It's been a very eventful day, but well done. Yeah, thank you, everyone. Not the way I wanted to win. It was going to be a good fight with George, but yeah, we'll take it."}],"BOR":[{"lap":1,"t":"19:11:23","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/BOR_5_20260524_112124.mp3","f":"BOR_5_20260524_112124.mp3","cap":"You have a wonderful drive, good job, excellent. So good, set the pressure up, really good pace, well done. Thank you. I applaud you preparing the car yesterday."}],"COL":[{"lap":67,"t":"21:43:56","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/COL_43_20260524_174314.mp3","f":"COL_43_20260524_174314.mp3","cap":"Vamos buddy, he's 6. What's up mate? Mate. You've got a jump, sorry for that. Extra stress. Mate, we've got much more. Pretty short. I'll check the heart rate. I'll check the heart rate after the race mate. Mate, fantastic job this weekend. Really, really good driving."},{"lap":67,"t":"21:44:59","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/COL_43_20260524_174426.mp3","f":"COL_43_20260524_174426.mp3","cap":"I've got the box on my shoulder here. He's a very happy man. So that is P6. That's your best ever result in F1, don't they? Another week, another best."}],"GAS":[{"lap":1,"t":"20:03:12","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/GAS_10_20260524_160246.mp3","f":"GAS_10_20260524_160246.mp3","cap":"The drivers can't enter tyres are complaining already, so you're on the right one then."}],"HAD":[{"lap":1,"t":"19:11:23","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/HAD_6_20260524_121726.mp3","f":"HAD_6_20260524_121726.mp3","cap":"Do you think it's worth getting ready to go to the shop? How do you feel the diet? They are still alive, so maybe wait a little bit. And for the moment they're okay. The only thing can be rear overheating a little bit."}],"HAM":[{"lap":9,"t":"20:21:31","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/HAM_44_20260524_162056.mp3","f":"HAM_44_20260524_162056.mp3","cap":"I got no power man. Come on guys"},{"lap":44,"t":"21:06:48","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/HAM_44_20260524_170614.mp3","f":"HAM_44_20260524_170614.mp3","cap":"You are same pace as Rantonelli P1 to 10 faster than Max in front"},{"lap":49,"t":"21:13:25","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/HAM_44_20260524_171312.mp3","f":"HAM_44_20260524_171312.mp3","cap":"We can do this guys"},{"lap":58,"t":"21:25:37","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/HAM_44_20260524_172525.mp3","f":"HAM_44_20260524_172525.mp3","cap":"Thank you for coming"},{"lap":68,"t":"21:40:23","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/HAM_44_20260524_173930.mp3","f":"HAM_44_20260524_173930.mp3","cap":"And what that feature that was a great fight good job good gene That was tough guys make a job this weekend Definitely the result we deserve. Thank you so much. Don't want back at the factory. Gosh, you're too tea. Let's keep pushing This is a good step. Let's keep working to try and close that gap Thank you"}],"LAW":[{"lap":67,"t":"21:44:29","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/LAW_30_20260524_174356.mp3","f":"LAW_30_20260524_174356.mp3","cap":"Well done guys. I really fucking put base in that race. I think we're going to have to start, especially if it's even on the last step. Yeah, probably out of balance a bit and we will show you some things when you come back. Copy that. By the way, really good job."}],"LEC":[{"lap":1,"t":"19:11:53","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/LEC_16_20260524_130022.mp3","f":"LEC_16_20260524_130022.mp3","cap":"Can you please tell me what the plan is, like what are we trying to do? We're trying to wait for a rain mate, so to keep the truck positioned and the vehicle drained, everyone has to stop, so keep the"},{"lap":35,"t":"20:55:36","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/LEC_16_20260524_165510.mp3","f":"LEC_16_20260524_165510.mp3","cap":"Okay, that was really a cheap one."},{"lap":50,"t":"21:14:59","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/LEC_16_20260524_171412.mp3","f":"LEC_16_20260524_171412.mp3","cap":"Blue is now picking up the pace 15.0 Let's stop thinking until the last lap, until the last lap And I think absolutely critical"}],"LIN":[{"lap":1,"t":"20:03:42","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/LIN_41_20260524_160334.mp3","f":"LIN_41_20260524_160334.mp3","cap":"It's not going again."}],"NOR":[{"lap":1,"t":"19:11:21","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_124627.mp3","f":"NOR_1_20260524_124627.mp3","cap":"And for the women, and for the women, they now need to keep it cool, reset."},{"lap":1,"t":"19:11:23","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_124935.mp3","f":"NOR_1_20260524_124935.mp3","cap":"There's no reason to go back anymore. I have a very big reason. If you get a penalty for Monaco, I'm gonna win. OK? So I want you to be back on track, even if you are too still up down, I'm gonna go as low. I don't care. I want the penalty today."},{"lap":1,"t":"20:03:12","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_160301.mp3","f":"NOR_1_20260524_160301.mp3","cap":"Any comments on conditional Glanda?"},{"lap":4,"t":"20:14:54","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_161435.mp3","f":"NOR_1_20260524_161435.mp3","cap":"although we could be going very long here"},{"lap":15,"t":"20:30:11","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_162952.mp3","f":"NOR_1_20260524_162952.mp3","cap":"We need to box this lap, it's a reliability problem"},{"lap":39,"t":"21:02:12","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_170139.mp3","f":"NOR_1_20260524_170139.mp3","cap":"Something's broken in my gearbox or something."},{"lap":39,"t":"21:02:43","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/NOR_1_20260524_170226.mp3","f":"NOR_1_20260524_170226.mp3","cap":"Sorry about that. Not on the... Okay."}],"PER":[{"lap":40,"t":"21:06:48","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/PER_11_20260524_170619.mp3","f":"PER_11_20260524_170619.mp3","cap":"I'm losing my screw and bike off. Yeah, I don't know what's happening."}],"PIA":[{"lap":1,"t":"19:27:39","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/PIA_81_20260524_152723.mp3","f":"PIA_81_20260524_152723.mp3","cap":"Are you happy on these ties or do you want to enter? Honestly, I have no idea. It's really tough honestly, but I'm surprised the enter is working."},{"lap":1,"t":"20:05:14","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/PIA_81_20260524_160438.mp3","f":"PIA_81_20260524_160438.mp3","cap":"Well, it feels like the rain stopped quite a lot now. What are we all thankful to do? No, Oscar, poor Carl. The rain should be proper here. Everyone's going to have very cold tires. Yeah, but I think now, I think it is time for the slicks, so shall we just box?"},{"lap":1,"t":"20:08:48","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/PIA_81_20260524_160758.mp3","f":"PIA_81_20260524_160758.mp3","cap":"So, Oscar, our tyres have dropped quite a lot. Everyone on stock must have very cold tyres by this time. Yeah, but if we, if we fit now, we will have cold tyres. We will have warm tyres. So, I don't know. It's, I mean, it's, these engines are a mistake now."}],"RUS":[{"lap":1,"t":"19:11:23","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/RUS_63_20260523_160721.mp3","f":"RUS_63_20260523_160721.mp3","cap":"I don't want to watch why the ride is for quite a bit worse today than yesterday."},{"lap":26,"t":"20:42:53","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/RUS_63_20260524_164224.mp3","f":"RUS_63_20260524_164224.mp3","cap":"Hemi will give you the position. I'm being injured for the freeze. I think that was just when I was given to him. So head down, draw, and plot a lap to go."}],"VER":[{"lap":1,"t":"19:22:05","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/VER_3_20260524_152145.mp3","f":"VER_3_20260524_152145.mp3","cap":"I think this is switch. Copy that Max box. Switch to slick, scripper."},{"lap":68,"t":"21:40:53","url":"https://livetiming.formula1.com/static/2026/2026-05-24_Canadian_Grand_Prix/2026-05-24_Race/TeamRadio/VER_3_20260524_174019.mp3","f":"VER_3_20260524_174019.mp3","cap":"Good job Max. We'll get the fight out of there today, well done. Yeah, it's a shame we didn't have the target attack for the final scene. It's really difficult with the good job. That's the first road in."}]},"6":{"ALB":[{"lap":45,"t":"14:03:09","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/ALB_23_20260607_160244.mp3","f":"ALB_23_20260607_160244.mp3","cap":"Is there a reason for this? Because if I'm should say I want to call each other I mean I'm happy to do it But I just We just risk it something for nothing"},{"lap":78,"t":"15:35:57","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/ALB_23_20260607_173615.mp3","f":"ALB_23_20260607_173615.mp3","cap":"Alex, it was a tough afternoon to walk away with P8, it's a good result, well done to you. I know it's tough out there with all the battery issues and the car, I'm looking to that, but well done. P8's really good points for keeping the recording. Yeah, thanks James. Yeah, it'll be interesting to see how much it is. Hey, so, straight by speed. Yeah, what a better weekend, sir. Thanks everyone, thanks for the hard work."}],"ANT":[{"lap":51,"t":"14:08:15","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/ANT_12_20260607_160731.mp3","f":"ANT_12_20260607_160731.mp3","cap":"If we were to stop again, I'm for safety car, we have plenty of margin. You just have to be really careful on the entry and exit. What you did last time was perfectly fine. Yeah, but I don't think we need to stop. No, no, no. So you say, but not. You can get a free stop, that's all."},{"lap":57,"t":"14:15:21","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/ANT_12_20260607_161447.mp3","f":"ANT_12_20260607_161447.mp3","cap":"There's something weird with you and Jane off the hill"},{"lap":57,"t":"14:16:21","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/ANT_12_20260607_161605.mp3","f":"ANT_12_20260607_161605.mp3","cap":"Okay, kill it, fastest lap, we don't need them."},{"lap":62,"t":"14:23:58","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/ANT_12_20260607_162334.mp3","f":"ANT_12_20260607_162334.mp3","cap":"What do I do I was too late, okay"}],"BEA":[{"lap":28,"t":"13:42:50","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/BEA_87_20260607_154229.mp3","f":"BEA_87_20260607_154229.mp3","cap":"Sorry guys, I don't know how we can. Yeah, sorry Ollie. We'll go again next week. Yeah."}],"HAD":[{"lap":16,"t":"13:23:02","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAD_6_20260607_152233.mp3","f":"HAD_6_20260607_152233.mp3","cap":"I'm going to have a blast. I'm going to have a blast. I'm going to have a blast."},{"lap":20,"t":"13:29:08","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAD_6_20260607_152831.mp3","f":"HAD_6_20260607_152831.mp3","cap":"Oh, so the pilot is gone! The pilot!"},{"lap":27,"t":"13:37:44","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAD_6_20260607_153707.mp3","f":"HAD_6_20260607_153707.mp3","cap":"Yeah, no power, out to the face, out to face. Yeah, copy that, we can see the issue, we're trying to work on a fix. Yeah, great job. Engine 3, position 11. Engine 3, position 11."},{"lap":35,"t":"13:48:24","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAD_6_20260607_154751.mp3","f":"HAD_6_20260607_154751.mp3","cap":"Hey, the problem is too real. Yeah, we're still looking for another fix. We are looking for another fix"},{"lap":70,"t":"15:14:12","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAD_6_20260607_171340.mp3","f":"HAD_6_20260607_171340.mp3","cap":"And I don't have enough power. Yeah, keep pushing, keep pushing. Arrow to our power. It's coming back."}],"HAM":[{"lap":1,"t":"12:25:08","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAM_44_20260607_142445.mp3","f":"HAM_44_20260607_142445.mp3","cap":""},{"lap":9,"t":"13:13:52","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAM_44_20260607_151337.mp3","f":"HAM_44_20260607_151337.mp3","cap":"Where is the faster despite pair n33 and n34?"},{"lap":75,"t":"15:22:20","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAM_44_20260607_172206.mp3","f":"HAM_44_20260607_172206.mp3","cap":"and delay turning 5 and 6. Thank you so much."},{"lap":78,"t":"15:28:56","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/HAM_44_20260607_172801.mp3","f":"HAM_44_20260607_172801.mp3","cap":"and one down on U.S. Great job guys. Sorry I can't pull the wind. Sorry I can't get the wind in the end. They just had to up ahead on us this weekend. But mega result. Really grateful for all the hard work and let's continue to push. Thank you. Thank you. Thank you for today. Thank you for today. We can be happy."}],"LAW":[{"lap":1,"t":"12:28:43","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/LAW_30_20260607_142803.mp3","f":"LAW_30_20260607_142803.mp3","cap":"Well done everybody, you're doing a good job, you're doing my best. Today I don't make it worth it. Thank you Liam."}],"LEC":[{"lap":65,"t":"14:32:36","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/LEC_16_20260607_163159.mp3","f":"LEC_16_20260607_163159.mp3","cap":"But if they are not I'm not you have to take the plane Right"}],"LIN":[{"lap":78,"t":"15:33:31","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/LIN_41_20260607_173220.mp3","f":"LIN_41_20260607_173220.mp3","cap":"who's the best player in the world. We're done. We are people. We're the opposite. Well, congratulations everyone. Unbelievable result. Amazing work. Thank you to everyone. Thank you to everyone on the track and fans. And we'll thank you to all. Amazing results from the team. Congratulations. I'll be with you, darling. Well done, mate. Thank you for your patience. Thank you for your team play. It paid off really in for an end. Yeah, congratulations guys. Thanks, Alan. We've got some luck, but amazing execution from everyone. Well done. Well done. Everyone is being picked up. Very good."}],"NOR":[{"lap":6,"t":"13:10:20","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/NOR_1_20260607_150948.mp3","f":"NOR_1_20260607_150948.mp3","cap":"Butters are cider's good bucks"},{"lap":42,"t":"13:57:33","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/NOR_1_20260607_155721.mp3","f":"NOR_1_20260607_155721.mp3","cap":"Lada we want to do the holding strategy on Russell we want to build up the seconds over the next couple of laps please."},{"lap":44,"t":"14:01:36","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/NOR_1_20260607_160057.mp3","f":"NOR_1_20260607_160057.mp3","cap":"Lado just a pop with we're gonna box this lap of retirement car with the box the lap of retirement car"},{"lap":44,"t":"14:04:09","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/NOR_1_20260607_160401.mp3","f":"NOR_1_20260607_160401.mp3","cap":"Something's wrong. I got nothing my battery"}],"OCO":[{"lap":78,"t":"15:35:57","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/OCO_31_20260607_173835.mp3","f":"OCO_31_20260607_173835.mp3","cap":"Nice job, we definitely deserve this one. Yeah, good job guys. Good job That's off to the strategy today How's that? Yeah, that was quite impressive. Thank you. Shout out to hazard an edge Yes, okay. Yes one. We're p9 actually because I'm equal got a 10 second penalty Copy that awesome Awesome. It was our job third Yes, he is actually It's nice I'm very happy for us too. So he won wait a few seconds and go to p0. Thank you for this little house. Thank you, man"}],"PIA":[{"lap":68,"t":"15:10:39","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/PIA_81_20260607_171009.mp3","f":"PIA_81_20260607_171009.mp3","cap":"I've got the FIA have said unlikely to scrape to the start of the restart to be some laps behind the safety car They've said they'll take a very deep view of people leaving the ball to the turn car lane"},{"lap":78,"t":"15:35:35","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/PIA_81_20260607_173431.mp3","f":"PIA_81_20260607_173431.mp3","cap":"Good afternoon mate, that was good progress from a 7 stop. Yeah, well done. Yeah, definitely did make up those 3 spots on pace, but we're stuck in a 1 minute too, well done. Yeah, I hope you said we will, but you obviously do have it if you can't just say again, good job mate. I know we did like pace, but we came to clean, we stayed out of trouble most of the day. And a good result of the way we got all the way back this weekend."}],"RUS":[{"lap":16,"t":"13:24:02","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/RUS_63_20260607_152339.mp3","f":"RUS_63_20260607_152339.mp3","cap":"How do I have front-end grain and he won't be able to look longer I don't think. Just make sure you've got good tyres when he does get out of the way."},{"lap":18,"t":"13:26:34","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/RUS_63_20260607_152610.mp3","f":"RUS_63_20260607_152610.mp3","cap":"George, how much paste would you have in clear air? At least one second, I think."},{"lap":28,"t":"13:38:45","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/RUS_63_20260607_153832.mp3","f":"RUS_63_20260607_153832.mp3","cap":"That's a lasting advantage. They can't keep it on the truck. They need to get the fish milk coffee It is our break so we've got no tires"},{"lap":65,"t":"14:29:33","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/RUS_63_20260607_162906.mp3","f":"RUS_63_20260607_162906.mp3","cap":"And have I served my penalty or not? I spent about 10 seconds in the pitch lane. Oh, you didn't know how to drive? What should I talk about enough? Yeah, I just need to know. You put me in a 5 second penalty and I'm super high. High drive or high tires? I'll give you the best you can, the best you can come through. Yeah, alright mate."},{"lap":68,"t":"14:57:58","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/RUS_63_20260607_165733.mp3","f":"RUS_63_20260607_165733.mp3","cap":"I just take college way more than take college"}],"SAI":[{"lap":29,"t":"13:41:18","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/SAI_55_20260607_154059.mp3","f":"SAI_55_20260607_154059.mp3","cap":"What do you think about plant B? Uh, repeat what was plant B, now I forgot it. Think I, uh, think out at the stop."},{"lap":30,"t":"13:41:50","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/SAI_55_20260607_154129.mp3","f":"SAI_55_20260607_154129.mp3","cap":"Up to you. You have already followed me."},{"lap":48,"t":"14:06:11","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/SAI_55_20260607_160551.mp3","f":"SAI_55_20260607_160551.mp3","cap":"You need to point out the mistake."}],"VER":[{"lap":1,"t":"13:04:44","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/VER_3_20260607_150430.mp3","f":"VER_3_20260607_150430.mp3","cap":"What's it like doing? Just bring it home for these guys."},{"lap":1,"t":"13:09:50","url":"https://livetiming.formula1.com/static/2026/2026-06-07_Monaco_Grand_Prix/2026-06-07_Race/TeamRadio/VER_3_20260607_150926.mp3","f":"VER_3_20260607_150926.mp3","cap":"Yeah, nice. Completely. Guys, what the... What?"}]},"7":{"ANT":[{"lap":1,"t":"12:29:37","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_142921.mp3","f":"ANT_12_20260614_142921.mp3","cap":"Brake still quite bad already, quite long. It was like air is in the system. Okay, copy. We'll have a look at it."},{"lap":22,"t":"13:33:03","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_153235.mp3","f":"ANT_12_20260614_153235.mp3","cap":"Happy with watching! Hey firm kitty, good luck times."},{"lap":30,"t":"13:44:11","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_154351.mp3","f":"ANT_12_20260614_154351.mp3","cap":"It's got to give me black and white flag for track limits, so no more of those please, otherwise it's a five-shaker penalty."},{"lap":34,"t":"13:49:46","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_154909.mp3","f":"ANT_12_20260614_154909.mp3","cap":"Giving a reminder that the track limits does not take any risks."},{"lap":35,"t":"13:51:17","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_155042.mp3","f":"ANT_12_20260614_155042.mp3","cap":"The commute won't be long for George, we are at risk for the noise behind 3.9 seconds."},{"lap":35,"t":"13:51:48","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_155119.mp3","f":"ANT_12_20260614_155119.mp3","cap":"So let's not slow each other down, erasing, we need to keep that gap to the race, nice and healthy, now at 4.3"},{"lap":37,"t":"13:54:22","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_155413.mp3","f":"ANT_12_20260614_155413.mp3","cap":"It won't be long, can it? Go to common source."},{"lap":53,"t":"14:16:10","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_161533.mp3","f":"ANT_12_20260614_161533.mp3","cap":"I'll go up 0.9, 1.3 behind I have floor 1, floor 3, front Copy that gimme"},{"lap":62,"t":"14:29:22","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/ANT_12_20260614_162900.mp3","f":"ANT_12_20260614_162900.mp3","cap":"You've got five laps remaining, so just walk in the track limits everywhere. Turn five, exit, turn ten, exit."}],"COL":[{"lap":20,"t":"13:31:29","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/COL_43_20260614_153044.mp3","f":"COL_43_20260614_153044.mp3","cap":"K-Frank S is an instruction, we need to switch cars into turn one, please switch into turn one Two, switch cars Paper, two into turn four, please turn four, switch the cars It's one of the signals, Vlog, I feel a bit cheap"},{"lap":65,"t":"14:40:24","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/COL_43_20260614_164437.mp3","f":"COL_43_20260614_164437.mp3","cap":"Hold up, go to the point Hold up, go to the point"}],"HAD":[{"lap":65,"t":"14:40:24","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAD_6_20260614_164656.mp3","f":"HAD_6_20260614_164656.mp3","cap":"I apologize for that structure, I think. Yeah, I mean, the whole weekend is a bit terrible, so... There's one task for us after regularly is just the first bit, because we're going backwards now."}],"HAM":[{"lap":1,"t":"12:24:31","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_142413.mp3","f":"HAM_44_20260614_142413.mp3","cap":"You found what you think of it don't work Maybe looking whiz"},{"lap":32,"t":"13:47:45","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_154710.mp3","f":"HAM_44_20260614_154710.mp3","cap":"Don't you know what time is ready to do? 20.9, Charlie's in fourth, got a different strategy."},{"lap":34,"t":"13:50:47","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_155019.mp3","f":"HAM_44_20260614_155019.mp3","cap":"I'll catch it now. You're catching anyway. Keep keep pushing keep pushing"},{"lap":39,"t":"13:57:23","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_155654.mp3","f":"HAM_44_20260614_155654.mp3","cap":"And we are planning other seven laps on this set. This is our race. Give everything the seven laps. It's the critical moment. We have our chance."},{"lap":42,"t":"14:01:58","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_160131.mp3","f":"HAM_44_20260614_160131.mp3","cap":"And you are in front"},{"lap":42,"t":"14:02:28","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_160155.mp3","f":"HAM_44_20260614_160155.mp3","cap":"Great job guys"},{"lap":52,"t":"14:15:10","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_161436.mp3","f":"HAM_44_20260614_161436.mp3","cap":"15 laps to go, you are doing a good job, so you can go on."},{"lap":59,"t":"14:24:48","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_162432.mp3","f":"HAM_44_20260614_162432.mp3","cap":"And be me free suggestion. I'm happy where I am. Thank you. I ask you to repeat the one."},{"lap":66,"t":"14:38:01","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_163708.mp3","f":"HAM_44_20260614_163708.mp3","cap":"And while down, Louis, while down. Finally, you got to deserve the first year that we were a sorry member. Thank you. Congratulations with good dreams. Good job. Sorry, Nancy. Gracias, Tootie. Hi, Maranello. Thank you so much. You've helped me achieve this dream. And I just, I can't thank you enough. Thank you, Brig. for pushing so hard back at home. I'm so proud of you. And to my family, I love you. And to the fans, thank you for continuing to remind me who I am. I couldn't have done this without you. Gracias. Gracias, Toutes de tardoues."},{"lap":66,"t":"14:39:02","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HAM_44_20260614_163825.mp3","f":"HAM_44_20260614_163825.mp3","cap":"Let's go! For the variety! For the variety! Guys, thank you for those great pit stops as well. I'm sorry I have to talk and I'm so proud of you. Thank you."}],"HUL":[{"lap":24,"t":"13:37:35","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/HUL_27_20260614_153713.mp3","f":"HUL_27_20260614_153713.mp3","cap":"I'm going to the break. Dangerous."}],"LEC":[{"lap":16,"t":"13:24:53","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/LEC_16_20260614_152415.mp3","f":"LEC_16_20260614_152415.mp3","cap":"And Box Charles Box, we have the gap to cover Piažký. We don't care about Piažký. Let's look for the head for the face. Okay, let me know. We stay out of this lap then. Stay out of this lap."},{"lap":62,"t":"14:29:53","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/LEC_16_20260614_162944.mp3","f":"LEC_16_20260614_162944.mp3","cap":"Ahhh! I love the posture. Ahhh, I'm losing the posture."}],"LIN":[{"lap":65,"t":"14:40:24","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/LIN_41_20260614_164234.mp3","f":"LIN_41_20260614_164234.mp3","cap":"But your face was not for the blue. Yeah, yeah, let's thank you for the work. Let's let's review when we get back next week. See if we can adapt that over. We lost the time. Regardless, thank you for the efforts. Yeah, I think I think it was an okay day."}],"NOR":[{"lap":9,"t":"13:15:45","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/NOR_1_20260614_151530.mp3","f":"NOR_1_20260614_151530.mp3","cap":"On that the house of the types just yes lighting everywhere"},{"lap":49,"t":"14:12:06","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/NOR_1_20260614_161143.mp3","f":"NOR_1_20260614_161143.mp3","cap":"And Land of Arrays is having better pace over the whole state than the cars ahead. I just said Pete, like I had to go with them. I dropped back and it's gone. So I can't devote to my freight."},{"lap":51,"t":"14:13:40","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/NOR_1_20260614_161310.mp3","f":"NOR_1_20260614_161310.mp3","cap":"Solando at the end of the race I want to be with him, but give me a hand he's got three strikes already"},{"lap":53,"t":"14:17:12","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/NOR_1_20260614_161650.mp3","f":"NOR_1_20260614_161650.mp3","cap":"And that it's quite clear that the internet has been on track more than three times. We've reported it to the FIA. We expect it should get at least a five second party."},{"lap":66,"t":"14:40:24","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/NOR_1_20260614_164037.mp3","f":"NOR_1_20260614_164037.mp3","cap":"Ah, that's great, that's great, what am I? Yeah, well done, race. See you back up on the train, guys. Please just keep it going. We need to catch them up, we need to catch them up."}],"RUS":[{"lap":12,"t":"13:19:48","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_151935.mp3","f":"RUS_63_20260614_151935.mp3","cap":"So Lewis in history up for three"},{"lap":15,"t":"13:23:21","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_152240.mp3","f":"RUS_63_20260614_152240.mp3","cap":"I was managing in that first stint. I could have given me the heads up, but you've exposed me to Jimmy now. I don't think it's going to be long for everyone. I'm planning on playing on the Klandash to be ripped for 3D things. Still on plan there George. Nothing to worry about yet."},{"lap":29,"t":"13:43:40","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_154302.mp3","f":"RUS_63_20260614_154302.mp3","cap":"to update. Lewis will be on a green. We are still racing at Doris so we need to keep these lap times going."},{"lap":40,"t":"13:58:55","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_155835.mp3","f":"RUS_63_20260614_155835.mp3","cap":"And we are forecast to be battling with newest end of race on that three stop."},{"lap":44,"t":"14:04:00","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_160340.mp3","f":"RUS_63_20260614_160340.mp3","cap":"24 laps remaining, that's the race up ahead of you, got 1.3 behind."},{"lap":53,"t":"14:16:11","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_161559.mp3","f":"RUS_63_20260614_161559.mp3","cap":"Pick up the pace here George."},{"lap":66,"t":"14:40:24","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/RUS_63_20260614_164059.mp3","f":"RUS_63_20260614_164059.mp3","cap":"Okay, so a two tough race, sorry for giving yeah great"}],"VER":[{"lap":11,"t":"13:18:47","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/VER_3_20260614_151828.mp3","f":"VER_3_20260614_151828.mp3","cap":"Yes, look like a lot for the fires. We'll keep the link up this straight. It's not pressing. Copy."},{"lap":66,"t":"14:40:24","url":"https://livetiming.formula1.com/static/2026/2026-06-14_Barcelona_Grand_Prix/2026-06-14_Race/TeamRadio/VER_3_20260614_164252.mp3","f":"VER_3_20260614_164252.mp3","cap":"A lot of max. Yeah, I think so. Yeah, it's a hard race. The other one is ahead, but yeah, it's alright. We're done max. It was a maxing up. I have a bit of yet to stay. Well done Lisa. It's a place and five months into the race. It's done."}]},"8":{"ANT":[{"lap":27,"t":"13:36:04","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/ANT_12_20260628_153534.mp3","f":"ANT_12_20260628_153534.mp3","cap":"Connor, what is happening? We didn't brake. I have no confidence. We've got a brake split mate, so one's hotter than the other."},{"lap":50,"t":"14:04:30","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/ANT_12_20260628_160408.mp3","f":"ANT_12_20260628_160408.mp3","cap":"Okay, give me a scope. Just maintain the focus."}],"GAS":[{"lap":1,"t":"12:32:10","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/GAS_10_20260628_143137.mp3","f":"GAS_10_20260628_143137.mp3","cap":"I like that one thing, it's like 45 degrees, yeah like a T"}],"HAM":[{"lap":13,"t":"13:18:48","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HAM_44_20260628_151833.mp3","f":"HAM_44_20260628_151833.mp3","cap":"Out and up critical, out and up critical. Let's push."},{"lap":18,"t":"13:24:23","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HAM_44_20260628_152408.mp3","f":"HAM_44_20260628_152408.mp3","cap":"It's okay better now your partner then shop"},{"lap":25,"t":"13:33:01","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HAM_44_20260628_153219.mp3","f":"HAM_44_20260628_153219.mp3","cap":"and back on the scene slower we are thinking also about Columbia it doesn't feel that way to me mate"},{"lap":26,"t":"13:34:34","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HAM_44_20260628_153415.mp3","f":"HAM_44_20260628_153415.mp3","cap":"Box, cross box. Double too late. We died."},{"lap":32,"t":"13:43:11","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HAM_44_20260628_154230.mp3","f":"HAM_44_20260628_154230.mp3","cap":"And more that yes more that yes, why do I think it's more to us? Dambor to it. I already have no power"},{"lap":39,"t":"13:51:18","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HAM_44_20260628_155100.mp3","f":"HAM_44_20260628_155100.mp3","cap":"We need to get the piazza. I know you are dying."}],"HUL":[{"lap":1,"t":"12:16:55","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/HUL_27_20260628_141647.mp3","f":"HUL_27_20260628_141647.mp3","cap":""}],"LEC":[{"lap":57,"t":"14:12:37","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/LEC_16_20260628_161214.mp3","f":"LEC_16_20260628_161214.mp3","cap":"This time it's off."},{"lap":59,"t":"14:15:10","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/LEC_16_20260628_161444.mp3","f":"LEC_16_20260628_161444.mp3","cap":"I want to have a good produce, just don't forget. No, nothing."}],"NOR":[{"lap":20,"t":"13:27:28","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/NOR_1_20260628_152707.mp3","f":"NOR_1_20260628_152707.mp3","cap":"I know we're gonna stay out you'll get cleaner gonna extend"}],"PER":[{"lap":5,"t":"13:09:10","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/PER_11_20260628_150840.mp3","f":"PER_11_20260628_150840.mp3","cap":"We will be back in a few minutes."}],"PIA":[{"lap":1,"t":"12:32:40","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/PIA_81_20260628_143201.mp3","f":"PIA_81_20260628_143201.mp3","cap":"Can we just check the left side of my seat? I mean, I guess it's coming out. Anyway, but it feels like it's not properly in. Around my left leg."}],"RUS":[{"lap":10,"t":"13:15:16","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/RUS_63_20260628_151458.mp3","f":"RUS_63_20260628_151458.mp3","cap":"So the stuff could trigger this early. He is very close to Lewis. Every, every extra second we can get."},{"lap":17,"t":"13:23:22","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/RUS_63_20260628_152244.mp3","f":"RUS_63_20260628_152244.mp3","cap":"I think it's all stuff that's overheated. The one stop made it possible. Hey."},{"lap":46,"t":"13:59:28","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/RUS_63_20260628_155900.mp3","f":"RUS_63_20260628_155900.mp3","cap":"Low and Kimmy keeps extended, but that one's gonna keep on extended. I'm gonna send a press."},{"lap":71,"t":"14:31:23","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/RUS_63_20260628_163044.mp3","f":"RUS_63_20260628_163044.mp3","cap":"Good job, mate. Whee! That was about two years ago. Yeah, badabado! Yeah, bad job. Well done, guys. I'm happy. Well done. Have you chosen? Good team, Brazil. Bye then. Bye then, everybody."},{"lap":71,"t":"14:32:55","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/RUS_63_20260628_163222.mp3","f":"RUS_63_20260628_163222.mp3","cap":"Drink system, nice race for it to do so. So I'm a little bit thirsty. Great job. Well, have a drink ready for your podium."}],"VER":[{"lap":12,"t":"13:17:16","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/VER_3_20260628_151652.mp3","f":"VER_3_20260628_151652.mp3","cap":"I respect"},{"lap":46,"t":"13:58:55","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/VER_3_20260628_155813.mp3","f":"VER_3_20260628_155813.mp3","cap":"So yeah, best you can at this stage of the race, we'll just probably just build a bit of a tyre offset if we get such trouble towards here. I think it's a long road. Probably."},{"lap":71,"t":"14:32:24","url":"https://livetiming.formula1.com/static/2026/2026-06-28_Austrian_Grand_Prix/2026-06-28_Race/TeamRadio/VER_3_20260628_163139.mp3","f":"VER_3_20260628_163139.mp3","cap":"Ah, good job, folks. Well done. Throw the wheels off it. That's a poor little car."}]},"9":{"ALB":[{"lap":35,"t":"15:02:54","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ALB_23_20260705_160209.mp3","f":"ALB_23_20260705_160209.mp3","cap":"And it's a small feedback base for you, and then we'll go towards it. More load, copy. This way. More load. Same as the simulator. Keep it short of full D-D-Flow. Quite what you did, what's up, Jeremy."}],"ANT":[{"lap":41,"t":"15:08:59","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_160837.mp3","f":"ANT_12_20260705_160837.mp3","cap":"I don't know if you're broken in the car."},{"lap":42,"t":"15:10:31","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_161020.mp3","f":"ANT_12_20260705_161020.mp3","cap":"I made a suspension in progress. OK, copy, copy."},{"lap":42,"t":"15:11:01","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_161048.mp3","f":"ANT_12_20260705_161048.mp3","cap":"I get road to keep going. We think it is just the wheel shield left-hand side."},{"lap":44,"t":"15:13:04","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_161231.mp3","f":"ANT_12_20260705_161231.mp3","cap":"Okay, club pin off. Okay, we're going to try and... To box the goal, we'll try and remove the wheel shield and go again."},{"lap":45,"t":"15:15:05","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_161440.mp3","f":"ANT_12_20260705_161440.mp3","cap":"I may not, there's something deeper. I have no brush, the wheel is in the air. Ok, we'll box the car. So this is to retire."},{"lap":45,"t":"15:16:07","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_161533.mp3","f":"ANT_12_20260705_161533.mp3","cap":"We are just in P10, we've got Kollopinto behind."},{"lap":46,"t":"15:18:10","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_161752.mp3","f":"ANT_12_20260705_161752.mp3","cap":"I'm gonna go first, mate."},{"lap":49,"t":"15:22:43","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_162224.mp3","f":"ANT_12_20260705_162224.mp3","cap":"Ah f***ing great. Everything is going again, but unbelievable. It just makes it feel like one of those days."},{"lap":50,"t":"15:24:16","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/ANT_12_20260705_162333.mp3","f":"ANT_12_20260705_162333.mp3","cap":"We do have a five second penalty for track limits. Yeah, but that's a joke, mate. I didn't do it on purpose. I like... Like, the car was broken. Yeah, understood. Like, I wasn't even getting time. Yeah, I know, mate. I know, mate."}],"COL":[{"lap":52,"t":"15:43:33","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/COL_43_20260705_164254.mp3","f":"COL_43_20260705_164254.mp3","cap":"I mean, so that's points to the team after I'd say a pretty difficult weekend. Yeah, we'll be still back at the podium."}],"HAD":[{"lap":52,"t":"15:40:29","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/HAD_6_20260705_163932.mp3","f":"HAD_6_20260705_163932.mp3","cap":"P5 to me, P5 I don't know what the hell that was I mean, obviously I was on the tyre again but you don't get that much time that was just yep, big loss big loss of load Don't be that Well, to the points Yeah but I wanted to go to the front, not like Back, back, I know, mate, I know Still stuff to work on, we'll work on it together"}],"HAM":[{"lap":24,"t":"14:40:34","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/HAM_44_20260705_154016.mp3","f":"HAM_44_20260705_154016.mp3","cap":"And box box My time that's still good my time"},{"lap":26,"t":"14:45:10","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/HAM_44_20260705_154456.mp3","f":"HAM_44_20260705_154456.mp3","cap":"We are p6 we are fighting for the podium p3"}],"LIN":[{"lap":52,"t":"15:42:01","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/LIN_41_20260705_164102.mp3","f":"LIN_41_20260705_164102.mp3","cap":"Well done everyone another amazing result Yeah, I'm gonna be honest that annoys me Not at you, but yeah, I'm not bad at you. It's just Yeah, it's really frustrating. But we got a good team effort. We'll keep working"}],"NOR":[{"lap":52,"t":"15:37:28","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/NOR_1_20260705_163702.mp3","f":"NOR_1_20260705_163702.mp3","cap":"there is a there a tikka everywhere I in this just everyone's over tikka you just do the right thing yeah just trying to stay out everyone's way I mean they're just racing strong everyone guesses qualify there's been confusing messages so I don't know sure"}],"RUS":[{"lap":33,"t":"14:56:18","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/RUS_63_20260705_155542.mp3","f":"RUS_63_20260705_155542.mp3","cap":"Let's blow punch off right and rear. Move me or you do?"},{"lap":35,"t":"14:59:22","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/RUS_63_20260705_155847.mp3","f":"RUS_63_20260705_155847.mp3","cap":"Oh my god."},{"lap":52,"t":"15:33:22","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/RUS_63_20260705_163250.mp3","f":"RUS_63_20260705_163250.mp3","cap":"But I'm for sticking in there, but that's really fine girls off this right line speed stuff that was a very frustrating weekend otherwise We got lucky Actually, yeah, I think straight line was okay in the race"}],"VER":[{"lap":1,"t":"14:01:01","url":"https://livetiming.formula1.com/static/2026/2026-07-05_British_Grand_Prix/2026-07-05_Race/TeamRadio/VER_3_20260705_150051.mp3","f":"VER_3_20260705_150051.mp3","cap":""}]},"10":{"ANT":[{"lap":17,"t":"13:37:49","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/ANT_12_20260719_153716.mp3","f":"ANT_12_20260719_153716.mp3","cap":"Tires are looking good, give it better than others so you can afford to use them."},{"lap":40,"t":"14:20:58","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/ANT_12_20260719_162042.mp3","f":"ANT_12_20260719_162042.mp3","cap":"Remember track limits. How many do I have? Two. We have two already. So we don't want any more."},{"lap":45,"t":"14:29:37","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/ANT_12_20260719_162911.mp3","f":"ANT_12_20260719_162911.mp3","cap":"Nice work coming. Well done there mate. Let's go! Thank you so much guys. Yeah, well done mate. Yeah, it was a busy race that one. Well done."},{"lap":45,"t":"14:33:43","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/ANT_12_20260719_163325.mp3","f":"ANT_12_20260719_163325.mp3","cap":"What am I throw that give me Bravo"}],"BEA":[{"lap":44,"t":"14:34:05","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/BEA_87_20260719_163702.mp3","f":"BEA_87_20260719_163702.mp3","cap":"Thanks everyone. The site was already after we held the cloth belt today, so it's really close to it."}],"BOR":[{"lap":44,"t":"14:34:05","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/BOR_5_20260719_163412.mp3","f":"BOR_5_20260719_163412.mp3","cap":"Come in, just P8, P8 more than, more than. Charged up, more than. And we're driving to P1, into turn one. What a race you have driven, Gabi. What a race. Unbelievable second attempt. I go backwards. Yes, yes. I go backwards? Yes, coming to the pit. Travel slowly. I mean, what a race. Amazing driving. Oh, my god. Mega Joe, mega quality. Thank you very much. Fantastic job. Really well deserved. You did a fun, to put out a fight, but we were fight out there. And great job for the team on the pit stop. Now we'll start getting you and Nico in a good time for the double points. Yes, thanks everyone. What a weekend. Amazing. I tell my team, I took him home again. Thank you. I remember. And full switch up when you're a run too far from me. And again, what a fight you put out there today. Really well deserved. Yeah, fantastic job, mate. I'm the team on the guys in the pit stop here. Fantastic job as well. Fantastic. Great job."}],"HAD":[{"lap":44,"t":"14:34:05","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAD_6_20260719_163403.mp3","f":"HAD_6_20260719_163403.mp3","cap":"Good pace today is all good pace. Yeah, nothing I could do more honestly. So, all that. So it's just training because, yeah. Could be on this podium, so. Yeah, I have car business there, unfortunately with penalty. Yeah. You know what you can say? Good man."}],"HAM":[{"lap":3,"t":"13:08:52","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_150827.mp3","f":"HAM_44_20260719_150827.mp3","cap":"I crossed over in front of me and I was right behind another car so I had no idea."},{"lap":13,"t":"13:30:12","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_152954.mp3","f":"HAM_44_20260719_152954.mp3","cap":"I'm quicker than Charles, I've got more pace."},{"lap":18,"t":"13:39:50","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_153914.mp3","f":"HAM_44_20260719_153914.mp3","cap":"What lap are we on? We are on lap 18. Why the hell? I told you what strategy I wanted to do. Just put me out with everyone else now. We are on Plan B."},{"lap":20,"t":"13:42:55","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_154223.mp3","f":"HAM_44_20260719_154223.mp3","cap":"And we are opening the gap to Piastri and we need to serve a 5 second penalty that's why."},{"lap":21,"t":"13:45:56","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_154537.mp3","f":"HAM_44_20260719_154537.mp3","cap":"Is he okay? He's not okay, or okay?"},{"lap":24,"t":"13:52:02","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_155123.mp3","f":"HAM_44_20260719_155123.mp3","cap":"If you put from winging or not, we need that manager. Yeah, I can't tell the cars."},{"lap":44,"t":"14:32:09","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_163152.mp3","f":"HAM_44_20260719_163152.mp3","cap":"Yeah, it's a weekend, of course. Hopefully, okay."},{"lap":44,"t":"14:32:40","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_163216.mp3","f":"HAM_44_20260719_163216.mp3","cap":""},{"lap":44,"t":"14:32:40","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HAM_44_20260719_163219.mp3","f":"HAM_44_20260719_163219.mp3","cap":"I guess I can say today I just wasn't there. That's what that's supposed to mean."}],"HUL":[{"lap":9,"t":"13:22:05","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HUL_27_20260719_152201.mp3","f":"HUL_27_20260719_152201.mp3","cap":""},{"lap":9,"t":"13:22:35","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/HUL_27_20260719_152208.mp3","f":"HUL_27_20260719_152208.mp3","cap":"Well, here's who we got the project in love. We should be right on track. Hold on. Coming across."}],"LEC":[{"lap":31,"t":"14:04:45","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/LEC_16_20260719_160412.mp3","f":"LEC_16_20260719_160412.mp3","cap":"These"},{"lap":44,"t":"14:30:38","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/LEC_16_20260719_163006.mp3","f":"LEC_16_20260719_163006.mp3","cap":"Peter Goodrace, Charles, well done. Good work Charles, good work. I was close, but... I only looked lucky with the BSCs. I was just hoping that this may be..."},{"lap":44,"t":"14:32:40","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/LEC_16_20260719_163216.mp3","f":"LEC_16_20260719_163216.mp3","cap":"Oh."}],"LIN":[{"lap":44,"t":"14:34:05","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/LIN_41_20260719_163621.mp3","f":"LIN_41_20260719_163621.mp3","cap":"Yeah, thank you everyone. I really tried. Yeah, especially about the BSC for Republics. A really good weekend again, so thank you for the work."}],"NOR":[{"lap":30,"t":"14:01:41","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/NOR_1_20260719_160127.mp3","f":"NOR_1_20260719_160127.mp3","cap":"and I don't want any yo-yo racing with Oscar, I'll explain why later."}],"OCO":[{"lap":1,"t":"12:54:09","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/OCO_31_20260719_145336.mp3","f":"OCO_31_20260719_145336.mp3","cap":"So we expect a very small shower five minutes after the race start, but it should last about four minutes and very light rain."}],"PIA":[{"lap":8,"t":"13:21:05","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/PIA_81_20260719_152048.mp3","f":"PIA_81_20260719_152048.mp3","cap":"If you leave another space, they could have been a massive cold. You saw?"},{"lap":41,"t":"14:22:00","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/PIA_81_20260719_162145.mp3","f":"PIA_81_20260719_162145.mp3","cap":"Hamilton under investigation post-rate for unsafe relief stay within five seconds Hamilton under investigation post-rate"}],"SAI":[{"lap":1,"t":"12:55:40","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/SAI_55_20260719_145529.mp3","f":"SAI_55_20260719_145529.mp3","cap":"I'm going to do a little bit of a quick quick quick quick quick quick quick quick quick quick quick quick quick"},{"lap":44,"t":"14:32:09","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/SAI_55_20260719_163145.mp3","f":"SAI_55_20260719_163145.mp3","cap":"Yeah, well done Carlos, good work, have a really good pace. Mr. Beth, we had a net up that packed change this morning. Yeah, thank you."}],"VER":[{"lap":44,"t":"14:31:08","url":"https://livetiming.formula1.com/static/2026/2026-07-19_Belgian_Grand_Prix/2026-07-19_Race/TeamRadio/VER_3_20260719_163033.mp3","f":"VER_3_20260719_163033.mp3","cap":"Yeah, good surprise. I mean, it's a lot of podium. We're not lucky with that PSC, but it's all well done. Well done, Max. The pace is getting better, are you? We are very strong, as you say. We're lucky for P2, but it's close enough to the top and we have more coming. So thanks for bearing with us. Yeah, exactly that. It's a tiny bit unlucky, but that hits. It's a lot of podium."}]},"11":{"ANT":[{"lap":49,"t":"14:13:05","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/ANT_12_20260726_161227.mp3","f":"ANT_12_20260726_161227.mp3","cap":"Again, just keep it 3-7, tight again."},{"lap":54,"t":"14:19:43","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/ANT_12_20260726_161904.mp3","f":"ANT_12_20260726_161904.mp3","cap":"What can we go until yet we don't think we have a tie like so press hold boost press hold boost"},{"lap":55,"t":"14:22:15","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/ANT_12_20260726_162136.mp3","f":"ANT_12_20260726_162136.mp3","cap":"Wait for the other way, so probably p6 potential but p2 they're giving we've got a big offset on tires"},{"lap":58,"t":"14:25:50","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/ANT_12_20260726_162520.mp3","f":"ANT_12_20260726_162520.mp3","cap":"But I think I was ahead. Yeah, we're just talking through"},{"lap":70,"t":"14:46:18","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/ANT_12_20260726_165018.mp3","f":"ANT_12_20260726_165018.mp3","cap":"Nice work, Kimmy. P3, but not a bad day. That was tough. Yeah, it can't be hard to earn your money today, mate. Thanks, everyone. It was a damn good time to be taking off for yesterday. So thank you, everyone."}],"BEA":[{"lap":1,"t":"12:53:19","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/BEA_87_20260726_145310.mp3","f":"BEA_87_20260726_145310.mp3","cap":""}],"COL":[{"lap":68,"t":"14:46:18","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/COL_43_20260726_164802.mp3","f":"COL_43_20260726_164802.mp3","cap":"Choking face, I'm so slow"}],"HAM":[{"lap":12,"t":"13:19:13","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/HAM_44_20260726_151851.mp3","f":"HAM_44_20260726_151851.mp3","cap":"Max is pretty slow."},{"lap":35,"t":"13:53:46","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/HAM_44_20260726_155318.mp3","f":"HAM_44_20260726_155318.mp3","cap":"Trying to be a struggle in the districts now we are fighting for the position we box it then we make it to the thighs"},{"lap":68,"t":"14:40:32","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/HAM_44_20260726_164018.mp3","f":"HAM_44_20260726_164018.mp3","cap":"And we got five second penalty for speeding into the pit lane Our penalty is like crazy"}],"LAW":[{"lap":69,"t":"14:46:18","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/LAW_30_20260726_164928.mp3","f":"LAW_30_20260726_164928.mp3","cap":"It was pretty tough, a really good job, very good call on my strategy as well. Had me down again at the car, but it's doing a really good job. Thank you. The car was so good. We wanted to keep you active, you know? We didn't want you to fall asleep. I literally said I don't want to overtake cars with the other guys, and that's what you had me do. But you see, we could do it."}],"LEC":[{"lap":27,"t":"13:41:04","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/LEC_16_20260726_154053.mp3","f":"LEC_16_20260726_154053.mp3","cap":"The world is in quite a bit of time."},{"lap":50,"t":"14:14:38","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/LEC_16_20260726_161356.mp3","f":"LEC_16_20260726_161356.mp3","cap":"Can you guys hear me? Oh, there's something that just popped the guard. I can't read them."}],"NOR":[{"lap":10,"t":"13:17:11","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_151629.mp3","f":"NOR_1_20260726_151629.mp3","cap":"How's the tires? How's the pump? Dirty, yeah, really. Much faster, but yeah, it gets yes."},{"lap":30,"t":"13:45:38","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_154526.mp3","f":"NOR_1_20260726_154526.mp3","cap":"Okay mate, let's get back to the rhythm. Now all you've been trying to do, and we see it back here with the plate."},{"lap":32,"t":"13:49:13","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_154842.mp3","f":"NOR_1_20260726_154842.mp3","cap":"Calvertons currently stuck behind the jar, and they thought they'd fall ignorant by their turn. I need to get off, because I have to do something nice. Bye bye. I'll go. I'm stuck, just gonna close in. I want boxes left."},{"lap":33,"t":"13:50:13","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_154941.mp3","f":"NOR_1_20260726_154941.mp3","cap":"You mean you don't like me? I'm sales faster."},{"lap":34,"t":"13:50:43","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_155006.mp3","f":"NOR_1_20260726_155006.mp3","cap":"Help them out attempts to get their thoughts"},{"lap":43,"t":"14:04:27","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_160406.mp3","f":"NOR_1_20260726_160406.mp3","cap":"I think that they're all catching up to any night quickly. That's just been measured where we get there."},{"lap":54,"t":"14:20:14","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_161945.mp3","f":"NOR_1_20260726_161945.mp3","cap":"You're clearly the fastest car I've done through, so the snaps are 4.8, no more."},{"lap":67,"t":"14:38:32","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_163816.mp3","f":"NOR_1_20260726_163816.mp3","cap":"I don't know, actually, Kirk, that's maybe what happened to Oscar's car."},{"lap":70,"t":"14:44:38","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_164359.mp3","f":"NOR_1_20260726_164359.mp3","cap":"What about what? Beautiful How was unbelievable today? Well done guys incredible Fine. Thank you so much for the car nice to finally be able to do it all for you again So it's like a skin a wife Congrats, very well deserved harder pays off. Just keep it going. Thank you very much. I love you all"},{"lap":70,"t":"14:46:18","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/NOR_1_20260726_164736.mp3","f":"NOR_1_20260726_164736.mp3","cap":"And Lando Barnsey put it on his plate. Won his last lap. Oh yeah, I only did it for him. Thanks Barnsey for everything. Beautiful career and did it on a high. Well done mate, thank you very much for everything."}],"OCO":[{"lap":68,"t":"14:46:18","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/OCO_31_20260726_164834.mp3","f":"OCO_31_20260726_164834.mp3","cap":"Thank you Laura. Yeah, positive weekends. It's not all good stuff Even if the race was very difficult not as good as we would have liked it's take the positive for you guys And we come back stronger after the break"}],"PIA":[{"lap":1,"t":"12:53:19","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/PIA_81_20260726_145312.mp3","f":"PIA_81_20260726_145312.mp3","cap":""},{"lap":11,"t":"13:18:13","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/PIA_81_20260726_151736.mp3","f":"PIA_81_20260726_151736.mp3","cap":"How's the title? Currently we are thinking plan A target land. Well it feels good."},{"lap":26,"t":"13:40:02","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/PIA_81_20260726_153950.mp3","f":"PIA_81_20260726_153950.mp3","cap":"We're aiming at plenty of target, but how's the time? Oh yeah, it doesn't feel great."},{"lap":39,"t":"13:58:21","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/PIA_81_20260726_155750.mp3","f":"PIA_81_20260726_155750.mp3","cap":"Hey"},{"lap":39,"t":"13:58:51","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/PIA_81_20260726_155835.mp3","f":"PIA_81_20260726_155835.mp3","cap":"Get out of the way it is! Oh my god."},{"lap":41,"t":"14:01:55","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/PIA_81_20260726_160114.mp3","f":"PIA_81_20260726_160114.mp3","cap":"After that sight, it's tough to start. Target is getting the end on this time. Oh, I'm aged. It's better you don't f*** with me now. I'll send you guys to Hector and Juanita otherwise, thanks."}],"RUS":[{"lap":2,"t":"13:05:31","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/RUS_63_20260726_150501.mp3","f":"RUS_63_20260726_150501.mp3","cap":"Well, it's 2% shallow, it is a throttle that you backed off with a high RPM."}],"VER":[{"lap":7,"t":"13:12:07","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/VER_3_20260726_151141.mp3","f":"VER_3_20260726_151141.mp3","cap":"Also got the dumping failed for sure"},{"lap":11,"t":"13:18:43","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/VER_3_20260726_151824.mp3","f":"VER_3_20260726_151824.mp3","cap":"Please do something on the shifts and don't tell me it's me, something major. I'm sitting."},{"lap":17,"t":"13:27:21","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/VER_3_20260726_152648.mp3","f":"VER_3_20260726_152648.mp3","cap":"Well that was quite special. I don't want to complain but it's again moving on the braking. I mean it's not a section but it's not right."},{"lap":50,"t":"14:15:08","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/VER_3_20260726_161437.mp3","f":"VER_3_20260726_161437.mp3","cap":"This is good Max, you've had it, you might have some fun towards the end."},{"lap":70,"t":"14:45:38","url":"https://livetiming.formula1.com/static/2026/2026-07-26_Hungarian_Grand_Prix/2026-07-26_Race/TeamRadio/VER_3_20260726_164505.mp3","f":"VER_3_20260726_164505.mp3","cap":"That is an excellent drive, Max. Really, really, really spot on. I went to VSC's property of a showpiece in Al Iber, but nonetheless, I couldn't be parro of that far enough, so that's a great move to Neregla, so that tells it your move. Yeah, you had a second game, so I'm going to go. Great tilt, while I'm not out there, so..."}]},"12":{"BEA":[{"lap":1,"t":"12:19:56","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/BEA_87_20260823_141940.mp3","f":"BEA_87_20260823_141940.mp3","cap":"I would accuse you to be honest guys, every degree counts."},{"lap":1,"t":"12:20:27","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/BEA_87_20260823_142007.mp3","f":"BEA_87_20260823_142007.mp3","cap":"Green light, green light."},{"lap":1,"t":"12:22:28","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/BEA_87_20260823_142210.mp3","f":"BEA_87_20260823_142210.mp3","cap":"Seems too wet for slicks at the moment."}],"ANT":[{"lap":1,"t":"12:24:32","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/ANT_12_20260823_142409.mp3","f":"ANT_12_20260823_142409.mp3","cap":"Third half is really dry for interest, but the second half is wet, quite wet."},{"lap":51,"t":"14:40:20","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/ANT_12_20260823_164008.mp3","f":"ANT_12_20260823_164008.mp3","cap":"Still recommend a wider line, exit to 10."},{"lap":72,"t":"15:11:02","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/ANT_12_20260823_171019.mp3","f":"ANT_12_20260823_171019.mp3","cap":"Right on, mate. That's P2. Not the race you could have had, but that is not a bad result. George managed to hang on to P3 there, so great drive from him as well. Yeah, great job, but on strategy, that was too risky. I think it was a bit too risky for both of us."}],"VER":[{"lap":1,"t":"13:06:37","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/VER_3_20260823_150618.mp3","f":"VER_3_20260823_150618.mp3","cap":"No, that's it. Oh, sorry."}],"RUS":[{"lap":3,"t":"13:34:31","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_153426.mp3","f":"RUS_63_20260823_153426.mp3","cap":"Can't make this joke how cold be tired they are again."},{"lap":15,"t":"13:53:19","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_155249.mp3","f":"RUS_63_20260823_155249.mp3","cap":"Consider original plan A. Copy."},{"lap":59,"t":"14:50:32","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_165007.mp3","f":"RUS_63_20260823_165007.mp3","cap":"Gives me coffee, I'm working the team here, yeah, fun. Give me five of the bikes. Paper, paper."},{"lap":65,"t":"14:58:49","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_165834.mp3","f":"RUS_63_20260823_165834.mp3","cap":"They're joking. We'll invert cars this lap. Hamilton's turn one."},{"lap":66,"t":"14:59:19","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_165856.mp3","f":"RUS_63_20260823_165856.mp3","cap":"Is he fighting for the win? Or is he planning to quote Norris?"},{"lap":66,"t":"15:00:21","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_165945.mp3","f":"RUS_63_20260823_165945.mp3","cap":"Thank you. I know. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head down. Head"},{"lap":72,"t":"15:15:07","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/RUS_63_20260823_171451.mp3","f":"RUS_63_20260823_171451.mp3","cap":"George, great, great, great, thank you for coming. Thanks. I didn't think that was possible, too."}],"NOR":[{"lap":16,"t":"13:54:53","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/NOR_1_20260823_155430.mp3","f":"NOR_1_20260823_155430.mp3","cap":"I don't know how the tyres have the pace. I'm 3-0, mate. I've got nothing else."},{"lap":57,"t":"14:48:59","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/NOR_1_20260823_164826.mp3","f":"NOR_1_20260823_164826.mp3","cap":"Do you think we need to take it? I'm a bit worried now."},{"lap":72,"t":"15:10:01","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/NOR_1_20260823_170926.mp3","f":"NOR_1_20260823_170926.mp3","cap":"What a bit. Very well done. Gorgeous. Well done. Well executed. Well executed. Good strategy. Want me to race today. So thank you guys. Whoo. Another one. Well done. Thank you, everyone. Just keep pushing. Not easy enough. Thanks for the hard work. Let's keep bringing upgrades. Let's keep bringing performance, please. The fight's still on. Let's keep going."}],"PIA":[{"lap":17,"t":"13:56:23","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/PIA_81_20260823_155551.mp3","f":"PIA_81_20260823_155551.mp3","cap":"Let's get out of the tyre. It's okay, it's better than medium. Copy."},{"lap":20,"t":"14:00:29","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/PIA_81_20260823_160002.mp3","f":"PIA_81_20260823_160002.mp3","cap":"The Ferraris are doing 17-5, we need to be better than that, we're aiming to plan 8-0."}],"HUL":[{"lap":27,"t":"14:09:47","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/HUL_27_20260823_160940.mp3","f":"HUL_27_20260823_160940.mp3","cap":"Excellent work. Next is Sainz."}],"STR":[{"lap":28,"t":"14:10:48","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/STR_18_20260823_161020.mp3","f":"STR_18_20260823_161020.mp3","cap":"I don't understand why you boxed me, man. Like, we said that the Cadillac should be a problem, we did it. I understood, Lance. We thought we were struggling so much on the soft, we thought the hard would give us better performance, and I think your pace now is going to be good. That was the choice we took at the time."}],"HAM":[{"lap":42,"t":"14:28:06","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/HAM_44_20260823_162733.mp3","f":"HAM_44_20260823_162733.mp3","cap":"I don't know if we can adjust. Tires are better. I think so."},{"lap":44,"t":"14:31:10","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/HAM_44_20260823_163049.mp3","f":"HAM_44_20260823_163049.mp3","cap":"Big way of wasting time, guys. Good job."},{"lap":50,"t":"14:38:48","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/HAM_44_20260823_163802.mp3","f":"HAM_44_20260823_163802.mp3","cap":"Tack of gear, turn, land, land, we are thinking something different. Happy to work with what you'll be doing. It's a great chance. It's slower. We are not sure. You guys have a lot of data, so figure it out, please."},{"lap":55,"t":"14:45:26","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/HAM_44_20260823_164514.mp3","f":"HAM_44_20260823_164514.mp3","cap":"Are you using me as a guinea pig or what's going on? How long do you have me stay out?"},{"lap":72,"t":"15:14:37","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/HAM_44_20260823_171415.mp3","f":"HAM_44_20260823_171415.mp3","cap":"In fact, we looked at the question, would it be unlucky with Russell? Well, we weren't unlucky. We lost time earlier on, and that closed us, D3, and we can discuss it offline."}],"LEC":[{"lap":42,"t":"14:28:39","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/LEC_16_20260823_162824.mp3","f":"LEC_16_20260823_162824.mp3","cap":"Now that tells part, whatever it does, finally, I stop to last after that's all."}],"ALO":[{"lap":71,"t":"15:14:05","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/ALO_14_20260823_171354.mp3","f":"ALO_14_20260823_171354.mp3","cap":"Yeah, the main thing of the radio was painful so we're not patching everything the same way, copy."},{"lap":71,"t":"15:14:37","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/ALO_14_20260823_171406.mp3","f":"ALO_14_20260823_171406.mp3","cap":"Well done, Fernando, that was a great drive, very disciplined and a great boost, probably going to see you this week, thank you. Yeah, absolutely, thanks to you guys, everyone in Switzerland, amazing, a lot of guys to drive, and more to come I know. Thank you, thank you."},{"lap":71,"t":"15:15:07","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/ALO_14_20260823_171447.mp3","f":"ALO_14_20260823_171447.mp3","cap":""}],"BOR":[{"lap":71,"t":"15:20:40","url":"https://livetiming.formula1.com/static/2026/2026-08-23_Dutch_Grand_Prix/2026-08-23_Race/TeamRadio/BOR_5_20260823_171734.mp3","f":"BOR_5_20260823_171734.mp3","cap":"Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Hadjar. Had"}]}}};
+const LIVE = {
+ "meta": {
+  "season": 2026,
+  "round": 13,
+  "updated": "2026-09-04T17:27:47Z"
+ },
+ "round": 13,
+ "gp": "Italian Grand Prix",
+ "full": "Gran Premio d’Italia",
+ "short": "Italy",
+ "flag": "🇮🇹",
+ "country": "Italy",
+ "circuit": "Autodromo Nazionale di Monza",
+ "locality": "Monza",
+ "date": "2026-09-06",
+ "laps": 53,
+ "length": "5.793",
+ "distance": "306.720",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-09-04T10:30:00Z",
+   "end": "2026-09-04T11:30:00+00:00",
+   "results": [
+    {
+     "pos": 1,
+     "code": "LEC",
+     "num": 16,
+     "name": "Leclerc",
+     "team": "Ferrari",
+     "col": "#E80020",
+     "time": "1:23.008",
+     "gap": null,
+     "laps": 29,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 2,
+     "code": "HAM",
+     "num": 44,
+     "name": "Hamilton",
+     "team": "Ferrari",
+     "col": "#E80020",
+     "time": "1:23.181",
+     "gap": "+0.173",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 3,
+     "code": "RUS",
+     "num": 63,
+     "name": "Russell",
+     "team": "Mercedes",
+     "col": "#00D7B6",
+     "time": "1:23.312",
+     "gap": "+0.304",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 4,
+     "code": "LAW",
+     "num": 30,
+     "name": "Lawson",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "time": "1:23.433",
+     "gap": "+0.425",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 5,
+     "code": "ANT",
+     "num": 12,
+     "name": "Antonelli",
+     "team": "Mercedes",
+     "col": "#00D7B6",
+     "time": "1:23.644",
+     "gap": "+0.636",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 6,
+     "code": "NOR",
+     "num": 1,
+     "name": "Norris",
+     "team": "McLaren",
+     "col": "#FF8000",
+     "time": "1:23.719",
+     "gap": "+0.711",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 7,
+     "code": "LIN",
+     "num": 41,
+     "name": "Lindblad",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "time": "1:23.802",
+     "gap": "+0.794",
+     "laps": 29,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 8,
+     "code": "BOR",
+     "num": 5,
+     "name": "Bortoleto",
+     "team": "Audi",
+     "col": "#D81C1C",
+     "time": "1:24.006",
+     "gap": "+0.998",
+     "laps": 21,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 9,
+     "code": "COL",
+     "num": 43,
+     "name": "Colapinto",
+     "team": "Alpine",
+     "col": "#00A1E8",
+     "time": "1:24.028",
+     "gap": "+1.020",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 10,
+     "code": "ARO",
+     "num": 61,
+     "name": "Aron",
+     "team": "Alpine",
+     "col": "#00A1E8",
+     "time": "1:24.177",
+     "gap": "+1.169",
+     "laps": 23,
+     "seg": null,
+     "out": false,
+     "rookie": true
+    },
+    {
+     "pos": 11,
+     "code": "PIA",
+     "num": 81,
+     "name": "Piastri",
+     "team": "McLaren",
+     "col": "#FF8000",
+     "time": "1:24.184",
+     "gap": "+1.176",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 12,
+     "code": "TSU",
+     "num": 22,
+     "name": "Tsunoda",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "time": "1:24.571",
+     "gap": "+1.563",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 13,
+     "code": "HUL",
+     "num": 27,
+     "name": "Hülkenberg",
+     "team": "Audi",
+     "col": "#D81C1C",
+     "time": "1:24.626",
+     "gap": "+1.618",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 14,
+     "code": "BEA",
+     "num": 87,
+     "name": "Bearman",
+     "team": "Haas",
+     "col": "#B9BDC2",
+     "time": "1:24.646",
+     "gap": "+1.638",
+     "laps": 28,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 15,
+     "code": "BRO",
+     "num": 46,
+     "name": "Browning",
+     "team": "Williams",
+     "col": "#1868DB",
+     "time": "1:24.740",
+     "gap": "+1.732",
+     "laps": 25,
+     "seg": null,
+     "out": false,
+     "rookie": true
+    },
+    {
+     "pos": 16,
+     "code": "SAI",
+     "num": 55,
+     "name": "Sainz",
+     "team": "Williams",
+     "col": "#3AA6E0",
+     "time": "1:24.827",
+     "gap": "+1.819",
+     "laps": 25,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 17,
+     "code": "IWA",
+     "num": 36,
+     "name": "Iwasa",
+     "team": "Red Bull Racing",
+     "col": "#4781D7",
+     "time": "1:24.873",
+     "gap": "+1.865",
+     "laps": 24,
+     "seg": null,
+     "out": false,
+     "rookie": true
+    },
+    {
+     "pos": 18,
+     "code": "OCO",
+     "num": 31,
+     "name": "Ocon",
+     "team": "Haas",
+     "col": "#B9BDC2",
+     "time": "1:25.852",
+     "gap": "+2.844",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 19,
+     "code": "BOT",
+     "num": 77,
+     "name": "Bottas",
+     "team": "Cadillac",
+     "col": "#C8A24B",
+     "time": "1:25.984",
+     "gap": "+2.976",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 20,
+     "code": "STR",
+     "num": 18,
+     "name": "Stroll",
+     "team": "Aston Martin",
+     "col": "#00A88E",
+     "time": "1:26.066",
+     "gap": "+3.058",
+     "laps": 23,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 21,
+     "code": "ALO",
+     "num": 14,
+     "name": "Alonso",
+     "team": "Aston Martin",
+     "col": "#00A88E",
+     "time": "1:26.072",
+     "gap": "+3.064",
+     "laps": 21,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 22,
+     "code": "HER",
+     "num": 25,
+     "name": "Herta",
+     "team": "Cadillac",
+     "col": "#909090",
+     "time": "1:29.922",
+     "gap": "+6.914",
+     "laps": 5,
+     "seg": null,
+     "out": false,
+     "rookie": true
+    }
+   ]
+  },
+  {
+   "key": "fp2",
+   "name": "Practice 2",
+   "start": "2026-09-04T14:00:00Z",
+   "end": "2026-09-04T15:00:00+00:00",
+   "results": [
+    {
+     "pos": 1,
+     "code": "RUS",
+     "num": 63,
+     "name": "Russell",
+     "team": "Mercedes",
+     "col": "#00D7B6",
+     "time": "1:22.559",
+     "gap": null,
+     "laps": 31,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 2,
+     "code": "LEC",
+     "num": 16,
+     "name": "Leclerc",
+     "team": "Ferrari",
+     "col": "#E80020",
+     "time": "1:22.679",
+     "gap": "+0.120",
+     "laps": 29,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 3,
+     "code": "ANT",
+     "num": 12,
+     "name": "Antonelli",
+     "team": "Mercedes",
+     "col": "#00D7B6",
+     "time": "1:22.700",
+     "gap": "+0.141",
+     "laps": 32,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 4,
+     "code": "NOR",
+     "num": 1,
+     "name": "Norris",
+     "team": "McLaren",
+     "col": "#FF8000",
+     "time": "1:22.943",
+     "gap": "+0.384",
+     "laps": 25,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 5,
+     "code": "HAM",
+     "num": 44,
+     "name": "Hamilton",
+     "team": "Ferrari",
+     "col": "#E80020",
+     "time": "1:23.016",
+     "gap": "+0.457",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 6,
+     "code": "PIA",
+     "num": 81,
+     "name": "Piastri",
+     "team": "McLaren",
+     "col": "#FF8000",
+     "time": "1:23.028",
+     "gap": "+0.469",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 7,
+     "code": "LIN",
+     "num": 41,
+     "name": "Lindblad",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "time": "1:23.349",
+     "gap": "+0.790",
+     "laps": 26,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 8,
+     "code": "BEA",
+     "num": 87,
+     "name": "Bearman",
+     "team": "Haas",
+     "col": "#B9BDC2",
+     "time": "1:23.370",
+     "gap": "+0.811",
+     "laps": 29,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 9,
+     "code": "VER",
+     "num": 3,
+     "name": "Verstappen",
+     "team": "Red Bull",
+     "col": "#3671C6",
+     "time": "1:23.377",
+     "gap": "+0.818",
+     "laps": 30,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 10,
+     "code": "TSU",
+     "num": 22,
+     "name": "Tsunoda",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "time": "1:23.455",
+     "gap": "+0.896",
+     "laps": 29,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 11,
+     "code": "COL",
+     "num": 43,
+     "name": "Colapinto",
+     "team": "Alpine",
+     "col": "#00A1E8",
+     "time": "1:23.619",
+     "gap": "+1.060",
+     "laps": 28,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 12,
+     "code": "LAW",
+     "num": 30,
+     "name": "Lawson",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "time": "1:23.660",
+     "gap": "+1.101",
+     "laps": 37,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 13,
+     "code": "HUL",
+     "num": 27,
+     "name": "Hülkenberg",
+     "team": "Audi",
+     "col": "#D81C1C",
+     "time": "1:23.732",
+     "gap": "+1.173",
+     "laps": 28,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 14,
+     "code": "GAS",
+     "num": 10,
+     "name": "Gasly",
+     "team": "Alpine",
+     "col": "#00A1E8",
+     "time": "1:23.773",
+     "gap": "+1.214",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 15,
+     "code": "BOR",
+     "num": 5,
+     "name": "Bortoleto",
+     "team": "Audi",
+     "col": "#D81C1C",
+     "time": "1:23.776",
+     "gap": "+1.217",
+     "laps": 22,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 16,
+     "code": "ALB",
+     "num": 23,
+     "name": "Albon",
+     "team": "Williams",
+     "col": "#3AA6E0",
+     "time": "1:23.853",
+     "gap": "+1.294",
+     "laps": 31,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 17,
+     "code": "SAI",
+     "num": 55,
+     "name": "Sainz",
+     "team": "Williams",
+     "col": "#3AA6E0",
+     "time": "1:23.900",
+     "gap": "+1.341",
+     "laps": 30,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 18,
+     "code": "OCO",
+     "num": 31,
+     "name": "Ocon",
+     "team": "Haas",
+     "col": "#B9BDC2",
+     "time": "1:24.407",
+     "gap": "+1.848",
+     "laps": 30,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 19,
+     "code": "ALO",
+     "num": 14,
+     "name": "Alonso",
+     "team": "Aston Martin",
+     "col": "#00A88E",
+     "time": "1:25.027",
+     "gap": "+2.468",
+     "laps": 18,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 20,
+     "code": "PER",
+     "num": 11,
+     "name": "Pérez",
+     "team": "Cadillac",
+     "col": "#C8A24B",
+     "time": "1:25.082",
+     "gap": "+2.523",
+     "laps": 28,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 21,
+     "code": "BOT",
+     "num": 77,
+     "name": "Bottas",
+     "team": "Cadillac",
+     "col": "#C8A24B",
+     "time": "1:25.149",
+     "gap": "+2.590",
+     "laps": 28,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 22,
+     "code": "STR",
+     "num": 18,
+     "name": "Stroll",
+     "team": "Aston Martin",
+     "col": "#00A88E",
+     "time": "1:25.253",
+     "gap": "+2.694",
+     "laps": 27,
+     "seg": null,
+     "out": false,
+     "rookie": false
+    }
+   ]
+  },
+  {
+   "key": "fp3",
+   "name": "Practice 3",
+   "start": "2026-09-05T10:30:00Z",
+   "end": "2026-09-05T11:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-09-05T14:00:00Z",
+   "end": "2026-09-05T15:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-09-06T13:00:00Z",
+   "end": "2026-09-06T15:00:00+00:00",
+   "results": []
+  }
+ ]
+};
 const D = DATA.drivers, C = DATA.constructors;
+// weekend in progress: only while its round is still ahead of the last completed one
+const hasLive = () => !!(LIVE && LIVE.round && LIVE.round > DATA.meta.round && (LIVE.sessions||[]).length);
 const IMGV = '?v=30';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
 const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
 const CAR = tid => `img/cars/${tid}.png${IMGV}`;   // local official f1.com 2026 car cutouts (all 11 incl. Cadillac)
 const $ = s => document.querySelector(s);
 const wrap = $('#wrap');
-let mode='drivers', idx=0, playing=false, timer=null, curGP=0;
+let mode='drivers', idx=0, playing=false, timer=null, curGP=0, lvSesKey='';
 const CTXA={drivers:"Drivers' Championship",constructors:"Constructors' Championship",races:"Grand Prix Results"};
 const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
 const N = () => list().length;
-const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:1);
+const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:(1+(hasLive()?1:0)));   // races: [+ weekend in progress] + season map
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
@@ -911,7 +1631,8 @@ const upRow=(cal,prev)=>{
   let cd;
   if(first){ const dd=daysTo(cal.date); cd = dd>0?`in ${wk(dd)}`:'upcoming'; }
   else { const gap=Math.round((new Date(cal.date+'T00:00:00Z')-new Date(prev.date+'T00:00:00Z'))/86400000); cd = wk(gap); }
-  return `<div class="gp up"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${cd}</span></div>`;
+  const live = hasLive() && cal.r===LIVE.round;   // the weekend currently running → open its card
+  return `<div class="gp up${live?' liveup':''}"${live?' data-golive="1" title="Weekend in progress — open"':''}><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${live?'in progress →':cd}</span></div>`;
 };
 // a round already run that this driver did NOT contest (e.g. a mid-season debut / an injured driver) → empty result cells, not a future countdown
 const absentRow=cal=>`<div class="gp up absent"><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span><span class="upcd gap didnot">did not race</span></div>`;
@@ -1241,6 +1962,65 @@ function raceCard(r){
     </div>
   </div>`;
 }
+/* ----- weekend in progress: schedule + each session's results as they land ----- */
+function lvState(sessions){                    // done / live / next / ahead, from the clock + captured results
+  const now=Date.now(); let nextSeen=false;
+  return sessions.map(s=>{
+    const st=Date.parse(s.start), en=s.end?Date.parse(s.end):(st+3600e3);
+    let k;
+    if(now>=st && now<=en) k='live';
+    else if((s.results&&s.results.length) || now>en) k='done';
+    else if(!nextSeen){ k='next'; nextSeen=true; }
+    else k='ahead';
+    return {...s, k, st};
+  });
+}
+const lvDay=ms=>new Date(ms).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
+const lvTime=ms=>new Date(ms).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+function liveCard(){
+  const L=LIVE, ses=lvState(L.sessions||[]);
+  const anyLive=ses.some(s=>s.k==='live');
+  const withRes=ses.filter(s=>s.results&&s.results.length);
+  const sel=lvSesKey && ses.find(s=>s.key===lvSesKey && s.results.length) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
+  const tabs=ses.filter(s=>s.key!=='race').map(s=>{
+    const on=s.key===sel, has=s.results&&s.results.length;
+    return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${s.name.replace('Practice ','FP')}</button>`;}).join('');
+  const cur=ses.find(s=>s.key===sel);
+  const isQ=cur&&(cur.key==='quali'||cur.key==='sq');
+  const body = cur&&cur.results.length ? `
+    <div class="lvhead"><span>Pos</span><span>Driver</span><span>${isQ?'Best':'Time'}</span><span>Gap</span><span class="h-lvl">Laps</span></div>
+    <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
+      <span class="lvp">${r.pos}</span>
+      <span class="lvd"><b>${r.code}</b><span>${r.name||''}${r.team?' · '+r.team:''}</span>${r.rookie?'<u>Rookie</u>':''}</span>
+      <span class="lvt">${r.time||'—'}</span>
+      <span class="lvg">${r.pos===1?'leader':(r.gap||'—')}</span>
+      <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
+    : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
+  const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
+  return `<div class="card enter" style="--c:${DATA.meta.color||'#00D7B6'}">
+    <div class="panel lvinfo">
+      <div class="lv-hd">
+        <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
+          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':'<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>Weekend in progress</span>'}</div>
+        <div class="lv-gp">${L.full||L.gp||''}</div>
+        <div class="lv-sub">${L.circuit||''}${L.locality?' · '+L.locality:''}</div>
+      </div>
+      <div class="lv-map"><img src="img/circuits/${L.round}.png${IMGV}" alt="${L.circuit||''}" onerror="this.closest('.lv-map').style.display='none'"></div>
+      <div class="lv-stats">${stat(L.laps,'Laps')}${stat(L.length?L.length+' km':'','Length')}${stat(L.distance?(+L.distance).toFixed(1)+' km':'','Distance')}</div>
+      <div class="lv-sched">${ses.map(s=>{
+        const tag=s.k==='done'?'<span class="lv-tag d">Done</span>':s.k==='live'?'<span class="lv-tag l">Live</span>':s.k==='next'?'<span class="lv-tag n">Next</span>':'<span class="lv-tag w">To come</span>';
+        return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
+    </div>
+    <div class="panel raceres">
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${cur?cur.name:'Sessions'} · results</span></div>
+      <div class="rc-view">${body}</div>
+    </div>
+  </div>`;
+}
+function wireLiveCard(){
+  wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
+    b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
+}
 function cdText(date){ if(!date)return ''; const dd=daysTo(date); if(dd<=0)return 'race weekend'; const w=Math.round(dd/7); return 'in '+(w<1?dd+' day'+(dd>1?'s':''):w+' week'+(w>1?'s':'')); }
 function raceTip(r){
   const cal=(DATA.calendar||[]).find(c=>c.r===r); if(!cal)return '';
@@ -1270,8 +2050,11 @@ function wireSeasonMap(){
   });
   ww.addEventListener('mouseleave', ()=>tip.classList.remove('on'));
   ww.addEventListener('click', e=>{
-    const g=e.target.closest('.geo.done'); if(!g||!g.dataset.r) return;   // finished races → open that race card
-    tip.classList.remove('on'); go(+g.dataset.r-1);
+    const g=e.target.closest('.geo'); if(!g||!g.dataset.r) return;
+    const r=+g.dataset.r;
+    if(hasLive() && r===LIVE.round){ tip.classList.remove('on'); goLive(); return; }   // weekend in progress
+    if(!g.classList.contains('done')) return;                                          // finished races → that race card
+    tip.classList.remove('on'); go(r-1);
   });
 }
 function worldMapCard(){
@@ -1692,6 +2475,7 @@ function render(dir){
       $('#cwho').textContent=`P${e.pos} ${mode==='drivers'?e.family:e.name}`;
       if(mode==='drivers') wrap.querySelectorAll('.gp[data-gp]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openRace(D[idx].races.findIndex(x=>x.r===+g.dataset.gp));});
       else wrap.querySelectorAll('.gp[data-tr]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openTeamRace(+g.dataset.tr-1);});
+      wrap.querySelectorAll('.gp[data-golive]').forEach(g=>g.onclick=()=>goLive());   // the in-progress weekend row
     }
   } else {
     document.documentElement.style.setProperty('--c','#00D7B6');
@@ -1709,9 +2493,9 @@ function render(dir){
         $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':'Sprint points';
         wrap.querySelectorAll('.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump)); }
     } else if(mode==='races'){
-      wrap.innerHTML = worldMapCard();
-      $('#cwho').textContent = 'Season map';
-      wireSeasonMap();
+      const k=idx-N();
+      if(hasLive() && k===0){ wrap.innerHTML=liveCard(); $('#cwho').textContent=`R${LIVE.round} ${LIVE.short||''}`; wireLiveCard(); }
+      else { wrap.innerHTML = worldMapCard(); $('#cwho').textContent = 'Season map'; wireSeasonMap(); }
     }
   }
   gpSel=-1;
@@ -1735,6 +2519,10 @@ const peekAnchor=()=>wrap.querySelector('.idstack .f, .cstrip .cname, .rc-full, 
 let peekIO=null;
 try{ peekIO=new IntersectionObserver(es=>{ document.querySelector('.topbar').classList.toggle('stuck', !es[0].isIntersecting); }, {rootMargin:'-52px 0px 0px 0px'}); }catch(e){}
 function go(i){ idx=(i+TOT())%TOT(); render(); }
+// jump straight to the weekend-in-progress card (it sits right after the last completed race)
+function goLive(){ if(!hasLive())return; setPlay(false); if(mode!=='races'){ mode='races';
+    document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='races')); $('#ctxA').textContent=CTXA.races; }
+  idx=DATA.races.length; render(); }
 let _wasMob=isMob(); addEventListener('resize',()=>{ const m=isMob(); if(m!==_wasMob){ _wasMob=m; render(); } });
 let gpSel=-1;
 const gpRows=()=>[...wrap.querySelectorAll('.gp')];
