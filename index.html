@@ -38,7 +38,8 @@ button{font-family:inherit}
 
 /* ---------- top bar ---------- */
 .topbar{position:relative;display:flex;align-items:center;gap:16px;padding:13px 26px;border-bottom:1px solid var(--line-2);z-index:5}
-.racenote{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#f4d000;color:#161200;font-weight:800;font-size:11px;letter-spacing:.02em;padding:4px 13px;border-radius:999px;white-space:nowrap;pointer-events:none;z-index:1}
+.racenote{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#f4d000;color:#161200;font-weight:800;font-size:11px;letter-spacing:.02em;padding:4px 13px;border-radius:999px;white-space:nowrap;z-index:1;border:0;font-family:inherit;cursor:pointer;transition:background .15s,box-shadow .15s}
+.racenote:hover{background:#ffe22e;box-shadow:0 0 0 3px rgba(244,208,0,.22)}
 @media (max-width:1280px){.racenote{display:none}}   /* only when there's empty middle space in landscape */
 .brand{font-weight:800;font-size:19px;letter-spacing:.14em;display:flex;align-items:center;gap:2px}
 .brand span{color:var(--c);transition:color .4s}
@@ -362,7 +363,7 @@ button{font-family:inherit}
 .gp.up.liveup:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
 .gp.up.liveup .upcd{color:color-mix(in srgb,var(--c) 88%,#fff);font-weight:800}
 /* ---- weekend in progress (the round currently running) ---- */
-.lvinfo{display:flex;flex-direction:column;gap:11px;min-height:0}
+.lvinfo{display:flex;flex-direction:column;gap:11px;min-height:0;overflow:hidden;padding:16px}   /* same inset as the race card's .racemeta */
 .lv-hd{display:flex;flex-direction:column;gap:2px;flex:0 0 auto}
 .lv-rd{font-size:10.5px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 82%,#fff);display:flex;align-items:center;gap:7px}
 .lv-live{display:inline-flex;align-items:center;gap:5px;padding:2px 7px;border-radius:20px;background:rgba(255,61,61,.16);border:1px solid rgba(255,80,80,.45);color:#ff8f8f;font-size:9.5px;letter-spacing:.1em}
@@ -794,7 +795,7 @@ button{font-family:inherit}
       <button data-mode="constructors">Constructors</button>
       <button data-mode="races">Races</button>
     </div>
-    <div class="racenote">Getting ready for Monza! This app will be updated after the race.</div>
+    <button class="racenote" id="racenote" type="button">This weekend is Monza! Click here to check the latest results.</button>
     <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span></div>
   </header>
 
@@ -2568,6 +2569,9 @@ function next(){ if(idx>=TOT()-1) gotoMode(MODES[(MODES.indexOf(mode)+1)%3],fals
 function prev(){ if(idx<=0) gotoMode(MODES[(MODES.indexOf(mode)+2)%3],true); else go(idx-1); }
 function setMode(m){ if(m===mode)return; setPlay(false); gotoMode(m,false); }
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+// yellow top-bar note → jump to the weekend-in-progress card (hidden once the round has been applied)
+(()=>{ const n=document.getElementById('racenote'); if(!n)return;
+  if(!hasLive()) n.style.display='none'; else n.onclick=()=>goLive(); })();
 
 /* autoplay */
 function setPlay(p){ playing=p; clearInterval(timer);
