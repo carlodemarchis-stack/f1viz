@@ -404,6 +404,31 @@ button{font-family:inherit}
 .lvrow .lvg{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;min-width:62px;text-align:right}
 .lvrow .lvl{text-align:right;color:var(--muted-2);font-variant-numeric:tabular-nums;font-size:12px}
 @media (orientation:portrait){.lvhead,.lvrow{grid-template-columns:28px 1fr auto auto;}.lvrow .lvl,.lvhead .h-lvl{display:none}}
+/* ---- qualifying grid: cars on track, spaced by their real gap to pole ---- */
+.card.qgrid-on{grid-template-columns:1fr;max-width:none}   /* the grid view wants the full width */
+.card.qgrid-on .lvinfo{display:none}
+.qg{display:flex;flex-direction:column;justify-content:center;gap:8px;height:100%;min-height:0;padding:4px 10px 8px;overflow:hidden}
+.qg-hd{display:flex;align-items:baseline;gap:10px;flex:0 0 auto;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:800}
+.qg-hd b{color:color-mix(in srgb,var(--c) 85%,#fff);letter-spacing:.04em}
+.qg-hd span{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted)}
+.qg-track{position:relative;flex:0 0 auto;max-height:100%;border-radius:10px;overflow:hidden;
+  background:repeating-linear-gradient(90deg,#23262c 0 3px,#212429 3px 6px);
+  border-top:3px solid #d8dbe2;border-bottom:3px solid #d8dbe2}
+.qg-track::before,.qg-track::after{content:'';position:absolute;left:0;right:0;height:6px;z-index:1;
+  background:repeating-linear-gradient(90deg,#e04b4b 0 14px,#f2f2f2 14px 28px)}
+.qg-track::before{top:0}.qg-track::after{bottom:0}
+.qg-start{position:absolute;top:6px;bottom:6px;width:16px;z-index:2;
+  background:repeating-conic-gradient(#f2f2f2 0 25%,#15171c 0 50%) 0 0/8px 8px}
+.qg-startlbl{position:absolute;top:9px;font-size:8.5px;font-weight:800;letter-spacing:.14em;color:#aab3c5;writing-mode:vertical-rl;z-index:2}
+.qg-car{position:absolute;display:flex;flex-direction:column;align-items:center;z-index:3;transition:right .5s cubic-bezier(.2,.7,.2,1),top .5s}
+.qg-car .qg-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.qg-car em{font-style:normal;display:flex;align-items:baseline;gap:4px;line-height:1;margin-top:1px;white-space:nowrap}
+.qg-car em b{font-weight:800;font-size:10px;color:color-mix(in srgb,var(--cc) 78%,#fff)}
+.qg-car em i{font-style:normal;font-size:8.5px;font-variant-numeric:tabular-nums;color:var(--muted-2)}
+.qg-car.pole em b{color:var(--gold)}
+.qg-axis{position:relative;height:15px;flex:0 0 auto;border-top:1px solid var(--line-2)}
+.qg-tick{position:absolute;top:2px;font-size:8.5px;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
+.qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:var(--line)}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -1240,13 +1265,15 @@ function liveCard(){
   const L=LIVE, ses=lvState(L.sessions||[]);
   const anyLive=ses.some(s=>s.k==='live');
   const withRes=ses.filter(s=>s.results&&s.results.length);
-  const sel=lvSesKey && ses.find(s=>s.key===lvSesKey && s.results.length) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
-  const tabs=ses.filter(s=>s.key!=='race').map(s=>{
+  const qs=ses.find(s=>(s.key==='quali'||s.key==='sq') && s.results.length);          // source for the grid view
+  const okTab=k=> k==='grid' ? !!qs : ses.some(s=>s.key===k && s.results.length);
+  const sel=(lvSesKey && okTab(lvSesKey)) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
+  let tabs=ses.filter(s=>s.key!=='race').map(s=>{
     const on=s.key===sel, has=s.results&&s.results.length;
     return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${s.name.replace('Practice ','FP')}</button>`;}).join('');
-  const cur=ses.find(s=>s.key===sel);
-  const isQ=cur&&(cur.key==='quali'||cur.key==='sq');
-  const body = cur&&cur.results.length ? `
+  if(qs) tabs+=`<button class="rc-tab${sel==='grid'?' on':''}" data-ls="grid">Grid</button>`;
+  const cur=sel==='grid'?null:ses.find(s=>s.key===sel);
+  const body = sel==='grid' ? qualiGridHTML(qs, L) : cur&&cur.results.length ? `
     <div class="lvhead"><span>Pos</span><span>Driver</span><span>Time</span><span>Gap</span><span class="h-lvl">Laps</span></div>
     <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
       <span class="lvp">${r.pos}</span>
@@ -1256,7 +1283,7 @@ function liveCard(){
       <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
-  return `<div class="card enter" style="--c:${DATA.meta.color||'#00D7B6'}">
+  return `<div class="card enter${sel==='grid'?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
     <div class="panel lvinfo">
       <div class="lv-hd">
         <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
@@ -1271,15 +1298,97 @@ function liveCard(){
         return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${cur?cur.name:'Sessions'} · results</span></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${sel==='grid'?(qs.name+' · grid'):(cur?cur.name+' · results':'Sessions')}</span></div>
       <div class="rc-view">${body}</div>
     </div>
   </div>`;
 }
+/* top-down F1 car, nose pointing right — F1 only publishes side profiles, so this is drawn.
+   Proportions follow the real car: ~5.6m long x 2.0m wide, wings full width, body narrow. */
+function carTopSVG(col){
+  const dark='#15181e', tyre='#1b1e24';
+  return `<svg class="qg-svg" viewBox="0 0 112 40" preserveAspectRatio="xMidYMid meet">
+    <rect x="1" y="5" width="7" height="30" rx="2.5" fill="${dark}"/>
+    <rect x="6" y="18" width="6" height="4" rx="1" fill="${dark}"/>
+    <path d="M11 14.5 L32 13.2 L64 15.4 L97 18.3 L97 21.7 L64 24.6 L32 26.8 L11 25.5 Z" fill="${col}"/>
+    <path d="M34 9.5 L58 11.5 L58 28.5 L34 30.5 Z" fill="${col}" opacity=".92"/>
+    <rect x="33" y="8.6" width="26" height="2.2" rx="1.1" fill="${dark}" opacity=".45"/>
+    <rect x="33" y="29.2" width="26" height="2.2" rx="1.1" fill="${dark}" opacity=".45"/>
+    <rect x="13" y="0.5" width="17" height="9" rx="3" fill="${tyre}"/>
+    <rect x="13" y="30.5" width="17" height="9" rx="3" fill="${tyre}"/>
+    <rect x="72" y="0.5" width="15" height="8.5" rx="3" fill="${tyre}"/>
+    <rect x="72" y="31" width="15" height="8.5" rx="3" fill="${tyre}"/>
+    <ellipse cx="66" cy="20" rx="6.5" ry="4.6" fill="${dark}"/>
+    <ellipse cx="66" cy="20" rx="3.4" ry="2.4" fill="#0a0c10"/>
+    <path d="M97 18.3 L104 18.8 L104 21.2 L97 21.7 Z" fill="${col}"/>
+    <rect x="103" y="3.5" width="7" height="33" rx="2.5" fill="${dark}"/>
+    <rect x="100" y="9" width="4" height="22" rx="1.5" fill="${dark}" opacity=".7"/>
+  </svg>`;
+}
+/* qualifying grid — cars on track, spaced by the real gap to pole (pole on the right) */
+const clockS=t=>{ if(!t)return null; const p=String(t).split(':'); return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]); };
+function qualiGridHTML(ses, L){
+  const rows=(ses.results||[]).filter(r=>r.gapS!=null);
+  if(!rows.length) return `<div class="lv-empty">No qualifying times yet.</div>`;
+  const poleT=clockS(rows[0].time), lenM=(parseFloat(L.length)||0)*1000;
+  const mps=(lenM&&poleT)?lenM/poleT:0;                       // pole-lap average speed
+  const maxGap=Math.max(...rows.map(r=>r.gapS))||1;
+  const cars=rows.map(r=>`<span class="qg-car${r.pos===1?' pole':''}" data-gap="${r.gapS}" style="--cc:${r.col}">
+      ${carTopSVG(r.col)}
+      <em><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
+  return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}">
+    <div class="qg-hd">Qualifying grid · gap to pole <b>${rows[0].code} ${rows[0].time}</b>
+      <span>${mps?`spaced to scale — ${(maxGap*mps).toFixed(0)} m covers the field at ${(mps*3.6).toFixed(0)} km/h average`:'spaced by time gap'}</span></div>
+    <div class="qg-track">
+      <div class="qg-start"></div><div class="qg-startlbl">START</div>
+      ${cars}
+    </div>
+    <div class="qg-axis"></div>
+  </div>`;
+}
+function layoutQGrid(){
+  const host=wrap.querySelector('#qgrid'); if(!host)return;
+  const track=host.querySelector('.qg-track'), axis=host.querySelector('.qg-axis');
+  const cars=[...host.querySelectorAll('.qg-car')]; if(!cars.length)return;
+  const W=track.clientWidth;                                     // the track has no intrinsic height (cars are absolute)
+  if(!W){ if((layoutQGrid._n=(layoutQGrid._n||0)+1)<10) setTimeout(layoutQGrid,40); return; }
+  layoutQGrid._n=0;
+  const maxGap=+host.dataset.max||1, mps=+host.dataset.mps||0;
+  const CARW=Math.max(58,Math.min(104,W/11)), PAD=26, GAPX=7;   // car footprint scales a little with the panel
+  const usable=Math.max(40, W-CARW-PAD-10);
+  const xOf=g=>PAD+(g/maxGap)*usable;                            // distance from the RIGHT edge (pole = start line)
+  host.querySelector('.qg-start').style.right=(PAD-18)+'px';
+  host.querySelector('.qg-startlbl').style.right=(PAD-16)+'px';
+  const lanes=[];                                                // greedy packing: keep the exact x, drop to a free lane
+  cars.forEach(el=>{
+    const x=xOf(+el.dataset.gap);
+    let ln=lanes.findIndex(last=>x>=last+CARW+GAPX);
+    if(ln<0){ lanes.push(x); ln=lanes.length-1; } else lanes[ln]=x;
+    el.style.width=CARW+'px'; el.style.right=x+'px'; el.dataset.lane=ln;
+  });
+  const n=Math.max(1,lanes.length);
+  const laneH=Math.max(30,Math.round(CARW*0.42));                // car height + its label
+  const availH=Math.max(90, host.clientHeight - host.querySelector('.qg-hd').offsetHeight - axis.offsetHeight - 26);
+  const trackH=Math.min(availH, n*laneH+18);
+  track.style.height=trackH+'px';
+  const lh=Math.min(laneH,(trackH-16)/n), top0=Math.max(8,(trackH-n*lh)/2);
+  cars.forEach(el=>{ el.style.top=(top0+(+el.dataset.lane)*lh)+'px'; });
+  // distance axis (metres behind pole), right-to-left
+  const maxM=maxGap*mps;
+  if(maxM>4){
+    const raw=maxM/4, pow=Math.pow(10,Math.floor(Math.log10(raw)));
+    const step=[1,2,2.5,5,10].map(m=>m*pow).find(v=>v>=raw)||pow*10;
+    let html='';
+    for(let m=0;m<=maxM+.001;m+=step){ const g=mps?m/mps:0; html+=`<span class="qg-tick" style="right:${xOf(g)}px">${m===0?'0':Math.round(m)+' m'}</span>`; }
+    axis.innerHTML=html;
+  } else axis.innerHTML='';
+}
 function wireLiveCard(){
   wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
     b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
+  if(wrap.querySelector('#qgrid')) setTimeout(layoutQGrid,0);
 }
+addEventListener('resize',()=>{ if(document.querySelector('#qgrid')) layoutQGrid(); });
 function cdText(date){ if(!date)return ''; const dd=daysTo(date); if(dd<=0)return 'race weekend'; const w=Math.round(dd/7); return 'in '+(w<1?dd+' day'+(dd>1?'s':''):w+' week'+(w>1?'s':'')); }
 function raceTip(r){
   const cal=(DATA.calendar||[]).find(c=>c.r===r); if(!cal)return '';

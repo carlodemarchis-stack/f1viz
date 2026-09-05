@@ -169,17 +169,21 @@ def quali_segments(d):
     return [fmt_lap(x) if isinstance(x, (int, float)) else None for x in (list(d) + [None, None, None])[:3]]
 
 
-def team_colour(name, teamcol):
-    """Match an f1.com team label ('Red Bull Racing') to a constructor colour ('Red Bull')."""
+def match_team(name, mapping, default=None):
+    """Match an f1.com team label ('Red Bull Racing') to a constructor entry ('Red Bull')."""
     n = (name or "").lower()
-    for cname, col in teamcol.items():
+    for cname, val in mapping.items():
         c = cname.lower()
         if n == c or n.startswith(c) or c.startswith(n) or c in n or n in c:
-            return col
-    return "#888"
+            return val
+    return default
 
 
-def f1com_results(mid, slug, skey, bynum, teamcol):
+def team_colour(name, teamcol):
+    return match_team(name, teamcol, "#888")
+
+
+def f1com_results(mid, slug, skey, bynum, teamcol, teamid):
     """Build our result rows from an f1.com session page. Non-leaders are published as a gap,
     so absolute times are reconstructed as leader + gap (exact: f1.com gaps are to 3dp)."""
     import re
@@ -224,8 +228,10 @@ def f1com_results(mid, slug, skey, bynum, teamcol):
             "name": (fd or {}).get("family") or get("drv").split()[-2].title() if len((get("drv") or "").split()) > 1 else code,
             "team": (fd or {}).get("team") or get("team"),
             "col": (fd or {}).get("color") or team_colour(get("team"), teamcol),
+            "tid": (fd or {}).get("teamId") or match_team(get("team"), teamid),
             "time": fmt_lap(best),
             "gap": None if pos == 1 else ("+%.3f" % (best - lead) if best and lead else None),
+            "gapS": 0.0 if pos == 1 else (round(best - lead, 3) if best and lead else None),
             "laps": int(get("laps")) if get("laps").isdigit() else None,
             "seg": [fmt_lap(x) if x else None for x in segs] if segs else None,
             "out": False,
@@ -316,6 +322,7 @@ def main():
     # driver fallbacks from f1.json (regulars); OpenF1 fills in FP-only rookies
     bynum = {int(d["num"]): d for d in f1["drivers"] if d.get("num")}
     teamcol = {c["name"]: c["color"] for c in f1["constructors"]}
+    teamid = {c["name"]: c["teamId"] for c in f1["constructors"]}
 
     # anything already captured for this round is kept if a fetch fails (never overwrite good data)
     prev = {}
@@ -339,7 +346,7 @@ def main():
             mid = f1com_meeting_id(slug) or ""
         if not mid:
             return None
-        return f1com_results(mid, slug, skey, bynum, teamcol)
+        return f1com_results(mid, slug, skey, bynum, teamcol, teamid)
 
     for s in schedule:
         of1 = by_name.get(OPENF1_NAME.get(s["key"], ""))
@@ -385,6 +392,7 @@ def main():
                 "name": (fd or {}).get("family") or (od.get("full_name") or "").split(" ")[-1].title(),
                 "team": (fd or {}).get("team") or od.get("team_name") or "",
                 "col": col,
+                "tid": (fd or {}).get("teamId") or match_team(od.get("team_name"), teamid),
                 "time": fmt_lap(best),
                 "laps": r.get("number_of_laps"),
                 "seg": quali_segments(r.get("duration")),
@@ -399,6 +407,7 @@ def main():
         for x in out:
             b = x.pop("_best", None)
             x["gap"] = ("+%.3f" % (b - lead)) if (b and lead and x["pos"] != 1) else None
+            x["gapS"] = 0.0 if x["pos"] == 1 else (round(b - lead, 3) if (b and lead) else None)
         row["results"] = out
         if out: src[s["key"]] = "openf1"
         live["sessions"].append(row)
