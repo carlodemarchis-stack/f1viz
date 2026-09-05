@@ -80,6 +80,64 @@ def curl_list(url, tries=3):
     return None
 
 
+# ---- formula1.com fallback -------------------------------------------------
+# OpenF1 is 401-locked while a session is live, and jolpica has no practice data at all,
+# so official f1.com session pages are the fallback for FP/Quali classifications.
+F1COM_PATH = {"fp1": "practice/1", "fp2": "practice/2", "fp3": "practice/3",
+              "sq": "sprint-qualifying", "sprint": "sprint-results",
+              "quali": "qualifying", "race": "race-result"}
+SLUG_FIX = {"UAE": "united-arab-emirates", "USA": "united-states", "United States": "united-states",
+            "Great Britain": "great-britain", "Saudi Arabia": "saudi-arabia", "Abu Dhabi": "abu-dhabi",
+            "Las Vegas": "las-vegas", "Mexico": "mexico", "Azerbaijan": "azerbaijan"}
+
+
+def curl_text(url):
+    r = subprocess.run(["curl", "-s", "--max-time", "30", "-A", "Mozilla/5.0", url],
+                       capture_output=True, text=True)
+    return r.stdout or ""
+
+
+def f1com_slug(country):
+    return SLUG_FIX.get(country, (country or "").lower().replace(" ", "-"))
+
+
+def f1com_meeting_id(slug):
+    """Discover the numeric race id f1.com uses in its results URLs."""
+    import re
+    m = re.search(r"/en/results/%d/races/(\d+)/" % YEAR, curl_text("https://www.formula1.com/en/racing/%d/%s" % (YEAR, slug)))
+    return m.group(1) if m else None
+
+
+def f1com_table(url):
+    """Return the results table as a list of cell-lists (row 0 = header), or None."""
+    import re, html as H
+    txt = curl_text(url)
+    m = re.search(r"<table[^>]*>(.*?)</table>", txt, re.S)
+    if not m:
+        return None
+    out = []
+    for tr in re.findall(r"<tr[^>]*>(.*?)</tr>", m.group(1), re.S):
+        cells = [re.sub(r"\s+", " ", H.unescape(re.sub(r"<[^>]+>", " ", c))).strip()
+                 for c in re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", tr, re.S)]
+        if cells:
+            out.append(cells)
+    return out or None
+
+
+def parse_clock(t):
+    """'1:22.219' or '+0.226s' or '22.219' -> seconds (float), else None."""
+    if not t:
+        return None
+    t = t.strip().lstrip("+").rstrip("s")
+    try:
+        if ":" in t:
+            m, s = t.split(":")
+            return int(m) * 60 + float(s)
+        return float(t)
+    except ValueError:
+        return None
+
+
 def fmt_lap(sec):
     """83.008 -> '1:23.008'  (None -> None)"""
     if sec is None:
@@ -105,6 +163,72 @@ def quali_segments(d):
     if not isinstance(d, list):
         return None
     return [fmt_lap(x) if isinstance(x, (int, float)) else None for x in (list(d) + [None, None, None])[:3]]
+
+
+def team_colour(name, teamcol):
+    """Match an f1.com team label ('Red Bull Racing') to a constructor colour ('Red Bull')."""
+    n = (name or "").lower()
+    for cname, col in teamcol.items():
+        c = cname.lower()
+        if n == c or n.startswith(c) or c.startswith(n) or c in n or n in c:
+            return col
+    return "#888"
+
+
+def f1com_results(mid, slug, skey, bynum, teamcol):
+    """Build our result rows from an f1.com session page. Non-leaders are published as a gap,
+    so absolute times are reconstructed as leader + gap (exact: f1.com gaps are to 3dp)."""
+    import re
+    tbl = f1com_table("https://www.formula1.com/en/results/%d/races/%s/%s/%s" % (YEAR, mid, slug, F1COM_PATH[skey]))
+    if not tbl or len(tbl) < 2:
+        return None
+    head = [h.lower() for h in tbl[0]]
+    col = lambda *names: next((i for i, h in enumerate(head) if any(n in h for n in names)), None)
+    ci = {"pos": col("pos"), "num": col("no."), "drv": col("driver"), "team": col("team"),
+          "time": col("time", "gap"), "laps": col("laps"),
+          "q1": col("q1"), "q2": col("q2"), "q3": col("q3")}
+    out, lead = [], None
+    for row in tbl[1:]:
+        get = lambda k: row[ci[k]] if ci[k] is not None and ci[k] < len(row) else ""
+        try:
+            pos = int(get("pos"))
+        except ValueError:
+            continue                                            # NC / DQ rows carry a non-numeric position
+        try:
+            num = int(get("num"))
+        except ValueError:
+            num = None
+        code_m = re.search(r"([A-Z]{3})\s*$", get("drv"))
+        code = code_m.group(1) if code_m else (get("drv") or "")[:3].upper()
+        fd = bynum.get(num)
+        # qualifying: best of Q1/Q2/Q3; practice: the single Time/Gap column
+        segs = [parse_clock(get(q)) for q in ("q1", "q2", "q3")] if ci["q1"] is not None else []
+        if segs and any(segs):
+            best = min(x for x in segs if x)
+        else:
+            v = parse_clock(get("time"))
+            if v is None:
+                best = None
+            elif pos == 1 or lead is None:
+                best = v
+            else:
+                best = lead + v if get("time").strip().startswith("+") else v
+        if pos == 1 and best:
+            lead = best
+        out.append({
+            "pos": pos, "code": code, "num": num,
+            "name": (fd or {}).get("family") or get("drv").split()[-2].title() if len((get("drv") or "").split()) > 1 else code,
+            "team": (fd or {}).get("team") or get("team"),
+            "col": (fd or {}).get("color") or team_colour(get("team"), teamcol),
+            "time": fmt_lap(best),
+            "gap": None if pos == 1 else ("+%.3f" % (best - lead) if best and lead else None),
+            "laps": int(get("laps")) if get("laps").isdigit() else None,
+            "seg": [fmt_lap(x) if x else None for x in segs] if segs else None,
+            "out": False,
+            "rookie": fd is None,
+        })
+    out.sort(key=lambda x: x["pos"])
+    return out or None
 
 
 def main():
@@ -149,10 +273,11 @@ def main():
 
     # ---- OpenF1 sessions for this weekend (match on the race date's meeting) ----
     sessions = curl_list("https://api.openf1.org/v1/sessions?year=%d" % YEAR)
-    if sessions is None:
-        print("OpenF1 unavailable - data/live.json left untouched.")
+    openf1_down = sessions is None
+    if openf1_down:
+        sessions = []
+        print("OpenF1 unavailable - falling back to formula1.com")
         if LAST_ERR: print("  reason: %s" % LAST_ERR)
-        sys.exit(1)
     days = {s["start"][:10] for s in schedule}
     wk = [s for s in sessions if (s.get("date_start") or "")[:10] in days]
     by_name = {}
@@ -186,6 +311,7 @@ def main():
 
     # driver fallbacks from f1.json (regulars); OpenF1 fills in FP-only rookies
     bynum = {int(d["num"]): d for d in f1["drivers"] if d.get("num")}
+    teamcol = {c["name"]: c["color"] for c in f1["constructors"]}
 
     # anything already captured for this round is kept if a fetch fails (never overwrite good data)
     prev = {}
@@ -198,20 +324,43 @@ def main():
             pass
     kept = []
 
+    slug = f1com_slug(live["country"])
+    mid = None
+    src = {}
+
+    def via_f1com(skey):
+        """f1.com fallback - only for sessions whose start time has passed."""
+        nonlocal mid
+        if mid is None:
+            mid = f1com_meeting_id(slug) or ""
+        if not mid:
+            return None
+        return f1com_results(mid, slug, skey, bynum, teamcol)
+
     for s in schedule:
         of1 = by_name.get(OPENF1_NAME.get(s["key"], ""))
         row = {"key": s["key"], "name": s["name"], "start": s["start"],
                "end": (of1 or {}).get("date_end"), "results": []}
+        started = s["start"] <= datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         if not of1:
+            got = via_f1com(s["key"]) if (started and s["key"] in F1COM_PATH) else None
+            if got:
+                row["results"] = got; src[s["key"]] = "f1.com"
+            else:
+                row["results"] = prev.get(s["key"], [])
+                if row["results"]: kept.append(s["key"])
             live["sessions"].append(row)
             continue
         sk = of1["session_key"]
         res = curl_list("https://api.openf1.org/v1/session_result?session_key=%s" % sk)
         drvl = curl_list("https://api.openf1.org/v1/drivers?session_key=%s" % sk)
-        if res is None or drvl is None:                      # API down -> keep whatever we had
-            row["results"] = prev.get(s["key"], [])
-            if row["results"]:
-                kept.append(s["key"])
+        if res is None or drvl is None:                      # API down -> f1.com, else keep what we had
+            got = via_f1com(s["key"]) if s["key"] in F1COM_PATH else None
+            if got:
+                row["results"] = got; src[s["key"]] = "f1.com"
+            else:
+                row["results"] = prev.get(s["key"], [])
+                if row["results"]: kept.append(s["key"])
             live["sessions"].append(row)
             continue
         drv = {x["driver_number"]: x for x in drvl}
@@ -242,15 +391,17 @@ def main():
         out = [x for x in out if x["pos"] is not None]
         out.sort(key=lambda x: x["pos"])
         row["results"] = out
+        if out: src[s["key"]] = "openf1"
         live["sessions"].append(row)
 
     json.dump(live, open(LIVEP, "w"), ensure_ascii=False, indent=1)
     filled = [s["key"] for s in live["sessions"] if s["results"]]
     print("wrote data/live.json - R%d %s | sessions: %s | with results: %s"
           % (rnd, live["gp"], ", ".join(s["key"] for s in live["sessions"]), ", ".join(filled) or "none"))
+    if src:
+        print("  sources: %s" % ", ".join("%s=%s" % kv for kv in src.items()))
     if kept:
         print("  NOTE: kept previously captured results for %s (fetch failed)" % ", ".join(kept))
-        if LAST_ERR: print("  reason: %s" % LAST_ERR)
 
 
 if __name__ == "__main__":
