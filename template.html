@@ -421,7 +421,9 @@ button{font-family:inherit}
   background:repeating-conic-gradient(#f2f2f2 0 25%,#15171c 0 50%) 0 0/8px 8px}
 .qg-startlbl{position:absolute;top:9px;font-size:8.5px;font-weight:800;letter-spacing:.14em;color:#aab3c5;writing-mode:vertical-rl;z-index:2}
 .qg-car{position:absolute;display:flex;flex-direction:column;align-items:center;z-index:3;transition:right .5s cubic-bezier(.2,.7,.2,1),top .5s}
-.qg-car .qg-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.qg-car .qg-art{position:relative;display:block;width:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+.qg-car .qg-svg{width:100%;height:auto;display:block}
+.qg-car .qg-art img{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:auto;display:block}
 .qg-car em{font-style:normal;display:flex;align-items:baseline;gap:4px;line-height:1;margin-top:1px;white-space:nowrap}
 .qg-car em b{font-weight:800;font-size:10px;color:color-mix(in srgb,var(--cc) 78%,#fff)}
 .qg-car em i{font-style:normal;font-size:8.5px;font-variant-numeric:tabular-nums;color:var(--muted-2)}
@@ -1334,7 +1336,7 @@ function qualiGridHTML(ses, L){
   const mps=(lenM&&poleT)?lenM/poleT:0;                       // pole-lap average speed
   const maxGap=Math.max(...rows.map(r=>r.gapS))||1;
   const cars=rows.map(r=>`<span class="qg-car${r.pos===1?' pole':''}" data-gap="${r.gapS}" style="--cc:${r.col}">
-      ${carTopSVG(r.col)}
+      <span class="qg-art">${carTopSVG(r.col)}<img src="img/cars-top/${r.tid||'_'}.png${IMGV}" alt="" onerror="this.remove()"></span>
       <em><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
   return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}">
     <div class="qg-hd">Qualifying grid · gap to pole <b>${rows[0].code} ${rows[0].time}</b>
@@ -1367,7 +1369,7 @@ function layoutQGrid(){
     el.style.width=CARW+'px'; el.style.right=x+'px'; el.dataset.lane=ln;
   });
   const n=Math.max(1,lanes.length);
-  const laneH=Math.max(30,Math.round(CARW*0.42));                // car height + its label
+  const laneH=Math.max(32,Math.round(CARW*0.55)+12);             // tallest art (photo) + its label
   const availH=Math.max(90, host.clientHeight - host.querySelector('.qg-hd').offsetHeight - axis.offsetHeight - 26);
   const trackH=Math.min(availH, n*laneH+18);
   track.style.height=trackH+'px';

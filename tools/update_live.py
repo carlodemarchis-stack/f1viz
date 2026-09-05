@@ -183,7 +183,7 @@ def team_colour(name, teamcol):
     return match_team(name, teamcol, "#888")
 
 
-def f1com_results(mid, slug, skey, bynum, teamcol, teamid):
+def f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col):
     """Build our result rows from an f1.com session page. Non-leaders are published as a gap,
     so absolute times are reconstructed as leader + gap (exact: f1.com gaps are to 3dp)."""
     import re
@@ -226,9 +226,9 @@ def f1com_results(mid, slug, skey, bynum, teamcol, teamid):
         out.append({
             "pos": pos, "code": code, "num": num,
             "name": (fd or {}).get("family") or get("drv").split()[-2].title() if len((get("drv") or "").split()) > 1 else code,
-            "team": (fd or {}).get("team") or get("team"),
-            "col": (fd or {}).get("color") or team_colour(get("team"), teamcol),
-            "tid": (fd or {}).get("teamId") or match_team(get("team"), teamid),
+            "team": tid2name.get(match_team(get("team"), teamid)) or get("team") or (fd or {}).get("team"),
+            "col": tid2col.get(match_team(get("team"), teamid)) or team_colour(get("team"), teamcol),
+            "tid": match_team(get("team"), teamid) or (fd or {}).get("teamId"),
             "time": fmt_lap(best),
             "gap": None if pos == 1 else ("+%.3f" % (best - lead) if best and lead else None),
             "gapS": 0.0 if pos == 1 else (round(best - lead, 3) if best and lead else None),
@@ -323,6 +323,10 @@ def main():
     bynum = {int(d["num"]): d for d in f1["drivers"] if d.get("num")}
     teamcol = {c["name"]: c["color"] for c in f1["constructors"]}
     teamid = {c["name"]: c["teamId"] for c in f1["constructors"]}
+    # the SESSION entry list is the truth for a live weekend - f1.json's roster can be a swap behind
+    # (Monza 2026: Lawson had moved to Red Bull while f1.json still had him at Racing Bulls)
+    tid2name = {c["teamId"]: c["name"] for c in f1["constructors"]}
+    tid2col = {c["teamId"]: c["color"] for c in f1["constructors"]}
 
     # anything already captured for this round is kept if a fetch fails (never overwrite good data)
     prev = {}
@@ -346,7 +350,7 @@ def main():
             mid = f1com_meeting_id(slug) or ""
         if not mid:
             return None
-        return f1com_results(mid, slug, skey, bynum, teamcol, teamid)
+        return f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col)
 
     for s in schedule:
         of1 = by_name.get(OPENF1_NAME.get(s["key"], ""))
@@ -382,7 +386,8 @@ def main():
             od = drv.get(n, {})
             fd = bynum.get(n)
             code = (fd or {}).get("code") or od.get("name_acronym") or str(n)
-            col = (fd or {}).get("color") or ("#" + od["team_colour"] if od.get("team_colour") else "#888")
+            tid = match_team(od.get("team_name"), teamid) or (fd or {}).get("teamId")
+            col = tid2col.get(tid) or (fd or {}).get("color") or ("#" + od["team_colour"] if od.get("team_colour") else "#888")
             best = best_duration(r.get("duration"))
             out.append({
                 "_best": best,
@@ -390,9 +395,9 @@ def main():
                 "code": code,
                 "num": n,
                 "name": (fd or {}).get("family") or (od.get("full_name") or "").split(" ")[-1].title(),
-                "team": (fd or {}).get("team") or od.get("team_name") or "",
+                "team": tid2name.get(tid) or od.get("team_name") or (fd or {}).get("team") or "",
                 "col": col,
-                "tid": (fd or {}).get("teamId") or match_team(od.get("team_name"), teamid),
+                "tid": tid,
                 "time": fmt_lap(best),
                 "laps": r.get("number_of_laps"),
                 "seg": quali_segments(r.get("duration")),
