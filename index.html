@@ -414,6 +414,8 @@ button{font-family:inherit}
 .qg-sec{position:relative;height:14px;flex:0 0 auto}
 .qg-tsec{position:absolute;bottom:0;font-size:8.5px;font-weight:700;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
 .qg-tsec::after{content:'';position:absolute;right:50%;bottom:-4px;width:1px;height:4px;background:var(--line)}
+.qg-tsec.pole{transform:none;font-weight:800;font-size:9.5px;color:color-mix(in srgb,var(--gold) 82%,#fff)}
+.qg-tsec.pole::after{right:0;background:color-mix(in srgb,var(--gold) 70%,transparent);height:6px}
 .qg-note{flex:0 0 auto;text-align:right;font-size:10px;color:var(--muted);padding-top:1px}
 .qg-track{position:relative;flex:0 0 auto;max-height:100%;border-radius:10px;overflow:hidden;
   background:repeating-linear-gradient(90deg,#23262c 0 3px,#212429 3px 6px);
@@ -3358,8 +3360,8 @@ function qualiGapsHTML(ses, L){
   const cars=rows.map(r=>`<span class="qg-car${r.pos===1?' pole':''}" data-gap="${r.gapS}" style="--cc:${r.col}">
       <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
       <em><u>${r.pos}</u><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
-  return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}">
-    <div class="qg-hd">Qualifying · gap to pole<b>${rows[0].code} ${rows[0].time}</b></div>
+  return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}" data-pole="${poleT||0}" data-polecode="${rows[0].code}">
+    <div class="qg-hd">Qualifying · gap to pole</div>
     <div class="qg-sec"></div>
     <div class="qg-track">
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
@@ -3399,9 +3401,12 @@ function layoutQGrid(){
   track.style.height=trackH+'px';
   const lh=Math.min(laneH,(trackH-KERB*2)/n), top0=Math.max(KERB,(trackH-n*lh)/2);
   cars.forEach(el=>{ el.style.top=(top0+(+el.dataset.lane)*lh)+'px'; });
-  // whole-second scale above the track, counting back from pole
+  // lap-time scale above the track: pole time at zero, then each whole second back
+  const poleT=+host.dataset.pole||0;
+  const fmtClock=v=>{ const m=Math.floor(v/60), r=v-m*60; return m>0?(m+':'+r.toFixed(3).padStart(6,'0')):r.toFixed(3); };
   let sh='';
-  for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${t}s</span>`;
+  if(poleT) sh+=`<span class="qg-tsec pole" style="right:${xOf(0)}px">${host.dataset.polecode} ${fmtClock(poleT)}</span>`;
+  for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${poleT?fmtClock(poleT+t):t+'s'}</span>`;
   sec.innerHTML=sh;
   // distance axis (metres behind pole), right-to-left
   const maxM=maxGap*mps;
