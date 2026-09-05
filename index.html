@@ -423,6 +423,8 @@ button{font-family:inherit}
 .qg-car{position:absolute;display:flex;flex-direction:column;align-items:center;z-index:3;transition:right .5s cubic-bezier(.2,.7,.2,1),top .5s}
 .qg-car .qg-side{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
 .qg-car em{font-style:normal;display:flex;align-items:baseline;gap:4px;line-height:1;margin-top:1px;white-space:nowrap}
+.qg-car em u{text-decoration:none;font-size:9.5px;font-weight:800;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.qg-car em u::after{content:'·';margin-left:4px;opacity:.5}
 .qg-car em b{font-weight:800;font-size:10px;color:color-mix(in srgb,var(--cc) 78%,#fff)}
 .qg-car em i{font-style:normal;font-size:8.5px;font-variant-numeric:tabular-nums;color:var(--muted-2)}
 .qg-car.pole em b{color:var(--gold)}
@@ -2938,7 +2940,7 @@ function qualiGridHTML(ses, L){
   const maxGap=Math.max(...rows.map(r=>r.gapS))||1;
   const cars=rows.map(r=>`<span class="qg-car${r.pos===1?' pole':''}" data-gap="${r.gapS}" style="--cc:${r.col}">
       <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
-      <em><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
+      <em><u>${r.pos}</u><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
   return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}">
     <div class="qg-hd">Qualifying grid · gap to pole <b>${rows[0].code} ${rows[0].time}</b>
       <span>${mps?`spaced to scale — ${(maxGap*mps).toFixed(0)} m covers the field at ${(mps*3.6).toFixed(0)} km/h average`:'spaced by time gap'}</span></div>
@@ -2957,7 +2959,7 @@ function layoutQGrid(){
   if(!W){ if((layoutQGrid._n=(layoutQGrid._n||0)+1)<10) setTimeout(layoutQGrid,40); return; }
   layoutQGrid._n=0;
   const maxGap=+host.dataset.max||1, mps=+host.dataset.mps||0;
-  const CARW=Math.max(58,Math.min(104,W/11)), PAD=26, GAPX=7;   // car footprint scales a little with the panel
+  const CARW=Math.max(62,Math.min(122,W/10)), PAD=26, GAPX=8;   // car footprint scales a little with the panel
   const usable=Math.max(40, W-CARW-PAD-10);
   const xOf=g=>PAD+(g/maxGap)*usable;                            // distance from the RIGHT edge (pole = start line)
   host.querySelector('.qg-start').style.right=(PAD-18)+'px';
@@ -2970,7 +2972,7 @@ function layoutQGrid(){
     el.style.width=CARW+'px'; el.style.right=x+'px'; el.dataset.lane=ln;
   });
   const n=Math.max(1,lanes.length);
-  const laneH=Math.max(30,Math.round(CARW*0.22)+15);             // lateral car (900x198) + its label
+  const laneH=Math.max(34,Math.round(CARW*0.22)+26);             // lateral car (900x198) + label + breathing room
   const availH=Math.max(90, host.clientHeight - host.querySelector('.qg-hd').offsetHeight - axis.offsetHeight - 26);
   const trackH=Math.min(availH, n*laneH+18);
   track.style.height=trackH+'px';
