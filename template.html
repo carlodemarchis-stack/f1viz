@@ -1246,7 +1246,7 @@ function liveCard(){
   const cur=ses.find(s=>s.key===sel);
   const isQ=cur&&(cur.key==='quali'||cur.key==='sq');
   const body = cur&&cur.results.length ? `
-    <div class="lvhead"><span>Pos</span><span>Driver</span><span>${isQ?'Best':'Time'}</span><span>Gap</span><span class="h-lvl">Laps</span></div>
+    <div class="lvhead"><span>Pos</span><span>Driver</span><span>Time</span><span>Gap</span><span class="h-lvl">Laps</span></div>
     <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
       <span class="lvp">${r.pos}</span>
       <span class="lvd"><b>${r.code}</b><span>${r.name||''}${r.team?' · '+r.team:''}</span>${r.rookie?'<u>Rookie</u>':''}</span>

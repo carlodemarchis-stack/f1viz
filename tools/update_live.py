@@ -151,10 +151,14 @@ def fmt_lap(sec):
 
 
 def best_duration(d):
-    """Practice gives a scalar; qualifying gives [Q1,Q2,Q3] -> take the best set time."""
+    """Practice gives a scalar; qualifying gives [Q1,Q2,Q3].
+
+    For qualifying the time that MATTERS is the LAST segment the driver ran, not their
+    outright best: a driver can be quicker in Q2 than Q3 and still be classified on the
+    Q3 lap (Antonelli, Monza 2026 - Q2 1:21.882, Q3 1:22.093, classified P7)."""
     if isinstance(d, list):
         vals = [x for x in d if isinstance(x, (int, float))]
-        return min(vals) if vals else None
+        return vals[-1] if vals else None
     return d if isinstance(d, (int, float)) else None
 
 
@@ -204,7 +208,7 @@ def f1com_results(mid, slug, skey, bynum, teamcol):
         # qualifying: best of Q1/Q2/Q3; practice: the single Time/Gap column
         segs = [parse_clock(get(q)) for q in ("q1", "q2", "q3")] if ci["q1"] is not None else []
         if segs and any(segs):
-            best = min(x for x in segs if x)
+            best = [x for x in segs if x][-1]        # last segment run decides the position
         else:
             v = parse_clock(get("time"))
             if v is None:
@@ -373,8 +377,8 @@ def main():
             code = (fd or {}).get("code") or od.get("name_acronym") or str(n)
             col = (fd or {}).get("color") or ("#" + od["team_colour"] if od.get("team_colour") else "#888")
             best = best_duration(r.get("duration"))
-            gap = r.get("gap_to_leader")
             out.append({
+                "_best": best,
                 "pos": pos,
                 "code": code,
                 "num": n,
@@ -382,7 +386,6 @@ def main():
                 "team": (fd or {}).get("team") or od.get("team_name") or "",
                 "col": col,
                 "time": fmt_lap(best),
-                "gap": (None if not gap else ("+%.3f" % float(gap))) if not isinstance(gap, str) else gap,
                 "laps": r.get("number_of_laps"),
                 "seg": quali_segments(r.get("duration")),
                 "out": bool(r.get("dnf") or r.get("dns") or r.get("dsq")),
@@ -390,6 +393,12 @@ def main():
             })
         out = [x for x in out if x["pos"] is not None]
         out.sort(key=lambda x: x["pos"])
+        # gap is derived from the best times: OpenF1's gap_to_leader is a scalar in practice but a
+        # [Q1,Q2,Q3] list in qualifying, so computing it here keeps one shape for every session.
+        lead = out[0]["_best"] if out else None
+        for x in out:
+            b = x.pop("_best", None)
+            x["gap"] = ("+%.3f" % (b - lead)) if (b and lead and x["pos"] != 1) else None
         row["results"] = out
         if out: src[s["key"]] = "openf1"
         live["sessions"].append(row)
