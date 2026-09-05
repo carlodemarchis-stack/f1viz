@@ -412,8 +412,12 @@ button{font-family:inherit}
 .qg-hd b{color:color-mix(in srgb,var(--c) 85%,#fff);letter-spacing:.04em}
 .qg-hd b{margin-left:auto}
 .qg-sec{position:relative;height:14px;flex:0 0 auto}
-.qg-tsec{position:absolute;bottom:0;font-size:8.5px;font-weight:700;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
-.qg-tsec::after{content:'';position:absolute;right:50%;bottom:-4px;width:1px;height:4px;background:var(--line)}
+.qg-guides{position:absolute;inset:0;z-index:1;pointer-events:none}
+.qg-gl{position:absolute;width:1px}
+.qg-gl.t{top:7px;bottom:34%;background:linear-gradient(180deg,rgba(244,208,0,.42),rgba(244,208,0,.05))}
+.qg-gl.b{bottom:7px;top:34%;background:linear-gradient(0deg,rgba(206,216,232,.34),rgba(206,216,232,.04))}
+.qg-tsec{position:absolute;bottom:0;font-size:8.5px;font-weight:700;color:#e0c53a;font-variant-numeric:tabular-nums;transform:translateX(50%)}
+.qg-tsec::after{content:'';position:absolute;right:50%;bottom:-4px;width:1px;height:4px;background:rgba(244,208,0,.55)}
 .qg-tsec.pole{transform:none;font-weight:800;font-size:9.5px;color:color-mix(in srgb,var(--gold) 82%,#fff)}
 .qg-tsec.pole::after{right:0;background:color-mix(in srgb,var(--gold) 70%,transparent);height:6px}
 .qg-note{flex:0 0 auto;text-align:right;font-size:10px;color:var(--muted);padding-top:1px}
@@ -435,17 +439,23 @@ button{font-family:inherit}
 .qg-car em i{font-style:normal;font-size:8.5px;font-variant-numeric:tabular-nums;color:var(--muted-2)}
 .qg-car.pole em b{color:var(--gold)}
 .qg-axis{position:relative;height:15px;flex:0 0 auto;border-top:1px solid var(--line-2)}
-.qg-tick{position:absolute;top:2px;font-size:8.5px;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
-.qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:var(--line)}
-.sg-slot{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sg-p{position:absolute;left:2px;top:50%;transform:translateY(-60%);font-size:19px;font-weight:800;font-style:italic;
-  color:rgba(255,255,255,.22);font-variant-numeric:tabular-nums;z-index:-1;letter-spacing:-.04em}
-.sg-slot .qg-side{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
-.sg-slot em{font-style:normal;display:flex;align-items:baseline;gap:5px;line-height:1;margin-top:2px;white-space:nowrap}
-.sg-slot em b{font-weight:800;font-size:10.5px;color:color-mix(in srgb,var(--cc) 80%,#fff)}
-.sg-slot em i{font-style:normal;font-size:8.5px;font-weight:800;font-variant-numeric:tabular-nums}
-.sg-slot em i.dn{color:#ff6b6b}.sg-slot em i.up{color:#4ad991}
-.sg-slot.pole .sg-p{color:color-mix(in srgb,var(--gold) 45%,transparent)}
+.qg-tick{position:absolute;top:2px;font-size:8.5px;color:#ced8e8;font-variant-numeric:tabular-nums;transform:translateX(50%)}
+.qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:rgba(206,216,232,.5)}
+.sg-slot{position:absolute;z-index:3;display:flex;flex-direction:column;justify-content:flex-end}
+.sg-top{display:flex;align-items:flex-end;gap:4px;min-height:0}
+.sg-fig{height:62px;width:auto;flex:0 0 auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+.sg-card{position:relative;flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;
+  gap:1px;padding:2px 0 3px 5px;border-left:2px solid var(--cc)}
+.sg-pos{font-size:17px;font-weight:800;font-style:italic;line-height:.9;letter-spacing:-.04em;
+  color:color-mix(in srgb,var(--cc) 75%,#fff);font-variant-numeric:tabular-nums}
+.sg-dl{position:absolute;left:5px;top:0;transform:translateX(20px);font-size:8px;font-weight:800;font-variant-numeric:tabular-nums}
+.sg-dl.dn{color:#ff6b6b}.sg-dl.up{color:#4ad991}
+.sg-name{font-weight:800;font-size:9.5px;letter-spacing:.01em;line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg-team{font-style:normal;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);
+  line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg-num{position:absolute;right:0;top:1px;font-size:9px;font-weight:800;color:var(--muted-2);font-variant-numeric:tabular-nums;opacity:.8}
+.sg-car{width:100%;height:auto;display:block;margin-top:2px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
+.sg-slot.pole .sg-pos{color:var(--gold)}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -1337,6 +1347,7 @@ function qualiGapsHTML(ses, L){
     <div class="qg-hd">Qualifying · gap to pole</div>
     <div class="qg-sec"></div>
     <div class="qg-track">
+      <div class="qg-guides"></div>
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
       ${cars}
     </div>
@@ -1389,6 +1400,8 @@ function layoutQGrid(){
     }
   } else for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${t}s</span>`;
   sec.innerHTML=sh;
+  const guides=host.querySelector('.qg-guides');
+  let gl=[...sec.querySelectorAll('.qg-tsec')].map(t=>`<span class="qg-gl t" style="right:${parseFloat(t.style.right)}px"></span>`).join('');
   // distance axis (metres behind pole), right-to-left
   const maxM=maxGap*mps;
   if(maxM>4){
@@ -1398,15 +1411,26 @@ function layoutQGrid(){
     for(let m=0;m<=maxM+.001;m+=step){ const g=mps?m/mps:0; html+=`<span class="qg-tick" style="right:${xOf(g)}px">${m===0?'0':Math.round(m)+' m'}</span>`; }
     axis.innerHTML=html;
   } else axis.innerHTML='';
+  gl+=[...axis.querySelectorAll('.qg-tick')].map(t=>`<span class="qg-gl b" style="right:${parseFloat(t.style.right)}px"></span>`).join('');
+  if(guides) guides.innerHTML=gl;
 }
 function startGridHTML(L){
   const rows=(L.grid||[]).slice().sort((a,b)=>a.pos-b.pos);
   if(!rows.length) return `<div class="lv-empty">No starting grid yet.<br>It is published once qualifying is official.</div>`;
   const moved=rows.filter(r=>r.delta).length;
   const slots=rows.map(r=>`<div class="sg-slot${r.pos===1?' pole':''}" data-p="${r.pos}" style="--cc:${r.col}">
-      <span class="sg-p">${r.pos}</span>
-      <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
-      <em><b>${r.code}</b>${r.delta?`<i class="${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</i>`:''}</em></div>`).join('');
+      <div class="sg-top">
+        ${r.slug?`<img class="sg-fig" src="${IMGFULL(r.slug)}" alt="" onerror="this.remove()">`:''}
+        <div class="sg-card">
+          <span class="sg-pos">${r.pos}</span>
+          ${r.delta?`<span class="sg-dl ${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</span>`:''}
+          <b class="sg-name">${(r.name||r.code).toUpperCase()}</b>
+          <i class="sg-team">${r.team||''}</i>
+          <span class="sg-num">${r.num!=null?r.num:''}</span>
+        </div>
+      </div>
+      <img class="sg-car" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
+    </div>`).join('');
   return `<div class="qg" id="sgrid" data-n="${rows.length}">
     <div class="qg-hd">Starting grid · after penalties<b>Pole ${rows[0].code}</b></div>
     <div class="qg-track">
@@ -1428,7 +1452,7 @@ function layoutSGrid(){
   // solving step and car width together keeps same-column cars clear and the last slot on the track.
   const step=Math.max(20,(W-PAD+14)/(N+1));
   const CARW=Math.max(46,Math.min(132,step*2-14));
-  const laneH=Math.max(60,Math.round(CARW*0.22)+44), KERB=18;
+  const laneH=Math.max(104,Math.round(CARW*0.22)+82), KERB=16;   // standing figure + identity card + car
   const trackH=2*laneH+KERB*2;
   track.style.height=trackH+'px';
   slots.forEach(el=>{ const p=+el.dataset.p, lane=(p%2)?0:1;

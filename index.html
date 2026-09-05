@@ -412,8 +412,12 @@ button{font-family:inherit}
 .qg-hd b{color:color-mix(in srgb,var(--c) 85%,#fff);letter-spacing:.04em}
 .qg-hd b{margin-left:auto}
 .qg-sec{position:relative;height:14px;flex:0 0 auto}
-.qg-tsec{position:absolute;bottom:0;font-size:8.5px;font-weight:700;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
-.qg-tsec::after{content:'';position:absolute;right:50%;bottom:-4px;width:1px;height:4px;background:var(--line)}
+.qg-guides{position:absolute;inset:0;z-index:1;pointer-events:none}
+.qg-gl{position:absolute;width:1px}
+.qg-gl.t{top:7px;bottom:34%;background:linear-gradient(180deg,rgba(244,208,0,.42),rgba(244,208,0,.05))}
+.qg-gl.b{bottom:7px;top:34%;background:linear-gradient(0deg,rgba(206,216,232,.34),rgba(206,216,232,.04))}
+.qg-tsec{position:absolute;bottom:0;font-size:8.5px;font-weight:700;color:#e0c53a;font-variant-numeric:tabular-nums;transform:translateX(50%)}
+.qg-tsec::after{content:'';position:absolute;right:50%;bottom:-4px;width:1px;height:4px;background:rgba(244,208,0,.55)}
 .qg-tsec.pole{transform:none;font-weight:800;font-size:9.5px;color:color-mix(in srgb,var(--gold) 82%,#fff)}
 .qg-tsec.pole::after{right:0;background:color-mix(in srgb,var(--gold) 70%,transparent);height:6px}
 .qg-note{flex:0 0 auto;text-align:right;font-size:10px;color:var(--muted);padding-top:1px}
@@ -435,17 +439,23 @@ button{font-family:inherit}
 .qg-car em i{font-style:normal;font-size:8.5px;font-variant-numeric:tabular-nums;color:var(--muted-2)}
 .qg-car.pole em b{color:var(--gold)}
 .qg-axis{position:relative;height:15px;flex:0 0 auto;border-top:1px solid var(--line-2)}
-.qg-tick{position:absolute;top:2px;font-size:8.5px;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
-.qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:var(--line)}
-.sg-slot{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sg-p{position:absolute;left:2px;top:50%;transform:translateY(-60%);font-size:19px;font-weight:800;font-style:italic;
-  color:rgba(255,255,255,.22);font-variant-numeric:tabular-nums;z-index:-1;letter-spacing:-.04em}
-.sg-slot .qg-side{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
-.sg-slot em{font-style:normal;display:flex;align-items:baseline;gap:5px;line-height:1;margin-top:2px;white-space:nowrap}
-.sg-slot em b{font-weight:800;font-size:10.5px;color:color-mix(in srgb,var(--cc) 80%,#fff)}
-.sg-slot em i{font-style:normal;font-size:8.5px;font-weight:800;font-variant-numeric:tabular-nums}
-.sg-slot em i.dn{color:#ff6b6b}.sg-slot em i.up{color:#4ad991}
-.sg-slot.pole .sg-p{color:color-mix(in srgb,var(--gold) 45%,transparent)}
+.qg-tick{position:absolute;top:2px;font-size:8.5px;color:#ced8e8;font-variant-numeric:tabular-nums;transform:translateX(50%)}
+.qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:rgba(206,216,232,.5)}
+.sg-slot{position:absolute;z-index:3;display:flex;flex-direction:column;justify-content:flex-end}
+.sg-top{display:flex;align-items:flex-end;gap:4px;min-height:0}
+.sg-fig{height:62px;width:auto;flex:0 0 auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+.sg-card{position:relative;flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;
+  gap:1px;padding:2px 0 3px 5px;border-left:2px solid var(--cc)}
+.sg-pos{font-size:17px;font-weight:800;font-style:italic;line-height:.9;letter-spacing:-.04em;
+  color:color-mix(in srgb,var(--cc) 75%,#fff);font-variant-numeric:tabular-nums}
+.sg-dl{position:absolute;left:5px;top:0;transform:translateX(20px);font-size:8px;font-weight:800;font-variant-numeric:tabular-nums}
+.sg-dl.dn{color:#ff6b6b}.sg-dl.up{color:#4ad991}
+.sg-name{font-weight:800;font-size:9.5px;letter-spacing:.01em;line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg-team{font-style:normal;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);
+  line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sg-num{position:absolute;right:0;top:1px;font-size:9px;font-weight:800;color:var(--muted-2);font-variant-numeric:tabular-nums;opacity:.8}
+.sg-car{width:100%;height:auto;display:block;margin-top:2px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
+.sg-slot.pole .sg-pos{color:var(--gold)}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -959,7 +969,7 @@ const LIVE = {
  "meta": {
   "season": 2026,
   "round": 13,
-  "updated": "2026-09-05T20:58:31Z"
+  "updated": "2026-09-05T22:19:28Z"
  },
  "round": 13,
  "gp": "Italian Grand Prix",
@@ -988,6 +998,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "leclerc",
      "time": "1:23.008",
      "laps": 29,
      "seg": null,
@@ -1004,6 +1015,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "hamilton",
      "time": "1:23.181",
      "laps": 26,
      "seg": null,
@@ -1020,6 +1032,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "russell",
      "time": "1:23.312",
      "laps": 27,
      "seg": null,
@@ -1036,6 +1049,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "lawson",
      "time": "1:23.433",
      "laps": 26,
      "seg": null,
@@ -1052,6 +1066,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "antonelli",
      "time": "1:23.644",
      "laps": 27,
      "seg": null,
@@ -1068,6 +1083,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "norris",
      "time": "1:23.719",
      "laps": 26,
      "seg": null,
@@ -1084,6 +1100,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "lindblad",
      "time": "1:23.802",
      "laps": 29,
      "seg": null,
@@ -1100,6 +1117,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "bortoleto",
      "time": "1:24.006",
      "laps": 21,
      "seg": null,
@@ -1116,6 +1134,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "colapinto",
      "time": "1:24.028",
      "laps": 27,
      "seg": null,
@@ -1132,6 +1151,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": null,
      "time": "1:24.177",
      "laps": 23,
      "seg": null,
@@ -1148,6 +1168,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "piastri",
      "time": "1:24.184",
      "laps": 26,
      "seg": null,
@@ -1164,6 +1185,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "tsunoda",
      "time": "1:24.571",
      "laps": 27,
      "seg": null,
@@ -1180,6 +1202,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "hulkenberg",
      "time": "1:24.626",
      "laps": 27,
      "seg": null,
@@ -1196,6 +1219,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "bearman",
      "time": "1:24.646",
      "laps": 28,
      "seg": null,
@@ -1212,6 +1236,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": null,
      "time": "1:24.740",
      "laps": 25,
      "seg": null,
@@ -1228,6 +1253,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "sainz",
      "time": "1:24.827",
      "laps": 25,
      "seg": null,
@@ -1244,6 +1270,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": null,
      "time": "1:24.873",
      "laps": 24,
      "seg": null,
@@ -1260,6 +1287,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "ocon",
      "time": "1:25.852",
      "laps": 26,
      "seg": null,
@@ -1276,6 +1304,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "bottas",
      "time": "1:25.984",
      "laps": 27,
      "seg": null,
@@ -1292,6 +1321,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "stroll",
      "time": "1:26.066",
      "laps": 23,
      "seg": null,
@@ -1308,6 +1338,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "alonso",
      "time": "1:26.072",
      "laps": 21,
      "seg": null,
@@ -1324,6 +1355,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": null,
      "time": "1:29.922",
      "laps": 5,
      "seg": null,
@@ -1348,6 +1380,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "russell",
      "time": "1:22.559",
      "laps": 31,
      "seg": null,
@@ -1364,6 +1397,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "leclerc",
      "time": "1:22.679",
      "laps": 29,
      "seg": null,
@@ -1380,6 +1414,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "antonelli",
      "time": "1:22.700",
      "laps": 32,
      "seg": null,
@@ -1396,6 +1431,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "norris",
      "time": "1:22.943",
      "laps": 25,
      "seg": null,
@@ -1412,6 +1448,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "hamilton",
      "time": "1:23.016",
      "laps": 27,
      "seg": null,
@@ -1428,6 +1465,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "piastri",
      "time": "1:23.028",
      "laps": 26,
      "seg": null,
@@ -1444,6 +1482,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "lindblad",
      "time": "1:23.349",
      "laps": 26,
      "seg": null,
@@ -1460,6 +1499,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "bearman",
      "time": "1:23.370",
      "laps": 29,
      "seg": null,
@@ -1476,6 +1516,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "verstappen",
      "time": "1:23.377",
      "laps": 30,
      "seg": null,
@@ -1492,6 +1533,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "tsunoda",
      "time": "1:23.455",
      "laps": 29,
      "seg": null,
@@ -1508,6 +1550,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "colapinto",
      "time": "1:23.619",
      "laps": 28,
      "seg": null,
@@ -1524,6 +1567,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "lawson",
      "time": "1:23.660",
      "laps": 37,
      "seg": null,
@@ -1540,6 +1584,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "hulkenberg",
      "time": "1:23.732",
      "laps": 28,
      "seg": null,
@@ -1556,6 +1601,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "gasly",
      "time": "1:23.773",
      "laps": 27,
      "seg": null,
@@ -1572,6 +1618,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "bortoleto",
      "time": "1:23.776",
      "laps": 22,
      "seg": null,
@@ -1588,6 +1635,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "albon",
      "time": "1:23.853",
      "laps": 31,
      "seg": null,
@@ -1604,6 +1652,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "sainz",
      "time": "1:23.900",
      "laps": 30,
      "seg": null,
@@ -1620,6 +1669,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "ocon",
      "time": "1:24.407",
      "laps": 30,
      "seg": null,
@@ -1636,6 +1686,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "alonso",
      "time": "1:25.027",
      "laps": 18,
      "seg": null,
@@ -1652,6 +1703,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "perez",
      "time": "1:25.082",
      "laps": 28,
      "seg": null,
@@ -1668,6 +1720,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "bottas",
      "time": "1:25.149",
      "laps": 28,
      "seg": null,
@@ -1684,6 +1737,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "stroll",
      "time": "1:25.253",
      "laps": 27,
      "seg": null,
@@ -1708,6 +1762,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "russell",
      "time": "1:22.219",
      "laps": 13,
      "seg": null,
@@ -1724,6 +1779,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "hamilton",
      "time": "1:22.445",
      "laps": 21,
      "seg": null,
@@ -1740,6 +1796,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "verstappen",
      "time": "1:22.569",
      "laps": 24,
      "seg": null,
@@ -1756,6 +1813,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "antonelli",
      "time": "1:22.580",
      "laps": 18,
      "seg": null,
@@ -1772,6 +1830,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "norris",
      "time": "1:22.625",
      "laps": 18,
      "seg": null,
@@ -1788,6 +1847,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "leclerc",
      "time": "1:22.708",
      "laps": 21,
      "seg": null,
@@ -1804,6 +1864,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "lindblad",
      "time": "1:22.724",
      "laps": 21,
      "seg": null,
@@ -1820,6 +1881,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "piastri",
      "time": "1:22.773",
      "laps": 21,
      "seg": null,
@@ -1836,6 +1898,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "gasly",
      "time": "1:22.898",
      "laps": 24,
      "seg": null,
@@ -1852,6 +1915,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "colapinto",
      "time": "1:23.101",
      "laps": 23,
      "seg": null,
@@ -1868,6 +1932,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "hulkenberg",
      "time": "1:23.126",
      "laps": 22,
      "seg": null,
@@ -1884,6 +1949,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "lawson",
      "time": "1:23.203",
      "laps": 23,
      "seg": null,
@@ -1900,6 +1966,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "bortoleto",
      "time": "1:23.298",
      "laps": 21,
      "seg": null,
@@ -1916,6 +1983,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "bearman",
      "time": "1:23.585",
      "laps": 23,
      "seg": null,
@@ -1932,6 +2000,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "tsunoda",
      "time": "1:23.817",
      "laps": 16,
      "seg": null,
@@ -1948,6 +2017,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "sainz",
      "time": "1:23.875",
      "laps": 28,
      "seg": null,
@@ -1964,6 +2034,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "ocon",
      "time": "1:24.020",
      "laps": 25,
      "seg": null,
@@ -1980,6 +2051,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "albon",
      "time": "1:24.437",
      "laps": 29,
      "seg": null,
@@ -1996,6 +2068,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "alonso",
      "time": "1:24.919",
      "laps": 20,
      "seg": null,
@@ -2012,6 +2085,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "bottas",
      "time": "1:25.004",
      "laps": 20,
      "seg": null,
@@ -2028,6 +2102,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "perez",
      "time": "1:25.031",
      "laps": 20,
      "seg": null,
@@ -2044,6 +2119,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "stroll",
      "time": "1:25.555",
      "laps": 20,
      "seg": null,
@@ -2068,6 +2144,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "gasly",
      "time": "1:21.786",
      "laps": 18,
      "seg": [
@@ -2088,6 +2165,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "russell",
      "time": "1:21.846",
      "laps": 17,
      "seg": [
@@ -2108,6 +2186,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "piastri",
      "time": "1:21.966",
      "laps": 18,
      "seg": [
@@ -2128,6 +2207,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "leclerc",
      "time": "1:22.004",
      "laps": 18,
      "seg": [
@@ -2148,6 +2228,7 @@ const LIVE = {
      "team": "Ferrari",
      "col": "#E80020",
      "tid": "ferrari",
+     "slug": "hamilton",
      "time": "1:22.011",
      "laps": 15,
      "seg": [
@@ -2168,6 +2249,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "verstappen",
      "time": "1:22.070",
      "laps": 17,
      "seg": [
@@ -2188,6 +2270,7 @@ const LIVE = {
      "team": "Mercedes",
      "col": "#00D7B6",
      "tid": "mercedes",
+     "slug": "antonelli",
      "time": "1:22.093",
      "laps": 18,
      "seg": [
@@ -2208,6 +2291,7 @@ const LIVE = {
      "team": "Alpine",
      "col": "#00A1E8",
      "tid": "alpine",
+     "slug": "colapinto",
      "time": "1:22.220",
      "laps": 18,
      "seg": [
@@ -2228,6 +2312,7 @@ const LIVE = {
      "team": "McLaren",
      "col": "#FF8000",
      "tid": "mclaren",
+     "slug": "norris",
      "time": "1:22.256",
      "laps": 19,
      "seg": [
@@ -2248,6 +2333,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "lindblad",
      "time": "1:22.286",
      "laps": 18,
      "seg": [
@@ -2268,6 +2354,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "bortoleto",
      "time": "1:22.517",
      "laps": 12,
      "seg": [
@@ -2288,6 +2375,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "bearman",
      "time": "1:22.756",
      "laps": 15,
      "seg": [
@@ -2308,6 +2396,7 @@ const LIVE = {
      "team": "Audi",
      "col": "#D81C1C",
      "tid": "audi",
+     "slug": "hulkenberg",
      "time": "1:22.779",
      "laps": 12,
      "seg": [
@@ -2328,6 +2417,7 @@ const LIVE = {
      "team": "Red Bull",
      "col": "#3671C6",
      "tid": "red_bull",
+     "slug": "lawson",
      "time": "1:22.821",
      "laps": 17,
      "seg": [
@@ -2348,6 +2438,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "sainz",
      "time": "1:23.453",
      "laps": 15,
      "seg": [
@@ -2368,6 +2459,7 @@ const LIVE = {
      "team": "Haas",
      "col": "#B9BDC2",
      "tid": "haas",
+     "slug": "ocon",
      "time": "1:23.454",
      "laps": 15,
      "seg": [
@@ -2388,6 +2480,7 @@ const LIVE = {
      "team": "Racing Bulls",
      "col": "#6C98FF",
      "tid": "rb",
+     "slug": "tsunoda",
      "time": "1:23.755",
      "laps": 6,
      "seg": [
@@ -2408,6 +2501,7 @@ const LIVE = {
      "team": "Williams",
      "col": "#3AA6E0",
      "tid": "williams",
+     "slug": "albon",
      "time": "1:24.356",
      "laps": 6,
      "seg": [
@@ -2428,6 +2522,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "bottas",
      "time": "1:24.364",
      "laps": 9,
      "seg": [
@@ -2448,6 +2543,7 @@ const LIVE = {
      "team": "Cadillac",
      "col": "#C8A24B",
      "tid": "cadillac",
+     "slug": "perez",
      "time": "1:24.595",
      "laps": 9,
      "seg": [
@@ -2468,6 +2564,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "alonso",
      "time": "1:25.150",
      "laps": 6,
      "seg": [
@@ -2488,6 +2585,7 @@ const LIVE = {
      "team": "Aston Martin",
      "col": "#00A88E",
      "tid": "aston_martin",
+     "slug": "stroll",
      "time": "1:25.222",
      "laps": 9,
      "seg": [
@@ -2519,6 +2617,7 @@ const LIVE = {
    "team": "Alpine",
    "col": "#00A1E8",
    "tid": "alpine",
+   "slug": "gasly",
    "time": "1:21.786",
    "gap": null,
    "gapS": 0.0,
@@ -2537,6 +2636,7 @@ const LIVE = {
    "team": "Mercedes",
    "col": "#00D7B6",
    "tid": "mercedes",
+   "slug": "russell",
    "time": "1:21.846",
    "gap": "+0.060",
    "gapS": 0.06,
@@ -2555,6 +2655,7 @@ const LIVE = {
    "team": "Ferrari",
    "col": "#E80020",
    "tid": "ferrari",
+   "slug": "leclerc",
    "time": "1:22.004",
    "gap": "+0.218",
    "gapS": 0.218,
@@ -2573,6 +2674,7 @@ const LIVE = {
    "team": "Ferrari",
    "col": "#E80020",
    "tid": "ferrari",
+   "slug": "hamilton",
    "time": "1:22.011",
    "gap": "+0.225",
    "gapS": 0.225,
@@ -2591,6 +2693,7 @@ const LIVE = {
    "team": "Red Bull",
    "col": "#3671C6",
    "tid": "red_bull",
+   "slug": "verstappen",
    "time": "1:22.070",
    "gap": "+0.284",
    "gapS": 0.284,
@@ -2609,6 +2712,7 @@ const LIVE = {
    "team": "McLaren",
    "col": "#FF8000",
    "tid": "mclaren",
+   "slug": "piastri",
    "time": "1:21.966",
    "gap": "+0.180",
    "gapS": 0.18,
@@ -2627,6 +2731,7 @@ const LIVE = {
    "team": "Alpine",
    "col": "#00A1E8",
    "tid": "alpine",
+   "slug": "colapinto",
    "time": "1:22.220",
    "gap": "+0.434",
    "gapS": 0.434,
@@ -2645,6 +2750,7 @@ const LIVE = {
    "team": "McLaren",
    "col": "#FF8000",
    "tid": "mclaren",
+   "slug": "norris",
    "time": "1:22.256",
    "gap": "+0.470",
    "gapS": 0.47,
@@ -2663,6 +2769,7 @@ const LIVE = {
    "team": "Racing Bulls",
    "col": "#6C98FF",
    "tid": "rb",
+   "slug": "lindblad",
    "time": "1:22.286",
    "gap": "+0.500",
    "gapS": 0.5,
@@ -2681,6 +2788,7 @@ const LIVE = {
    "team": "Audi",
    "col": "#D81C1C",
    "tid": "audi",
+   "slug": "bortoleto",
    "time": "1:22.517",
    "gap": "+0.731",
    "gapS": 0.731,
@@ -2699,6 +2807,7 @@ const LIVE = {
    "team": "Haas",
    "col": "#B9BDC2",
    "tid": "haas",
+   "slug": "bearman",
    "time": "1:22.756",
    "gap": "+0.970",
    "gapS": 0.97,
@@ -2717,6 +2826,7 @@ const LIVE = {
    "team": "Audi",
    "col": "#D81C1C",
    "tid": "audi",
+   "slug": "hulkenberg",
    "time": "1:22.779",
    "gap": "+0.993",
    "gapS": 0.993,
@@ -2735,6 +2845,7 @@ const LIVE = {
    "team": "Williams",
    "col": "#3AA6E0",
    "tid": "williams",
+   "slug": "sainz",
    "time": "1:23.453",
    "gap": "+1.667",
    "gapS": 1.667,
@@ -2753,6 +2864,7 @@ const LIVE = {
    "team": "Haas",
    "col": "#B9BDC2",
    "tid": "haas",
+   "slug": "ocon",
    "time": "1:23.454",
    "gap": "+1.668",
    "gapS": 1.668,
@@ -2771,6 +2883,7 @@ const LIVE = {
    "team": "Racing Bulls",
    "col": "#6C98FF",
    "tid": "rb",
+   "slug": "tsunoda",
    "time": "1:23.755",
    "gap": "+1.969",
    "gapS": 1.969,
@@ -2789,6 +2902,7 @@ const LIVE = {
    "team": "Cadillac",
    "col": "#C8A24B",
    "tid": "cadillac",
+   "slug": "bottas",
    "time": "1:24.364",
    "gap": "+2.578",
    "gapS": 2.578,
@@ -2807,6 +2921,7 @@ const LIVE = {
    "team": "Cadillac",
    "col": "#C8A24B",
    "tid": "cadillac",
+   "slug": "perez",
    "time": "1:24.595",
    "gap": "+2.809",
    "gapS": 2.809,
@@ -2825,6 +2940,7 @@ const LIVE = {
    "team": "Aston Martin",
    "col": "#00A88E",
    "tid": "aston_martin",
+   "slug": "alonso",
    "time": "1:25.150",
    "gap": "+3.364",
    "gapS": 3.364,
@@ -2843,6 +2959,7 @@ const LIVE = {
    "team": "Aston Martin",
    "col": "#00A88E",
    "tid": "aston_martin",
+   "slug": "stroll",
    "time": "1:25.222",
    "gap": "+3.436",
    "gapS": 3.436,
@@ -2861,6 +2978,7 @@ const LIVE = {
    "team": "Mercedes",
    "col": "#00D7B6",
    "tid": "mercedes",
+   "slug": "antonelli",
    "time": "1:22.093",
    "gap": "+0.307",
    "gapS": 0.307,
@@ -2879,6 +2997,7 @@ const LIVE = {
    "team": "Red Bull",
    "col": "#3671C6",
    "tid": "red_bull",
+   "slug": "lawson",
    "time": "1:22.821",
    "gap": "+1.035",
    "gapS": 1.035,
@@ -2897,6 +3016,7 @@ const LIVE = {
    "team": "Williams",
    "col": "#3AA6E0",
    "tid": "williams",
+   "slug": "albon",
    "time": "1:24.356",
    "gap": "+2.570",
    "gapS": 2.57,
@@ -3360,6 +3480,7 @@ function qualiGapsHTML(ses, L){
     <div class="qg-hd">Qualifying · gap to pole</div>
     <div class="qg-sec"></div>
     <div class="qg-track">
+      <div class="qg-guides"></div>
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
       ${cars}
     </div>
@@ -3412,6 +3533,8 @@ function layoutQGrid(){
     }
   } else for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${t}s</span>`;
   sec.innerHTML=sh;
+  const guides=host.querySelector('.qg-guides');
+  let gl=[...sec.querySelectorAll('.qg-tsec')].map(t=>`<span class="qg-gl t" style="right:${parseFloat(t.style.right)}px"></span>`).join('');
   // distance axis (metres behind pole), right-to-left
   const maxM=maxGap*mps;
   if(maxM>4){
@@ -3421,15 +3544,26 @@ function layoutQGrid(){
     for(let m=0;m<=maxM+.001;m+=step){ const g=mps?m/mps:0; html+=`<span class="qg-tick" style="right:${xOf(g)}px">${m===0?'0':Math.round(m)+' m'}</span>`; }
     axis.innerHTML=html;
   } else axis.innerHTML='';
+  gl+=[...axis.querySelectorAll('.qg-tick')].map(t=>`<span class="qg-gl b" style="right:${parseFloat(t.style.right)}px"></span>`).join('');
+  if(guides) guides.innerHTML=gl;
 }
 function startGridHTML(L){
   const rows=(L.grid||[]).slice().sort((a,b)=>a.pos-b.pos);
   if(!rows.length) return `<div class="lv-empty">No starting grid yet.<br>It is published once qualifying is official.</div>`;
   const moved=rows.filter(r=>r.delta).length;
   const slots=rows.map(r=>`<div class="sg-slot${r.pos===1?' pole':''}" data-p="${r.pos}" style="--cc:${r.col}">
-      <span class="sg-p">${r.pos}</span>
-      <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
-      <em><b>${r.code}</b>${r.delta?`<i class="${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</i>`:''}</em></div>`).join('');
+      <div class="sg-top">
+        ${r.slug?`<img class="sg-fig" src="${IMGFULL(r.slug)}" alt="" onerror="this.remove()">`:''}
+        <div class="sg-card">
+          <span class="sg-pos">${r.pos}</span>
+          ${r.delta?`<span class="sg-dl ${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</span>`:''}
+          <b class="sg-name">${(r.name||r.code).toUpperCase()}</b>
+          <i class="sg-team">${r.team||''}</i>
+          <span class="sg-num">${r.num!=null?r.num:''}</span>
+        </div>
+      </div>
+      <img class="sg-car" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
+    </div>`).join('');
   return `<div class="qg" id="sgrid" data-n="${rows.length}">
     <div class="qg-hd">Starting grid · after penalties<b>Pole ${rows[0].code}</b></div>
     <div class="qg-track">
@@ -3451,7 +3585,7 @@ function layoutSGrid(){
   // solving step and car width together keeps same-column cars clear and the last slot on the track.
   const step=Math.max(20,(W-PAD+14)/(N+1));
   const CARW=Math.max(46,Math.min(132,step*2-14));
-  const laneH=Math.max(60,Math.round(CARW*0.22)+44), KERB=18;
+  const laneH=Math.max(104,Math.round(CARW*0.22)+82), KERB=16;   // standing figure + identity card + car
   const trackH=2*laneH+KERB*2;
   track.style.height=trackH+'px';
   slots.forEach(el=>{ const p=+el.dataset.p, lane=(p%2)?0:1;
