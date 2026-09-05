@@ -60,15 +60,24 @@ def curl_json(url, timeout="30"):
         return None
 
 
+LAST_ERR = None
+
+
 def curl_list(url, tries=3):
-    """OpenF1 endpoints return a list; it can rate-limit and hand back a dict/string instead."""
+    """OpenF1 endpoints return a list. Returns None (not []) when the API is unavailable, so a
+    failed fetch is never mistaken for 'this session has no results' and used to wipe good data.
+    NOTE: OpenF1 answers 401 for EVERYTHING (past sessions included) while a session is live -
+    run this after the session has ended, or use an API key."""
+    global LAST_ERR
     import time
     for i in range(tries):
         v = curl_json(url)
         if isinstance(v, list):
             return v
+        if isinstance(v, dict) and v.get("detail"):
+            LAST_ERR = v["detail"]
         time.sleep(1.5 * (i + 1))
-    return []
+    return None
 
 
 def fmt_lap(sec):
@@ -140,6 +149,10 @@ def main():
 
     # ---- OpenF1 sessions for this weekend (match on the race date's meeting) ----
     sessions = curl_list("https://api.openf1.org/v1/sessions?year=%d" % YEAR)
+    if sessions is None:
+        print("OpenF1 unavailable - data/live.json left untouched.")
+        if LAST_ERR: print("  reason: %s" % LAST_ERR)
+        sys.exit(1)
     days = {s["start"][:10] for s in schedule}
     wk = [s for s in sessions if (s.get("date_start") or "")[:10] in days]
     by_name = {}
@@ -174,6 +187,17 @@ def main():
     # driver fallbacks from f1.json (regulars); OpenF1 fills in FP-only rookies
     bynum = {int(d["num"]): d for d in f1["drivers"] if d.get("num")}
 
+    # anything already captured for this round is kept if a fetch fails (never overwrite good data)
+    prev = {}
+    if os.path.exists(LIVEP):
+        try:
+            old = json.load(open(LIVEP))
+            if old.get("round") == rnd:
+                prev = {s["key"]: s.get("results") or [] for s in old.get("sessions", [])}
+        except Exception:
+            pass
+    kept = []
+
     for s in schedule:
         of1 = by_name.get(OPENF1_NAME.get(s["key"], ""))
         row = {"key": s["key"], "name": s["name"], "start": s["start"],
@@ -183,7 +207,14 @@ def main():
             continue
         sk = of1["session_key"]
         res = curl_list("https://api.openf1.org/v1/session_result?session_key=%s" % sk)
-        drv = {x["driver_number"]: x for x in curl_list("https://api.openf1.org/v1/drivers?session_key=%s" % sk)}
+        drvl = curl_list("https://api.openf1.org/v1/drivers?session_key=%s" % sk)
+        if res is None or drvl is None:                      # API down -> keep whatever we had
+            row["results"] = prev.get(s["key"], [])
+            if row["results"]:
+                kept.append(s["key"])
+            live["sessions"].append(row)
+            continue
+        drv = {x["driver_number"]: x for x in drvl}
         out = []
         for r in res:
             n = r.get("driver_number")
@@ -217,6 +248,9 @@ def main():
     filled = [s["key"] for s in live["sessions"] if s["results"]]
     print("wrote data/live.json - R%d %s | sessions: %s | with results: %s"
           % (rnd, live["gp"], ", ".join(s["key"] for s in live["sessions"]), ", ".join(filled) or "none"))
+    if kept:
+        print("  NOTE: kept previously captured results for %s (fetch failed)" % ", ".join(kept))
+        if LAST_ERR: print("  reason: %s" % LAST_ERR)
 
 
 if __name__ == "__main__":
