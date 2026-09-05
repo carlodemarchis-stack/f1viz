@@ -85,7 +85,7 @@ button{font-family:inherit}
 
 /* ----- left: identity ----- */
 .idcard{display:flex;flex-direction:column;overflow:hidden;padding:14px}
-.hero-top{display:grid;grid-template-columns:1.12fr 1fr;grid-template-rows:1fr auto;grid-template-areas:"info photo" "team photo";column-gap:8px;row-gap:6px;height:clamp(230px,44vh,376px);flex:0 0 auto}
+.hero-top{display:grid;grid-template-columns:1.12fr 1fr;grid-template-rows:1fr auto;grid-template-areas:"info photo" "team photo";column-gap:8px;row-gap:6px;height:clamp(230px,38vh,320px);flex:0 0 auto}
 .hero-info{grid-area:info;position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;padding:2px 0}
 .hero-top>.teamline{grid-area:team}
 .bigpos{font-weight:800;font-style:italic;font-size:clamp(46px,8vh,84px);line-height:.76;letter-spacing:-.05em;
@@ -98,11 +98,11 @@ button{font-family:inherit}
 .ptop em{font-style:normal;font-size:.52em;color:var(--muted-2);font-weight:700;letter-spacing:.04em}
 .statgrid.r1{grid-template-columns:repeat(5,1fr)}
 /* 2026 helmet, filling the space between the position block and the name */
-.helmet{position:relative;flex:1 1 0;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;padding:6px 0 2px}
-.helmet::before{content:'';position:absolute;left:-6%;top:50%;width:62%;padding-bottom:62%;transform:translateY(-50%);
+.helmet{position:relative;flex:0 1 auto;height:clamp(44px,7.2vh,84px);min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;padding:4px 0 2px}
+.helmet::before{content:'';position:absolute;left:-5%;top:50%;width:40%;padding-bottom:40%;transform:translateY(-50%);
   border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 30%,transparent) 0%,transparent 68%);
   filter:blur(10px);opacity:.85;pointer-events:none}
-.helmet img{position:relative;height:auto;width:auto;max-height:100%;max-width:78%;object-fit:contain;object-position:left center;
+.helmet img{position:relative;height:auto;width:auto;max-height:100%;max-width:60%;object-fit:contain;object-position:left center;
   filter:drop-shadow(0 10px 16px rgba(0,0,0,.55)) drop-shadow(0 2px 3px rgba(0,0,0,.4))}
 .idstack{margin-top:auto;display:flex;flex-direction:column;min-width:0;gap:2px}
 .idstack .rnum{font-weight:800;font-style:italic;font-size:clamp(18px,2.7vh,26px);color:color-mix(in srgb,var(--c) 82%,#fff);line-height:1;letter-spacing:-.02em;margin-bottom:2px}
@@ -3167,7 +3167,7 @@ function driverCard(d){
       <div class="hero-top">
         <div class="hero-info">
           <div class="postop"><div class="bigpos">P${d.pos}</div><div class="ptop">·<b>${d.points}</b><em>pts</em></div></div>
-          <div class="helmet"><img src="${IMGHELM(d.slug)}" alt="" loading="lazy" onerror="this.closest('.helmet').remove()"></div>
+          <div class="helmet"><img src="${IMGHELM(d.slug)}" alt="" onerror="this.closest('.helmet').remove()"></div>
           <div class="idstack">
             <div class="rnum">#${d.num||''}<span class="tla">${d.code}</span></div>
             <div class="gname">${d.given}</div>
