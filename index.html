@@ -410,7 +410,11 @@ button{font-family:inherit}
 .qg{display:flex;flex-direction:column;justify-content:center;gap:8px;height:100%;min-height:0;padding:4px 10px 8px;overflow:hidden}
 .qg-hd{display:flex;align-items:baseline;gap:10px;flex:0 0 auto;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:800}
 .qg-hd b{color:color-mix(in srgb,var(--c) 85%,#fff);letter-spacing:.04em}
-.qg-hd span{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600;color:var(--muted)}
+.qg-hd b{margin-left:auto}
+.qg-sec{position:relative;height:14px;flex:0 0 auto}
+.qg-tsec{position:absolute;bottom:0;font-size:8.5px;font-weight:700;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
+.qg-tsec::after{content:'';position:absolute;right:50%;bottom:-4px;width:1px;height:4px;background:var(--line)}
+.qg-note{flex:0 0 auto;text-align:right;font-size:10px;color:var(--muted);padding-top:1px}
 .qg-track{position:relative;flex:0 0 auto;max-height:100%;border-radius:10px;overflow:hidden;
   background:repeating-linear-gradient(90deg,#23262c 0 3px,#212429 3px 6px);
   border-top:3px solid #d8dbe2;border-bottom:3px solid #d8dbe2}
@@ -431,6 +435,19 @@ button{font-family:inherit}
 .qg-axis{position:relative;height:15px;flex:0 0 auto;border-top:1px solid var(--line-2)}
 .qg-tick{position:absolute;top:2px;font-size:8.5px;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
 .qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:var(--line)}
+.sg-line{position:absolute;left:0;right:0;top:50%;height:0;border-top:2px dashed rgba(255,255,255,.16);z-index:1}
+.sg-slot{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sg-box{position:absolute;left:-7px;right:-9px;top:-5px;bottom:9px;border:2px solid rgba(255,255,255,.42);
+  border-right:0;border-radius:2px;background:rgba(255,255,255,.035);z-index:-1}
+.sg-p{position:absolute;left:2px;top:50%;transform:translateY(-60%);font-size:19px;font-weight:800;font-style:italic;
+  color:rgba(255,255,255,.22);font-variant-numeric:tabular-nums;z-index:-1;letter-spacing:-.04em}
+.sg-slot .qg-side{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
+.sg-slot em{font-style:normal;display:flex;align-items:baseline;gap:5px;line-height:1;margin-top:2px;white-space:nowrap}
+.sg-slot em b{font-weight:800;font-size:10.5px;color:color-mix(in srgb,var(--cc) 80%,#fff)}
+.sg-slot em i{font-style:normal;font-size:8.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.sg-slot em i.dn{color:#ff6b6b}.sg-slot em i.up{color:#4ad991}
+.sg-slot.pole .sg-box{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent)}
+.sg-slot.pole .sg-p{color:color-mix(in srgb,var(--gold) 45%,transparent)}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -944,7 +961,7 @@ const LIVE = {
  "meta": {
   "season": 2026,
   "round": 13,
-  "updated": "2026-09-05T20:24:37Z"
+  "updated": "2026-09-05T20:58:31Z"
  },
  "round": 13,
  "gp": "Italian Grand Prix",
@@ -2494,6 +2511,404 @@ const LIVE = {
    "end": "2026-09-06T15:00:00+00:00",
    "results": []
   }
+ ],
+ "grid": [
+  {
+   "pos": 1,
+   "code": "GAS",
+   "num": 10,
+   "name": "Gasly",
+   "team": "Alpine",
+   "col": "#00A1E8",
+   "tid": "alpine",
+   "time": "1:21.786",
+   "gap": null,
+   "gapS": 0.0,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 1,
+   "delta": 0
+  },
+  {
+   "pos": 2,
+   "code": "RUS",
+   "num": 63,
+   "name": "Russell",
+   "team": "Mercedes",
+   "col": "#00D7B6",
+   "tid": "mercedes",
+   "time": "1:21.846",
+   "gap": "+0.060",
+   "gapS": 0.06,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 2,
+   "delta": 0
+  },
+  {
+   "pos": 3,
+   "code": "LEC",
+   "num": 16,
+   "name": "Leclerc",
+   "team": "Ferrari",
+   "col": "#E80020",
+   "tid": "ferrari",
+   "time": "1:22.004",
+   "gap": "+0.218",
+   "gapS": 0.218,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 4,
+   "delta": 1
+  },
+  {
+   "pos": 4,
+   "code": "HAM",
+   "num": 44,
+   "name": "Hamilton",
+   "team": "Ferrari",
+   "col": "#E80020",
+   "tid": "ferrari",
+   "time": "1:22.011",
+   "gap": "+0.225",
+   "gapS": 0.225,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 5,
+   "delta": 1
+  },
+  {
+   "pos": 5,
+   "code": "VER",
+   "num": 3,
+   "name": "Verstappen",
+   "team": "Red Bull",
+   "col": "#3671C6",
+   "tid": "red_bull",
+   "time": "1:22.070",
+   "gap": "+0.284",
+   "gapS": 0.284,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 6,
+   "delta": 1
+  },
+  {
+   "pos": 6,
+   "code": "PIA",
+   "num": 81,
+   "name": "Piastri",
+   "team": "McLaren",
+   "col": "#FF8000",
+   "tid": "mclaren",
+   "time": "1:21.966",
+   "gap": "+0.180",
+   "gapS": 0.18,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 3,
+   "delta": -3
+  },
+  {
+   "pos": 7,
+   "code": "COL",
+   "num": 43,
+   "name": "Colapinto",
+   "team": "Alpine",
+   "col": "#00A1E8",
+   "tid": "alpine",
+   "time": "1:22.220",
+   "gap": "+0.434",
+   "gapS": 0.434,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 8,
+   "delta": 1
+  },
+  {
+   "pos": 8,
+   "code": "NOR",
+   "num": 1,
+   "name": "Norris",
+   "team": "McLaren",
+   "col": "#FF8000",
+   "tid": "mclaren",
+   "time": "1:22.256",
+   "gap": "+0.470",
+   "gapS": 0.47,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 9,
+   "delta": 1
+  },
+  {
+   "pos": 9,
+   "code": "LIN",
+   "num": 41,
+   "name": "Lindblad",
+   "team": "Racing Bulls",
+   "col": "#6C98FF",
+   "tid": "rb",
+   "time": "1:22.286",
+   "gap": "+0.500",
+   "gapS": 0.5,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 10,
+   "delta": 1
+  },
+  {
+   "pos": 10,
+   "code": "BOR",
+   "num": 5,
+   "name": "Bortoleto",
+   "team": "Audi",
+   "col": "#D81C1C",
+   "tid": "audi",
+   "time": "1:22.517",
+   "gap": "+0.731",
+   "gapS": 0.731,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 11,
+   "delta": 1
+  },
+  {
+   "pos": 11,
+   "code": "BEA",
+   "num": 87,
+   "name": "Bearman",
+   "team": "Haas",
+   "col": "#B9BDC2",
+   "tid": "haas",
+   "time": "1:22.756",
+   "gap": "+0.970",
+   "gapS": 0.97,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 12,
+   "delta": 1
+  },
+  {
+   "pos": 12,
+   "code": "HUL",
+   "num": 27,
+   "name": "Hülkenberg",
+   "team": "Audi",
+   "col": "#D81C1C",
+   "tid": "audi",
+   "time": "1:22.779",
+   "gap": "+0.993",
+   "gapS": 0.993,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 13,
+   "delta": 1
+  },
+  {
+   "pos": 13,
+   "code": "SAI",
+   "num": 55,
+   "name": "Sainz",
+   "team": "Williams",
+   "col": "#3AA6E0",
+   "tid": "williams",
+   "time": "1:23.453",
+   "gap": "+1.667",
+   "gapS": 1.667,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 15,
+   "delta": 2
+  },
+  {
+   "pos": 14,
+   "code": "OCO",
+   "num": 31,
+   "name": "Ocon",
+   "team": "Haas",
+   "col": "#B9BDC2",
+   "tid": "haas",
+   "time": "1:23.454",
+   "gap": "+1.668",
+   "gapS": 1.668,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 16,
+   "delta": 2
+  },
+  {
+   "pos": 15,
+   "code": "TSU",
+   "num": 22,
+   "name": "Tsunoda",
+   "team": "Racing Bulls",
+   "col": "#6C98FF",
+   "tid": "rb",
+   "time": "1:23.755",
+   "gap": "+1.969",
+   "gapS": 1.969,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 17,
+   "delta": 2
+  },
+  {
+   "pos": 16,
+   "code": "BOT",
+   "num": 77,
+   "name": "Bottas",
+   "team": "Cadillac",
+   "col": "#C8A24B",
+   "tid": "cadillac",
+   "time": "1:24.364",
+   "gap": "+2.578",
+   "gapS": 2.578,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 19,
+   "delta": 3
+  },
+  {
+   "pos": 17,
+   "code": "PER",
+   "num": 11,
+   "name": "Pérez",
+   "team": "Cadillac",
+   "col": "#C8A24B",
+   "tid": "cadillac",
+   "time": "1:24.595",
+   "gap": "+2.809",
+   "gapS": 2.809,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 20,
+   "delta": 3
+  },
+  {
+   "pos": 18,
+   "code": "ALO",
+   "num": 14,
+   "name": "Alonso",
+   "team": "Aston Martin",
+   "col": "#00A88E",
+   "tid": "aston_martin",
+   "time": "1:25.150",
+   "gap": "+3.364",
+   "gapS": 3.364,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 21,
+   "delta": 3
+  },
+  {
+   "pos": 19,
+   "code": "STR",
+   "num": 18,
+   "name": "Stroll",
+   "team": "Aston Martin",
+   "col": "#00A88E",
+   "tid": "aston_martin",
+   "time": "1:25.222",
+   "gap": "+3.436",
+   "gapS": 3.436,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 22,
+   "delta": 3
+  },
+  {
+   "pos": 20,
+   "code": "ANT",
+   "num": 12,
+   "name": "Antonelli",
+   "team": "Mercedes",
+   "col": "#00D7B6",
+   "tid": "mercedes",
+   "time": "1:22.093",
+   "gap": "+0.307",
+   "gapS": 0.307,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 7,
+   "delta": -13
+  },
+  {
+   "pos": 21,
+   "code": "LAW",
+   "num": 30,
+   "name": "Lawson",
+   "team": "Red Bull",
+   "col": "#3671C6",
+   "tid": "red_bull",
+   "time": "1:22.821",
+   "gap": "+1.035",
+   "gapS": 1.035,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 14,
+   "delta": -7
+  },
+  {
+   "pos": 22,
+   "code": "ALB",
+   "num": 23,
+   "name": "Albon",
+   "team": "Williams",
+   "col": "#3AA6E0",
+   "tid": "williams",
+   "time": "1:24.356",
+   "gap": "+2.570",
+   "gapS": 2.57,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 18,
+   "delta": -4
+  }
  ]
 };
 const D = DATA.drivers, C = DATA.constructors;
@@ -2893,14 +3308,15 @@ function liveCard(){
   const anyLive=ses.some(s=>s.k==='live');
   const withRes=ses.filter(s=>s.results&&s.results.length);
   const qs=ses.find(s=>(s.key==='quali'||s.key==='sq') && s.results.length);          // source for the grid view
-  const okTab=k=> k==='gaps' ? !!qs : ses.some(s=>s.key===k && s.results.length);
+  const okTab=k=> k==='gaps' ? !!qs : k==='sgrid' ? !!(L.grid||[]).length : ses.some(s=>s.key===k && s.results.length);
   const sel=(lvSesKey && okTab(lvSesKey)) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
   let tabs=ses.filter(s=>s.key!=='race').map(s=>{
     const on=s.key===sel, has=s.results&&s.results.length;
     return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${s.name.replace('Practice ','FP')}</button>`;}).join('');
   if(qs) tabs+=`<button class="rc-tab${sel==='gaps'?' on':''}" data-ls="gaps">Gaps</button>`;
-  const cur=sel==='gaps'?null:ses.find(s=>s.key===sel);
-  const body = sel==='gaps' ? qualiGapsHTML(qs, L) : cur&&cur.results.length ? `
+  if((L.grid||[]).length) tabs+=`<button class="rc-tab${sel==='sgrid'?' on':''}" data-ls="sgrid">Grid</button>`;
+  const cur=(sel==='gaps'||sel==='sgrid')?null:ses.find(s=>s.key===sel);
+  const body = sel==='sgrid' ? startGridHTML(L) : sel==='gaps' ? qualiGapsHTML(qs, L) : cur&&cur.results.length ? `
     <div class="lvhead"><span>Pos</span><span>Driver</span><span>Time</span><span>Gap</span><span class="h-lvl">Laps</span></div>
     <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
       <span class="lvp">${r.pos}</span>
@@ -2910,7 +3326,7 @@ function liveCard(){
       <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
-  return `<div class="card enter${sel==='gaps'?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
+  return `<div class="card enter${(sel==='gaps'||sel==='sgrid')?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
     <div class="panel lvinfo">
       <div class="lv-hd">
         <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
@@ -2925,7 +3341,7 @@ function liveCard(){
         return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${sel==='gaps'?(qs.name+' · gap to pole'):(cur?cur.name+' · results':'Sessions')}</span></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${sel==='sgrid'?'Starting grid':sel==='gaps'?(qs.name+' · gap to pole'):(cur?cur.name+' · results':'Sessions')}</span></div>
       <div class="rc-view">${body}</div>
     </div>
   </div>`;
@@ -2943,13 +3359,14 @@ function qualiGapsHTML(ses, L){
       <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
       <em><u>${r.pos}</u><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
   return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}">
-    <div class="qg-hd">Qualifying · gap to pole <b>${rows[0].code} ${rows[0].time}</b>
-      <span>${mps?`spaced to scale — ${(maxGap*mps).toFixed(0)} m covers the field at ${(mps*3.6).toFixed(0)} km/h average`:'spaced by time gap'}</span></div>
+    <div class="qg-hd">Qualifying · gap to pole<b>${rows[0].code} ${rows[0].time}</b></div>
+    <div class="qg-sec"></div>
     <div class="qg-track">
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
       ${cars}
     </div>
     <div class="qg-axis"></div>
+    <div class="qg-note">${mps?`spaced to scale — ${(maxGap*mps).toFixed(0)} m covers the field at ${(mps*3.6).toFixed(0)} km/h average`:'spaced by time gap'}</div>
   </div>`;
 }
 function layoutQGrid(){
@@ -2972,13 +3389,20 @@ function layoutQGrid(){
     if(ln<0){ lanes.push(x); ln=lanes.length-1; } else lanes[ln]=x;
     el.style.width=CARW+'px'; el.style.right=x+'px'; el.dataset.lane=ln;
   });
+  const sec=host.querySelector('.qg-sec');
   const n=Math.max(1,lanes.length);
   const laneH=Math.max(34,Math.round(CARW*0.22)+26);             // lateral car (900x198) + label + breathing room
-  const availH=Math.max(90, host.clientHeight - host.querySelector('.qg-hd').offsetHeight - axis.offsetHeight - 26);
-  const trackH=Math.min(availH, n*laneH+18);
+  const KERB=17;                                                  // clearance from the red/white strips
+  const availH=Math.max(90, host.clientHeight - host.querySelector('.qg-hd').offsetHeight
+                          - sec.offsetHeight - axis.offsetHeight - host.querySelector('.qg-note').offsetHeight - 30);
+  const trackH=Math.min(availH, n*laneH+KERB*2);
   track.style.height=trackH+'px';
-  const lh=Math.min(laneH,(trackH-16)/n), top0=Math.max(8,(trackH-n*lh)/2);
+  const lh=Math.min(laneH,(trackH-KERB*2)/n), top0=Math.max(KERB,(trackH-n*lh)/2);
   cars.forEach(el=>{ el.style.top=(top0+(+el.dataset.lane)*lh)+'px'; });
+  // whole-second scale above the track, counting back from pole
+  let sh='';
+  for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${t}s</span>`;
+  sec.innerHTML=sh;
   // distance axis (metres behind pole), right-to-left
   const maxM=maxGap*mps;
   if(maxM>4){
@@ -2989,12 +3413,52 @@ function layoutQGrid(){
     axis.innerHTML=html;
   } else axis.innerHTML='';
 }
+function startGridHTML(L){
+  const rows=(L.grid||[]).slice().sort((a,b)=>a.pos-b.pos);
+  if(!rows.length) return `<div class="lv-empty">No starting grid yet.<br>It is published once qualifying is official.</div>`;
+  const moved=rows.filter(r=>r.delta).length;
+  const slots=rows.map(r=>`<div class="sg-slot${r.pos===1?' pole':''}" data-p="${r.pos}" style="--cc:${r.col}">
+      <span class="sg-box"></span><span class="sg-p">${r.pos}</span>
+      <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
+      <em><b>${r.code}</b>${r.delta?`<i class="${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</i>`:''}</em></div>`).join('');
+  return `<div class="qg" id="sgrid" data-n="${rows.length}">
+    <div class="qg-hd">Starting grid · after penalties<b>Pole ${rows[0].code}</b></div>
+    <div class="qg-track">
+      <div class="sg-line"></div><div class="qg-start"></div><div class="qg-startlbl">START</div>
+      ${slots}
+    </div>
+    <div class="qg-note">${moved?`${moved} of ${rows.length} moved from their qualifying position`:'unchanged from qualifying'}</div>
+  </div>`;
+}
+function layoutSGrid(){
+  const host=wrap.querySelector('#sgrid'); if(!host)return;
+  const track=host.querySelector('.qg-track'), slots=[...host.querySelectorAll('.sg-slot')];
+  if(!slots.length)return;
+  const W=track.clientWidth;
+  if(!W){ if((layoutSGrid._n=(layoutSGrid._n||0)+1)<10) setTimeout(layoutSGrid,40); return; }
+  layoutSGrid._n=0;
+  const N=+host.dataset.n||slots.length, PAD=30;
+  // real grids stagger: each slot sits one step further back, alternating side of the racing line.
+  // solving step and car width together keeps same-column cars clear and the last slot on the track.
+  const step=Math.max(20,(W-PAD+14)/(N+1));
+  const CARW=Math.max(46,Math.min(132,step*2-14));
+  const laneH=Math.max(60,Math.round(CARW*0.22)+44), KERB=18;
+  const trackH=2*laneH+KERB*2;
+  track.style.height=trackH+'px';
+  slots.forEach(el=>{ const p=+el.dataset.p, lane=(p%2)?0:1;
+    el.style.width=CARW+'px';
+    el.style.right=(PAD+(p-1)*step)+'px';
+    el.style.top=(KERB+lane*laneH)+'px'; });
+  host.querySelector('.qg-start').style.right=(PAD-20)+'px';
+  host.querySelector('.qg-startlbl').style.right=(PAD-18)+'px';
+}
 function wireLiveCard(){
   wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
     b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
   if(wrap.querySelector('#qgrid')) setTimeout(layoutQGrid,0);
+  if(wrap.querySelector('#sgrid')) setTimeout(layoutSGrid,0);
 }
-addEventListener('resize',()=>{ if(document.querySelector('#qgrid')) layoutQGrid(); });
+addEventListener('resize',()=>{ if(document.querySelector('#qgrid')) layoutQGrid(); if(document.querySelector('#sgrid')) layoutSGrid(); });
 function cdText(date){ if(!date)return ''; const dd=daysTo(date); if(dd<=0)return 'race weekend'; const w=Math.round(dd/7); return 'in '+(w<1?dd+' day'+(dd>1?'s':''):w+' week'+(w>1?'s':'')); }
 function raceTip(r){
   const cal=(DATA.calendar||[]).find(c=>c.r===r); if(!cal)return '';

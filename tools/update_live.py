@@ -85,7 +85,8 @@ def curl_list(url, tries=3):
 # so official f1.com session pages are the fallback for FP/Quali classifications.
 F1COM_PATH = {"fp1": "practice/1", "fp2": "practice/2", "fp3": "practice/3",
               "sq": "sprint-qualifying", "sprint": "sprint-results",
-              "quali": "qualifying", "race": "race-result"}
+              "quali": "qualifying", "race": "race-result",
+              "grid": "starting-grid"}
 SLUG_FIX = {"UAE": "united-arab-emirates", "USA": "united-states", "United States": "united-states",
             "Great Britain": "great-britain", "Saudi Arabia": "saudi-arabia", "Abu Dhabi": "abu-dhabi",
             "Las Vegas": "las-vegas", "Mexico": "mexico", "Azerbaijan": "azerbaijan"}
@@ -338,6 +339,12 @@ def main():
         except Exception:
             pass
     kept = []
+    prev_grid = None
+    if os.path.exists(LIVEP):
+        try:
+            _o = json.load(open(LIVEP))
+            if _o.get("round") == rnd: prev_grid = _o.get("grid")
+        except Exception: pass
 
     slug = f1com_slug(live["country"])
     mid = None
@@ -416,6 +423,20 @@ def main():
         row["results"] = out
         if out: src[s["key"]] = "openf1"
         live["sessions"].append(row)
+
+    # starting grid - only meaningful once qualifying has run; f1.com is the only source
+    if any(x["key"] in ("quali", "sq") and x["results"] for x in live["sessions"]):
+        g = via_f1com("grid")
+        if g:
+            qpos = {r["code"]: r["pos"] for x in live["sessions"] if x["key"] in ("quali", "sq") for r in x["results"]}
+            for r in g:
+                r["qpos"] = qpos.get(r["code"])
+                r["delta"] = (r["qpos"] - r["pos"]) if r["qpos"] else None
+            live["grid"] = g
+            src["grid"] = "f1.com"
+        elif isinstance(prev_grid, list) and prev_grid:
+            live["grid"] = prev_grid
+            kept.append("grid")
 
     json.dump(live, open(LIVEP, "w"), ensure_ascii=False, indent=1)
     filled = [s["key"] for s in live["sessions"] if s["results"]]
