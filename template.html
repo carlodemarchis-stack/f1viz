@@ -1381,9 +1381,17 @@ function layoutQGrid(){
   // lap-time scale above the track: pole time at zero, then each whole second back
   const poleT=+host.dataset.pole||0;
   const fmtClock=v=>{ const m=Math.floor(v/60), r=v-m*60; return m>0?(m+':'+r.toFixed(3).padStart(6,'0')):r.toFixed(3); };
+  const fmtWhole=v=>{ const m=Math.floor(v/60), r=Math.round(v-m*60); return m>0?(m+':'+String(r).padStart(2,'0')):String(r); };
   let sh='';
   if(poleT) sh+=`<span class="qg-tsec pole" style="right:${xOf(0)}px">${host.dataset.polecode} ${fmtClock(poleT)}</span>`;
-  for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${poleT?fmtClock(poleT+t):t+'s'}</span>`;
+  // marks land on whole lap times (1:22, 1:23 ...), not on pole + n seconds
+  if(poleT){
+    for(let T=Math.ceil(poleT-1e-6); T<=poleT+maxGap+1e-9; T++){
+      const x=xOf(T-poleT);
+      if(x-xOf(0)<62) continue;                                   // would collide with the pole label
+      sh+=`<span class="qg-tsec" style="right:${x}px">${fmtWhole(T)}</span>`;
+    }
+  } else for(let t=1;t<=Math.floor(maxGap);t++) sh+=`<span class="qg-tsec" style="right:${xOf(t)}px">${t}s</span>`;
   sec.innerHTML=sh;
   // distance axis (metres behind pole), right-to-left
   const maxM=maxGap*mps;
