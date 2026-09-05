@@ -437,10 +437,7 @@ button{font-family:inherit}
 .qg-axis{position:relative;height:15px;flex:0 0 auto;border-top:1px solid var(--line-2)}
 .qg-tick{position:absolute;top:2px;font-size:8.5px;color:var(--muted-2);font-variant-numeric:tabular-nums;transform:translateX(50%)}
 .qg-tick::before{content:'';position:absolute;right:50%;top:-3px;width:1px;height:3px;background:var(--line)}
-.sg-line{position:absolute;left:0;right:0;top:50%;height:0;border-top:2px dashed rgba(255,255,255,.16);z-index:1}
 .sg-slot{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sg-box{position:absolute;left:-7px;right:-9px;top:-5px;bottom:9px;border:2px solid rgba(255,255,255,.42);
-  border-right:0;border-radius:2px;background:rgba(255,255,255,.035);z-index:-1}
 .sg-p{position:absolute;left:2px;top:50%;transform:translateY(-60%);font-size:19px;font-weight:800;font-style:italic;
   color:rgba(255,255,255,.22);font-variant-numeric:tabular-nums;z-index:-1;letter-spacing:-.04em}
 .sg-slot .qg-side{width:100%;height:auto;display:block;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
@@ -448,7 +445,6 @@ button{font-family:inherit}
 .sg-slot em b{font-weight:800;font-size:10.5px;color:color-mix(in srgb,var(--cc) 80%,#fff)}
 .sg-slot em i{font-style:normal;font-size:8.5px;font-weight:800;font-variant-numeric:tabular-nums}
 .sg-slot em i.dn{color:#ff6b6b}.sg-slot em i.up{color:#4ad991}
-.sg-slot.pole .sg-box{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent)}
 .sg-slot.pole .sg-p{color:color-mix(in srgb,var(--gold) 45%,transparent)}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
@@ -1408,13 +1404,13 @@ function startGridHTML(L){
   if(!rows.length) return `<div class="lv-empty">No starting grid yet.<br>It is published once qualifying is official.</div>`;
   const moved=rows.filter(r=>r.delta).length;
   const slots=rows.map(r=>`<div class="sg-slot${r.pos===1?' pole':''}" data-p="${r.pos}" style="--cc:${r.col}">
-      <span class="sg-box"></span><span class="sg-p">${r.pos}</span>
+      <span class="sg-p">${r.pos}</span>
       <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
       <em><b>${r.code}</b>${r.delta?`<i class="${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</i>`:''}</em></div>`).join('');
   return `<div class="qg" id="sgrid" data-n="${rows.length}">
     <div class="qg-hd">Starting grid · after penalties<b>Pole ${rows[0].code}</b></div>
     <div class="qg-track">
-      <div class="sg-line"></div><div class="qg-start"></div><div class="qg-startlbl">START</div>
+      <div class="qg-start"></div><div class="qg-startlbl">START</div>
       ${slots}
     </div>
     <div class="qg-note">${moved?`${moved} of ${rows.length} moved from their qualifying position`:'unchanged from qualifying'}</div>
@@ -1442,13 +1438,26 @@ function layoutSGrid(){
   host.querySelector('.qg-start').style.right=(PAD-20)+'px';
   host.querySelector('.qg-startlbl').style.right=(PAD-18)+'px';
 }
+let liveRO=null;
+function relayoutLive(){
+  layoutQGrid._n=0; layoutSGrid._n=0;                    // allow retries again now that size may exist
+  if(wrap.querySelector('#qgrid')) layoutQGrid();
+  if(wrap.querySelector('#sgrid')) layoutSGrid();
+}
 function wireLiveCard(){
   wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
-    b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
-  if(wrap.querySelector('#qgrid')) setTimeout(layoutQGrid,0);
-  if(wrap.querySelector('#sgrid')) setTimeout(layoutSGrid,0);
+    b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); lcHash(); }; });
+  const lvHost=wrap.querySelector('#qgrid')||wrap.querySelector('#sgrid');
+  if(lvHost){
+    setTimeout(relayoutLive,0);
+    // a card rendered while the tab is hidden has zero width and cannot lay out; the observer
+    // fires as soon as it gains size (tab shown, pane resized) so it is never left unplaced
+    if(window.ResizeObserver){ if(liveRO) liveRO.disconnect();
+      liveRO=new ResizeObserver(()=>relayoutLive()); liveRO.observe(lvHost); }
+  } else if(liveRO){ liveRO.disconnect(); liveRO=null; }
 }
-addEventListener('resize',()=>{ if(document.querySelector('#qgrid')) layoutQGrid(); if(document.querySelector('#sgrid')) layoutSGrid(); });
+addEventListener('resize',relayoutLive);
+addEventListener('visibilitychange',()=>{ if(!document.hidden) relayoutLive(); });
 function cdText(date){ if(!date)return ''; const dd=daysTo(date); if(dd<=0)return 'race weekend'; const w=Math.round(dd/7); return 'in '+(w<1?dd+' day'+(dd>1?'s':''):w+' week'+(w>1?'s':'')); }
 function raceTip(r){
   const cal=(DATA.calendar||[]).find(c=>c.r===r); if(!cal)return '';
@@ -1682,7 +1691,12 @@ let lcSeekLap=0, lcCurLap=0;   // lap-evo lap: one-shot seek target on reload + 
 let pendingRace=null, pendingTeamRace=null, pendingVs=null;   // driver / constructor race deep-dive: round (+ compare driver) to reopen from the URL on load/hashchange
 let rdvChartTab='pos';                         // driver deep-dive left chart: 'pos' (position trace) | 'pace' (lap times), sticky
 let rdvVs=null;                                // driver deep-dive COMPARE: 2nd driver's code overlaid on the chart (+ 2nd info box), null = off; reset per race
-function lcHash(){ try{ const t=(mode==='races'&&lcTab==='lap')?('/lap'+(lcCurLap>0?'/'+lcCurLap:'')):(mode==='races'&&lcTab==='wall')?'/wall':''; history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
+function onLiveCard(){ return mode==='races' && hasLive() && idx===DATA.races.length; }
+function lcHash(){ try{
+  const t = onLiveCard() ? (lvSesKey?('/'+lvSesKey):'')
+          : (mode==='races'&&lcTab==='lap') ? ('/lap'+(lcCurLap>0?'/'+lcCurLap:''))
+          : (mode==='races'&&lcTab==='wall') ? '/wall' : '';
+  history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
 // followed drivers persist across races + sessions (keyed by stable driver code)
 const _lcFollowKey='f1viz.follow';
 function loadFollow(){try{return new Set(JSON.parse(localStorage.getItem(_lcFollowKey)||'[]'));}catch(e){return new Set();}}
@@ -1975,6 +1989,8 @@ function applyHash(){
   const onLap = m[0]==='races' && m[2]==='lap';
   lcTab = onLap ? 'lap' : (m[0]==='races' && m[2]==='wall') ? 'wall' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
+  // weekend card: restore the selected tab (fp1/fp2/fp3/quali/gaps/sgrid) so a reload lands back on it
+  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
   if(pendingRace!=null){ rdvChartTab = m[4]==='pace'?'pace':m[4]==='gap-leader'?'gapL':m[4]==='gap-ahead'?'gapA':'pos';   // + which chart tab
     const vseg=m.find(s=>/^vs-/.test(s||'')); pendingVs = vseg?vseg.slice(3):null; }   // + optional compare driver
