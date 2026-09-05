@@ -904,7 +904,7 @@ const LIVE = /*__LIVE__*/;
 const D = DATA.drivers, C = DATA.constructors;
 // weekend in progress: only while its round is still ahead of the last completed one
 const hasLive = () => !!(LIVE && LIVE.round && LIVE.round > DATA.meta.round && (LIVE.sessions||[]).length);
-const IMGV = '?v=30';   // bump when refreshing local images (cache-bust)
+const IMGV = '?v=31';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
 const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
 const IMGHELM = s => `img/helmets/${s}.png${IMGV}`;   // 2026 helmet; absent for drivers added mid-season
