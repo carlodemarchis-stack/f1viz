@@ -1268,14 +1268,14 @@ function liveCard(){
   const anyLive=ses.some(s=>s.k==='live');
   const withRes=ses.filter(s=>s.results&&s.results.length);
   const qs=ses.find(s=>(s.key==='quali'||s.key==='sq') && s.results.length);          // source for the grid view
-  const okTab=k=> k==='grid' ? !!qs : ses.some(s=>s.key===k && s.results.length);
+  const okTab=k=> k==='gaps' ? !!qs : ses.some(s=>s.key===k && s.results.length);
   const sel=(lvSesKey && okTab(lvSesKey)) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
   let tabs=ses.filter(s=>s.key!=='race').map(s=>{
     const on=s.key===sel, has=s.results&&s.results.length;
     return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${s.name.replace('Practice ','FP')}</button>`;}).join('');
-  if(qs) tabs+=`<button class="rc-tab${sel==='grid'?' on':''}" data-ls="grid">Grid</button>`;
-  const cur=sel==='grid'?null:ses.find(s=>s.key===sel);
-  const body = sel==='grid' ? qualiGridHTML(qs, L) : cur&&cur.results.length ? `
+  if(qs) tabs+=`<button class="rc-tab${sel==='gaps'?' on':''}" data-ls="gaps">Gaps</button>`;
+  const cur=sel==='gaps'?null:ses.find(s=>s.key===sel);
+  const body = sel==='gaps' ? qualiGapsHTML(qs, L) : cur&&cur.results.length ? `
     <div class="lvhead"><span>Pos</span><span>Driver</span><span>Time</span><span>Gap</span><span class="h-lvl">Laps</span></div>
     <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
       <span class="lvp">${r.pos}</span>
@@ -1285,7 +1285,7 @@ function liveCard(){
       <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
-  return `<div class="card enter${sel==='grid'?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
+  return `<div class="card enter${sel==='gaps'?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
     <div class="panel lvinfo">
       <div class="lv-hd">
         <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
@@ -1300,14 +1300,15 @@ function liveCard(){
         return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${sel==='grid'?(qs.name+' · grid'):(cur?cur.name+' · results':'Sessions')}</span></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${sel==='gaps'?(qs.name+' · gap to pole'):(cur?cur.name+' · results':'Sessions')}</span></div>
       <div class="rc-view">${body}</div>
     </div>
   </div>`;
 }
-/* qualifying grid — cars on track, spaced by the real gap to pole (pole on the right) */
+/* qualifying GAP chart — cars spaced by the real gap to pole (pole on the right).
+   This is not the starting grid: that has its own order (penalties) and painted slots. */
 const clockS=t=>{ if(!t)return null; const p=String(t).split(':'); return p.length>1?(+p[0])*60+parseFloat(p[1]):parseFloat(p[0]); };
-function qualiGridHTML(ses, L){
+function qualiGapsHTML(ses, L){
   const rows=(ses.results||[]).filter(r=>r.gapS!=null);
   if(!rows.length) return `<div class="lv-empty">No qualifying times yet.</div>`;
   const poleT=clockS(rows[0].time), lenM=(parseFloat(L.length)||0)*1000;
@@ -1317,7 +1318,7 @@ function qualiGridHTML(ses, L){
       <img class="qg-side" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
       <em><u>${r.pos}</u><b>${r.code}</b><i>${r.pos===1?'POLE':'+'+r.gapS.toFixed(3)}</i></em></span>`).join('');
   return `<div class="qg" id="qgrid" data-max="${maxGap}" data-mps="${mps.toFixed(3)}">
-    <div class="qg-hd">Qualifying grid · gap to pole <b>${rows[0].code} ${rows[0].time}</b>
+    <div class="qg-hd">Qualifying · gap to pole <b>${rows[0].code} ${rows[0].time}</b>
       <span>${mps?`spaced to scale — ${(maxGap*mps).toFixed(0)} m covers the field at ${(mps*3.6).toFixed(0)} km/h average`:'spaced by time gap'}</span></div>
     <div class="qg-track">
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
