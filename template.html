@@ -448,8 +448,6 @@ button{font-family:inherit}
   gap:1px;padding:2px 0 3px 5px;border-left:2px solid var(--cc)}
 .sg-pos{font-size:17px;font-weight:800;font-style:italic;line-height:.9;letter-spacing:-.04em;
   color:color-mix(in srgb,var(--cc) 75%,#fff);font-variant-numeric:tabular-nums}
-.sg-dl{position:absolute;left:5px;top:0;transform:translateX(20px);font-size:8px;font-weight:800;font-variant-numeric:tabular-nums}
-.sg-dl.dn{color:#ff6b6b}.sg-dl.up{color:#4ad991}
 .sg-name{font-weight:800;font-size:9.5px;letter-spacing:.01em;line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sg-team{font-style:normal;font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2);
   line-height:1.05;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1423,7 +1421,6 @@ function startGridHTML(L){
         ${r.slug?`<img class="sg-fig" src="${IMGFULL(r.slug)}" alt="" onerror="this.remove()">`:''}
         <div class="sg-card">
           <span class="sg-pos">${r.pos}</span>
-          ${r.delta?`<span class="sg-dl ${r.delta<0?'dn':'up'}">${r.delta>0?'+':''}${r.delta}</span>`:''}
           <b class="sg-name">${(r.name||r.code).toUpperCase()}</b>
           <i class="sg-team">${r.team||''}</i>
           <span class="sg-num">${r.num!=null?r.num:''}</span>
