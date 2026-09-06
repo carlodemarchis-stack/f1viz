@@ -1317,7 +1317,7 @@ function raceCard(r){
           <div class="rc-row"><span>Winner</span><b><em class="wl">${r.winner.family}</em></b></div>
           <div class="rc-row"><span>Pole position</span><b>${r.pole?r.pole.family:'—'}</b></div>
           <div class="rc-row"><span>Fastest lap</span><b>${r.fl?`${r.fl.family} · ${r.fl.time}`:'—'}</b></div>
-          <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
+          <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};if(s.unknown)return '<em class="none">—</em>';const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
       ${(()=>{const red=(r.safety||{}).red||0;return red>0?`<div class="rc-row"><span>Red flag</span><b style="color:var(--bad)">⚑ ${red>1?red+' stoppages':'Yes'}</b></div>`:'';})()}
         </div>
         ${(()=>{const vid=DATA.highlights&&DATA.highlights[r.r];
@@ -1335,7 +1335,7 @@ function raceCard(r){
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}">Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall">The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
       <div class="rc-view">
         <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
         <div class="rc-cls">${cls}</div>
@@ -2076,7 +2076,7 @@ function render(dir){
           else if(t==='radio'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(rad)rad.removeAttribute('hidden'); }
           else if(t==='wall'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; wl.removeAttribute('hidden'); mountWall(lcRound, wl); }
           else { if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); lc.setAttribute('hidden',''); lc.innerHTML=''; view.removeAttribute('hidden'); lcCurLap=0; } lcHash(); };
-        tabs.forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+        tabs.forEach(b=>{ if(b.hasAttribute('disabled'))return; b.onclick=()=>setTab(b.dataset.tab); });
         if(lcTab==='lap') setTab('lap'); else if(lcTab==='radio'&&rad) setTab('radio'); else if(lcTab==='wall') setTab('wall');   // keep the tab when navigating between races
       }
     } else {
