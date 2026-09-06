@@ -1595,7 +1595,7 @@ function relayoutLive(){
 function wkBack(r){ wkCur=null; const i=DATA.races.findIndex(x=>x.r===r); if(i>=0){ idx=i; render(); } else render(); }
 function openWeekend(r){
   setPlay(false);
-  const show=()=>{ wrap.innerHTML=liveCard(); wireLiveCard(); lvSesKey=lvSesKey||''; };
+  const show=()=>{ wrap.innerHTML=liveCard(); wireLiveCard(); lcHash(); };
   if(hasLive() && LIVE.round===r){ wkCur=LIVE; show(); return; }
   if(wkCache[r]){ wkCur=wkCache[r]; show(); return; }
   wrap.innerHTML='<div class="card enter"><div class="panel lvinfo"><div class="lv-empty">Loading the weekend…</div></div></div>';
@@ -1855,12 +1855,13 @@ function mountLeadLaps(){
 const _lcCache={};
 let lcTab='res';   // remembered active race-panel tab (res|lap) — sticky across race navigation
 let lcSeekLap=0, lcCurLap=0;   // lap-evo lap: one-shot seek target on reload + live value written to the URL
-let pendingRace=null, pendingTeamRace=null, pendingVs=null;   // driver / constructor race deep-dive: round (+ compare driver) to reopen from the URL on load/hashchange
+let pendingRace=null, pendingTeamRace=null, pendingVs=null, pendingWeekend=false;   // driver / constructor race deep-dive: round (+ compare driver) to reopen from the URL on load/hashchange
 let rdvChartTab='pos';                         // driver deep-dive left chart: 'pos' (position trace) | 'pace' (lap times), sticky
 let rdvVs=null;                                // driver deep-dive COMPARE: 2nd driver's code overlaid on the chart (+ 2nd info box), null = off; reset per race
 function onLiveCard(){ return mode==='races' && hasLive() && idx===DATA.races.length; }
 function lcHash(){ try{
-  const t = onLiveCard() ? (lvSesKey?('/'+lvSesKey):'')
+  const t = wkCur ? ('/wk'+(lvSesKey?('/'+lvSesKey):''))          // weekend opened from a race card
+          : onLiveCard() ? (lvSesKey?('/'+lvSesKey):'')
           : (mode==='races'&&lcTab==='lap') ? ('/lap'+(lcCurLap>0?'/'+lcCurLap:''))
           : (mode==='races'&&lcTab==='wall') ? '/wall' : '';
   history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
@@ -2158,7 +2159,9 @@ function applyHash(){
   lcTab = onLap ? 'lap' : (m[0]==='races' && m[2]==='wall') ? 'wall' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
   // weekend card: restore the selected tab (fp1/fp2/fp3/quali/gaps/sgrid) so a reload lands back on it
-  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
+  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && m[2]!=='wk' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
+  pendingWeekend = (m[0]==='races' && m[2]==='wk');               // reopen that round's weekend after render
+  if(pendingWeekend && m[3]) lvSesKey=m[3];
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
   if(pendingRace!=null){ rdvChartTab = m[4]==='pace'?'pace':m[4]==='gap-leader'?'gapL':m[4]==='gap-ahead'?'gapA':'pos';   // + which chart tab
     const vseg=m.find(s=>/^vs-/.test(s||'')); pendingVs = vseg?vseg.slice(3):null; }   // + optional compare driver
@@ -2166,6 +2169,7 @@ function applyHash(){
 }
 // render, then reopen a race deep-dive (driver or constructor) if the URL points at one
 function applyView(){ render();
+  if(pendingWeekend && mode==='races' && DATA.races[idx]){ openWeekend(DATA.races[idx].r); pendingWeekend=false; }
   if(pendingRace!=null && mode==='drivers' && D[idx]){ const gi=D[idx].races.findIndex(x=>x.r===pendingRace); if(gi>=0) openRace(gi); pendingRace=null; }
   if(pendingTeamRace!=null && mode==='constructors'){ const ti=DATA.rounds.findIndex(x=>x.r===pendingTeamRace); if(ti>=0) openTeamRace(ti); pendingTeamRace=null; }
 }
