@@ -461,6 +461,46 @@ button{font-family:inherit}
 .sg-num{position:absolute;right:0;top:1px;font-size:9px;font-weight:800;color:var(--muted-2);font-variant-numeric:tabular-nums;opacity:.8}
 .sg-car{width:100%;height:auto;display:block;margin-top:2px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
 .sg-slot.pole .sg-pos{color:var(--gold)}
+/* grid view: track at the top, driver detail below */
+.qg.sg{justify-content:flex-start}
+.sg-slot{cursor:pointer;transition:filter .15s,transform .15s}
+.sg-slot:hover{filter:brightness(1.18)}
+.sg-slot.on{transform:translateY(-2px)}
+.sg-slot.on .sg-card{background:color-mix(in srgb,var(--cc) 20%,transparent);border-radius:0 4px 4px 0}
+.sg-slot:not(.on){opacity:.72}
+.sgd{flex:0 1 auto;min-height:0;max-height:46vh;display:grid;grid-template-columns:minmax(250px,.95fr) minmax(0,1.6fr);gap:16px;
+  margin-top:10px;padding:14px 16px;border-radius:12px;overflow:hidden;
+  background:linear-gradient(120deg,color-mix(in srgb,var(--cc) 16%,#0d111a),#0b0e16 62%);
+  border:1px solid color-mix(in srgb,var(--cc) 32%,var(--line))}
+.sgd-id{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 13px;align-content:center;min-width:0}
+.sgd-helm{grid-column:1;grid-row:1;height:clamp(66px,11.5vh,124px);width:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.62))}
+.sgd-who{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.sgd-line{display:flex;align-items:baseline;gap:8px}
+.sgd-num{font-weight:800;font-style:italic;font-size:20px;letter-spacing:-.03em;color:color-mix(in srgb,var(--cc) 85%,#fff)}
+.sgd-tla{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--muted-2)}
+.sgd-name{font-weight:800;font-size:clamp(17px,2.4vh,24px);letter-spacing:-.02em;line-height:1.02}
+.sgd-team{font-style:normal;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.sgd-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.sgd-chip{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;border-radius:20px;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted)}
+.sgd-chip.grid{background:color-mix(in srgb,var(--cc) 26%,transparent);border-color:color-mix(in srgb,var(--cc) 50%,transparent);
+  color:color-mix(in srgb,var(--cc) 88%,#fff)}
+.sgd-car{grid-column:1/-1;grid-row:2;justify-self:end;width:min(100%,310px);height:auto;opacity:.7;pointer-events:none;margin-bottom:-4px}
+.sgd-ses{display:flex;flex-direction:column;gap:5px;min-width:0;justify-content:center}
+.sgd-row{display:grid;grid-template-columns:38px 34px auto auto 62px minmax(60px,1fr);gap:10px;align-items:center;
+  padding:5px 9px;border-radius:8px;background:rgba(255,255,255,.035);font-size:12.5px}
+.sgd-row.out{grid-template-columns:38px 1fr;color:var(--muted-2)}
+.sgd-row b{font-weight:800;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2)}
+.sgd-p{font-weight:800;font-variant-numeric:tabular-nums;color:color-mix(in srgb,var(--cc) 80%,#fff)}
+.sgd-t{font-weight:700;font-variant-numeric:tabular-nums}
+.sgd-g{font-variant-numeric:tabular-nums;color:var(--muted)}
+.sgd-l{font-variant-numeric:tabular-nums;color:var(--muted-2);font-size:11px;text-align:right}
+.sgd-bar{position:relative;height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
+.sgd-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--cc);opacity:.85}
+.sgd-q{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-left:38px}
+.sgd-q em{font-style:normal;font-weight:800;letter-spacing:.08em;color:var(--muted-2);margin-right:4px}
+.sgd-na{color:var(--muted-2);font-size:11.5px}
+@media (orientation:portrait){.sgd{grid-template-columns:1fr}.sgd-car{display:none}}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -911,7 +951,7 @@ const IMGHELM = s => `img/helmets/${s}.png${IMGV}`;   // 2026 helmet; absent for
 const CAR = tid => `img/cars/${tid}.png${IMGV}`;   // local official f1.com 2026 car cutouts (all 11 incl. Cadillac)
 const $ = s => document.querySelector(s);
 const wrap = $('#wrap');
-let mode='drivers', idx=0, playing=false, timer=null, curGP=0, lvSesKey='';
+let mode='drivers', idx=0, playing=false, timer=null, curGP=0, lvSesKey='', sgSel='';
 const CTXA={drivers:"Drivers' Championship",constructors:"Constructors' Championship",races:"Grand Prix Results"};
 const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
 const N = () => list().length;
@@ -1425,7 +1465,8 @@ function startGridHTML(L){
   const rows=(L.grid||[]).slice().sort((a,b)=>a.pos-b.pos);
   if(!rows.length) return `<div class="lv-empty">No starting grid yet.<br>It is published once qualifying is official.</div>`;
   const moved=rows.filter(r=>r.delta).length;
-  const slots=rows.map(r=>`<div class="sg-slot${r.pos===1?' pole':''}" data-p="${r.pos}" style="--cc:${r.col}">
+  const sel = rows.some(r=>r.code===sgSel) ? sgSel : rows[0].code;       // pole selected to begin with
+  const slots=rows.map(r=>`<div class="sg-slot${r.pos===1?' pole':''}${r.code===sel?' on':''}" data-p="${r.pos}" data-c="${r.code}" style="--cc:${r.col}">
       <div class="sg-top">
         ${r.slug?`<img class="sg-fig" src="${IMGFULL(r.slug)}" alt="" onerror="this.remove()">`:''}
         <div class="sg-card">
@@ -1437,13 +1478,51 @@ function startGridHTML(L){
       </div>
       <img class="sg-car" src="${CAR(r.tid||'')}" alt="${r.team||''}" onerror="this.style.visibility='hidden'">
     </div>`).join('');
-  return `<div class="qg" id="sgrid" data-n="${rows.length}">
+  return `<div class="qg sg" id="sgrid" data-n="${rows.length}">
     <div class="qg-hd">Starting grid · after penalties<b>Pole ${rows[0].code}</b></div>
     <div class="qg-track">
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
       ${slots}
     </div>
-    <div class="qg-note">${moved?`${moved} of ${rows.length} moved from their qualifying position`:'unchanged from qualifying'}</div>
+    <div class="qg-note">${moved?`${moved} of ${rows.length} moved from their qualifying position · tap a car`:'unchanged from qualifying · tap a car'}</div>
+    ${sgDetailHTML(sel, L)}
+  </div>`;
+}
+function sgDetailHTML(code, L){
+  const g=(L.grid||[]).find(r=>r.code===code); if(!g) return '';
+  const d=D.find(x=>x.code===code);
+  const ses=(L.sessions||[]).filter(x=>x.results&&x.results.length && x.key!=='race');
+  const rowOf=s=>(s.results||[]).find(r=>r.code===code)||null;
+  // gap bars are scaled against the slowest gap in each session, so each row reads on its own terms
+  const bars=ses.map(s=>{ const r=rowOf(s); if(!r) return {s,r:null,pct:0};
+    const mx=Math.max(...s.results.map(x=>x.gapS||0),0.001);
+    return {s,r,pct:Math.min(100,100*((r.gapS||0)/mx))}; });
+  const line=({s,r,pct})=>{
+    if(!r) return `<div class="sgd-row out"><b>${s.name.replace('Practice ','FP')}</b><span class="sgd-na">did not set a time</span></div>`;
+    const q=(r.seg||[]).filter(Boolean);
+    return `<div class="sgd-row">
+      <b>${s.name.replace('Practice ','FP')}</b>
+      <span class="sgd-p">P${r.pos}</span>
+      <span class="sgd-t">${r.time||'—'}</span>
+      <span class="sgd-g">${r.pos===1?'fastest':(r.gap||'—')}</span>
+      <span class="sgd-l">${r.laps!=null?r.laps+' laps':'—'}</span>
+      <span class="sgd-bar"><i style="width:${pct.toFixed(1)}%"></i></span>
+      ${q.length>1?`<span class="sgd-q">${q.map((t,i)=>`<em>Q${i+1}</em>${t}`).join('')}</span>`:''}
+    </div>`; };
+  return `<div class="sgd" style="--cc:${g.col}">
+    <div class="sgd-id">
+      ${g.slug?`<img class="sgd-helm" src="${IMGHELM(g.slug)}" alt="" onerror="this.remove()">`:''}
+      <div class="sgd-who">
+        <div class="sgd-line"><span class="sgd-num">#${g.num!=null?g.num:''}</span><span class="sgd-tla">${g.code}</span></div>
+        <b class="sgd-name">${g.name||g.code}</b>
+        <i class="sgd-team">${g.team||''}</i>
+        <div class="sgd-chips"><span class="sgd-chip grid">Grid P${g.pos}</span>
+          ${g.qpos?`<span class="sgd-chip">Qualified P${g.qpos}</span>`:''}
+          ${d?`<span class="sgd-chip">Championship P${d.pos} · ${d.points} pts</span>`:''}</div>
+      </div>
+      <img class="sgd-car" src="${CAR(g.tid||'')}" alt="" onerror="this.remove()">
+    </div>
+    <div class="sgd-ses">${bars.map(line).join('')}</div>
   </div>`;
 }
 function layoutSGrid(){
@@ -1477,6 +1556,8 @@ function relayoutLive(){
 function wireLiveCard(){
   wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
     b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); lcHash(); }; });
+  wrap.querySelectorAll('.sg-slot[data-c]').forEach(el=>{
+    el.onclick=()=>{ sgSel=el.dataset.c; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
   const lvHost=wrap.querySelector('#qgrid')||wrap.querySelector('#sgrid');
   if(lvHost){
     setTimeout(relayoutLive,0);
