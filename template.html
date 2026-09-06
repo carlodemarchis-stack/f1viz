@@ -92,19 +92,19 @@ button{font-family:inherit}
   color:transparent;-webkit-text-stroke:1.8px color-mix(in srgb,var(--c) 60%,#fff);opacity:.9;pointer-events:none}
 .bigpos small{display:block;font-style:normal;-webkit-text-stroke:0;font-size:10px;font-weight:700;letter-spacing:.24em;
   color:color-mix(in srgb,var(--c) 78%,#fff);margin-top:5px;opacity:.9}
-.postop{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.postop{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:auto}
 .ptop{font-weight:800;font-size:clamp(19px,3.2vh,28px);color:var(--muted-2);white-space:nowrap;letter-spacing:-.01em;line-height:1}
 .ptop b{color:color-mix(in srgb,var(--c) 85%,#fff);margin:0 4px 0 4px}
 .ptop em{font-style:normal;font-size:.52em;color:var(--muted-2);font-weight:700;letter-spacing:.04em}
 .statgrid.r1{grid-template-columns:repeat(5,1fr)}
 /* 2026 helmet, filling the space between the position block and the name */
-.helmet{position:relative;flex:0 1 auto;height:clamp(44px,7.2vh,84px);min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;padding:4px 0 2px}
+.helmet{position:relative;flex:0 1 auto;height:clamp(44px,7.2vh,84px);min-height:0;overflow:hidden;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px}
 .helmet::before{content:'';position:absolute;left:-5%;top:50%;width:40%;padding-bottom:40%;transform:translateY(-50%);
   border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 30%,transparent) 0%,transparent 68%);
   filter:blur(10px);opacity:.85;pointer-events:none}
 .helmet img{position:relative;height:auto;width:auto;max-height:100%;max-width:60%;object-fit:contain;object-position:left center;
   filter:drop-shadow(0 10px 16px rgba(0,0,0,.55)) drop-shadow(0 2px 3px rgba(0,0,0,.4))}
-.idstack{margin-top:auto;display:flex;flex-direction:column;min-width:0;gap:2px}
+.idstack{display:flex;flex-direction:column;min-width:0;gap:2px}
 .idstack .rnum{font-weight:800;font-style:italic;font-size:clamp(18px,2.7vh,26px);color:color-mix(in srgb,var(--c) 82%,#fff);line-height:1;letter-spacing:-.02em;margin-bottom:2px}
 .idstack .rnum .tla{font-style:normal;font-weight:700;font-size:.68em;letter-spacing:.11em;color:var(--muted-2);margin-left:9px}
 .idstack .gname{font-weight:500;font-size:clamp(20px,3.7vh,35px);color:var(--muted);letter-spacing:-.01em;line-height:.96}
