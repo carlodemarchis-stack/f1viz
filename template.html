@@ -412,8 +412,12 @@ button{font-family:inherit}
 .lvrow .lvl{text-align:right;color:var(--muted-2);font-variant-numeric:tabular-nums;font-size:12px}
 @media (orientation:portrait){.lvhead,.lvrow{grid-template-columns:28px 1fr auto auto;}.lvrow .lvl,.lvhead .h-lvl{display:none}}
 /* ---- qualifying grid: cars on track, spaced by their real gap to pole ---- */
-.card.qgrid-on{grid-template-columns:1fr;max-width:none}   /* the grid view wants the full width */
-.card.qgrid-on .lvinfo{display:none}
+.card.wkcard{display:flex;flex-direction:column;gap:10px;max-width:none}
+.wk-head{display:flex;align-items:center;gap:12px;flex:0 0 auto;padding:0 2px}
+.wk-head .rc-date{margin-left:auto}
+.wk-body{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.wk-body.full{grid-template-columns:1fr}
+.wkcard .raceres{padding-top:2px}
 .qg{display:flex;flex-direction:column;justify-content:center;gap:8px;height:100%;min-height:0;padding:4px 10px 8px;overflow:hidden}
 .qg-hd{display:flex;align-items:baseline;gap:10px;flex:0 0 auto;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:800}
 .qg-hd b{color:color-mix(in srgb,var(--c) 85%,#fff);letter-spacing:.04em}
@@ -1380,11 +1384,21 @@ function liveCard(){
       <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
-  return `<div class="card enter${(sel==='gaps'||sel==='sgrid')?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
-    <div class="panel lvinfo">
+  const full=(sel==='gaps'||sel==='sgrid');
+  const badge = anyLive?'<span class="lv-live"><i></i>Session live</span>'
+    :`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${(L.round>DATA.meta.round)?'Weekend in progress':'Practice &amp; qualifying'}</span>`;
+  // the tab bar lives on the card, not inside a panel, so it holds its place when the
+  // gaps/grid views take the full width and the left panel drops out
+  return `<div class="card enter wkcard" style="--c:${DATA.meta.color||'#00D7B6'}">
+    <div class="wk-head">
+      ${wkCur?`<button class="lv-back" onclick="wkBack(${L.round})">‹ Race</button>`:''}
+      <div class="rc-tabset">${tabs}</div>
+      <span class="rc-date">${sel==='sgrid'?'Starting grid':sel==='gaps'?(qs.name+' · gap to pole'):(cur?cur.name+' · results':'Sessions')}</span>
+    </div>
+    <div class="wk-body${full?' full':''}">
+    ${full?'':`<div class="panel lvinfo">
       <div class="lv-hd">
-        <div class="lv-rd">${wkCur?`<button class="lv-back" onclick="wkBack(${L.round})">‹ Race</button>`:''}Round ${L.round} · ${L.flag||''} ${L.country||''}
-          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${(L.round>DATA.meta.round)?'Weekend in progress':'Practice &amp; qualifying'}</span>`}</div>
+        <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}${badge}</div>
         <div class="lv-gp">${L.full||L.gp||''}</div>
         <div class="lv-sub">${L.circuit||''}${L.locality?' · '+L.locality:''}</div>
       </div>
@@ -1393,10 +1407,10 @@ function liveCard(){
       <div class="lv-sched">${ses.map(s=>{
         const tag=s.k==='done'?'<span class="lv-tag d">Done</span>':s.k==='live'?'<span class="lv-tag l">Live</span>':s.k==='next'?'<span class="lv-tag n">Next</span>':'<span class="lv-tag w">To come</span>';
         return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
-    </div>
+    </div>`}
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset">${tabs}</div></div><span class="rc-date">${sel==='sgrid'?'Starting grid':sel==='gaps'?(qs.name+' · gap to pole'):(cur?cur.name+' · results':'Sessions')}</span></div>
       <div class="rc-view">${body}</div>
+    </div>
     </div>
   </div>`;
 }
