@@ -470,6 +470,10 @@ button{font-family:inherit}
 .rc-wk span{display:flex;flex-direction:column;gap:2px;min-width:0}
 .rc-wk b{font-weight:800;font-size:12.5px;letter-spacing:-.01em}
 .rc-wk i{font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2)}
+.lv-back{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);cursor:pointer;
+  font-family:inherit;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;margin-right:9px}
+.lv-back:hover{color:var(--ink);border-color:var(--muted-2)}
 /* grid view: track at the top, driver detail below */
 .qg.sg{justify-content:flex-start}
 .sg-slot{cursor:pointer;transition:filter .15s,transform .15s}
@@ -952,10 +956,13 @@ const DATA = /*__DATA__*/;
 const RECAPS = /*__RECAPS__*/;
 const RADIO = /*__RADIO__*/;
 const LIVE = /*__LIVE__*/;
+const WEEKENDS = /*__WEEKENDS__*/;
 const D = DATA.drivers, C = DATA.constructors;
 // weekend in progress: only while its round is still ahead of the last completed one
 const hasLive = () => !!(LIVE && LIVE.round && (LIVE.sessions||[]).length);   // weekend data exists -> card stays reachable
 const weekendLive = () => hasLive() && LIVE.round > DATA.meta.round;          // ...and the race itself has not been applied yet
+const wkHas = r => (hasLive() && LIVE.round===r) || (WEEKENDS||[]).includes(r);   // any round whose sessions we can show
+let wkCur=null, wkCache={};                       // weekend payload on screen (null = the live one), + fetched archive
 const IMGV = '?v=31';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
 const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
@@ -1313,7 +1320,7 @@ function raceCard(r){
           return vid?`<a class="rc-hl" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer" title="Watch race highlights">
             <img src="https://i.ytimg.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">
             <span class="rc-hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a>`:'';})()}
-        ${(hasLive() && LIVE.round===r.r)?`<button class="rc-wk" onclick="goLive()" title="Practice, qualifying, gaps and the starting grid">
+        ${wkHas(r.r)?`<button class="rc-wk" onclick="openWeekend(${r.r})" title="Practice, qualifying, gaps and the starting grid">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 10.6V6h-2v7.4l5.2 3.1 1-1.7z"/></svg>
           <span><b>Practice &amp; Qualifying</b><i>FP1–FP3 · grid · gaps</i></span></button>`:''}
       </div>
@@ -1351,7 +1358,7 @@ function lvState(sessions){                    // done / live / next / ahead, fr
 const lvDay=ms=>new Date(ms).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
 const lvTime=ms=>new Date(ms).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
 function liveCard(){
-  const L=LIVE, ses=lvState(L.sessions||[]);
+  const L=wkCur||LIVE, ses=lvState(L.sessions||[]);
   const anyLive=ses.some(s=>s.k==='live');
   const withRes=ses.filter(s=>s.results&&s.results.length);
   const qs=ses.find(s=>(s.key==='quali'||s.key==='sq') && s.results.length);          // source for the grid view
@@ -1359,7 +1366,7 @@ function liveCard(){
   const sel=(lvSesKey && okTab(lvSesKey)) ? lvSesKey : (withRes.length?withRes[withRes.length-1].key:'');
   let tabs=ses.filter(s=>s.key!=='race').map(s=>{
     const on=s.key===sel, has=s.results&&s.results.length;
-    return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${s.name.replace('Practice ','FP')}</button>`;}).join('');
+    return `<button class="rc-tab${on?' on':''}" data-ls="${s.key}"${has?'':' disabled'}>${sesLbl(s.name)}</button>`;}).join('');
   if(qs) tabs+=`<button class="rc-tab${sel==='gaps'?' on':''}" data-ls="gaps">Gaps</button>`;
   if((L.grid||[]).length) tabs+=`<button class="rc-tab${sel==='sgrid'?' on':''}" data-ls="sgrid">Grid</button>`;
   const cur=(sel==='gaps'||sel==='sgrid')?null:ses.find(s=>s.key===sel);
@@ -1376,8 +1383,8 @@ function liveCard(){
   return `<div class="card enter${(sel==='gaps'||sel==='sgrid')?' qgrid-on':''}" style="--c:${DATA.meta.color||'#00D7B6'}">
     <div class="panel lvinfo">
       <div class="lv-hd">
-        <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
-          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${weekendLive()?'Weekend in progress':'Practice &amp; qualifying'}</span>`}</div>
+        <div class="lv-rd">${wkCur?`<button class="lv-back" onclick="wkBack(${L.round})">‹ Race</button>`:''}Round ${L.round} · ${L.flag||''} ${L.country||''}
+          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${(L.round>DATA.meta.round)?'Weekend in progress':'Practice &amp; qualifying'}</span>`}</div>
         <div class="lv-gp">${L.full||L.gp||''}</div>
         <div class="lv-sub">${L.circuit||''}${L.locality?' · '+L.locality:''}</div>
       </div>
@@ -1570,6 +1577,16 @@ function relayoutLive(){
   layoutQGrid._n=0; layoutSGrid._n=0;                    // allow retries again now that size may exist
   if(wrap.querySelector('#qgrid')) layoutQGrid();
   if(wrap.querySelector('#sgrid')) layoutSGrid();
+}
+function wkBack(r){ wkCur=null; const i=DATA.races.findIndex(x=>x.r===r); if(i>=0){ idx=i; render(); } else render(); }
+function openWeekend(r){
+  setPlay(false);
+  const show=()=>{ wrap.innerHTML=liveCard(); wireLiveCard(); lvSesKey=lvSesKey||''; };
+  if(hasLive() && LIVE.round===r){ wkCur=LIVE; show(); return; }
+  if(wkCache[r]){ wkCur=wkCache[r]; show(); return; }
+  wrap.innerHTML='<div class="card enter"><div class="panel lvinfo"><div class="lv-empty">Loading the weekend…</div></div></div>';
+  fetch('data/weekend/r'+r+'.json').then(x=>x.ok?x.json():Promise.reject()).then(d=>{ wkCache[r]=d; wkCur=d; show(); })
+    .catch(()=>{ wrap.innerHTML='<div class="card enter"><div class="panel lvinfo"><div class="lv-empty">Weekend data unavailable for this round.</div></div></div>'; });
 }
 function sgStep(d){
   const rows=((LIVE&&LIVE.grid)||[]).slice().sort((a,b)=>a.pos-b.pos);
@@ -2023,6 +2040,7 @@ function render(dir){
   if(window.__lcStop) window.__lcStop();
   const _wasPlayingRecap=(_recapRound!=null);      // continue the recap across navigation
   stopRecap(); closeRadioModal();
+  wkCur=null;                               // any normal render leaves the standalone weekend view
   rdvVs=null;                               // leaving the deep-dive / changing driver clears compare (prev/next RACE keeps it — that goes through openRace, not render)
   if(idx<N()){
     const e=list()[idx];
