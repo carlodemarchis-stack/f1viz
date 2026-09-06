@@ -83,6 +83,13 @@ def main():
             if ln not in start_of or d < start_of[ln]:
                 start_of[ln] = d
 
+    # a retiree stops producing position events, so their last position would otherwise persist
+    # to the flag; cap each driver at the laps they actually completed (jolpica does the same)
+    completed = {}
+    for dr in f1["drivers"]:
+        for rr in dr["races"]:
+            if rr["r"] == rnd:
+                completed[dr["code"]] = rr.get("laps") or 0
     # running order: resolve each driver's latest position at the leader's lap crossing
     evs = sorted([(parse(p["date"]), p["driver_number"], p["position"]) for p in pos if p.get("position")],
                  key=lambda x: x[0])
@@ -91,7 +98,8 @@ def main():
         boundary = start_of.get(ln + 1) or (start_of.get(ln) or evs[-1][0]) + datetime.timedelta(minutes=5)
         while i < len(evs) and evs[i][0] <= boundary:
             cur[evs[i][1]] = evs[i][2]; i += 1
-        row = sorted(((p, n) for n, p in cur.items() if num2code.get(n)), key=lambda x: x[0])
+        row = sorted(((p, n) for n, p in cur.items()
+                      if num2code.get(n) and ln <= completed.get(num2code[n], nLaps)), key=lambda x: x[0])
         order.append([num2code[n] for _, n in row])
 
     grid = [c["code"] for c in sorted(race["cls"], key=lambda c: c["grid"] or 99) if c["grid"]]
