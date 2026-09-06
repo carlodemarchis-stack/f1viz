@@ -1394,7 +1394,7 @@ function raceCard(r){
           return vid?`<a class="rc-hl" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer" title="Watch race highlights">
             <img src="https://i.ytimg.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">
             <span class="rc-hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a>`:'';})()}
-        ${wkHas(r.r)?`<button class="rc-wk" onclick="openWeekend(${r.r})" title="Practice, qualifying, gaps and the starting grid">
+        ${wkHas(r.r)?`<button class="rc-wk" onclick="openWeekend(${r.r},'sgrid')" title="Practice, qualifying, gaps and the starting grid">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 10.6V6h-2v7.4l5.2 3.1 1-1.7z"/></svg>
           <span><b>Practice &amp; Qualifying</b><i>FP1–FP3 · grid · gaps</i></span></button>`:''}
       </div>
@@ -1663,8 +1663,9 @@ function relayoutLive(){
   if(wrap.querySelector('#sgrid')) layoutSGrid();
 }
 function wkBack(r){ wkCur=null; const i=DATA.races.findIndex(x=>x.r===r); if(i>=0){ idx=i; render(); } else render(); }
-function openWeekend(r){
+function openWeekend(r, tab){
   setPlay(false);
+  if(tab) lvSesKey=tab;   // link from the race card opens on the grid; hash restore passes nothing
   const show=()=>{ wrap.innerHTML=liveCard(); wireLiveCard(); lcHash(); };
   if(hasLive() && LIVE.round===r){ wkCur=LIVE; show(); return; }
   if(wkCache[r]){ wkCur=wkCache[r]; show(); return; }
