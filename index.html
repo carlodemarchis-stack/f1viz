@@ -461,6 +461,15 @@ button{font-family:inherit}
 .sg-num{position:absolute;right:0;top:1px;font-size:9px;font-weight:800;color:var(--muted-2);font-variant-numeric:tabular-nums;opacity:.8}
 .sg-car{width:100%;height:auto;display:block;margin-top:2px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
 .sg-slot.pole .sg-pos{color:var(--gold)}
+.rc-wk{flex:1 1 46%;height:82px;display:flex;align-items:center;gap:10px;padding:0 13px;border-radius:12px;cursor:pointer;
+  background:linear-gradient(120deg,color-mix(in srgb,var(--c) 16%,#0a0d14),#0a0d14 70%);
+  border:1px solid color-mix(in srgb,var(--c) 34%,var(--line));color:var(--ink);font-family:inherit;text-align:left;
+  transition:border-color .15s,background .15s}
+.rc-wk:hover{border-color:color-mix(in srgb,var(--c) 62%,transparent);background:linear-gradient(120deg,color-mix(in srgb,var(--c) 24%,#0a0d14),#0a0d14 70%)}
+.rc-wk svg{width:20px;height:20px;flex:0 0 auto;fill:color-mix(in srgb,var(--c) 82%,#fff)}
+.rc-wk span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rc-wk b{font-weight:800;font-size:12.5px;letter-spacing:-.01em}
+.rc-wk i{font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted-2)}
 /* grid view: track at the top, driver detail below */
 .qg.sg{justify-content:flex-start}
 .sg-slot{cursor:pointer;transition:filter .15s,transform .15s}
@@ -3078,7 +3087,8 @@ const LIVE = {
 };
 const D = DATA.drivers, C = DATA.constructors;
 // weekend in progress: only while its round is still ahead of the last completed one
-const hasLive = () => !!(LIVE && LIVE.round && LIVE.round > DATA.meta.round && (LIVE.sessions||[]).length);
+const hasLive = () => !!(LIVE && LIVE.round && (LIVE.sessions||[]).length);   // weekend data exists -> card stays reachable
+const weekendLive = () => hasLive() && LIVE.round > DATA.meta.round;          // ...and the race itself has not been applied yet
 const IMGV = '?v=31';   // bump when refreshing local images (cache-bust)
 const IMG = s => `img/cut/${s}.png${IMGV}`;
 const IMGFULL = s => `img/full/${s}.png${IMGV}`;   // full-body figure (head→feet), used on mobile
@@ -3123,7 +3133,7 @@ const upRow=(cal,prev)=>{
   let cd;
   if(first){ const dd=daysTo(cal.date); cd = dd>0?`in ${wk(dd)}`:'upcoming'; }
   else { const gap=Math.round((new Date(cal.date+'T00:00:00Z')-new Date(prev.date+'T00:00:00Z'))/86400000); cd = wk(gap); }
-  const live = hasLive() && cal.r===LIVE.round;   // the weekend currently running → open its card
+  const live = weekendLive() && cal.r===LIVE.round;   // the weekend currently running → open its card
   return `<div class="gp up${live?' liveup':''}"${live?' data-golive="1" title="Weekend in progress — open"':''}><span class="rd">R${cal.r}</span><span class="fl">${cal.flag}</span><span class="gpn"><b>${cal.short}</b><i>${cal.locality} · ${fmtRange(cal.date)}</i></span><span class="upcd ${first?'':'gap'}">${live?'in progress →':cd}</span></div>`;
 };
 // a round already run that this driver did NOT contest (e.g. a mid-season debut / an injured driver) → empty result cells, not a future countdown
@@ -3436,6 +3446,9 @@ function raceCard(r){
           return vid?`<a class="rc-hl" href="https://www.youtube.com/watch?v=${vid}" target="_blank" rel="noopener noreferrer" title="Watch race highlights">
             <img src="https://i.ytimg.com/vi/${vid}/mqdefault.jpg" alt="" loading="lazy">
             <span class="rc-hl-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></a>`:'';})()}
+        ${(hasLive() && LIVE.round===r.r)?`<button class="rc-wk" onclick="goLive()" title="Practice, qualifying, gaps and the starting grid">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 10.6V6h-2v7.4l5.2 3.1 1-1.7z"/></svg>
+          <span><b>Practice &amp; Qualifying</b><i>FP1–FP3 · grid · gaps</i></span></button>`:''}
       </div>
       ${(()=>{const rc=_recapText(r.r); return rc?`<div class="rc-recap">
         <div class="rc-recap-hd"><button class="rc-recap-play" onclick="speakRecap(${r.r},this)" aria-label="Play race recap">
@@ -3497,7 +3510,7 @@ function liveCard(){
     <div class="panel lvinfo">
       <div class="lv-hd">
         <div class="lv-rd">Round ${L.round} · ${L.flag||''} ${L.country||''}
-          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':'<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>Weekend in progress</span>'}</div>
+          ${anyLive?'<span class="lv-live"><i></i>Session live</span>':`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${weekendLive()?'Weekend in progress':'Practice &amp; qualifying'}</span>`}</div>
         <div class="lv-gp">${L.full||L.gp||''}</div>
         <div class="lv-sub">${L.circuit||''}${L.locality?' · '+L.locality:''}</div>
       </div>
@@ -3745,7 +3758,7 @@ function wireSeasonMap(){
   ww.addEventListener('click', e=>{
     const g=e.target.closest('.geo'); if(!g||!g.dataset.r) return;
     const r=+g.dataset.r;
-    if(hasLive() && r===LIVE.round){ tip.classList.remove('on'); goLive(); return; }   // weekend in progress
+    if(weekendLive() && r===LIVE.round){ tip.classList.remove('on'); goLive(); return; }   // weekend in progress
     if(!g.classList.contains('done')) return;                                          // finished races → that race card
     tip.classList.remove('on'); go(r-1);
   });
@@ -4270,7 +4283,7 @@ function setMode(m){ if(m===mode)return; setPlay(false); gotoMode(m,false); }
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 // yellow top-bar note → jump to the weekend-in-progress card (hidden once the round has been applied)
 (()=>{ const n=document.getElementById('racenote'); if(!n)return;
-  if(!hasLive()) n.style.display='none'; else n.onclick=()=>goLive(); })();
+  if(!weekendLive()) n.style.display='none'; else n.onclick=()=>goLive(); })();
 
 /* autoplay */
 function setPlay(p){ playing=p; clearInterval(timer);
