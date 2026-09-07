@@ -10,7 +10,7 @@ in the EXACT f1.json schema, then recomputes every driver & constructor standing
 ALWAYS run --validate on an existing round first (proves the pipeline still matches),
 and cross-check the new round's winner/podium/points against formula1.com before publishing.
 """
-import json, os, sys, subprocess
+import json, os, re, sys, subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F1P  = os.path.join(ROOT, "data", "f1.json")
@@ -60,10 +60,16 @@ def openf1_safety(rnd, cal):
     sc = vsc = red = 0; flags = {}
     for msg in rc:
         u = (msg.get("message") or "").upper(); lap = msg.get("lap_number")
-        if "RED FLAG" in u: red += 1; flags[str(lap)] = "R"
-        elif "VIRTUAL SAFETY CAR" in u and "DEPLOYED" in u: vsc += 1
-        elif ("SAFETY CAR" in u and ("DEPLOYED" in u or "LIGHTS ON" in u)):
-            sc += 1
+        # \b or CHEQUERED FLAG matches too, inventing a red flag on the last lap of every race.
+        # The card only renders S and V, so a stoppage is marked as caution rather than "R".
+        if re.search(r"\bRED FLAG\b", u):
+            red += 1
+            if lap: flags[str(lap)] = "S"
+        elif ("VSC" in u or "VIRTUAL SAFETY CAR" in u) and "DEPLOYED" in u:  # OpenF1 writes "VSC DEPLOYED"
+            vsc += 1
+            if lap: flags[str(lap)] = "V"
+        elif "SAFETY CAR" in u and ("DEPLOYED" in u or "LIGHTS ON" in u):
+            if "DEPLOYED" in u: sc += 1        # LIGHTS ON restarts the same period, it is not a second one
             if lap: flags[str(lap)] = "S"
     return {"sc": sc, "vsc": vsc, "red": red}, flags
 
