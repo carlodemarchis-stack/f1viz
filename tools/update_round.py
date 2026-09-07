@@ -18,7 +18,12 @@ YEAR = 2026
 # circuit length (km) for tracks not yet in f1.json['circuits']; official race distance = length*laps
 # OpenF1 race_control is unreliable for exact safety counts; verified overrides win when present.
 # OpenF1 race_control is flaky; provide verified {safety counts, per-lap flags} per round.
-SAFETY_OVERRIDE = {12: {"safety": {"sc": 1, "vsc": 0, "red": 1}, "flags": {"1": "S", "2": "S", "3": "S"}}}  # Dutch: Verstappen L1 crash -> red flag + SC
+# Dutch: Verstappen L1 crash -> red flag L2, standing restart L3, then VSCs on L55 and L70.
+# The old override claimed 1 SC / 0 VSC: race control shows no SAFETY CAR DEPLOYED at all
+# (the "SAFETY CAR LIGHTS ON" lines are the standing-start procedure) and two VSCs the
+# broken matcher could not see. Verified with tools/audit_safety.py on 2026-09-07.
+SAFETY_OVERRIDE = {12: {"safety": {"sc": 0, "vsc": 2, "red": 1},
+                        "flags": {"1": "S", "2": "S", "3": "S", "55": "V", "70": "V"}}}
 CIRCUIT_LEN = {"zandvoort": 4.259, "monza": 5.793, "madring": 5.474, "baku": 6.003,
                "sepang": 5.543, "marina_bay": 4.940, "americas": 5.513, "rodriguez": 4.304,
                "interlagos": 4.309, "vegas": 6.201, "losail": 5.419, "yas_marina": 5.281}
@@ -60,9 +65,10 @@ def openf1_safety(rnd, cal):
     sc = vsc = red = 0; flags = {}
     for msg in rc:
         u = (msg.get("message") or "").upper(); lap = msg.get("lap_number")
-        # \b or CHEQUERED FLAG matches too, inventing a red flag on the last lap of every race.
+        # Anchored: CHEQUERED FLAG would match a substring test, and the stewards' "RED FLAG
+        # INFRINGEMENT" lines are a driver penalty, not a stoppage (they added 2 to Monaco).
         # The card only renders S and V, so a stoppage is marked as caution rather than "R".
-        if re.search(r"\bRED FLAG\b", u):
+        if re.match(r"RED FLAG\b", u):
             red += 1
             if lap: flags[str(lap)] = "S"
         elif ("VSC" in u or "VIRTUAL SAFETY CAR" in u) and "DEPLOYED" in u:  # OpenF1 writes "VSC DEPLOYED"

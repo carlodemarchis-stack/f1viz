@@ -996,6 +996,11 @@ const teamContribs = c => { const l=[...teamRegulars(c.teamId)]; const t=teamTem
 const T2COL = {}; C.forEach(x=>T2COL[x.teamId]=x.color);                              // teamId → colour
 const raceTid = (d,rnum) => { const r=d.races.find(x=>x.r===rnum); return (r&&r.tid)||d.teamId; };  // team a driver actually raced for that round
 const raceCol = (d,rnum) => { const t=raceTid(d,rnum); return (t!==d.teamId && T2COL[t])||d.color; };
+// A lapped driver's stored time is their gap inside their OWN lap, not to the winner, so
+// showing it under "Race time" reads as a few seconds behind. Give the deficit in laps,
+// which is what the results table already does and what f1.com prints.
+const raceTimeTxt = r => { const n=(DATA.raceLaps&&DATA.raceLaps[r.r])||0, down=(n&&r.laps!=null)?n-r.laps:0;
+  return (r.status==='Lapped'&&down>0) ? `+${down} lap${down>1?'s':''}` : r.time; };
 
 $('#ctxB').textContent = `2026 · After Round ${DATA.meta.round} of ${DATA.meta.totalRounds} · ${DATA.meta.roundName} GP`;
 const initials = n => n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -2299,7 +2304,7 @@ function renderRace(d,gi,r,LD){
           ${rdvRow('Fastest lap', r.flrank?`<span style="color:${r.flrank===1?'#c9a3ff':'var(--ink)'}">P${r.flrank}${flStr?' · '+flStr:''}</span>`:'—')}
           ${LD&&led?rdvRow('Laps led', `${led} <span style="color:var(--muted-2);font-weight:400;">(${led===nL?'all':'L'+ledFrom+'–'+ledTo})</span>`):''}
           ${rdvRow('Laps completed', `${r.laps} / ${raceLaps}`)}
-          ${r.time?rdvRow('Race time', r.time):''}
+          ${r.time?rdvRow('Race time', raceTimeTxt(r)):''}
         </div>
         <div>
           <div style="font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px;">Pit stops</div>
@@ -2776,7 +2781,7 @@ function renderGP(){
       <div class="mrow"><span>Grid → Finish</span><b>${deltaTxt}</b></div>
       <div class="mrow"><span>Laps completed</span><b>${r.laps} / ${(DATA.raceLaps&&DATA.raceLaps[r.r])||r.laps}</b></div>
       <div class="mrow"><span>Fastest lap</span><b>${r.flrank?('P'+r.flrank+(r.flTime?' · '+r.flTime:'')):'—'}</b></div>
-      ${r.time?`<div class="mrow"><span>Race time</span><b>${r.time}</b></div>`:''}
+      ${r.time?`<div class="mrow"><span>Race time</span><b>${raceTimeTxt(r)}</b></div>`:''}
       ${hlBlock(r.r)}
     </div>`;
   document.documentElement.style.setProperty('--c',d.color);
