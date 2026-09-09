@@ -10,6 +10,14 @@
 <meta name="theme-color" content="#070910">
 <meta name="description" content="The 2026 Formula 1 season told as three films of cards — Drivers, Constructors and Races. Explore every driver, team and Grand Prix, lap by lap.">
 <link rel="canonical" href="https://f1.aguywithascarf.com/">
+<!-- AGWAS social capture — not read by the browser; the capture extension reads these
+     and the receiver builds the Instagram caption + story card. updateSocialMeta() keeps
+     cta/tags/bg in step with the card on screen. -->
+<meta name="agwas:title"    content="F1 interactive experience">
+<meta name="agwas:cta"      content="Full interactive F1 experience below">
+<meta name="agwas:mentions" content="f1">
+<meta name="agwas:tags"     content="f1 dataviz formula1">
+<meta name="agwas:bg"       content="https://f1.aguywithascarf.com/img/og.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="F1viz — the 2026 F1 season, in films">
 <meta property="og:description" content="The 2026 Formula 1 season told as three films of cards — Drivers, Constructors and Races. Explore every driver, team and Grand Prix, lap by lap.">
@@ -1865,12 +1873,51 @@ let pendingRace=null, pendingTeamRace=null, pendingVs=null, pendingWeekend=false
 let rdvChartTab='pos';                         // driver deep-dive left chart: 'pos' (position trace) | 'pace' (lap times), sticky
 let rdvVs=null;                                // driver deep-dive COMPARE: 2nd driver's code overlaid on the chart (+ 2nd info box), null = off; reset per race
 function onLiveCard(){ return mode==='races' && hasLive() && idx===DATA.races.length; }
+// ---- AGWAS social capture -------------------------------------------------
+// The bg must be an absolute, public https URL: the receiver fetches it server-side to
+// build the story card, so a relative path or localhost cannot work. It is also
+// cover-cropped to 9:16, which is why a driver cutout is used rather than a car (a
+// 900x198 strip crops to a meaningless sliver) or a circuit map (palette PNG: its
+// transparent ground turns bright green once flattened to RGB).
+const SOC_ORIGIN='https://f1.aguywithascarf.com/';
+const SOC_OG=SOC_ORIGIN+'img/og.png';                       // generic failover
+const socCut = slug => slug ? SOC_ORIGIN+'img/cut/'+slug+'.png' : SOC_OG;
+const socTag = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+                      .replace(/[^A-Za-z0-9]/g,'').toLowerCase();   // one word: tags split on spaces
+function socMeta(name,content){
+  let m=document.head.querySelector('meta[name="'+name+'"]');
+  if(!m){ m=document.createElement('meta'); m.setAttribute('name',name); document.head.appendChild(m); }
+  m.setAttribute('content',content);
+}
+function socRound(r){                                       // a GP, raced or still to come
+  const c=(DATA.calendar||[]).find(x=>x.r===r)||{}, race=DATA.races.find(x=>x.r===r);
+  const w=race&&D.find(d=>d.code===race.winner.code);       // the winner carries the race's story
+  return {name:(race&&race.full)||c.full||('Round '+r), tag:socTag(c.gp||c.short)+'gp', bg:socCut(w&&w.slug)};
+}
+function socSubject(){
+  if(wkCur) return socRound(wkCur);                         // practice & qualifying view
+  if(onLiveCard()) return socRound(LIVE.round);
+  if(idx<N()){
+    const e=list()[idx];
+    if(mode==='races') return socRound(e.r);
+    if(mode==='drivers') return {name:e.given+' '+e.family, tag:socTag(e.family), bg:socCut(e.slug)};
+    const lead=teamCars(e.teamId)[0];
+    return {name:e.name, tag:socTag(e.name), bg:socCut(lead&&lead.slug)};
+  }
+  return {name:'The 2026 F1 season', tag:'formula1', bg:SOC_OG};   // standings, season map, lead laps
+}
+function updateSocialMeta(){ try{
+  const s=socSubject();
+  socMeta('agwas:cta', s.name+' \u2014 Full interactive F1 experience below');
+  socMeta('agwas:tags', 'f1 dataviz '+s.tag);
+  socMeta('agwas:bg', s.bg); }catch(e){} }
 function lcHash(){ try{
   const t = wkCur ? ('/wk'+(lvSesKey?('/'+lvSesKey):''))          // weekend opened from a race card
           : onLiveCard() ? (lvSesKey?('/'+lvSesKey):'')
           : (mode==='races'&&lcTab==='lap') ? ('/lap'+(lcCurLap>0?'/'+lcCurLap:''))
           : (mode==='races'&&lcTab==='wall') ? '/wall' : '';
-  history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){} }
+  history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){}
+  updateSocialMeta(); }
 // followed drivers persist across races + sessions (keyed by stable driver code)
 const _lcFollowKey='f1viz.follow';
 function loadFollow(){try{return new Set(JSON.parse(localStorage.getItem(_lcFollowKey)||'[]'));}catch(e){return new Set();}}
