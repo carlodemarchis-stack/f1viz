@@ -1875,13 +1875,15 @@ let rdvVs=null;                                // driver deep-dive COMPARE: 2nd 
 function onLiveCard(){ return mode==='races' && hasLive() && idx===DATA.races.length; }
 // ---- AGWAS social capture -------------------------------------------------
 // The bg must be an absolute, public https URL: the receiver fetches it server-side to
-// build the story card, so a relative path or localhost cannot work. It is also
-// cover-cropped to 9:16, which is why a driver cutout is used rather than a car (a
-// 900x198 strip crops to a meaningless sliver) or a circuit map (palette PNG: its
-// transparent ground turns bright green once flattened to RGB).
+// build the story card, so a relative path or localhost cannot work. It is then
+// cover-cropped to 9:16, blurred and faded halfway to black. The race photos and the
+// upright car canvases are built by tools/build_social_bg.py, which guarantees a file
+// per round and per team, so nothing here needs to know which ones f1.com actually had.
 const SOC_ORIGIN='https://f1.aguywithascarf.com/';
 const SOC_OG=SOC_ORIGIN+'img/og.png';                       // generic failover
 const socCut = slug => slug ? SOC_ORIGIN+'img/cut/'+slug+'.png' : SOC_OG;
+const socRace = r => SOC_ORIGIN+'img/social/r'+r+'.jpg';    // the GP's own photo, from f1.com
+const socCar = tid => SOC_ORIGIN+'img/social/car-'+tid+'.jpg';   // car rotated upright on 9:16
 const socTag = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
                       .replace(/[^A-Za-z0-9]/g,'').toLowerCase();   // one word: tags split on spaces
 function socMeta(name,content){
@@ -1891,8 +1893,7 @@ function socMeta(name,content){
 }
 function socRound(r){                                       // a GP, raced or still to come
   const c=(DATA.calendar||[]).find(x=>x.r===r)||{}, race=DATA.races.find(x=>x.r===r);
-  const w=race&&D.find(d=>d.code===race.winner.code);       // the winner carries the race's story
-  return {name:(race&&race.full)||c.full||('Round '+r), tag:socTag(c.gp||c.short)+'gp', bg:socCut(w&&w.slug)};
+  return {name:(race&&race.full)||c.full||('Round '+r), tag:socTag(c.gp||c.short)+'gp', bg:socRace(r)};
 }
 function socSubject(){
   if(wkCur) return socRound(wkCur);                         // practice & qualifying view
@@ -1901,8 +1902,7 @@ function socSubject(){
     const e=list()[idx];
     if(mode==='races') return socRound(e.r);
     if(mode==='drivers') return {name:e.given+' '+e.family, tag:socTag(e.family), bg:socCut(e.slug)};
-    const lead=teamCars(e.teamId)[0];
-    return {name:e.name, tag:socTag(e.name), bg:socCut(lead&&lead.slug)};
+    return {name:e.name, tag:socTag(e.name), bg:socCar(e.teamId)};
   }
   return {name:'The 2026 F1 season', tag:'formula1', bg:SOC_OG};   // standings, season map, lead laps
 }
