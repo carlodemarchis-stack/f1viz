@@ -223,7 +223,7 @@ button{font-family:inherit}
 .gp .pts em{font-style:normal;font-size:8.5px;color:var(--muted-2);letter-spacing:.08em;margin-left:2px}
 .gp .pts i{font-style:normal;color:rgba(150,166,205,.3);font-weight:400}
 /* column templates */
-.gpcard.drv .gpcols,.gpcard.drv .gp{grid-template-columns:22px 16px minmax(0,1fr) 60px 26px 28px 36px 40px 30px 22px}
+.gpcard.drv .gpcols,.gpcard.drv .gp{grid-template-columns:22px 16px minmax(0,1fr) 60px 26px 34px 28px 36px 40px 30px 22px}
 .gp .pit{font-size:12px;font-weight:600;color:var(--muted-2);text-align:right;font-variant-numeric:tabular-nums}
 .gp .pit i{font-style:normal;color:rgba(150,166,205,.3)}
 .gp .ytmini{display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .15s;text-decoration:none}
@@ -542,6 +542,27 @@ button{font-family:inherit}
 .card.wall-on .racemeta{display:none}
 .rc-tab.wall-tab.on{color:var(--ink);background:color-mix(in srgb,var(--c,#00D7B6) 42%,transparent)}
 .rc-wall{flex:1;min-height:0;overflow:auto;padding:6px 10px 8px}
+.rc-strat{flex:1;min-height:0;overflow:auto;padding:8px 12px 10px}
+.gp .tyr{display:flex;gap:2px;justify-content:flex-end;align-items:center}
+.gp .tyr i{width:6px;height:6px;border-radius:50%;display:block}
+.gp .tyr em{color:var(--muted-2);font-style:normal}
+.rc-tyres{display:inline-flex;align-items:center;gap:3px}
+.rc-tyres i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.rc-tyres u{text-decoration:none;color:var(--muted-2);font-size:9px}
+.rc-row .mut2{color:var(--muted-2);font-weight:600;font-style:normal;font-size:10px}
+.st-row{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.st-pos{width:26px;text-align:right;font-size:10px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.st-code{width:38px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.st-bar{flex:1;display:flex;height:15px;border-radius:4px;overflow:hidden;background:var(--line-2)}
+.st-seg{position:relative;display:flex;align-items:center;justify-content:center;font-size:9px;
+        font-weight:700;color:#0b0d12;min-width:0;border-right:1px solid rgba(6,8,12,.55)}
+.st-seg:last-child{border-right:0}
+.st-seg.dark{color:#f2f5f9}
+.st-legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:2px 0 10px 72px;
+           font-size:10px;color:var(--muted-2)}
+.st-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.st-axis{display:flex;justify-content:space-between;margin:6px 0 0 72px;font-size:9px;color:var(--muted-2)}
+.st-note{margin:9px 0 0 72px;font-size:10px;color:var(--muted-2);line-height:1.5}
 .wall{display:grid;gap:2px;width:100%;height:100%;min-height:0}
 .wcell{border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;writing-mode:vertical-rl;text-orientation:upright;font-size:7px;font-weight:800;line-height:1;letter-spacing:-1.5px;transition:opacity .12s,box-shadow .12s}
 .wcell:hover{box-shadow:0 0 0 1.5px #fff}
@@ -883,8 +904,8 @@ button{font-family:inherit}
   .mstand .hbar{background:var(--cc)}
   /* driver per-GP list: only crucial columns fit — round · flag · name · Fin · Race (tap row for the rest) */
   .gpcard.drv .gpcols,.gpcard.drv .gp{grid-template-columns:22px 17px minmax(0,1fr) 46px 40px;gap:9px}
-  .gpcard.drv .h-delta,.gpcard.drv .h-flap,.gpcard.drv .h-pit,.gpcard.drv .h-spr,.gpcard.drv .h-hl,
-  .gpcard.drv .gp .delta,.gpcard.drv .gp .flap,.gpcard.drv .gp .pit,.gpcard.drv .gp .spr,.gpcard.drv .gp .ytmini{display:none}
+  .gpcard.drv .h-delta,.gpcard.drv .h-flap,.gpcard.drv .h-tyr,.gpcard.drv .h-pit,.gpcard.drv .h-spr,.gpcard.drv .h-hl,
+  .gpcard.drv .gp .delta,.gpcard.drv .gp .flap,.gpcard.drv .gp .tyr,.gpcard.drv .gp .pit,.gpcard.drv .gp .spr,.gpcard.drv .gp .ytmini{display:none}
   /* constructor per-GP list: drop HL, free the name — round · flag · name · 2 drivers · Pts */
   .gpcard.con .gpcols,.gpcard.con .gp{grid-template-columns:22px 17px minmax(0,1fr) 42px 42px 38px;gap:9px}
   .gpcard.con .h-hl,.gpcard.con .gp .ytmini{display:none}
@@ -969,6 +990,14 @@ const RECAPS = /*__RECAPS__*/;
 const RADIO = /*__RADIO__*/;
 const LIVE = /*__LIVE__*/;
 const WEEKENDS = /*__WEEKENDS__*/;
+const EXTRAS = /*__EXTRAS__*/;            // per-race tyre stints + overtake summaries (OpenF1)
+// Pirelli's own colours. Compounds are stored by initial: S/M/H, I/W when it rains.
+const TYRE={S:{n:'Soft',c:'#ee3d3d'},M:{n:'Medium',c:'#f2c53d'},H:{n:'Hard',c:'#e6ebf2'},
+            I:{n:'Intermediate',c:'#3fbf6f'},W:{n:'Wet',c:'#3a8fd8'}};
+const tyreCol = k => (TYRE[k]||{}).c||'#8a8f98';
+const stintsOf = r => (EXTRAS&&EXTRAS.stints&&EXTRAS.stints[r])||null;
+const ovtOf    = r => (EXTRAS&&EXTRAS.overtakes&&EXTRAS.overtakes[r])||null;
+const stintSeq = (r,code) => ((stintsOf(r)||{})[code]||[]).map(x=>x[0]);
 const D = DATA.drivers, C = DATA.constructors;
 // weekend in progress: only while its round is still ahead of the last completed one
 const hasLive = () => !!(LIVE && LIVE.round && (LIVE.sessions||[]).length);   // weekend data exists -> card stays reachable
@@ -986,7 +1015,8 @@ let mode='drivers', idx=0, playing=false, timer=null, curGP=0, lvSesKey='', sgSe
 const CTXA={drivers:"Drivers' Championship",constructors:"Constructors' Championship",races:"Grand Prix Results"};
 const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
 const N = () => list().length;
-const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?4:(1+(hasLive()?1:0)));   // races: [+ weekend in progress] + season map
+const hasOvt = () => !!(EXTRAS&&EXTRAS.overtakes&&Object.keys(EXTRAS.overtakes).length);
+const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?(hasOvt()?5:4):(1+(hasLive()?1:0)));   // races: [+ weekend in progress] + season map
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
@@ -1099,6 +1129,8 @@ function driverCard(d){
       <span class="gpn"><b>${cal.short}</b><i>${cal.locality}</i></span>
       <span class="delta">${deltaLabel(r)}</span>
       ${flap}
+      <span class="tyr">${(()=>{const q=stintSeq(r.r,d.code);
+        return q.length?q.map(k=>`<i style="background:${tyreCol(k)}"></i>`).join(''):'<em>·</em>';})()}</span>
       <span class="pit">${r.pits==null?'<i>·</i>':(r.pits>0?r.pits:'<i>–</i>')}</span>
       <span class="fin ${f.cls}">${f.t}</span>
       <span class="pts">${r.rpts>0?r.rpts:'<i>–</i>'}</span>
@@ -1129,7 +1161,7 @@ function driverCard(d){
     </div>
     <div class="panel gpcard drv">
       <div class="gphead"><b>Season 2026</b><span>${DATA.meta.round} of ${DATA.calendar.length} rounds · tap a GP</span></div>
-      <div class="gpcols"><span></span><span></span><span>Grand Prix</span><span class="h-delta">Grid→Fin</span><span class="h-flap">FL</span><span class="h-pit">Pit</span><span>Fin</span><span>Race</span><span class="h-spr">Spr</span><span class="h-hl">HL</span></div>
+      <div class="gpcols"><span></span><span></span><span>Grand Prix</span><span class="h-delta">Grid→Fin</span><span class="h-flap">FL</span><span class="h-tyr">Tyres</span><span class="h-pit">Pit</span><span>Fin</span><span>Race</span><span class="h-spr">Spr</span><span class="h-hl">HL</span></div>
       <div class="gps">${rows}</div>
     </div>
   </div>`;
@@ -1330,6 +1362,12 @@ function raceCard(r){
           <div class="rc-row"><span>Winner</span><b><em class="wl">${r.winner.family}</em></b></div>
           <div class="rc-row"><span>Pole position</span><b>${r.pole?r.pole.family:'—'}</b></div>
           <div class="rc-row"><span>Fastest lap</span><b>${r.fl?`${r.fl.family} · ${r.fl.time}`:'—'}</b></div>
+          ${(()=>{const seq=stintSeq(r.r,r.winner.code); return seq.length?`<div class="rc-row"><span>Winning strategy</span>
+            <b class="rc-tyres">${seq.map(k=>`<i style="background:${tyreCol(k)}" title="${(TYRE[k]||{}).n||k}"></i>`).join('<u>›</u>')}</b></div>`:'';})()}
+          ${(()=>{const o=ovtOf(r.r); if(!o||!o.total)return '';
+            const t=Object.entries(o.by)[0]||['—',0];
+            return `<div class="rc-row" title="Position changes on track, excluding the standing start${o.skip.length>1?' and the restart':''}"><span>On-track passes</span>
+              <b>${o.total} <em class="mut2">· most ${t[0]} ${t[1]}</em></b></div>`;})()}
           <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};if(s.unknown)return '<em class="none">—</em>';const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
       ${(()=>{const red=(r.safety||{}).red||0;return red>0?`<div class="rc-row"><span>Red flag</span><b style="color:var(--bad)">⚑ ${red>1?red+' stoppages':'Yes'}</b></div>`:'';})()}
         </div>
@@ -1348,7 +1386,7 @@ function raceCard(r){
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}<button class="rc-tab wall-tab" data-tab="wall"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}${stintsOf(r.r)?`<button class="rc-tab" data-tab="strat">Strategy</button>`:''}<button class="rc-tab wall-tab" data-tab="wall"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
       <div class="rc-view">
         <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
         <div class="rc-cls">${cls}</div>
@@ -1356,6 +1394,7 @@ function raceCard(r){
       <div class="rc-lc" hidden></div>
       <div class="rc-wall" data-wr="${r.r}" hidden></div>
       <div class="rc-radio" hidden>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?raceRadioList(r):''}</div>
+      <div class="rc-strat" hidden>${stintsOf(r.r)?stratChart(r):''}</div>
     </div>
   </div>`;
 }
@@ -1733,18 +1772,22 @@ function worldMapCard(){
 }
 
 function barCard(kind){
-  const laps=kind==='laps';
+  const laps=kind==='laps', ovt=kind==='ovt';
   const sset=new Set(); D.forEach(d=>d.races.forEach(r=>{ if(r.spr!=null) sset.add(r.r); }));
   const sprRds=[...sset].sort((a,b)=>a-b);
-  const val=d=>laps ? d.races.reduce((a,r)=>a+(r.laps||0),0) : d.races.reduce((a,r)=>a+(r.spr>0?r.spr:0),0);
+  const raceVal=(code,s)=>ovt ? (((ovtOf(s.r)||{}).by||{})[code]||0) : (s.spr>0?s.spr:0);
+  const val=d=>laps ? d.races.reduce((a,r)=>a+(r.laps||0),0)
+                    : d.races.reduce((a,s)=>a+raceVal(d.code,s),0);
   let rows=D.map(d=>({d,v:val(d)}));
   if(!laps) rows=rows.filter(r=>r.v>0);               // sprint: non-zero drivers only
   rows.sort((a,b)=>b.v-a.v || a.d.family.localeCompare(b.d.family));
   const mx=Math.max(1,...rows.map(r=>r.v)), mn=Math.min(...rows.map(r=>r.v));
   const totalLaps=laps ? Object.keys(DATA.raceLaps||{}).filter(k=>+k<=DATA.meta.round).reduce((a,k)=>a+DATA.raceLaps[k],0) : 0;
-  const title=laps?'Laps Completed':'Sprint Points';
+  const title=laps?'Laps Completed':ovt?'On-Track Passes':'Sprint Points';
   const sub=laps
     ? `Total racing laps completed (${totalLaps} run) · bars scaled from the lowest (${mn}) · after Round ${DATA.meta.round} of ${DATA.meta.totalRounds}`
+    : ovt
+    ? `Places taken on track, stacked by round · the standing start and any restart after a red flag are excluded, since those re-sort the grid rather than being raced for`
     : `Points from the ${sprRds.length} sprint races · Rounds ${sprRds.join(', ')}`;
   if(isMob()){
     const rowsH=rows.map((r,i)=>{const w=laps?(mx===mn?100:8+92*(r.v-mn)/(mx-mn)):Math.max(2,100*r.v/mx);
@@ -1758,8 +1801,8 @@ function barCard(kind){
     const pct=laps&&totalLaps ? Math.round(r.v/totalLaps*100) : 0;
     const segs=laps
       ? `<span class="seg" style="height:100%" title="${r.v} laps"></span><span class="barpct">${pct}%</span>`
-      : e.races.map(s=>{ const sv=s.spr>0?s.spr:0; if(sv<=0) return '';
-          return `<span class="seg" style="height:${(100*sv/total).toFixed(2)}%" title="R${s.r} ${s.gp} · ${sv} pts">${sv>=2?`<em>R${s.r}</em>`:''}</span>`;
+      : e.races.map(s=>{ const sv=raceVal(e.code,s); if(sv<=0) return '';
+          return `<span class="seg" style="height:${(100*sv/total).toFixed(2)}%" title="R${s.r} ${s.gp} · ${sv} ${ovt?'passes':'pts'}">${sv>=(ovt?7:2)?`<em>R${s.r}</em>`:''}</span>`;
         }).join('');
     return `<div class="col ${i===0?'lead':''}" style="--cc:${e.color}" data-jump="${e.pos-1}">
       <img class="face" src="${IMG(e.slug)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'face fb',textContent:'${initials(e.given+' '+e.family)}'}))">
@@ -1769,12 +1812,17 @@ function barCard(kind){
   return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div><div class="chart">${cols}</div></div></div>`;
 }
 function constructorBarCard(kind){
-  const laps=kind==='laps';
+  const laps=kind==='laps', ovt=kind==='ovt';
   const sset=new Set(); D.forEach(d=>d.races.forEach(r=>{ if(r.spr!=null) sset.add(r.r); }));
   const sprRds=[...sset].sort((a,b)=>a-b);
-  const agg={}; D.forEach(d=>{ const t=agg[d.teamId]||(agg[d.teamId]={laps:0,spr:0,sprR:{}});
-    d.races.forEach(r=>{ t.laps+=(r.laps||0); if(r.spr>0){ t.spr+=r.spr; t.sprR[r.r]=(t.sprR[r.r]||0)+r.spr; } }); });
-  let rows=C.map(e=>({e, v:laps?(agg[e.teamId]?.laps||0):(agg[e.teamId]?.spr||0), sprR:agg[e.teamId]?.sprR||{}}));
+  const agg={}; D.forEach(d=>{
+    d.races.forEach(r=>{ const tid=r.tid||d.teamId;          // credit the team he drove for that round
+      const t=agg[tid]||(agg[tid]={laps:0,spr:0,sprR:{},ovt:0,ovtR:{}});
+      t.laps+=(r.laps||0); if(r.spr>0){ t.spr+=r.spr; t.sprR[r.r]=(t.sprR[r.r]||0)+r.spr; }
+      const ov=((ovtOf(r.r)||{}).by||{})[d.code]||0;
+      if(ov){ t.ovt+=ov; t.ovtR[r.r]=(t.ovtR[r.r]||0)+ov; } }); });
+  let rows=C.map(e=>({e, v:laps?(agg[e.teamId]?.laps||0):ovt?(agg[e.teamId]?.ovt||0):(agg[e.teamId]?.spr||0),
+                      sprR:(ovt?agg[e.teamId]?.ovtR:agg[e.teamId]?.sprR)||{}}));
   if(!laps) rows=rows.filter(r=>r.v>0);                 // sprint: non-zero constructors only
   rows.sort((a,b)=>b.v-a.v || a.e.name.localeCompare(b.e.name));
   const mx=Math.max(1,...rows.map(r=>r.v)), mn=Math.min(...rows.map(r=>r.v));
@@ -1784,17 +1832,19 @@ function constructorBarCard(kind){
     const pct=laps&&totalLaps ? Math.round(r.v/totalLaps*100) : 0;
     const segs=laps
       ? `<span class="hseg" style="width:100%"></span><span class="hpct">${pct}%</span>`
-      : sprRds.map(rd=>{ const sv=r.sprR[rd]||0; if(sv<=0) return '';
-          return `<span class="hseg" style="width:${(100*sv/total).toFixed(2)}%" title="R${rd} · ${sv} pts">${sv>=2?`<em>R${rd}</em>`:''}</span>`; }).join('');
+      : (ovt?Object.keys(r.sprR).map(Number).sort((a,b)=>a-b):sprRds).map(rd=>{ const sv=r.sprR[rd]||0; if(sv<=0) return '';
+          return `<span class="hseg" style="width:${(100*sv/total).toFixed(2)}%" title="R${rd} · ${sv} ${ovt?'passes':'pts'}">${sv>=(ovt?14:2)?`<em>R${rd}</em>`:''}</span>`; }).join('');
     return `<div class="hrow" style="--cc:${e.color}" data-jump="${e.pos-1}">
       <div class="hlabel"><span class="hpos">${i+1}</span><span class="hname">${e.name}</span></div>
       <div class="htrack"><div class="hbar" style="width:max(3px,calc((100% - var(--hres,186px))*${(w/100).toFixed(4)}))">${segs}</div>
         <span class="hpts">${r.v}</span>
         <img class="hcar" src="${CAR(e.teamId)}" alt="" loading="lazy" onerror="this.remove()"></div>
     </div>`;}).join('');
-  const title=laps?'Laps Completed — Constructors':'Sprint Points — Constructors';
+  const title=laps?'Laps Completed — Constructors':ovt?'On-Track Passes — Constructors':'Sprint Points — Constructors';
   const sub=laps
     ? `Total racing laps, both cars (${totalLaps} run) · bars scaled from the lowest (${mn}) · after Round ${DATA.meta.round} of ${DATA.meta.totalRounds}`
+    : ovt
+    ? `Places taken on track by both cars, stacked by round · the standing start and any restart after a red flag are excluded`
     : `Sprint points (both cars) · from the ${sprRds.length} sprint races · Rounds ${sprRds.join(', ')}`;
   return `<div class="card enter"><div class="panel gridcard"><h2>${title}</h2><div class="gsub">${sub}</div><div class="hstand">${rowsH}</div></div></div>`;
 }
@@ -1911,11 +1961,40 @@ function updateSocialMeta(){ try{
   socMeta('agwas:cta', s.name+' \u2014 Full interactive F1 experience below');
   socMeta('agwas:tags', 'f1 dataviz '+s.tag);
   socMeta('agwas:bg', s.bg); }catch(e){} }
+// Tyre strategy: one bar per driver in finishing order, a segment per stint. Widths are
+// percentages of race distance, so it lines up with the lap axis underneath.
+function stratChart(r){
+  const st=stintsOf(r.r); if(!st) return '';
+  const nL=(DATA.raceLaps&&DATA.raceLaps[r.r])||r.laps||0; if(!nL) return '';
+  const used=new Set();
+  const rows=r.cls.map(c=>{
+    const ss=st[c.code]||[];
+    if(!ss.length) return '';
+    const segs=ss.map(([k,a,b])=>{
+      used.add(k);
+      const w=Math.max(0,(b-a+1))/nL*100, laps=b-a+1;
+      // white/yellow tyres need dark text on them, red and blue need light
+      const dark=(k==='S'||k==='W')?' dark':'';
+      return `<div class="st-seg${dark}" style="flex:0 0 ${w.toFixed(2)}%;background:${tyreCol(k)}"
+        title="${(TYRE[k]||{}).n||k} · laps ${a}–${b} (${laps})">${w>4.5?laps:''}</div>`;
+    }).join('');
+    return `<div class="st-row"><span class="st-pos">${c.pos==='R'?'NC':'P'+c.pos}</span>
+      <span class="st-code" style="color:${c.color}">${c.code}</span>
+      <div class="st-bar">${segs}</div></div>`;
+  }).join('');
+  const legend=[...used].sort().map(k=>`<span><i style="background:${tyreCol(k)}"></i>${(TYRE[k]||{}).n||k}</span>`).join('');
+  const mid=Math.round(nL/2);
+  return `<div class="st-legend">${legend}</div>${rows}
+    <div class="st-axis"><span>Lap 1</span><span>${mid}</span><span>${nL}</span></div>
+    <div class="st-note">Stint lengths from the tyre fitted, so a lap under red flag or safety car
+      counts the same as a racing lap. Numbers are laps on that set.</div>`;
+}
 function lcHash(){ try{
   const t = wkCur ? ('/wk'+(lvSesKey?('/'+lvSesKey):''))          // weekend opened from a race card
           : onLiveCard() ? (lvSesKey?('/'+lvSesKey):'')
           : (mode==='races'&&lcTab==='lap') ? ('/lap'+(lcCurLap>0?'/'+lcCurLap:''))
-          : (mode==='races'&&lcTab==='wall') ? '/wall' : '';
+          : (mode==='races'&&lcTab==='wall') ? '/wall'
+          : (mode==='races'&&lcTab==='strat') ? '/strat' : '';
   history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){}
   updateSocialMeta(); }
 // followed drivers persist across races + sessions (keyed by stable driver code)
@@ -2118,19 +2197,21 @@ function render(dir){
       document.documentElement.dataset.team=e.winner.teamId||'';
       $('#cwho').textContent=`R${e.r} ${e.short}`;
       const tabs=[...wrap.querySelectorAll('.rc-tab')];
-      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), rad=wrap.querySelector('.rc-radio'), wl=wrap.querySelector('.rc-wall'), card=wrap.querySelector('.card'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
+      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), rad=wrap.querySelector('.rc-radio'), wl=wrap.querySelector('.rc-wall'), strat=wrap.querySelector('.rc-strat'), card=wrap.querySelector('.card'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
         const meta=wrap.querySelector('.lc-meta'), date=wrap.querySelector('.rc-date');
         const setTab=t=>{ lcTab=t; tabs.forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
           if(rad) rad.setAttribute('hidden','');
+          if(strat) strat.setAttribute('hidden','');
           if(wl){ wl.setAttribute('hidden',''); wl.innerHTML=''; }               // reset The Wall (fresh mount each time)
           const wpills=wrap.querySelector('.wall-pills'); if(wpills && t!=='wall'){ wpills.setAttribute('hidden',''); wpills.innerHTML=''; const wmax=wrap.querySelector('.wall-maxmsg'); if(wmax)wmax.hidden=true; }
           if(card) card.classList.toggle('wall-on', t==='wall');                 // full-width takeover only for The Wall
           if(t==='lap'){ date.setAttribute('hidden',''); meta.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.removeAttribute('hidden'); mountLapChart(lcRound, lc); }
           else if(t==='radio'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(rad)rad.removeAttribute('hidden'); }
+          else if(t==='strat'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(strat)strat.removeAttribute('hidden'); }
           else if(t==='wall'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; wl.removeAttribute('hidden'); mountWall(lcRound, wl); }
           else { if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); lc.setAttribute('hidden',''); lc.innerHTML=''; view.removeAttribute('hidden'); lcCurLap=0; } lcHash(); };
         tabs.forEach(b=>{ if(b.hasAttribute('disabled'))return; b.onclick=()=>setTab(b.dataset.tab); });
-        if(lcTab==='lap') setTab('lap'); else if(lcTab==='radio'&&rad) setTab('radio'); else if(lcTab==='wall') setTab('wall');   // keep the tab when navigating between races
+        if(lcTab==='lap') setTab('lap'); else if(lcTab==='radio'&&rad) setTab('radio'); else if(lcTab==='strat'&&strat&&strat.innerHTML) setTab('strat'); else if(lcTab==='wall') setTab('wall');   // keep the tab when navigating between races
       }
     } else {
       wrap.innerHTML = mode==='drivers'?driverCard(e):constructorCard(e);
@@ -2147,14 +2228,14 @@ function render(dir){
     if(mode==='drivers'){
       const k=idx-N();
       if(k===3){ wrap.innerHTML=leadLapsCard(); $('#cwho').textContent='Leading laps'; mountLeadLaps(); }
-      else { wrap.innerHTML = k===0?gridCard():k===1?barCard('laps'):barCard('sprint');
-        $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':'Sprint points';
+      else { wrap.innerHTML = k===0?gridCard():k===1?barCard('laps'):k===2?barCard('sprint'):barCard('ovt');
+        $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':k===2?'Sprint points':'On-track passes';
         wrap.querySelectorAll('.col,.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump)); }
     } else if(mode==='constructors'){
       const k=idx-N();
       if(k===3){ wrap.innerHTML=leadLapsCard(); $('#cwho').textContent='Leading laps'; mountLeadLaps(); }
-      else { wrap.innerHTML = k===0?gridCard():k===1?constructorBarCard('laps'):constructorBarCard('sprint');
-        $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':'Sprint points';
+      else { wrap.innerHTML = k===0?gridCard():k===1?constructorBarCard('laps'):k===2?constructorBarCard('sprint'):constructorBarCard('ovt');
+        $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':k===2?'Sprint points':'On-track passes';
         wrap.querySelectorAll('.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump)); }
     } else if(mode==='races'){
       const k=idx-N();
@@ -2209,10 +2290,11 @@ function applyHash(){
   }
   const i=parseInt(m[1],10); idx=isNaN(i)?0:Math.max(0,Math.min(TOT()-1,i));
   const onLap = m[0]==='races' && m[2]==='lap';
-  lcTab = onLap ? 'lap' : (m[0]==='races' && m[2]==='wall') ? 'wall' : 'res';
+  lcTab = onLap ? 'lap' : (m[0]==='races' && m[2]==='wall') ? 'wall'
+        : (m[0]==='races' && m[2]==='strat') ? 'strat' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
   // weekend card: restore the selected tab (fp1/fp2/fp3/quali/gaps/sgrid) so a reload lands back on it
-  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && m[2]!=='wk' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
+  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && m[2]!=='strat' && m[2]!=='wk' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
   pendingWeekend = (m[0]==='races' && m[2]==='wk');               // reopen that round's weekend after render
   if(pendingWeekend && m[3]) lvSesKey=m[3];
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen
@@ -2351,6 +2433,10 @@ function renderRace(d,gi,r,LD){
           ${rdvRow('Fastest lap', r.flrank?`<span style="color:${r.flrank===1?'#c9a3ff':'var(--ink)'}">P${r.flrank}${flStr?' · '+flStr:''}</span>`:'—')}
           ${LD&&led?rdvRow('Laps led', `${led} <span style="color:var(--muted-2);font-weight:400;">(${led===nL?'all':'L'+ledFrom+'–'+ledTo})</span>`):''}
           ${rdvRow('Laps completed', `${r.laps} / ${raceLaps}`)}
+          ${(()=>{const q=(stintsOf(r.r)||{})[d.code]||[]; return q.length?rdvRow('Tyres',
+            q.map(([k,a,b])=>`<span style="color:${tyreCol(k)};font-weight:800">${k}</span><span style="color:var(--muted-2);font-weight:400"> ${b-a+1}</span>`).join('<span style="color:var(--muted-2)"> › </span>')):'';})()}
+          ${(()=>{const o=ovtOf(r.r); if(!o)return ''; const n=(o.by||{})[d.code]||0, c=(o.dist||{})[d.code]||0;
+            return n?rdvRow('On-track passes', `${n} <span style="color:var(--muted-2);font-weight:400;">(${c} car${c===1?'':'s'})</span>`):'';})()}
           ${r.time?rdvRow('Race time', raceTimeTxt(r)):''}
         </div>
         <div>
