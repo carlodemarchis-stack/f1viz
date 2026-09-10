@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build data/extras.json — per-race tyre stints and overtake summaries from OpenF1.
+"""Build data/extras.json — per-race tyre stints, overtakes and weather from OpenF1.
 
   python3 tools/fetch_extras.py              # every round, dry run
   python3 tools/fetch_extras.py --apply
@@ -59,8 +59,9 @@ def build_round(rnd, cal, num2code, sk):
     st = api("stints", session_key=sk);  time.sleep(4)
     ov = api("overtakes", session_key=sk); time.sleep(4)
     rc = api("race_control", session_key=sk); time.sleep(4)
+    wx = api("weather", session_key=sk); time.sleep(4)
     if laps is None or st is None or ov is None or rc is None:
-        return None, None
+        return None, None, None
 
     start = {}
     for l in laps:
@@ -98,7 +99,27 @@ def build_round(rnd, cal, num2code, sk):
     overtakes = dict(total=sum(by.values()), raw=len(ov), skip=skip,
                      by=dict(sorted(by.items(), key=lambda x: -x[1])),
                      dist=dict(sorted(dist.items(), key=lambda x: -x[1])))
-    return stints, overtakes
+
+    # weather arrives every ~30s; average it onto laps so it shares the strategy chart's axis
+    weather = None
+    if wx:
+        acc = {}
+        for w in wx:
+            if not w.get("date"):
+                continue
+            L = lap_of(w["date"])
+            a = acc.setdefault(L, {"t": [], "a": [], "r": 0, "h": []})
+            if w.get("track_temperature") is not None: a["t"].append(w["track_temperature"])
+            if w.get("air_temperature") is not None:   a["a"].append(w["air_temperature"])
+            if w.get("humidity") is not None:          a["h"].append(w["humidity"])
+            if w.get("rainfall"):                      a["r"] = 1
+        avg = lambda v: round(sum(v) / len(v)) if v else None
+        weather = dict(
+            t=[avg(acc.get(L, {}).get("t", [])) for L in range(1, nLaps + 1)],
+            a=[avg(acc.get(L, {}).get("a", [])) for L in range(1, nLaps + 1)],
+            h=[avg(acc.get(L, {}).get("h", [])) for L in range(1, nLaps + 1)],
+            r=[acc.get(L, {}).get("r", 0) for L in range(1, nLaps + 1)])
+    return stints, overtakes, weather
 
 
 def main():
@@ -109,7 +130,7 @@ def main():
     num2code = {int(d["num"]): d["code"] for d in f1["drivers"] if d.get("num")}
     cals = {c["r"]: c for c in f1["calendar"]}
 
-    out = json.load(open(OUT)) if os.path.exists(OUT) else {"meta": {}, "stints": {}, "overtakes": {}}
+    out = json.load(open(OUT)) if os.path.exists(OUT) else {"meta": {}, "stints": {}, "overtakes": {}, "weather": {}}
     ses = api("sessions", year=YEAR, session_name="Race") or []
     by_date = {str(s.get("date_start", ""))[:10]: s for s in ses}
     time.sleep(3)
@@ -120,7 +141,7 @@ def main():
         s = by_date.get(cal["date"])
         if not s:
             print("  r%-3d %-16s no OpenF1 session" % (rnd, cal["locality"])); continue
-        stints, ov = build_round(rnd, cal, num2code, s["session_key"])
+        stints, ov, wx = build_round(rnd, cal, num2code, s["session_key"])
         if stints is None:
             print("  r%-3d %-16s fetch failed - left alone" % (rnd, cal["locality"])); continue
         top = next(iter(ov["by"].items()), ("-", 0))
@@ -130,8 +151,13 @@ def main():
                  top[0], top[1], topd[0], topd[1]))
         out["stints"][str(rnd)] = stints
         out["overtakes"][str(rnd)] = ov
+        if wx:
+            out.setdefault("weather", {})[str(rnd)] = wx
+            rl = sum(wx["r"]); tt = [x for x in wx["t"] if x is not None]
+            print("        weather: track %d-%d°C%s" % (min(tt), max(tt),
+                  (", rain on %d lap%s" % (rl, "" if rl == 1 else "s")) if rl else ", dry"))
 
-    out["meta"] = dict(season=YEAR, kind="per-race tyre stints + overtake summaries (OpenF1)",
+    out["meta"] = dict(season=YEAR, kind="per-race tyre stints, overtake summaries and per-lap weather (OpenF1)",
                        throughRound=max(int(k) for k in out["stints"]) if out["stints"] else 0,
                        note="overtake totals exclude lap 1 and post-red-flag standing restarts")
     if not do:

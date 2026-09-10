@@ -558,11 +558,18 @@ button{font-family:inherit}
         font-weight:700;color:#0b0d12;min-width:0;border-right:1px solid rgba(6,8,12,.55)}
 .st-seg:last-child{border-right:0}
 .st-seg.dark{color:#f2f5f9}
-.st-legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:2px 0 10px 72px;
+.st-legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:2px 0 8px 80px;
            font-size:10px;color:var(--muted-2)}
 .st-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:-1px}
-.st-axis{display:flex;justify-content:space-between;margin:6px 0 0 72px;font-size:9px;color:var(--muted-2)}
-.st-note{margin:9px 0 0 72px;font-size:10px;color:var(--muted-2);line-height:1.5}
+.st-wx{position:relative;margin:0 0 7px 80px;height:30px;border-radius:4px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(150,166,205,.07),rgba(150,166,205,.02))}
+.st-wx svg{position:absolute;inset:0;width:100%;height:100%}
+.st-wx-cap{position:absolute;left:6px;top:3px;z-index:1;font-size:9px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--muted-2);pointer-events:none}
+.st-wx-hi,.st-wx-lo{position:absolute;right:6px;font-size:8.5px;color:var(--muted-2);pointer-events:none}
+.st-wx-hi{top:2px} .st-wx-lo{bottom:2px}
+.st-axis{display:flex;justify-content:space-between;margin:6px 0 0 80px;font-size:9px;color:var(--muted-2)}
+.st-note{margin:9px 0 0 80px;font-size:10px;color:var(--muted-2);line-height:1.5}
 .wall{display:grid;gap:2px;width:100%;height:100%;min-height:0}
 .wcell{border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;writing-mode:vertical-rl;text-orientation:upright;font-size:7px;font-weight:800;line-height:1;letter-spacing:-1.5px;transition:opacity .12s,box-shadow .12s}
 .wcell:hover{box-shadow:0 0 0 1.5px #fff}
@@ -1003,6 +1010,7 @@ const TYRE={S:{n:'Soft',c:'#ee3d3d'},M:{n:'Medium',c:'#f2c53d'},H:{n:'Hard',c:'#
 const tyreCol = k => (TYRE[k]||{}).c||'#8a8f98';
 const stintsOf = r => (EXTRAS&&EXTRAS.stints&&EXTRAS.stints[r])||null;
 const ovtOf    = r => (EXTRAS&&EXTRAS.overtakes&&EXTRAS.overtakes[r])||null;
+const wxOf     = r => (EXTRAS&&EXTRAS.weather&&EXTRAS.weather[r])||null;
 const stintSeq = (r,code) => ((stintsOf(r)||{})[code]||[]).map(x=>x[0]);
 const D = DATA.drivers, C = DATA.constructors;
 // weekend in progress: only while its round is still ahead of the last completed one
@@ -1967,6 +1975,36 @@ function updateSocialMeta(){ try{
   socMeta('agwas:cta', s.name+' \u2014 Full interactive F1 experience below');
   socMeta('agwas:tags', 'f1 dataviz '+s.tag);
   socMeta('agwas:bg', s.bg); }catch(e){} }
+// Track temperature and rain across the race, on the strategy chart's own lap axis so a
+// stint can be read against the conditions that produced it. Rain is what tyre choice
+// actually turns on, so wet laps are shaded rather than left to the temperature line.
+function stratWeather(rnd,nL){
+  const w=wxOf(rnd); if(!w||!w.t) return '';
+  const t=w.t.slice(0,nL), rain=(w.r||[]).slice(0,nL), air=(w.a||[]).filter(x=>x!=null);
+  const known=t.filter(x=>x!=null); if(known.length<2) return '';
+  const lo=Math.min(...known), hi=Math.max(...known), span=Math.max(1,hi-lo);
+  const y=v=>92-((v-lo)/span)*74;                       // leave headroom top and bottom
+  let d='',open=false;
+  t.forEach((v,i)=>{ if(v==null){open=false;return;} const X=i+.5;
+    d+=(open?' L ':' M ')+X.toFixed(2)+' '+y(v).toFixed(2); open=true; });
+  const wet=[]; let st=null;
+  rain.forEach((v,i)=>{ if(v&&st===null)st=i; if((!v||i===nL-1)&&st!==null){ wet.push([st+1,(v?i+1:i)]); st=null; } });
+  const bands=wet.map(([a,b])=>`<rect x="${a-1}" y="0" width="${b-a+1}" height="100"
+      fill="rgba(74,150,225,.30)"><title>Rain · laps ${a}–${b}</title></rect>`).join('');
+  // Zandvoort's rain came in nine separate spells, so listing them ran off the caption:
+  // give the count here and leave the where to the shaded bands and their tooltips.
+  const nWet=rain.reduce((a,v)=>a+(v?1:0),0);
+  const cap=`Track ${lo}–${hi}°C`
+    +(air.length?` · air ${Math.min(...air)}–${Math.max(...air)}°C`:'')
+    +(nWet?` · rain on ${nWet} lap${nWet===1?'':'s'}`:' · dry');
+  return `<div class="st-wx"><div class="st-wx-cap">${cap}</div>
+    <svg viewBox="0 0 ${nL} 100" preserveAspectRatio="none" aria-hidden="true">
+      ${bands}
+      <path d="${d}" fill="none" stroke="#f0894a" stroke-width="1.5" vector-effect="non-scaling-stroke"
+        stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+    <span class="st-wx-hi">${hi}°</span><span class="st-wx-lo">${lo}°</span></div>`;
+}
 // Tyre strategy: one bar per driver in finishing order, a segment per stint. Widths are
 // percentages of race distance, so it lines up with the lap axis underneath.
 function stratChart(r){
@@ -1990,7 +2028,7 @@ function stratChart(r){
   }).join('');
   const legend=[...used].sort().map(k=>`<span><i style="background:${tyreCol(k)}"></i>${(TYRE[k]||{}).n||k}</span>`).join('');
   const mid=Math.round(nL/2);
-  return `<div class="st-legend">${legend}</div>${rows}
+  return `<div class="st-legend">${legend}</div>${stratWeather(r.r,nL)}${rows}
     <div class="st-axis"><span>Lap 1</span><span>${mid}</span><span>${nL}</span></div>
     <div class="st-note">Stint lengths from the tyre fitted, so a lap under red flag or safety car
       counts the same as a racing lap. Numbers are laps on that set.</div>`;
