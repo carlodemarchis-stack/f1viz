@@ -1,1 +1,56 @@
-{}
+{
+ "meta": {
+  "season": 2026,
+  "round": 14,
+  "updated": "2026-09-11T08:08:38Z"
+ },
+ "round": 14,
+ "gp": "Spanish Grand Prix",
+ "full": "Gran Premio de España",
+ "short": "Madrid",
+ "flag": "🇪🇸",
+ "country": "Spain",
+ "circuit": "Madring",
+ "locality": "Madrid",
+ "date": "2026-09-13",
+ "laps": 57,
+ "length": "5.474",
+ "distance": "312.018",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-09-11T11:30:00Z",
+   "end": "2026-09-11T12:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp2",
+   "name": "Practice 2",
+   "start": "2026-09-11T15:00:00Z",
+   "end": "2026-09-11T16:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp3",
+   "name": "Practice 3",
+   "start": "2026-09-12T10:30:00Z",
+   "end": "2026-09-12T11:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-09-12T14:00:00Z",
+   "end": "2026-09-12T15:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-09-13T13:00:00Z",
+   "end": "2026-09-13T15:00:00+00:00",
+   "results": []
+  }
+ ]
+}

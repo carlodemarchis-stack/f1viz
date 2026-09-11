@@ -954,7 +954,7 @@ button{font-family:inherit}
       <button data-mode="constructors">Constructors</button>
       <button data-mode="races">Races</button>
     </div>
-    <button class="racenote" id="racenote" type="button">This weekend is Monza! Click here to check the latest results.</button>
+    <button class="racenote" id="racenote" type="button" hidden></button>
     <div class="ctx"><b id="ctxA">Drivers' Championship</b><br><span id="ctxB"></span></div>
   </header>
 
@@ -2365,7 +2365,10 @@ function setMode(m){ if(m===mode)return; setPlay(false); gotoMode(m,false); }
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 // yellow top-bar note → jump to the weekend-in-progress card (hidden once the round has been applied)
 (()=>{ const n=document.getElementById('racenote'); if(!n)return;
-  if(!weekendLive()) n.style.display='none'; else n.onclick=()=>goLive(); })();
+  if(!weekendLive()){ n.style.display='none'; return; }
+  // named from the live round, not hardcoded — it said "Monza" all the way to Madrid
+  n.textContent=`This weekend is ${LIVE.locality||LIVE.short||LIVE.gp}! Click here to check the latest results.`;
+  n.hidden=false; n.onclick=()=>goLive(); })();
 
 /* autoplay */
 function setPlay(p){ playing=p; clearInterval(timer);
