@@ -546,6 +546,9 @@ button{font-family:inherit}
 .gp .tyr{display:flex;gap:2px;justify-content:flex-end;align-items:center}
 .gp .tyr i{width:6px;height:6px;border-radius:50%;display:block}
 .gp .tyr em{color:var(--muted-2);font-style:normal}
+.lv-you{text-decoration:none;color:var(--muted-2);font-weight:600;margin-left:9px;
+  padding-left:9px;border-left:1px solid var(--line-2)}
+.lv-schnote{margin:7px 2px 0;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2)}
 .rc-tyres{display:inline-flex;align-items:center;gap:3px}
 .rc-tyres i{width:10px;height:10px;border-radius:50%;display:inline-block}
 .rc-tyres u{text-decoration:none;color:var(--muted-2);font-size:9px}
@@ -1425,8 +1428,20 @@ function lvState(sessions){                    // done / live / next / ahead, fr
     return {...s, k, st};
   });
 }
-const lvDay=ms=>new Date(ms).toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});
-const lvTime=ms=>new Date(ms).toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+// A weekend schedule is published at the circuit, and that is how people talk about it —
+// "quali at four". Rendered in the viewer's own zone it drifts somewhere useless the moment
+// they travel (a laptop on AEST turned Madrid qualifying into "Sun 00:00"). So the circuit's
+// IANA zone, carried on the payload, is the primary; the viewer's own time rides alongside
+// only when it actually differs.
+const lvDay=(ms,tz)=>new Date(ms).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',timeZone:tz||undefined});
+const lvTime=(ms,tz)=>new Date(ms).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:tz||undefined});
+// Compare the rendered time, not the zone name: Europe/Amsterdam and Europe/Madrid are
+// different zones that both read CEST, and printing "13:30 13:30" helps nobody.
+const lvSame=(ms,tz)=>lvTime(ms,tz)===lvTime(ms)&&lvDay(ms,tz)===lvDay(ms);
+const lvYours=(ms,tz)=>lvSame(ms,tz)?'':(lvDay(ms,tz)===lvDay(ms)?lvTime(ms):lvDay(ms)+' · '+lvTime(ms));
+const lvZone=(ms,tz)=>{ try{
+  return new Intl.DateTimeFormat('en-GB',{timeZone:tz||undefined,timeZoneName:'short'})
+    .formatToParts(new Date(ms)).find(p=>p.type==='timeZoneName').value; }catch(e){ return ''; } };
 function liveCard(){
   const L=wkCur||LIVE, ses=lvState(L.sessions||[]);
   const anyLive=ses.some(s=>s.k==='live');
@@ -1472,7 +1487,10 @@ function liveCard(){
       <div class="lv-stats">${stat(L.laps,'Laps')}${stat(L.length?L.length+' km':'','Length')}${stat(L.distance?(+L.distance).toFixed(1)+' km':'','Distance')}</div>
       <div class="lv-sched">${ses.map(s=>{
         const tag=s.k==='done'?'<span class="lv-tag d">Done</span>':s.k==='live'?'<span class="lv-tag l">Live</span>':s.k==='next'?'<span class="lv-tag n">Next</span>':'<span class="lv-tag w">To come</span>';
-        return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st)} · ${lvTime(s.st)}</em>${tag}</div>`;}).join('')}</div>
+        const yours=lvYours(s.st,L.tz);
+        return `<div class="lv-ses ${s.k==='live'?'now':s.k}"><b>${s.name}</b><em>${lvDay(s.st,L.tz)} · ${lvTime(s.st,L.tz)}${
+          yours?`<u class="lv-you" title="Your local time">${yours}</u>`:''}</em>${tag}</div>`;}).join('')}
+        ${ses.some(s=>!lvSame(s.st,L.tz))?`<div class="lv-schnote">Circuit time (${lvZone(ses[0].st,L.tz)}) · yours (${lvZone(ses[0].st)})</div>`:''}</div>
     </div>`}
     <div class="panel raceres">
       <div class="rc-view">${body}</div>

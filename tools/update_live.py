@@ -37,6 +37,21 @@ OPENF1_NAME = {"fp1": "Practice 1", "fp2": "Practice 2", "fp3": "Practice 3",
 
 # f1.json['circuits'] only covers rounds already run, so upcoming tracks need a fallback
 # (official laps + length; distance = laps * length). Values cross-checked on formula1.com.
+# Session times come from jolpica in UTC. The card shows them at the CIRCUIT, which is how
+# a race weekend is actually published and talked about - rendering them in the viewer's own
+# zone turned qualifying into "Sun 00:00" the moment the laptop moved to Australia. IANA
+# names, not fixed offsets, so DST is handled for us. Keyed by locality: three US rounds.
+CIRCUIT_TZ = {
+    "Melbourne": "Australia/Melbourne", "Shanghai": "Asia/Shanghai", "Suzuka": "Asia/Tokyo",
+    "Miami": "America/New_York", "Montreal": "America/Toronto", "Monte Carlo": "Europe/Monaco",
+    "Barcelona": "Europe/Madrid", "Spielberg": "Europe/Vienna", "Silverstone": "Europe/London",
+    "Spa": "Europe/Brussels", "Budapest": "Europe/Budapest", "Zandvoort": "Europe/Amsterdam",
+    "Monza": "Europe/Rome", "Madrid": "Europe/Madrid", "Baku": "Asia/Baku",
+    "Kuala Lumpur": "Asia/Kuala_Lumpur", "Marina Bay": "Asia/Singapore", "Austin": "America/Chicago",
+    "Mexico City": "America/Mexico_City", "S\u00e3o Paulo": "America/Sao_Paulo",
+    "Las Vegas": "America/Los_Angeles", "Lusail": "Asia/Qatar", "Abu Dhabi": "Asia/Dubai",
+}
+
 CIRCUIT_INFO = {
     "monza":       {"laps": 53, "length": 5.793, "distance": 306.720},
     "madring":     {"laps": 57, "length": 5.474},
@@ -315,6 +330,8 @@ def main():
         "circuit": jr.get("Circuit", {}).get("circuitName") or cal.get("circuit"),
         "locality": (jr.get("Circuit", {}).get("Location", {}) or {}).get("locality") or cal.get("locality"),
         "date": jr.get("date"),
+        "tz": CIRCUIT_TZ.get((jr.get("Circuit", {}).get("Location", {}) or {}).get("locality")
+                             or cal.get("locality") or ""),
         "laps": circ.get("laps"),
         "length": circ.get("length"),
         "distance": circ.get("distance"),
