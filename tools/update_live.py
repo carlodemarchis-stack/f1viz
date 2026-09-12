@@ -166,15 +166,27 @@ def fmt_lap(sec):
     return ("%d:%06.3f" % (int(m), s)) if m >= 1 else ("%.3f" % s)
 
 
-def best_duration(d):
-    """Practice gives a scalar; qualifying gives [Q1,Q2,Q3].
+def quali_time(segs, pos):
+    """The time a driver was CLASSIFIED on: the segment they were eliminated in.
 
-    For qualifying the time that MATTERS is the LAST segment the driver ran, not their
-    outright best: a driver can be quicker in Q2 than Q3 and still be classified on the
-    Q3 lap (Antonelli, Monza 2026 - Q2 1:21.882, Q3 1:22.093, classified P7)."""
+    P1-10 are ranked on Q3, P11-15 on Q2, the rest on Q1 - which is why this cannot be the
+    driver's outright best (Antonelli, Monza 2026: Q2 1:21.882 beat the Q3 1:22.093 he
+    actually qualified on) and cannot simply be the last segment either (Albon, Madrid
+    2026: P16 with a Q2 lap 0.2s slower than his Q1, so "last run" ranked him behind the
+    P17 car and the gaps chart came out non-monotonic). Falls back to the last segment run
+    when the band is empty, e.g. a driver who reached Q3 but set no time there."""
+    vals = [x if isinstance(x, (int, float)) else None for x in (list(segs) + [None, None, None])[:3]]
+    band = vals[2] if pos and pos <= 10 else (vals[1] if pos and pos <= 15 else vals[0])
+    if band:
+        return band
+    run = [x for x in vals if x]
+    return run[-1] if run else None
+
+
+def best_duration(d, pos=None):
+    """Practice gives a scalar; qualifying gives [Q1,Q2,Q3] -> quali_time()."""
     if isinstance(d, list):
-        vals = [x for x in d if isinstance(x, (int, float))]
-        return vals[-1] if vals else None
+        return quali_time(d, pos)
     return d if isinstance(d, (int, float)) else None
 
 
@@ -225,10 +237,10 @@ def f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col):
         code_m = re.search(r"([A-Z]{3})\s*$", get("drv"))
         code = code_m.group(1) if code_m else (get("drv") or "")[:3].upper()
         fd = bynum.get(num)
-        # qualifying: best of Q1/Q2/Q3; practice: the single Time/Gap column
+        # qualifying: the segment the driver was classified on; practice: the Time/Gap column
         segs = [parse_clock(get(q)) for q in ("q1", "q2", "q3")] if ci["q1"] is not None else []
         if segs and any(segs):
-            best = [x for x in segs if x][-1]        # last segment run decides the position
+            best = quali_time(segs, pos)
         else:
             v = parse_clock(get("time"))
             if v is None:
@@ -413,7 +425,7 @@ def main():
             code = (fd or {}).get("code") or od.get("name_acronym") or str(n)
             tid = match_team(od.get("team_name"), teamid) or (fd or {}).get("teamId")
             col = tid2col.get(tid) or (fd or {}).get("color") or ("#" + od["team_colour"] if od.get("team_colour") else "#888")
-            best = best_duration(r.get("duration"))
+            best = best_duration(r.get("duration"), pos)   # qualifying: ranked on the elimination segment
             out.append({
                 "_best": best,
                 "pos": pos,
