@@ -418,7 +418,15 @@ button{font-family:inherit}
 .lvrow .lvt{font-weight:700;font-variant-numeric:tabular-nums}
 .lvrow .lvg{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;min-width:62px;text-align:right}
 .lvrow .lvl{text-align:right;color:var(--muted-2);font-variant-numeric:tabular-nums;font-size:12px}
-@media (orientation:portrait){.lvhead,.lvrow{grid-template-columns:28px 1fr auto auto;}.lvrow .lvl,.lvhead .h-lvl{display:none}}
+.lvhead.q,.lvrow.q{grid-template-columns:34px 1fr 74px 74px 74px auto 52px}
+.lvrow .lvq{font-variant-numeric:tabular-nums;text-align:right;color:var(--muted);font-size:12px}
+.lvrow .lvq.best{color:#fff;font-weight:700}          /* the driver's quickest of the three */
+.lvrow .lvq i{font-style:normal;color:var(--line-2)}
+.lvrow.q .lvt,.lvhead.q .h-lvt{display:none}          /* the single time is the narrow-screen fallback */
+@media (orientation:portrait){.lvhead,.lvrow{grid-template-columns:28px 1fr auto auto;}.lvrow .lvl,.lvhead .h-lvl{display:none}
+  .lvhead.q,.lvrow.q{grid-template-columns:28px 1fr auto auto}
+  .lvrow.q .lvq,.lvhead.q span:nth-child(4),.lvhead.q span:nth-child(5),.lvhead.q span:nth-child(6){display:none}
+  .lvrow.q .lvt,.lvhead.q .h-lvt{display:block}}
 /* ---- qualifying grid: cars on track, spaced by their real gap to pole ---- */
 .card.wkcard{display:flex;flex-direction:column;gap:10px;max-width:none}
 .wk-head{display:flex;align-items:center;gap:12px;flex:0 0 auto;padding:0 2px}
@@ -1455,14 +1463,23 @@ function liveCard(){
   if(qs) tabs+=`<button class="rc-tab${sel==='gaps'?' on':''}" data-ls="gaps">Gaps</button>`;
   if((L.grid||[]).length) tabs+=`<button class="rc-tab${sel==='sgrid'?' on':''}" data-ls="sgrid">Grid</button>`;
   const cur=(sel==='gaps'||sel==='sgrid')?null:ses.find(s=>s.key===sel);
+  const segCols=!!(cur&&cur.results&&cur.results.some(r=>(r.seg||[]).some(Boolean)));   // qualifying only
   const body = sel==='sgrid' ? startGridHTML(L) : sel==='gaps' ? qualiGapsHTML(qs, L) : cur&&cur.results.length ? `
-    <div class="lvhead"><span>Pos</span><span>Driver</span><span>Time</span><span>Gap</span><span class="h-lvl">Laps</span></div>
-    <div class="rc-cls">${cur.results.map(r=>`<div class="lvrow${r.pos===1?' p1':''}" style="--dc:${r.col}">
+    <div class="lvhead${segCols?' q':''}"><span>Pos</span><span>Driver</span>${segCols
+        ?'<span class="h-lvt">Time</span><span>Q1</span><span>Q2</span><span>Q3</span>'
+        :'<span>Time</span>'}<span>Gap</span><span class="h-lvl">Laps</span></div>
+    <div class="rc-cls">${cur.results.map(r=>{
+      // the driver's own quickest of the three — not the session best, and not necessarily
+      // the lap they qualified on (that is r.time, the segment they were eliminated in)
+      const sg=segCols?(r.seg||[]):[], sv=sg.map(t=>t?clockS(t):null);
+      const bi=sv.reduce((b,v,i)=>(v!=null&&(b<0||v<sv[b]))?i:b,-1);
+      return `<div class="lvrow${segCols?' q':''}${r.pos===1?' p1':''}" style="--dc:${r.col}">
       <span class="lvp">${r.pos}</span>
       <span class="lvd"><b>${r.code}</b><span>${r.name||''}${r.team?' · '+r.team:''}</span>${r.rookie?'<u>Rookie</u>':''}</span>
-      <span class="lvt">${r.time||'—'}</span>
+      <span class="lvt">${r.time||'—'}</span>${segCols?[0,1,2].map(i=>
+        `<span class="lvq${i===bi?' best':''}">${sg[i]||'<i>—</i>'}</span>`).join(''):''}
       <span class="lvg">${r.pos===1?'leader':(r.gap||'—')}</span>
-      <span class="lvl">${r.laps??'—'}</span></div>`).join('')}</div>`
+      <span class="lvl">${r.laps??'—'}</span></div>`;}).join('')}</div>`
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
   const full=(sel==='gaps'||sel==='sgrid');
