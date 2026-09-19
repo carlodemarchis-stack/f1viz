@@ -2411,8 +2411,8 @@ document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.da
 // is right even between our own updates. First practice is two days before the race,
 // which is Friday for a Sunday race and correctly Thursday for a Saturday one (Baku).
 // The POST -> PRE hand-over depends on the gap to the next race, and the two tile exactly:
-//   one-week gap  POST Mon-Wed, PRE from Thursday  (race-3)
-//   longer gap    POST Mon-Sat, PRE from Sunday    (race-7)
+//   one-week gap  POST Mon-Wed, PRE from Thursday   (race day + 3)
+//   longer gap    POST Mon-Fri, PRE from Saturday   (race day + 5)
 function raceNote(now){
   const cal=DATA.calendar||[]; if(!cal.length) return null;
   const mid=d=>{const x=new Date(d); x.setHours(0,0,0,0); return x;};
@@ -2427,7 +2427,7 @@ function raceNote(now){
   if(days(today,fp1)>=0)  return {k:'live',c:next,t:`This weekend is ${next.locality||next.short}! Click here to check the latest results.`};
   if(prev){
     const pd=mid(new Date(prev.date+'T00:00:00')), gap=days(race,pd);
-    const postEnd=new Date(pd); postEnd.setDate(postEnd.getDate()+(gap<=7?3:6));
+    const postEnd=new Date(pd); postEnd.setDate(postEnd.getDate()+(gap<=7?3:5));
     if(days(today,postEnd)<=0) return {k:'post',c:prev,t:`The ${prev.short} GP is done — results, radio and the recap are in. Click here.`};
   }
   const d=days(fp1,today);
