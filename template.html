@@ -1483,8 +1483,15 @@ function liveCard(){
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
   const full=(sel==='gaps'||sel==='sgrid');
+  // the schedule goes up days before anything runs, so say which it is: a weekend that has
+  // not started yet is not "in progress"
+  const lvStarted=(()=>{ try{ const r=(DATA.calendar||[]).find(c=>c.r===L.round); if(!r) return true;
+    const fp1=new Date(r.date+'T00:00:00'); fp1.setDate(fp1.getDate()-2);
+    const t=new Date(); t.setHours(0,0,0,0); return t>=fp1; }catch(e){ return true; } })();
+  const upcoming = L.round>DATA.meta.round && !lvStarted;
   const badge = anyLive?'<span class="lv-live"><i></i>Session live</span>'
-    :`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${(L.round>DATA.meta.round)?'Weekend in progress':'Practice &amp; qualifying'}</span>`;
+    :`<span class="lv-live" style="background:rgba(120,220,170,.13);border-color:rgba(120,220,170,.4);color:#6fd6a6"><i style="background:#6fd6a6;animation:none"></i>${
+        upcoming?'Up next':(L.round>DATA.meta.round)?'Weekend in progress':'Practice &amp; qualifying'}</span>`;
   // the tab bar lives on the card, not inside a panel, so it holds its place when the
   // gaps/grid views take the full width and the left panel drops out
   return `<div class="card enter wkcard" style="--c:${DATA.meta.color||'#00D7B6'}">
@@ -2399,30 +2406,47 @@ function prev(){ if(idx<=0) gotoMode(MODES[(MODES.indexOf(mode)+2)%3],true); els
 function setMode(m){ if(m===mode)return; setPlay(false); gotoMode(m,false); }
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 // yellow top-bar note → jump to the weekend-in-progress card (hidden once the round has been applied)
-(()=>{ const n=document.getElementById('racenote'); if(!n)return;
-  if(weekendLive()){
-    // named from the live round, not hardcoded — it said "Monza" all the way to Madrid
-    n.textContent=`This weekend is ${LIVE.locality||LIVE.short||LIVE.gp}! Click here to check the latest results.`;
-    n.hidden=false; n.onclick=()=>goLive(); return;
-  }
-  // Between rounds: count down to when the cars next run, which is first practice, not the
-  // race. That is two days before race day — Friday for a Sunday race, and correctly
-  // Thursday for a Saturday one like Baku, where practice shifts forward with it.
-  const nx=(DATA.calendar||[]).find(c=>c.r>DATA.meta.round);
-  if(!nx) return;                                   // season over, nothing to count to
-  const midnight=d=>{const x=new Date(d);x.setHours(0,0,0,0);return x;};
-  const race=new Date(nx.date+'T00:00:00');
+// ---- the yellow note: one line that follows the season ---------------------
+// Driven by the calendar rather than by whether live.json happens to be populated, so it
+// is right even between our own updates. First practice is two days before the race,
+// which is Friday for a Sunday race and correctly Thursday for a Saturday one (Baku).
+// The POST -> PRE hand-over depends on the gap to the next race, and the two tile exactly:
+//   one-week gap  POST Mon-Wed, PRE from Thursday  (race-3)
+//   longer gap    POST Mon-Sat, PRE from Sunday    (race-7)
+function raceNote(now){
+  const cal=DATA.calendar||[]; if(!cal.length) return null;
+  const mid=d=>{const x=new Date(d); x.setHours(0,0,0,0); return x;};
+  const days=(a,b)=>Math.round((mid(a)-mid(b))/86400000);
+  const today=mid(now||new Date());
+  const next=cal.find(c=>c.r>DATA.meta.round);
+  const prev=[...cal].filter(c=>c.r<=DATA.meta.round).pop();
+  if(!next) return prev?{k:'post',c:prev,t:`That's the 2026 season. Relive the ${prev.short} GP, and every round before it, here.`}:null;
+  const race=mid(new Date(next.date+'T00:00:00'));
   const fp1=new Date(race); fp1.setDate(fp1.getDate()-2);
-  const days=Math.round((midnight(fp1)-midnight(new Date()))/86400000);
-  if(days<0) return;                                // weekend already under way; live.json will take over
-  const when=days===0?'today':days===1?'tomorrow':`in ${days} days`;
-  n.textContent=`Enjoy the Formula 1 season here, and come back for the ${nx.short} GP ${when}.`;
-  n.hidden=false; n.onclick=()=>{ setPlay(false);
+  if(days(today,race)>=0) return {k:'race',c:next,t:`It's race day at ${next.locality||next.short}! Click here to follow it.`};
+  if(days(today,fp1)>=0)  return {k:'live',c:next,t:`This weekend is ${next.locality||next.short}! Click here to check the latest results.`};
+  if(prev){
+    const pd=mid(new Date(prev.date+'T00:00:00')), gap=days(race,pd);
+    const postEnd=new Date(pd); postEnd.setDate(postEnd.getDate()+(gap<=7?3:6));
+    if(days(today,postEnd)<=0) return {k:'post',c:prev,t:`The ${prev.short} GP is done — results, radio and the recap are in. Click here.`};
+  }
+  const d=days(fp1,today);
+  return {k:'pre',c:next,t:`Enjoy the Formula 1 season here, and come back for the ${next.short} GP ${d===0?'today':d===1?'tomorrow':'in '+d+' days'}.`};
+}
+(()=>{ const n=document.getElementById('racenote'); if(!n)return;
+  const st=raceNote(); if(!st) return;
+  n.textContent=st.t; n.hidden=false;
+  n.onclick=()=>{ setPlay(false);
     if(mode!=='races'){ mode='races';
       document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='races'));
       $('#ctxA').textContent=CTXA.races; }
-    idx=DATA.races.length; render(); };    // the season map, where the rest of the calendar is
-  })();
+    // always the GP the note is about: its own card once raced, the live weekend while it
+    // runs, otherwise the season map, which is where an upcoming round is shown
+    if(hasLive() && LIVE.round===st.c.r) return goLive();
+    const i=DATA.races.findIndex(x=>x.r===st.c.r);
+    idx = i>=0 ? i : DATA.races.length;
+    render(); };
+})();
 
 /* autoplay */
 function setPlay(p){ playing=p; clearInterval(timer);

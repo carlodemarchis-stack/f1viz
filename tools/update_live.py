@@ -55,7 +55,7 @@ CIRCUIT_TZ = {
 CIRCUIT_INFO = {
     "monza":       {"laps": 53, "length": 5.793, "distance": 306.720},
     "madring":     {"laps": 57, "length": 5.474},
-    "baku":        {"laps": 51, "length": 6.003},
+    "baku":        {"laps": 51, "length": 6.003, "distance": 306.049},   # official; 51x6.003 rounds up
     "sepang":      {"laps": 56, "length": 5.543},
     "marina_bay":  {"laps": 62, "length": 4.940},
     "americas":    {"laps": 56, "length": 5.513},
