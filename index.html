@@ -1985,7 +1985,9 @@ function worldMapCard(){
   // path would behead him (Silverstone and Monza). Shrink to fit instead, so the whole
   // driver shows and his feet stay on the dot.
   const figure=(x,y,r,plc,minY)=>{ const sl=winSlug[r]; if(!sl) return '';
-    const h=Math.min(FH, Math.max(13, y-minY-1.5)), w=h*RATIO;
+    // minY is the edge that would crop him; the inset passes null because its markers are
+    // drawn outside the clip and are free to stand out over the frame
+    const h=minY==null?FH:Math.min(FH, Math.max(13, y-minY-1.5)), w=h*RATIO;
     plc.push({x:x-w/2-1,y:y-h-1,w:w+2,h:h+1});
     return `<image class="wfig" href="img/winners/${sl}.png${IMGV}" x="${(x-w/2).toFixed(2)}" y="${(y-h).toFixed(2)}"
       width="${w.toFixed(2)}" height="${h.toFixed(2)}" preserveAspectRatio="xMidYMax meet"/>`; };
@@ -2018,10 +2020,10 @@ function worldMapCard(){
   // Two passes. Every figure and code box is reserved before any label is placed -
   // otherwise a label put down for an early round gets covered by the driver drawn for a
   // later one, which is how Monza's winner ended up standing on Monaco's number.
-  const layout=(items,plc,toXY,minX,maxX,minY,maxY)=>{
+  const layout=(items,plc,toXY,minX,maxX,minY,maxY,labMinY)=>{
     const pre=items.map(g=>{ const [x,y]=toXY(g), done=g.r<=DATA.meta.round;
       return {g,x,y,done, marks: done ? figure(x,y,g.r,plc,minY)+codeMark(x,y,g.r,plc) : ''}; });
-    return pre.map(p=>`${gtag(p.g)}${p.marks}${dot(p.x,p.y,'R'+p.g.r,p.done,plc,minX,maxX,minY,maxY)}</g>`).join('');
+    return pre.map(p=>`${gtag(p.g)}${p.marks}${dot(p.x,p.y,'R'+p.g.r,p.done,plc,minX,maxX,labMinY!=null?labMinY:minY,maxY)}</g>`).join('');
   };
   // ---- main map (Europe rounds drawn as bare dots; labelled in the inset) ----
   const placed=[{x:IB.x,y:IB.y,w:IB.w,h:IB.h}];  // reserve inset area so labels avoid it
@@ -2037,16 +2039,17 @@ function worldMapCard(){
   const iplaced=[{x:IB.x,y:IB.y,w:66,h:22}];     // reserve title corner
   const euItems=layout(DATA.geo.filter(g=>{const[x,y]=proj(g);return inEU(x,y);}),
     iplaced, g=>{const[x,y]=proj(g);return [zx(x),zy(y)];},
-    IB.x+3, IB.x+IB.w-3, IB.y+3, IB.y+IB.h-3);
+    IB.x+3, IB.x+IB.w-3, null, IB.y+IB.h-3, IB.y+3);
   const T=`translate(${(IB.x+padx).toFixed(2)},${(IB.y+pady).toFixed(2)}) scale(${s.toFixed(3)}) translate(${-EU.x0},${-EU.y0})`;
   const inset=`<g class="euinset">
       <rect class="euframe-src" x="${EU.x0}" y="${EU.y0}" width="${EU.x1-EU.x0}" height="${EU.y1-EU.y0}" rx="3"/>
       <line class="eulink" x1="${EU.x1}" y1="${EU.y1}" x2="${IB.x+8}" y2="${IB.y}"/>
       <clipPath id="euclip"><rect x="${IB.x}" y="${IB.y}" width="${IB.w}" height="${IB.h}" rx="8"/></clipPath>
       <rect class="eubg" x="${IB.x}" y="${IB.y}" width="${IB.w}" height="${IB.h}" rx="8"/>
-      <g clip-path="url(#euclip)"><path class="land euland" transform="${T}" d="${DATA.worldPath}"/>${euItems}</g>
+      <g clip-path="url(#euclip)"><path class="land euland" transform="${T}" d="${DATA.worldPath}"/></g>
       <rect class="euborder" x="${IB.x}" y="${IB.y}" width="${IB.w}" height="${IB.h}" rx="8"/>
       <text class="eutitle" x="${IB.x+11}" y="${IB.y+17}">EUROPE</text>
+      ${euItems}
     </g>`;
   return `<div class="card enter"><div class="panel worldcard">
     <h2>Season Map — 2026</h2><div class="gsub">All ${DATA.geo.length} Grands Prix · ${DATA.meta.round} run</div>
