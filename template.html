@@ -1923,7 +1923,7 @@ function worldMapCard(){
     const d=D.find(x=>x.code===r.winner.code); if(d) winSlug[r.r]=d.slug; } });
   // The race winner standing on the dot. Drawn before the label is placed and its box
   // pushed into the same list, so the round number steps aside instead of landing on him.
-  const FH=20, FW=FH*0.27;      // ~34px on a desktop map, where the figure reads as a driver
+  const FH=32, FW=FH*0.27;      // big enough to read as a driver, not just a coloured mark
   const figure=(x,y,r,plc)=>{ const sl=winSlug[r]; if(!sl) return '';
     plc.push({x:x-FW/2-1,y:y-FH-1,w:FW+2,h:FH+1});
     return `<image class="wfig" href="img/winners/${sl}.png${IMGV}" x="${(x-FW/2).toFixed(2)}" y="${(y-FH).toFixed(2)}"
