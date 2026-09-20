@@ -1935,45 +1935,53 @@ function worldMapCard(){
       width="${w.toFixed(2)}" height="${h.toFixed(2)}" preserveAspectRatio="xMidYMax meet"/>`; };
   const gtag=g=>{ const done=g.r<=DATA.meta.round, isNext=g.r===DATA.meta.round+1, c=done&&winColor[g.r];
     return `<g class="geo ${done?'done':'up'}${isNext?' next':''}" data-r="${g.r}"${c?` style="--gc:${c}"`:''}>`; };
-  const dot=(x,y,label,done,plc,minX,maxX,minY,maxY,code)=>{
-    const lw=6+label.length*4.4, lh=9;
-    let extra='';
-    if(code){                                     // winner's three letters, under the dot
-      const cw=6+code.length*4.3, cy=y+9;
-      plc.push({x:x-cw/2,y:cy-5,w:cw,h:9.5});
-      extra=`<text class="gcode" x="${x.toFixed(1)}" y="${(cy+1).toFixed(1)}">${code}</text>`;
-    }
-    // the round number sits to the RIGHT of the dot, and only goes hunting for a free
-    // spot if something is already there
-    const right=[lw/2+6.5, 0];
+  // Text is drawn with a 2.4 outline, so a box that only covers the glyphs lets two
+  // labels sit a hair apart and still touch. Pad for it.
+  const STK=2.6;
+  const tw=t=>8.6+t.length*4.4, th=9+STK;
+  // the winner's three letters, directly under the dot
+  const codeMark=(x,y,r,plc)=>{ const code=winCode[r]; if(!code) return '';
+    const cw=8.6+code.length*4.3, cy=y+9;
+    plc.push({x:x-cw/2,y:cy-5-STK/2,w:cw,h:th});
+    return `<text class="gcode" x="${x.toFixed(1)}" y="${(cy+1).toFixed(1)}">${code}</text>`; };
+  const dot=(x,y,label,done,plc,minX,maxX,minY,maxY)=>{
+    const lw=tw(label), lh=th;
+    // up and to the right at 45 degrees, far enough to clear the driver on the dot; only
+    // if that is taken does it hunt for another spot
+    const off=lw/2+6.5, pref=[off,-off];
     let ch=null;
-    for(const [dx,dy] of [right].concat(cand)){ const box={x:x+dx-lw/2,y:y+dy-lh/2,w:lw,h:lh};
+    for(const [dx,dy] of [pref].concat(cand)){ const box={x:x+dx-lw/2,y:y+dy-lh/2,w:lw,h:lh};
       if(box.x<minX||box.x+lw>maxX||box.y<minY||box.y+lh>maxY) continue;
       if(!plc.some(p=>ov(box,p))){ ch=[dx,dy,box]; break; } }
-    if(!ch) ch=[right[0],0,{x:x+6.5,y:y-lh/2,w:lw,h:lh}];
+    if(!ch) ch=[pref[0],pref[1],{x:x+off-lw/2,y:y-off-lh/2,w:lw,h:lh}];
     plc.push(ch[2]);
     const [dx,dy]=ch, lx=x+dx, ly=y+dy;
     const line=Math.hypot(dx,dy)>13?`<line class="geoline" x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"/>`:'';
-    return `${line}${extra}<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${done?3.1:2.4}"/><text x="${lx.toFixed(1)}" y="${(ly+3).toFixed(1)}">${label}</text>`;
+    return `${line}<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${done?3.1:2.4}"/><text x="${lx.toFixed(1)}" y="${(ly+3).toFixed(1)}">${label}</text>`;
+  };
+  // Two passes. Every figure and code box is reserved before any label is placed -
+  // otherwise a label put down for an early round gets covered by the driver drawn for a
+  // later one, which is how Monza's winner ended up standing on Monaco's number.
+  const layout=(items,plc,toXY,minX,maxX,minY,maxY)=>{
+    const pre=items.map(g=>{ const [x,y]=toXY(g), done=g.r<=DATA.meta.round;
+      return {g,x,y,done, marks: done ? figure(x,y,g.r,plc,minY)+codeMark(x,y,g.r,plc) : ''}; });
+    return pre.map(p=>`${gtag(p.g)}${p.marks}${dot(p.x,p.y,'R'+p.g.r,p.done,plc,minX,maxX,minY,maxY)}</g>`).join('');
   };
   // ---- main map (Europe rounds drawn as bare dots; labelled in the inset) ----
   const placed=[{x:IB.x,y:IB.y,w:IB.w,h:IB.h}];  // reserve inset area so labels avoid it
-  const main=DATA.geo.map(g=>{
+  const euBare=DATA.geo.filter(g=>{const[x,y]=proj(g);return inEU(x,y);}).map(g=>{
     const [x,y]=proj(g), done=g.r<=DATA.meta.round;
-    if(inEU(x,y)) return `${gtag(g)}<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${done?2.7:2.1}"/></g>`;
-    const fig=done?figure(x,y,g.r,placed,TOPc+2):'';
-    return `${gtag(g)}${fig}${dot(x,y,'R'+g.r,done,placed,LEFc+3,RIGc-3,TOPc+2,BOTc-2,done?winCode[g.r]:'')}</g>`;
-  }).join('');
+    return `${gtag(g)}<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${done?2.7:2.1}"/></g>`; }).join('');
+  const main=euBare+layout(DATA.geo.filter(g=>{const[x,y]=proj(g);return !inEU(x,y);}),
+    placed, proj, LEFc+3, RIGc-3, TOPc+2, BOTc-2);
   // ---- Europe inset ----
   const s=Math.min(IB.w/(EU.x1-EU.x0),IB.h/(EU.y1-EU.y0));
   const padx=(IB.w-(EU.x1-EU.x0)*s)/2, pady=(IB.h-(EU.y1-EU.y0)*s)/2;
   const zx=x=>IB.x+padx+(x-EU.x0)*s, zy=y=>IB.y+pady+(y-EU.y0)*s;
   const iplaced=[{x:IB.x,y:IB.y,w:66,h:22}];     // reserve title corner
-  const euItems=DATA.geo.filter(g=>{const[x,y]=proj(g);return inEU(x,y);}).map(g=>{
-    const [x,y]=proj(g), done=g.r<=DATA.meta.round, X=zx(x), Y=zy(y);
-    const fig=done?figure(X,Y,g.r,iplaced,IB.y+3):'';
-    return `${gtag(g)}${fig}${dot(X,Y,'R'+g.r,done,iplaced,IB.x+3,IB.x+IB.w-3,IB.y+3,IB.y+IB.h-3,done?winCode[g.r]:'')}</g>`;
-  }).join('');
+  const euItems=layout(DATA.geo.filter(g=>{const[x,y]=proj(g);return inEU(x,y);}),
+    iplaced, g=>{const[x,y]=proj(g);return [zx(x),zy(y)];},
+    IB.x+3, IB.x+IB.w-3, IB.y+3, IB.y+IB.h-3);
   const T=`translate(${(IB.x+padx).toFixed(2)},${(IB.y+pady).toFixed(2)}) scale(${s.toFixed(3)}) translate(${-EU.x0},${-EU.y0})`;
   const inset=`<g class="euinset">
       <rect class="euframe-src" x="${EU.x0}" y="${EU.y0}" width="${EU.x1-EU.x0}" height="${EU.y1-EU.y0}" rx="3"/>
