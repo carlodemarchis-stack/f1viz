@@ -453,6 +453,9 @@ button{font-family:inherit}
 .lvrow{display:grid;grid-template-columns:34px 1fr auto auto 52px;gap:9px;align-items:center;padding:2px 12px;border-radius:9px;font-size:13px;border-left:3px solid var(--dc,#888);
   flex:1;min-height:0;overflow:hidden}   /* share the panel height like .clsrow so a full 22-car field always fits */
 .lvrow:nth-child(odd){background:rgba(255,255,255,.028)}
+.lvrow.lk{cursor:pointer}
+.lvrow.lk:hover{background:rgba(255,255,255,.075)}
+.lvrow.lk:hover .lvd b{color:#fff}
 .lvrow .lvp{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted-2)}
 .lvrow.p1 .lvp{color:var(--gold)}
 .lvrow .lvd b{font-weight:800;color:color-mix(in srgb,var(--dc,#888) 72%,#fff)}
@@ -1558,7 +1561,9 @@ function liveCard(){
       // the lap they qualified on (that is r.time, the segment they were eliminated in)
       const sg=segCols?(r.seg||[]):[], sv=sg.map(t=>t?clockS(t):null);
       const bi=sv.reduce((b,v,i)=>(v!=null&&(b<0||v<sv[b]))?i:b,-1);
-      return `<div class="lvrow${segCols?' q':''}${r.pos===1?' p1':''}" style="--dc:${r.col}">
+      const known=D.some(d=>d.code===r.code);
+      return `<div class="lvrow${segCols?' q':''}${r.pos===1?' p1':''}${known?' lk':''}"${
+        known?` data-dc="${r.code}" title="Open ${r.name||r.code}'s card"`:''} style="--dc:${r.col}">
       <span class="lvp">${r.pos}</span>
       <span class="lvd"><b>${r.code}</b><span>${r.name||''}${r.team?' · '+r.team:''}</span>${r.rookie?'<u>Rookie</u>':''}</span>
       <span class="lvt">${r.time||'—'}</span>${segCols?[0,1,2].map(i=>
@@ -1803,11 +1808,20 @@ function sgStep(d){
   sgSel=rows[(i+d+rows.length)%rows.length].code;                 // wraps at either end of the grid
   wrap.innerHTML=liveCard(); wireLiveCard();
 }
+function goDriver(code){
+  const i=D.findIndex(d=>d.code===code); if(i<0) return;
+  setPlay(false);
+  if(mode!=='drivers'){ mode='drivers';
+    document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='drivers'));
+    $('#ctxA').textContent=CTXA.drivers; }
+  idx=i; render();
+}
 function wireLiveCard(){
   wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
     b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); lcHash(); }; });
   wrap.querySelectorAll('.sg-slot[data-c]').forEach(el=>{
     el.onclick=()=>{ sgSel=el.dataset.c; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
+  wrap.querySelectorAll('.lvrow[data-dc]').forEach(el=>{ el.onclick=()=>goDriver(el.dataset.dc); });
   const lvHost=wrap.querySelector('#qgrid')||wrap.querySelector('#sgrid');
   if(lvHost){
     setTimeout(relayoutLive,0);
