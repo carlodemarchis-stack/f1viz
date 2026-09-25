@@ -2032,7 +2032,16 @@
    "out": false,
    "rookie": false,
    "qpos": 9,
-   "delta": -13
+   "delta": -13,
+   "pen": [
+    {
+     "k": "pitlane",
+     "n": null,
+     "why": "PU change in parc fermé",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_6_-_pu_elements_changed_under_parc_ferme.pdf"
+    }
+   ]
   }
  ]
 }

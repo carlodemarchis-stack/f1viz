@@ -1754,7 +1754,16 @@
    "out": false,
    "rookie": false,
    "qpos": 3,
-   "delta": -3
+   "delta": -3,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 3,
+     "why": "Impeding LAW",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_81_-_impeding_of_car_30.pdf"
+    }
+   ]
   },
   {
    "pos": 7,
@@ -2001,7 +2010,16 @@
    "out": false,
    "rookie": false,
    "qpos": 7,
-   "delta": -12
+   "delta": -12,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 30,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_12_-_changes_to_pu_elements.pdf"
+    }
+   ]
   },
   {
    "pos": 20,
@@ -2020,7 +2038,16 @@
    "out": false,
    "rookie": false,
    "qpos": 18,
-   "delta": -2
+   "delta": -2,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 20,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_23_-_changes_to_pu_elements.pdf"
+    }
+   ]
   },
   {
    "pos": 21,
@@ -2039,7 +2066,16 @@
    "out": false,
    "rookie": false,
    "qpos": 21,
-   "delta": 0
+   "delta": 0,
+   "pen": [
+    {
+     "k": "pitlane",
+     "n": null,
+     "why": "PU change in parc fermé",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_14_-_pu_elements_changed_during_parc_ferme.pdf"
+    }
+   ]
   },
   {
    "pos": 22,
@@ -2058,7 +2094,23 @@
    "out": false,
    "rookie": false,
    "qpos": 14,
-   "delta": -8
+   "delta": -8,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 35,
+     "why": "PU change",
+     "ses": "Free Practice 3",
+     "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_30_-_change_to_pu_elements.pdf"
+    },
+    {
+     "k": "pitlane",
+     "n": null,
+     "why": "Parc fermé change",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_30_-_changes_made_under_parc_ferme.pdf"
+    }
+   ]
   }
  ]
 }

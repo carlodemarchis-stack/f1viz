@@ -527,6 +527,16 @@ button{font-family:inherit}
 .sg-num{position:absolute;right:0;top:1px;font-size:9px;font-weight:800;color:var(--muted-2);font-variant-numeric:tabular-nums;opacity:.8}
 .sg-car{width:100%;height:auto;display:block;margin-top:2px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
 .sg-slot.pole .sg-pos{color:var(--gold)}
+/* stewards: why a car is not where it qualified (FIA decisions) */
+.sg-pen{display:inline-block;vertical-align:3px;margin-left:3px;padding:1px 3px;border-radius:3px;font-style:normal;
+  font-size:7.5px;font-weight:800;letter-spacing:.04em;line-height:1.1;background:var(--bad);color:#fff}
+.sg-pens{display:flex;flex-wrap:wrap;gap:5px;flex:0 0 auto;margin:6px 0 2px}
+.sg-pens b{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);align-self:center;margin-right:2px}
+.sg-pc{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;padding:3px 8px 3px 6px;border-radius:20px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);border-left:3px solid var(--cc);color:var(--muted);font-family:inherit}
+.sg-pc:hover,.sg-pc.on{color:var(--ink);border-color:color-mix(in srgb,var(--cc) 60%,var(--line))}
+.sg-pc em{font-style:normal;font-weight:800;color:var(--ink)}
+.sg-pc i{font-style:normal;font-weight:800;font-size:9px;padding:1px 4px;border-radius:3px;background:var(--bad);color:#fff}
 .rc-wk{flex:1 1 46%;height:82px;display:flex;align-items:center;gap:10px;padding:0 13px;border-radius:12px;cursor:pointer;
   background:linear-gradient(120deg,color-mix(in srgb,var(--c) 16%,#0a0d14),#0a0d14 70%);
   border:1px solid color-mix(in srgb,var(--c) 34%,var(--line));color:var(--ink);font-family:inherit;text-align:left;
@@ -564,6 +574,9 @@ button{font-family:inherit}
   background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted)}
 .sgd-chip.grid{background:color-mix(in srgb,var(--cc) 26%,transparent);border-color:color-mix(in srgb,var(--cc) 50%,transparent);
   color:color-mix(in srgb,var(--cc) 88%,#fff)}
+.sgd-chip.pen{background:color-mix(in srgb,var(--bad) 22%,transparent);border-color:color-mix(in srgb,var(--bad) 55%,transparent);
+  color:#ffd7d7;text-decoration:none;text-transform:none;letter-spacing:.02em;font-size:10px}
+a.sgd-chip.pen:hover{border-color:var(--bad);color:#fff}
 .sgd-car{grid-column:2;grid-row:2;justify-self:start;width:min(100%,300px);height:auto;opacity:.75;pointer-events:none;margin-bottom:-4px}
 .sgd-ses{display:flex;flex-direction:column;gap:5px;min-width:0;justify-content:center}
 .sgd-row{display:grid;grid-template-columns:46px 34px auto auto 62px minmax(60px,1fr);gap:10px;align-items:center;
@@ -1069,7 +1082,7 @@ const LIVE = {
  "meta": {
   "season": 2026,
   "round": 15,
-  "updated": "2026-09-25T16:11:21Z"
+  "updated": "2026-09-25T19:20:28Z"
  },
  "round": 15,
  "gp": "Azerbaijan Grand Prix",
@@ -2974,7 +2987,16 @@ const LIVE = {
    "out": false,
    "rookie": false,
    "qpos": 9,
-   "delta": -5
+   "delta": -5,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 5,
+     "why": "Yellow flag",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_55_-_failure_to_slow_for_yellow_flags_0.pdf"
+    }
+   ]
   },
   {
    "pos": 15,
@@ -3088,7 +3110,16 @@ const LIVE = {
    "out": false,
    "rookie": false,
    "qpos": 20,
-   "delta": 0
+   "delta": 0,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 3,
+     "why": "Impeding PIA",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_11_-_impeding_car_81.pdf"
+    }
+   ]
   },
   {
    "pos": 21,
@@ -3107,7 +3138,23 @@ const LIVE = {
    "out": false,
    "rookie": false,
    "qpos": 19,
-   "delta": -2
+   "delta": -2,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 25,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_14_-_pu_elements.pdf"
+    },
+    {
+     "k": "grid",
+     "n": 5,
+     "why": "PU change",
+     "ses": "Free Practice 3",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_14_-_pu_element.pdf"
+    }
+   ]
   },
   {
    "pos": 22,
@@ -3126,7 +3173,16 @@ const LIVE = {
    "out": false,
    "rookie": false,
    "qpos": 21,
-   "delta": -1
+   "delta": -1,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 20,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_18_-_pu_elements.pdf"
+    }
+   ]
   }
  ]
 };
@@ -3759,6 +3815,14 @@ function layoutQGrid(){
   gl+=[...axis.querySelectorAll('.qg-tick')].map(t=>`<span class="qg-gl b" style="right:${parseFloat(t.style.right)}px"></span>`).join('');
   if(guides) guides.innerHTML=gl;
 }
+// FIA stewards' decisions attached to a grid row by tools/fetch_penalties.py
+const SESAB={'Free Practice 1':'FP1','Free Practice 2':'FP2','Free Practice 3':'FP3','Qualifying':'Quali',
+  'Sprint Qualifying':'SQ','Sprint':'Sprint','Race':'Race'};
+function penSum(g){
+  const p=g&&g.pen; if(!p||!p.length) return null;
+  const pit=p.some(x=>x.k==='pitlane'), n=p.reduce((s,x)=>s+(x.k==='grid'?(x.n||0):0),0);
+  return {tag:pit?'PIT':(n?('−'+n):'BACK'), why:[...new Set(p.map(x=>x.why))].join(' + ')};
+}
 function startGridHTML(L){
   const rows=(L.grid||[]).slice().sort((a,b)=>a.pos-b.pos);
   if(!rows.length) return `<div class="lv-empty">No starting grid yet.<br>It is published once qualifying is official.</div>`;
@@ -3768,7 +3832,7 @@ function startGridHTML(L){
       <div class="sg-top">
         ${r.slug?`<img class="sg-fig" src="${IMGFULL(r.slug)}" alt="" onerror="this.remove()">`:''}
         <div class="sg-card">
-          <span class="sg-pos">${r.pos}</span>
+          <span class="sg-pos">${r.pos}${penSum(r)?`<em class="sg-pen">${penSum(r).tag}</em>`:''}</span>
           <b class="sg-name">${(r.name||r.code).toUpperCase()}</b>
           <i class="sg-team">${r.team||''}</i>
           <span class="sg-num">${r.num!=null?r.num:''}</span>
@@ -3778,6 +3842,8 @@ function startGridHTML(L){
     </div>`).join('');
   return `<div class="qg sg" id="sgrid" data-n="${rows.length}">
     <div class="qg-hd">Starting grid · after penalties<b>Pole ${rows[0].code}</b></div>
+    ${rows.some(penSum)?`<div class="sg-pens"><b>Penalties</b>${rows.filter(penSum).map(r=>{ const ps=penSum(r);
+      return `<button class="sg-pc${r.code===sel?' on':''}" data-c="${r.code}" style="--cc:${r.col}"><em>${r.code}</em><i>${ps.tag}</i>${ps.why}</button>`; }).join('')}</div>`:''}
     <div class="qg-track">
       <div class="qg-start"></div><div class="qg-startlbl">START</div>
       ${slots}
@@ -3819,6 +3885,8 @@ function sgDetailHTML(code, L){
         <i class="sgd-team">${g.team||''}</i>
         <div class="sgd-chips"><span class="sgd-chip grid">Grid P${g.pos}</span>
           ${g.qpos?`<span class="sgd-chip">Qualified P${g.qpos}</span>`:''}
+          ${(g.pen||[]).map(p=>`<a class="sgd-chip pen" href="${p.url}" target="_blank" rel="noopener" title="FIA stewards' decision (PDF)">${p.k==='pitlane'?'Pit-lane start':('−'+p.n+' places')} · ${p.why} · ${SESAB[p.ses]||p.ses||''}</a>`).join('')}
+          ${!(g.pen||[]).length&&g.delta?`<span class="sgd-chip">${g.delta>0?'Up '+g.delta+' · penalties ahead':'Down '+(-g.delta)+' · others moved'}</span>`:''}
           ${d?`<span class="sgd-chip">Championship P${d.pos} · ${d.points} pts</span>`:''}</div>
       </div>
       <img class="sgd-car" src="${CAR(g.tid||'')}" alt="" onerror="this.remove()">
@@ -3883,7 +3951,7 @@ function goDriver(code){
 function wireLiveCard(){
   wrap.querySelectorAll('.rc-tab[data-ls]').forEach(b=>{ if(b.hasAttribute('disabled'))return;
     b.onclick=()=>{ lvSesKey=b.dataset.ls; wrap.innerHTML=liveCard(); wireLiveCard(); lcHash(); }; });
-  wrap.querySelectorAll('.sg-slot[data-c]').forEach(el=>{
+  wrap.querySelectorAll('.sg-slot[data-c],.sg-pc[data-c]').forEach(el=>{
     el.onclick=()=>{ sgSel=el.dataset.c; wrap.innerHTML=liveCard(); wireLiveCard(); }; });
   wrap.querySelectorAll('.lvrow[data-dc]').forEach(el=>{ el.onclick=()=>goDriver(el.dataset.dc); });
   const lvHost=wrap.querySelector('#qgrid')||wrap.querySelector('#sgrid');

@@ -2013,7 +2013,16 @@
    "out": false,
    "rookie": false,
    "qpos": 12,
-   "delta": -3
+   "delta": -3,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 3,
+     "why": "Impeding STR",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_10_-_impeding_of_car_18.pdf"
+    }
+   ]
   },
   {
    "pos": 16,
@@ -2146,7 +2155,16 @@
    "out": false,
    "rookie": false,
    "qpos": 21,
-   "delta": -1
+   "delta": -1,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 10,
+     "why": "PU change",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_18_-_pu_elements_changed.pdf"
+    }
+   ]
   }
  ]
 }

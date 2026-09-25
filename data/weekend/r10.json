@@ -1887,7 +1887,16 @@
    "out": false,
    "rookie": false,
    "qpos": 3,
-   "delta": -10
+   "delta": -10,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 10,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_1_-_change_to_pu_element.pdf"
+    }
+   ]
   },
   {
    "pos": 14,
@@ -2001,7 +2010,16 @@
    "out": false,
    "rookie": false,
    "qpos": 15,
-   "delta": -4
+   "delta": -4,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 10,
+     "why": "PU change",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_55_-_change_to_pu_elements.pdf"
+    }
+   ]
   },
   {
    "pos": 20,
@@ -2020,7 +2038,16 @@
    "out": false,
    "rookie": false,
    "qpos": 22,
-   "delta": 2
+   "delta": 2,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 10,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_18_-_change_to_pu_element.pdf"
+    }
+   ]
   },
   {
    "pos": 21,
@@ -2039,7 +2066,16 @@
    "out": false,
    "rookie": false,
    "qpos": 10,
-   "delta": -11
+   "delta": -11,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 30,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_corrected_infringement_-_car_6_-_changes_to_pu_elements.pdf"
+    }
+   ]
   },
   {
    "pos": 22,
@@ -2058,7 +2094,16 @@
    "out": false,
    "rookie": false,
    "qpos": 21,
-   "delta": -1
+   "delta": -1,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 20,
+     "why": "PU change",
+     "ses": "Free Practice 3",
+     "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_corrected_infringement_-_car_14_-_change_to_pu_elements.pdf"
+    }
+   ]
   }
  ]
 }

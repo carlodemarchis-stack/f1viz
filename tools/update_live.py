@@ -469,6 +469,17 @@ def main():
             live["grid"] = prev_grid
             kept.append("grid")
 
+    # stewards' decisions (fia.com): refresh this round and explain the grid order. Best effort -
+    # a failure here must never cost the session results above.
+    try:
+        import fetch_penalties as fp
+        P = fp.refresh([rnd])
+        if live.get("grid"):
+            n = fp.annotate(live["grid"], fp.grid_reasons(rnd, P))
+            src["grid reasons"] = "fia.com (%d)" % n
+    except Exception as e:
+        print("  penalties skipped: %s" % e)
+
     json.dump(live, open(LIVEP, "w"), ensure_ascii=False, indent=1)
     filled = [s["key"] for s in live["sessions"] if s["results"]]
     print("wrote data/live.json - R%d %s | sessions: %s | with results: %s"

@@ -1978,7 +1978,16 @@
    "out": false,
    "rookie": false,
    "qpos": 17,
-   "delta": -3
+   "delta": -3,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 3,
+     "why": "Impeding BOT",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_55_-_impeding_of_car_77.pdf"
+    }
+   ]
   },
   {
    "pos": 21,
@@ -1997,7 +2006,16 @@
    "out": false,
    "rookie": false,
    "qpos": null,
-   "delta": null
+   "delta": null,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 40,
+     "why": "PU change",
+     "ses": "Free Practice 3",
+     "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_18_-_pu_elements_changed.pdf"
+    }
+   ]
   },
   {
    "pos": 22,
@@ -2016,7 +2034,16 @@
    "out": false,
    "rookie": false,
    "qpos": null,
-   "delta": null
+   "delta": null,
+   "pen": [
+    {
+     "k": "pitlane",
+     "n": null,
+     "why": "PU change in parc fermé",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_87_-_pu_elements_changed_during_parc_ferme.pdf"
+    }
+   ]
   }
  ]
 }

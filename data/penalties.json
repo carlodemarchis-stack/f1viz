@@ -1,0 +1,4145 @@
+{
+ "source": "fia.com/documents",
+ "rounds": {
+  "15": [
+   {
+    "doc": 19,
+    "title": "Infringement - Car 77 - Overtaking under yellow flags",
+    "pub": "24.09.26 13:31",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 1",
+    "fact": "Overtaking under yellow flags",
+    "breach": "Breach of Appendix H, Article 2.5.5 b) of the International Sporting Code.",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_77_-_overtaking_under_yellow_flags.pdf"
+   },
+   {
+    "doc": 20,
+    "title": "Infringement - Car 14 - PU elements",
+    "pub": "24.09.26 14:10",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 9th Power Unit Ancillary Component (PU-ANC)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 25 grid positions for the next Race in which the driver participates",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_14_-_pu_elements.pdf",
+    "grid": 25
+   },
+   {
+    "doc": 21,
+    "title": "Infringement - Car 18 - PU elements",
+    "pub": "24.09.26 14:10",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit elements have been used: 6th Turbocharger (TC) 7th Energy Store (ES) 6th Control Electronics Unit (PU-CE) 8th Power Unit Ancillary Component (PU-ANC)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 20 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_18_-_pu_elements.pdf",
+    "grid": 20
+   },
+   {
+    "doc": 29,
+    "title": "Infringement - Car 44 - Impeding car 30",
+    "pub": "24.09.26 18:05",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 2",
+    "fact": "Impeding of car 30",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations and of item 27 of the Race Director’s Competition Notes V2.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 2nd reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_44_-_impeding_car_30.pdf"
+   },
+   {
+    "doc": 34,
+    "title": "Infringement - Car 14 - PU element",
+    "pub": "25.09.26 11:21",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 3",
+    "fact": "The following Power Unit elements have been used: 7th Energy Store (ES)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 5 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_14_-_pu_element.pdf",
+    "grid": 5
+   },
+   {
+    "doc": 39,
+    "title": "Infringement - Car 55 - Failure to slow for yellow flags",
+    "pub": "25.09.26 13:35",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Failure to slow for yellow flags",
+    "breach": "Breach of Appendix H, Article 2.5.5 b) of the International Sporting Code",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 2nd reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_55_-_failure_to_slow_for_yellow_flags.pdf"
+   },
+   {
+    "doc": 40,
+    "title": "Infringement - Car 41 - Leaving the track in turn 15",
+    "pub": "25.09.26 13:38",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Leaving the track without a justifiable reason at turn 15.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_41_-_leaving_the_track_in_turn_15.pdf"
+   },
+   {
+    "doc": 48,
+    "title": "Infringement - Car 11 - Impeding Car 81",
+    "pub": "25.09.26 17:09",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Qualifying",
+    "fact": "Car 11 was driving at reduced speed on the racing line through Turns 18, 19 and 20 and forced Car 81 approaching in a flying lap to lift and change direction.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations and of item 27 of the Race Director’s Competition Notes (V2).",
+    "decision": "Drop of 3 grid positions for the next Sprint/Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_11_-_impeding_car_81.pdf",
+    "grid": 3
+   },
+   {
+    "doc": 49,
+    "title": "Infringement - Car 55 - Failure to slow for yellow flags",
+    "pub": "25.09.26 17:17",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Qualifying",
+    "fact": "Failure to slow for yellow flags",
+    "breach": "Breach of Appendix H, Article 2.5.5 b) of the International Sporting Code",
+    "decision": "Drop of 5 grid positions for the next Sprint/Race in which the driver participates. 2 penalty points (total of 4 for the 12 month period).",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_55_-_failure_to_slow_for_yellow_flags_0.pdf",
+    "grid": 5,
+    "pp": 2,
+    "ppTotal": 4
+   }
+  ],
+  "14": [
+   {
+    "doc": 12,
+    "title": "Infringement - Car 11 - Pit Lane Speeding",
+    "pub": "11.09.26 14:00",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 86.7 km/h",
+    "breach": "Breach of Article B1.6.3a.i of the FIA F1 Regulations.",
+    "decision": "The competitor (Cadillac Formula 1 Team) is fined €700.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_11_-_pit_lane_speeding.pdf",
+    "eur": 700
+   },
+   {
+    "doc": 13,
+    "title": "Infringement - Car 11 - Second Pit Lane Speeding",
+    "pub": "11.09.26 14:01",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 96.7 km/h",
+    "breach": "Breach of Article B1.6.3a.i of the FIA F1 Regulations.",
+    "decision": "The competitor (Cadillac Formula 1 Team) is fined €1000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_11_-_second_pit_lane_speeding.pdf",
+    "eur": 1000
+   },
+   {
+    "doc": 19,
+    "title": "Infringement - Car 23 - Leaving the track and re-joining unsafely",
+    "pub": "11.09.26 16:41",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Leaving the track and re-joining unsafely in T6",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_23_-_leaving_the_track_and_re-joining_unsafely_.pdf"
+   },
+   {
+    "doc": 33,
+    "title": "Infringement - Car 77 - Failure to follow Race Director's Instructions (Escape Roads)",
+    "pub": "12.09.26 14:25",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 3",
+    "fact": "The driver failed to follow the Race Director’s Competition Notes by not staying to the right of the bollard in Turn 5.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 26.2, document 28).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_77_-_failure_to_follow_race_directors_instructions_escape_roads.pdf"
+   },
+   {
+    "doc": 36,
+    "title": "Infringement - Car 1 - Pit Lane Speeding",
+    "pub": "12.09.26 16:44",
+    "num": 1,
+    "code": "NOR",
+    "driver": "Lando Norris",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Qualifying",
+    "fact": "Pit lane speeding – 88.5 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (McLaren Mastercard F1 Team) is fined €900.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_1_-_pit_lane_speeding.pdf",
+    "eur": 900
+   },
+   {
+    "doc": 41,
+    "title": "Infringement - Car 18 - PU Elements changed",
+    "pub": "12.09.26 16:56",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 3",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 6th Energy Store (ES) 5th MGU-K 7th Power Unit Ancillary Component (PU-ANC)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 40 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_18_-_pu_elements_changed.pdf",
+    "grid": 40
+   },
+   {
+    "doc": 46,
+    "title": "Infringement - Car 55 - Impeding of Car 77",
+    "pub": "12.09.26 18:29",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 55 impeded Car 77 at Turns 6 and 7.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Drop of 3 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_55_-_impeding_of_car_77.pdf",
+    "grid": 3
+   },
+   {
+    "doc": 49,
+    "title": "Infringement - Car 5 - Failure to Follow RD Instructions (SCL2 - SCL1)",
+    "pub": "12.09.26 19:15",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 5 exceeded the time limit between the Safety Car lines.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations and Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Competition Notes (item 1, document 28).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_5_-_failure_to_follow_rd_instructions_scl2_-_scl1.pdf"
+   },
+   {
+    "doc": 51,
+    "title": "Infringement - Car 12 - Failure to follow RD instructions (SCL2 - SCL1)",
+    "pub": "12.09.26 19:23",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 12 exceeded the time limit between the Saftety Car lines.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations and Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Competition Notes (item 1, document 28).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_12_-_failure_to_follow_rd_instructions_scl2_-_scl1.pdf"
+   },
+   {
+    "doc": 52,
+    "title": "Infringement - Car 63 - Failure to follow Race Director Instructions - (SCL2 - SCL1)",
+    "pub": "12.09.26 19:26",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "The driver failed to follow the Race Director’s Competition Notes at Turn 5 by not staying to the right of the bollard.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 26.2, document 28).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_63_-_failure_to_follow_race_director_instructions_-_scl2_-_scl1.pdf"
+   },
+   {
+    "doc": 53,
+    "title": "Infringement - Car 16 - Failure to follow RD instructions (SCL2 - SCL1)",
+    "pub": "12.09.26 19:35",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Qualifying",
+    "fact": "Car 16 exceeded the time limit between the Safety Car lines.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations and Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Competition Notes (item 1, document 28).",
+    "decision": "Competitor: Reprimand.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_16_-_failure_to_follow_rd_instructions_scl2_-_scl1.pdf"
+   },
+   {
+    "doc": 63,
+    "title": "Infringement - Car 87 - PU elements changed during Parc Ferme",
+    "pub": "13.09.26 13:20",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE) 4th MGU-K All Power Unit elements were replaced without the approval of the FIA Technical Delegate during parc fermé. Furthermore, Car 87 was not covered two (2) hours after chequered flag of Q3.",
+    "breach": "Breaches of Articles B8.2.2 (in conjunction with B8.2.3), B3.4.3a, B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the Pit Lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_87_-_pu_elements_changed_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 66,
+    "title": "Infringement - Car 22 - Pit Lane Speeding",
+    "pub": "13.09.26 15:56",
+    "num": 22,
+    "code": "TSU",
+    "driver": "Yuki Tsunoda",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Pit lane speeding – 81.4 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Visa Cash App Racing Bulls F1 Team) is fined €200.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_22_-_pit_lane_speeding.pdf",
+    "eur": 200
+   },
+   {
+    "doc": 67,
+    "title": "Infringement - Car 55 - Causing a Collision with Car 14",
+    "pub": "13.09.26 16:13",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Car 55 moved under braking and made contact with Car 14 in Turn 5.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_55_-_causing_a_collision_with_car_14.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 68,
+    "title": "Infringement - Car 10 - Pit Lane Speeding",
+    "pub": "13.09.26 16:50",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 81.2 km/h",
+    "breach": "Breach of Article B1.6.3a.iii of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_10_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 69,
+    "title": "Infringement - Car 5 - Moving Under Braking",
+    "pub": "13.09.26 17:04",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 5 moved under braking into Turn 5.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_spanish_grand_prix_-_infringement_-_car_5_-_moving_under_braking.pdf"
+   }
+  ],
+  "13": [
+   {
+    "doc": 19,
+    "title": "Infringement - Car 12 - Changes to PU elements",
+    "pub": "04.09.26 17:10",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE)",
+    "breach": "Breaches of Article B8.2.2 (read in conjunction with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 30 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_12_-_changes_to_pu_elements.pdf",
+    "grid": 30
+   },
+   {
+    "doc": 20,
+    "title": "Infringement - Car 23 - Changes to PU elements",
+    "pub": "04.09.26 17:11",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 4th Control Electronics Unit (PU-CE)",
+    "breach": "Breaches of Articles B8.2.2 (read in conjunction with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 20 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_23_-_changes_to_pu_elements.pdf",
+    "grid": 20
+   },
+   {
+    "doc": 27,
+    "title": "Infringement - Car 12 - Pit lane speeding",
+    "pub": "04.09.26 18:22",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Pit lane speeding – 80.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Mercedes-AMG PETRONAS F1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_12_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 28,
+    "title": "Infringement - Car 18 - Impeding of Car 1",
+    "pub": "04.09.26 19:29",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Car 18 impeded Car 1 prior to turn 1.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Competitor: Warning. Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_18_-_impeding_of_car_1.pdf"
+   },
+   {
+    "doc": 32,
+    "title": "Infringement - Car 25 - Technical Non-Conformity (CDS)",
+    "pub": "05.09.26 17:52",
+    "num": 25,
+    "code": null,
+    "driver": "Colton Herta",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 1",
+    "fact": "The Clutch Disengagement System (“CDS”) did not function when the car stopped on the track.",
+    "breach": "Breach of Article C9.3 of the FIA F1 Regulations.",
+    "decision": "The competitor (Cadillac F1 Team) is fined €30,000, €25,000 of which is suspended for a period of 12 months subject to no further breaches of this regulation.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_25_-_technical_non-conformity_cds.pdf",
+    "eur": 30000,
+    "susp": 25000
+   },
+   {
+    "doc": 39,
+    "title": "Infringement - Car 23 - Failure to slow for double yellow flags",
+    "pub": "05.09.26 16:20",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "The driver of Car 23 failed to slow for double Yellow Flags.",
+    "breach": "Breach of Article B1.8.4b of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 2nd reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_23_-_failure_to_slow_for_double_yellow_flags.pdf"
+   },
+   {
+    "doc": 40,
+    "title": "Infringement - Car 55 - Failure to slow for double yellow flags",
+    "pub": "05.09.26 16:20",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Car 55 appeared to fail to slow for double Yellow Flags.",
+    "breach": "Breach of Article B1.8.4b of the FIA F1 Regulations.",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_55_-_failure_to_slow_for_double_yellow_flags.pdf"
+   },
+   {
+    "doc": 41,
+    "title": "Infringement - Car 30 - Change to PU elements",
+    "pub": "05.09.26 17:02",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 3",
+    "fact": "The following Power Unit elements have been used: 6th Engine (ICE) 6th Turbocharger (TC) 6th Exhaust Set (EXH) 4th MGU-K 7th Power Unit Ancillary Component (PU-ANC)",
+    "breach": "Breach of Article B8.2.2 (in conjunction with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 35 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_30_-_change_to_pu_elements.pdf",
+    "grid": 35
+   },
+   {
+    "doc": 47,
+    "title": "Infringement - Car 81 - Impeding of Car 30",
+    "pub": "05.09.26 18:27",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 81 impeded car 30 at turn 2.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Drop of 3 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_81_-_impeding_of_car_30.pdf",
+    "grid": 3
+   },
+   {
+    "doc": 55,
+    "title": "Infringement - Car 23 - Failure to follow Race Directors instructions",
+    "pub": "06.09.26 12:06",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "The driver failed to follow the Race Directors Instructions at Turns 4 and 5",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Event Note (item 25.2, document 5).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_23_-_failure_to_follow_race_directors_instructions_.pdf"
+   },
+   {
+    "doc": 56,
+    "title": "Infringement - Car 14 - PU elements changed during Parc Ferme",
+    "pub": "06.09.26 12:54",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 6th Energy Store (ES) 6th Control Electronics Unit (PU-CE) 5th MGU-K All listed Power Unit elements were replaced without the approval of the FIA Technical Delegate during parc fermé.",
+    "breach": "Breaches of Article B8.2.2 (read in conjunction with B8.2.3), B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_14_-_pu_elements_changed_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 57,
+    "title": "Infringement - Car 30 - Changes made under parc ferme",
+    "pub": "06.09.26 13:01",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Oracle Red Bull Racing",
+    "session": "Qualifying",
+    "fact": "The rear wing assembly has been changed while under parc fermé without the approval of the Technical Delegate. Changes to the set up of the suspension were also made.",
+    "breach": "Breaches of Articles B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_30_-_changes_made_under_parc_ferme.pdf"
+   },
+   {
+    "doc": 60,
+    "title": "Infringement - Car 11 - Failure to follow Race Directors Instruction - Pit Exit",
+    "pub": "06.09.26 16:04",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "The driver failed to follow the Race Directors Instruction for the Pit Exit",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 12.6, document 48).",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 3rd reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_11_-_failure_to_follow_race_directors_instruction_-_pit_exit.pdf"
+   },
+   {
+    "doc": 61,
+    "title": "Infringement - Car 43 - Failure to follow Race Directors Instruction - Practice Start",
+    "pub": "06.09.26 16:04",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "The driver failed to follow the Race Directors Instruction – Practice Start",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 12.6, document 48).",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_43_-_failure_to_follow_race_directors_instruction_-_practice_start.pdf"
+   },
+   {
+    "doc": 63,
+    "title": "Decision - Car 30 - Turn 4 Incident with Car 27",
+    "pub": "06.09.26 16:43",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Car 30 was defending against car 27 on the approach to turn 4 and caused car 27 to have two wheels off the track",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 e) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_decision_-_car_30_-_turn_4_incident_with_car_27.pdf"
+   },
+   {
+    "doc": 64,
+    "title": "Infringement - Car 11 - Failure to follow Race Directors Instruction - Turns 1 and 2",
+    "pub": "06.09.26 16:56",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "The driver failed to follow the Race Director’s Competition Notes at Turns 1 and 2.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 25.1, document 48).",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_infringement_-_car_11_-_failure_to_follow_race_directors_instruction_-_turns_1_and_2.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 65,
+    "title": "Decision - Car 63 - Alleged failure to slow for yellow flags",
+    "pub": "06.09.26 17:02",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Allegedly the driver failed to slow for a single yellow flag at Turns 1 and 2.",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 b) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_decision_-_car_63_-_alleged_failure_to_slow_for_yellow_flags.pdf"
+   },
+   {
+    "doc": 69,
+    "title": "Decision - Car 22 - Alleged Start Procedure Infringement",
+    "pub": "06.09.26 19:45",
+    "num": 22,
+    "code": "TSU",
+    "driver": "Yuki Tsunoda",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "An extra formation lap was commenced and it was a result of a decision by Race Control based on the approach to, and position of, Car 22 on the grid.",
+    "breach": "Alleged breach of Article B5.9.4 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_italian_grand_prix_-_decision_-_car_22_-_alleged_start_procedure_infringement.pdf"
+   }
+  ],
+  "12": [
+   {
+    "doc": 22,
+    "title": "Infringement- Car 55 - driving unnecessarily slowly during sprint qualifying",
+    "pub": "21.08.26 19:13",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 55 driving unnecessarily slowly during Sprint Qualifying",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 1, document 5).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement-_car_55_-_driving_unnecessarily_slowly_during_sprint_qualifying.pdf"
+   },
+   {
+    "doc": 29,
+    "title": "Infringement - Car 55 - Changes made during Parc Ferme",
+    "pub": "22.08.26 10:44",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé.",
+    "breach": "Breaches of Article B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_55_-_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 30,
+    "title": "Infringement - Car 14 - Changes made during Parc Ferme",
+    "pub": "22.08.26 10:45",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé.",
+    "breach": "Breaches of Article B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_14_-_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 33,
+    "title": "Infringement - Car 55 - Starting procedure infringement",
+    "pub": "22.08.26 12:39",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint",
+    "fact": "Car 55 overtook Car 77 during the formation lap.",
+    "breach": "Breach of Article B5.6.4 of the FIA F1 Regulations",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_55_-_starting_procedure_infringement.pdf"
+   },
+   {
+    "doc": 37,
+    "title": "Infringement - Car 77 - Failure to follow Race Director's Instructions (Reaching the Grid)",
+    "pub": "22.08.26 13:28",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Sprint",
+    "fact": "The driver of Car 77 stopped his car before Safety Car Line 1 when driving to the grid.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Event Note (item 24, document 5).",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_77_-_failure_to_follow_race_directors_instructions_reaching_the_grid.pdf"
+   },
+   {
+    "doc": 38,
+    "title": "Infringement - Car 44 - Failure to follow Race Director's Instructions (Reaching the Grid)",
+    "pub": "22.08.26 13:29",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Sprint",
+    "fact": "The driver of Car 44 stopped his car before Safety Car Line 1 when driving to the grid.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Event Note (item 24, document 5).",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_44_-_failure_to_follow_race_directors_instructions_reaching_the_grid.pdf"
+   },
+   {
+    "doc": 39,
+    "title": "Infringement - Car 3 - Failure to follow Race Director's Instructions (Reaching the Grid)",
+    "pub": "22.08.26 13:29",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Sprint",
+    "fact": "The driver of Car 3 stopped his car before Safety Car Line 1 when driving to the grid.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Event Note (item 24, document 5).",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_3_-_failure_to_follow_race_directors_instructions_reaching_the_grid.pdf"
+   },
+   {
+    "doc": 40,
+    "title": "Infringement - Car 22 - Failure to follow Race Director's Instructions (Reaching the Grid)",
+    "pub": "22.08.26 13:32",
+    "num": 22,
+    "code": "TSU",
+    "driver": "Yuki Tsunoda",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Sprint",
+    "fact": "The driver of Car 22 stopped his car before Safety Car Line 1 when driving to the grid.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Event Note (item 24, document 5).",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_22_-_failure_to_follow_race_directors_instructions_reaching_the_grid.pdf"
+   },
+   {
+    "doc": 41,
+    "title": "Infringement - Car 18 - Failure to follow Race Director's Instructions (Reaching the Grid)",
+    "pub": "22.08.26 13:35",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Sprint",
+    "fact": "The driver of Car 18 stopped his car before Safety Car Line 1 when driving to the grid.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code – Non-compliance with Race Director’s Event Note (item 24, document 5).",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_18_-_failure_to_follow_race_directors_instructions_reaching_the_grid.pdf"
+   },
+   {
+    "doc": 42,
+    "title": "Infringement - Car 5 - Unsafe release",
+    "pub": "22.08.26 14:17",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Sprint",
+    "fact": "Car 5 was released into the path of Car 87 on the way to the reconnaissance laps.",
+    "breach": "Breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "Competitor: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_5_-_unsafe_release.pdf"
+   },
+   {
+    "doc": 52,
+    "title": "Decision - Car 10 - alleged unsafe release",
+    "pub": "22.08.26 18:15",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Qualifying",
+    "fact": "Alleged unsafe release of Car 10",
+    "breach": "Alleged breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_decision_-_car_10_-_alleged_unsafe_release.pdf"
+   },
+   {
+    "doc": 59,
+    "title": "Infringement - Car 11 - Changes made in Parc Ferme",
+    "pub": "23.08.26 12:34",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé.",
+    "breach": "Breaches of Articles B3.5.3 and B3.5.4 of the FIA F1 Regulations",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_11_-_changes_made_in_parc_ferme.pdf"
+   },
+   {
+    "doc": 62,
+    "title": "Infringement - Car 41 - Overtaking under yellow flags",
+    "pub": "23.08.26 17:14",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "Car 41 overtook Car 10 in a double yellow flag sector",
+    "breach": "Breach of Article B1.8.4b of the FIA F1 Regulations.",
+    "decision": "Drive through penalty. 2 penalty points (total of 2 for the 12 month period).",
+    "kinds": [
+     "drive"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_41_-_overtaking_under_yellow_flags.pdf",
+    "pp": 2,
+    "ppTotal": 2
+   },
+   {
+    "doc": 63,
+    "title": "Infringement - Car 43 - Overtaking under yellow flags",
+    "pub": "23.08.26 16:48",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Car 43 overtook Car 22 in a double yellow flag sector",
+    "breach": "Breach of Article B1.8.4b of the FIA F1 Regulations.",
+    "decision": "Drive through penalty. 2 penalty points (total of 3 for the 12 month period).",
+    "kinds": [
+     "drive"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_43_-_overtaking_under_yellow_flags.pdf",
+    "pp": 2,
+    "ppTotal": 3
+   },
+   {
+    "doc": 65,
+    "title": "Infringement - Car 43 - Failure to slow for yellow flags",
+    "pub": "23.08.26 17:36",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Failure to slow for a single yellow flag in Turn 3.",
+    "breach": "Breach of Article B1.8.4a of the FIA F1 Regulations.",
+    "decision": "10 second time penalty. 1 penalty point (total of 4 for the 12 month period).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_43_-_failure_to_slow_for_yellow_flags.pdf",
+    "sec": 10,
+    "pp": 1,
+    "ppTotal": 4
+   },
+   {
+    "doc": 66,
+    "title": "Infringement - Car 30 - Failure to follow for yellow flags",
+    "pub": "23.08.26 17:37",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Failure to slow for a single yellow flag in Turn 3.",
+    "breach": "Breach of Article B1.8.4a of the FIA F1 Regulations.",
+    "decision": "10 second time penalty. 1 penalty points (total of 3 for the 12 month period).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_30_-_failure_to_follow_for_yellow_flags.pdf",
+    "sec": 10,
+    "pp": 1,
+    "ppTotal": 3
+   },
+   {
+    "doc": 68,
+    "title": "Infringement - Car 55 - Collision with Car 23",
+    "pub": "23.08.26 18:09",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Causing a collision with Car 23 in Turn 1.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_55_-_collision_with_car_23.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 69,
+    "title": "Infringement - Car 87 - Red Light at Pit Exit",
+    "pub": "23.08.26 18:55",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Car 87 left the pit lane when the light at the end of the pit lane was red.",
+    "breach": "Breach of Article B1.6.3e of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_87_-_red_light_at_pit_exit.pdf"
+   },
+   {
+    "doc": 70,
+    "title": "Infringement - Car 5 - Red Light at Pit Exit",
+    "pub": "23.08.26 18:57",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 5 left the pit lane when the light at the end of the pit lane was red.",
+    "breach": "Breach of Article B1.6.3e of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_dutch_grand_prix_-_infringement_-_car_5_-_red_light_at_pit_exit.pdf"
+   }
+  ],
+  "11": [
+   {
+    "doc": 13,
+    "title": "Infringement - Car 6 - Pit Lane Speeding",
+    "pub": "24.07.26 14:11",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 83.8 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Oracle Red Bull Racing) is fined €400.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_6_-_pit_lane_speeding_.pdf",
+    "eur": 400
+   },
+   {
+    "doc": 19,
+    "title": "Infringement - Car 55 - Erratic driving in Turn 12",
+    "pub": "24.07.26 16:06",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The driver of Car 55 was preparing his brakes when on the racing line between turns 11 and 12 and hindered Car 3 which was on a push lap.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 b) of the International Sporting Code.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_55_-_erratic_driving_in_turn_12_0.pdf"
+   },
+   {
+    "doc": 20,
+    "title": "Decision - Car 3 - Alleged erratic driving in Turn 12",
+    "pub": "24.07.26 16:06",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 1",
+    "fact": "The driver of Car 3 slowed significantly in turn 12",
+    "breach": "Alleged Breach of Appendix L, Chapter IV, Article 2 e) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_decision_-_car_3_-_alleged_erratic_driving_in_turn_12.pdf"
+   },
+   {
+    "doc": 21,
+    "title": "Decision - Car 55 - Alleged erratic driving in Turn 9",
+    "pub": "24.07.26 16:31",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "After overtaking Car 61, the driver of Car 55 slowed significantly at turn 9.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 e) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_decision_-_car_55_-_alleged_erratic_driving_in_turn_9.pdf"
+   },
+   {
+    "doc": 36,
+    "title": "Infringement - Car 44 - Unnecessarily impeding of Car 81",
+    "pub": "25.07.26 18:40",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Qualifying",
+    "fact": "Car 44 unnecessarily impeded Car 81.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Drop of 3 grid positions for the next Sprint/Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_44_-_unnecessarily_impeding_of_car_81.pdf",
+    "grid": 3
+   },
+   {
+    "doc": 41,
+    "title": "Infringement - Car 12 - Yellow flag infringement",
+    "pub": "25.07.26 19:31",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "The driver of Car 12 did not slow sufficiently under single yellow flags at Turn 14.",
+    "breach": "Breach of Appendix H, Article 2.5.5 b) of the International Sporting Code and B1.8.4a of the FIA F1 Regulations.",
+    "decision": "Drop of 3 grid positions for the next Sprint/Race in which the driver participates. 1 penalty point (total of 4 for the 12 month period).",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_12_-_yellow_flag_infringement.pdf",
+    "grid": 3,
+    "pp": 1,
+    "ppTotal": 4
+   },
+   {
+    "doc": 43,
+    "title": "Infringement - Car 12 - Alleged failure to follow Race Director's instructions (SC2-SC1 Time)",
+    "pub": "25.07.26 19:39",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "Driving unnecessarily slowly during Qualifying.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Event Note (item 1, document 4).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_12_-_alleged_failure_to_follow_race_directors_instructions_sc2-sc1_time.pdf"
+   },
+   {
+    "doc": 50,
+    "title": "Infringement - Car 11 - Changes made under Parc Ferme",
+    "pub": "26.07.26 12:38",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé without the approval of the Technical Director.",
+    "breach": "Breach of Article B3.5.3a and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_11_-_changes_made_under_parc_ferme.pdf"
+   },
+   {
+    "doc": 54,
+    "title": "Infringement - Car 55 - Collision with car 81",
+    "pub": "26.07.26 16:55",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Car 55 collided with car 81.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_55_-_collision_with_car_81.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 56,
+    "title": "Decision - Car 16 - Alleged failure to slow for yellow flags",
+    "pub": "26.07.26 17:03",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "The driver of Car 16 appeared not to take appropriate action when yellow flags were displayed at Turn 2.",
+    "breach": "Alleged breach of Article B1.8.4a of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_decision_-_car_16_-_alleged_failure_to_slow_for_yellow_flags.pdf"
+   },
+   {
+    "doc": 57,
+    "title": "Infringement - Car 44 - Pit lane speeding",
+    "pub": "26.07.26 17:16",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Pit lane speeding – 80.1 km/h.",
+    "breach": "Breach of Article B1.6.3a.iii of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_44_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 59,
+    "title": "Infringement - Car 87 - Ignoring blue flags",
+    "pub": "26.07.26 18:05",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "The driver ignored Blue Flags being displayed for Car 6’s approach.",
+    "breach": "Breach of Appendix H, Article 2.5.5 e) of the International Sporting Code.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_87_-_ignoring_blue_flags.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 60,
+    "title": "Infringement - Car 11 - Starting procedure infringement",
+    "pub": "26.07.26 18:12",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Cars 11 was out of position at Safety Car Line 1 during the formation lap.",
+    "breach": "Breach of Article B5.6.4 of the FIA F1 Regulations",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_hungarian_grand_prix_-_infringement_-_car_11_-_starting_procedure_infringement.pdf"
+   }
+  ],
+  "10": [
+   {
+    "doc": 13,
+    "title": "Infringement - Car 31 - Media Commitment",
+    "pub": "17.07.26 12:27",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": null,
+    "fact": "The driver was late attending the Thursday Press Conference",
+    "breach": "Breach of Article B10.1.1.a of the FIA F1 Regulations and Articles 12.2.1.i and 12.2.1.p of the FIA International Sporting Code.",
+    "decision": "The competitor (TGR Haas F1 Team) is fined €5,000. This fine is suspended for a period of 12 months subject to there being no further breach of a similar nature.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_31_-_media_commitment.pdf",
+    "eur": 5000,
+    "susp": 5000
+   },
+   {
+    "doc": 18,
+    "title": "Infringement - Car 34 - Pit lane speeding",
+    "pub": "17.07.26 16:47",
+    "num": 34,
+    "code": null,
+    "driver": "Jak Crawford",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 80.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Aston Martin Aramco F1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_34_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 19,
+    "title": "Infringement - Car 55 - Crossing the white line at pit entry",
+    "pub": "17.07.26 16:33",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Crossing the white line at pit entry.",
+    "breach": "Breach of Appendix L, Chapter IV Article 4 of the International Sporting Code as clarified by Race Director’s Event Notes (item 15.2, document 6).",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_55_-_crossing_the_white_line_at_pit_entry.pdf"
+   },
+   {
+    "doc": 22,
+    "title": "Infringement - Car 18 - Change to PU element",
+    "pub": "17.07.26 16:53",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit element has been used: 4th MGU-K",
+    "breach": "Breach of Article B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_18_-_change_to_pu_element.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 23,
+    "title": "Infringement - Car 1 - Change to PU element",
+    "pub": "17.07.26 16:53",
+    "num": 1,
+    "code": "NOR",
+    "driver": "Lando Norris",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit element has been used: 4th Control Electronics Unit (PU-CE)",
+    "breach": "Breach of Article B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_1_-_change_to_pu_element.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 30,
+    "title": "Infringement - Car 27 - Failure to slow under double yellow flags",
+    "pub": "17.07.26 18:58",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Failing to slow under double yellow flags.",
+    "breach": "Breaches of Appendix H, Article 2.5.5 b) of the International Sporting Code and B1.8.4b of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 2nd reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_27_-_failure_to_slow_under_double_yellow_flags.pdf"
+   },
+   {
+    "doc": 33,
+    "title": "Infringement - Ferrari - Car 16 Return of tyres",
+    "pub": "17.07.26 19:38",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 2",
+    "fact": "The team failed to physically return electronically returned tyres to the appointed tyre supplier before the start of Free Practice 2.",
+    "breach": "Breach of Article B6.4.2 of the FIA F1 Regulations.",
+    "decision": "The competitor (Scuderia Ferrari HP) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_ferrari_-_car_16_return_of_tyres.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 34,
+    "title": "Infringement - Ferrari - Car 44 Return of tyres",
+    "pub": "17.07.26 19:38",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 2",
+    "fact": "The team failed to physically return electronically returned tyres to the appointed tyre supplier before the start of Free Practice 2.",
+    "breach": "Breach of Article B6.4.2 of the FIA F1 Regulations.",
+    "decision": "The competitor (Scuderia Ferrari HP) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_ferrari_-_car_44_return_of_tyres.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 43,
+    "title": "Decision - Car 55 - Alleged failure to slow for double yellow flags",
+    "pub": "18.07.26 15:09",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Alleged failing to slow under yellow flags",
+    "breach": "Alleged breaches of Appendix H, Article 2.5.5 b) of the International Sporting Code and Article 1.8.4.b of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_decision_-_car_55_-_alleged_failure_to_slow_for_double_yellow_flags_.pdf"
+   },
+   {
+    "doc": 44,
+    "title": "Corrected Infringement - Car 6 - Changes to PU elements",
+    "pub": "18.07.26 15:51",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 5th Exhaust Set (EXH)",
+    "breach": "Breach of Article B8.2.2 (read with Article B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 30 grid positions for the next Race in which the driver participates. (Subject to Car 6 being classified in the results of qualifying, Car 6 will be allocated a grid position in the race in accordance with Article B2.5.4b.iv of the FIA F1 Regulations)",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_corrected_infringement_-_car_6_-_changes_to_pu_elements.pdf",
+    "grid": 30
+   },
+   {
+    "doc": 45,
+    "title": "Corrected Infringement - Car 14 - Change to PU elements",
+    "pub": "18.07.26 15:52",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 3",
+    "fact": "The following Power Unit elements have been used: 5th Energy Store (ES) 5th Control Electronics Unit (PU-CE) 7th Power Unit Ancillary Component (PU-ANC)",
+    "breach": "Breach of Article B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 20 grid positions for the next Race in which the driver participates. (Subject to Car 14 being classified in the results of qualifying, Car 14 will be allocated a grid position in the race in accordance with Article B2.5.4b.iv of the FIA F1 Regulations)",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_corrected_infringement_-_car_14_-_change_to_pu_elements.pdf",
+    "grid": 20
+   },
+   {
+    "doc": 54,
+    "title": "Infringement - Car 55 - Change to PU elements",
+    "pub": "19.07.26 12:22",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Qualifying",
+    "fact": "The following additional Power Unit element has been used: 4th Control Electronics Unit (PU-CE) All Power Unit elements were replaced with the approval of the FIA Technical Delegate during parc fermé.",
+    "breach": "Breach of Article B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_55_-_change_to_pu_elements.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 57,
+    "title": "Infringement - Car 44 - Causing a collision with Car 63 in turn 5",
+    "pub": "19.07.26 16:20",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Causing a collision with Car 63 in turn 5",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_44_-_causing_a_collision_with_car_63_in_turn_5.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 59,
+    "title": "Decision - Car 16 - Collision with Car 81 in turn 5",
+    "pub": "19.07.26 16:21",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Collision with Car 81 in turn 5.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_decision_-_car_16_-_collision_with_car_81_in_turn_5.pdf"
+   },
+   {
+    "doc": 63,
+    "title": "Infringement - Ferrari - Unsafe Release of Car 44",
+    "pub": "19.07.26 18:50",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Unsafe release of car 44 from a pit stop.",
+    "breach": "Breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "The competitor (Scuderia Ferrari HP) is fined €30,000 of which €10,000 is suspended for 12 months on condition that the Competitor does not commit a similar infringement in the meantime and on the further condition that within 14 days the",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_ferrari_-_unsafe_release_of_car_44.pdf",
+    "eur": 30000
+   },
+   {
+    "doc": 64,
+    "title": "Infringement - Car 23 - Car Safety Lights",
+    "pub": "19.07.26 19:09",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Car 23 left the pit lane during the reconnaissance laps without functioning rear lights",
+    "breach": "Breach of Article B1.5.5 of the FIA F1 Regulations.",
+    "decision": "Competitor: Reprimand.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_belgian_grand_prix_-_infringement_-_car_23_-_car_safety_lights_.pdf"
+   }
+  ],
+  "9": [
+   {
+    "doc": 28,
+    "title": "Infringement - Car 41 - Failing to follow Race Directors Instructions (SC2-SC1)",
+    "pub": "03.07.26 20:47",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 41 exceeded the time limit between the Safety Car lines.",
+    "breach": "Breach of Article 12.2.1.i of the FIA International Sporting Code and non-compliance with Race Director’s Competition Notes (Item 1, Document 5) in combination with Document 17.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_41_-_failing_to_follow_race_directors_instructions_sc2-sc1.pdf"
+   },
+   {
+    "doc": 29,
+    "title": "Infringement - Car 23 - Failing to follow Race Directors Instructions (SC2-SC1)",
+    "pub": "03.07.26 20:47",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 23 exceeded the time limit between the Saftey Car lines.",
+    "breach": "Breach of Article 12.2.1.i of the FIA International Sporting Code and non-compliance with Race Director’s Competition Notes (Item 1, Document 5) in combination with Document 17.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_23_-_failing_to_follow_race_directors_instructions_sc2-sc1.pdf"
+   },
+   {
+    "doc": 35,
+    "title": "Infringement - Car 23 - Changes made during Parc Ferme",
+    "pub": "04.07.26 11:55",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé.",
+    "breach": "Breach of Article B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_23_-_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 42,
+    "title": "Infringement - Car 11 - Causing a collision with Car 14",
+    "pub": "04.07.26 14:45",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Sprint",
+    "fact": "Car 11 collided with Car 14 at Turn 3 on Lap 2.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_11_-_causing_a_collision_with_car_14.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 45,
+    "title": "Infringement - Car 30 - Abnormal change of direction",
+    "pub": "04.07.26 15:47",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Sprint",
+    "fact": "Abnormal change of direction by Car 30 at Turn 15 (change of direction after the deceleration phase had commenced).",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 b) of the International Sporting Code.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_30_-_abnormal_change_of_direction.pdf"
+   },
+   {
+    "doc": 46,
+    "title": "Infringement - Car 27 - Leaving the track and gaining an advantage",
+    "pub": "04.07.26 15:53",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Sprint",
+    "fact": "Car 27 left the track at Turn 9 at 12:04, without a justifiable reason, and gained a lasting advantage.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty imposed after the Sprint.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_27_-_leaving_the_track_and_gaining_an_advantage.pdf",
+    "sec": 5,
+    "post": true
+   },
+   {
+    "doc": 58,
+    "title": "Decision - Car 31 - Alleged yellow flag infringement",
+    "pub": "04.07.26 19:42",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 31 was alleged to have failed to reduce speed under a single waved yellow flag in Turn 13 during Lap 9.",
+    "breach": "Alleged Breach of Article B1.8.4 a) of the FIA Formula One Sporting Regulations and Article 2.5.5 b) of Appendix H to the FIA International Sporting Code",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_decision_-_car_31_-_alleged_yellow_flag_infringement.pdf"
+   },
+   {
+    "doc": 60,
+    "title": "Infringement - Car 10 - Impeding of Car 18",
+    "pub": "04.07.26 20:01",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 10 unnecessarily impeded Car 18 at Turn 15 at 16:09.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Drop of 3 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_10_-_impeding_of_car_18.pdf",
+    "grid": 3
+   },
+   {
+    "doc": 62,
+    "title": "Infringement - Car 41 - Unsafe release",
+    "pub": "04.07.26 20:13",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Qualifying",
+    "fact": "Unsafe Release by Car 41 at 17:04.",
+    "breach": "Breach of Article B1.6.2b.i of the FIA F1 Regulations.",
+    "decision": "The competitor (Visa Cash App Racing Bulls F1 Team) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_41_-_unsafe_release.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 68,
+    "title": "Infringement - Car 18 - PU Elements changed",
+    "pub": "05.07.26 13:48",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 5th Energy Store (ES) 5th Control Electronics Unit (PU-CE)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_18_-_pu_elements_changed.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 71,
+    "title": "Infringement - Car 23 - Causing a collision with Car 87",
+    "pub": "05.07.26 17:20",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Car 23 caused a collision with Car 87 at Turn 6.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_23_-_causing_a_collision_with_car_87.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 72,
+    "title": "Infringement - Car 44 - False start - Moving before start signal",
+    "pub": "05.07.26 17:20",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 44 moved before the start signal was given.",
+    "breach": "Breach of Article B5.11.1 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_44_-_false_start_-_moving_before_start_signal.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 75,
+    "title": "Infringement - Car 44 - Yellow flags - Failing to slow",
+    "pub": "05.07.26 19:37",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 44 failed to slow for a single yellow flag at Turn 9 on Lap 38.",
+    "breach": "Breach of Article B1.8.4 a. of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_44_-_yellow_flags_-_failing_to_slow.pdf"
+   },
+   {
+    "doc": 77,
+    "title": "Infringement - Car 12 - Leaving the track multiple times",
+    "pub": "05.07.26 19:49",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Car 12 left the track at Turn 6 on Lap 44 without a justifiable reason.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_12_-_leaving_the_track_multiple_times.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 78,
+    "title": "Infringement - Car 18 - Leaving the track multiple times",
+    "pub": "05.07.26 19:58",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Car 18 left the track at Turn 18 in Lap 33 without a justifiable reason.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_18_-_leaving_the_track_multiple_times.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 79,
+    "title": "Infringement - Car 18 - Leaving the track multiple times",
+    "pub": "05.07.26 19:58",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Car 18 left the track at Turn 9 in Lap 35 without a justifiable reason.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_18_-_leaving_the_track_multiple_times_0.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 81,
+    "title": "Infringement - Car 18 - Leaving the track multiple times",
+    "pub": "05.07.26 19:59",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Car 18 left the track at Turn 15 in Lap 42 without a justifiable reason.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_18_-_leaving_the_track_multiple_times_1.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 83,
+    "title": "Infringement - Car 55 - Overtaking the Safety Car",
+    "pub": "05.07.26 20:57",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Car 55 overtook the Safety Car after the \"LAPPED CARS MAY NOW OVERTAKE\" message had been displayed, despite not being entitled to do so under Article B5.13.4c of the FIA F1 Regulations.",
+    "breach": "Breach of Article B5.13.4c of the FIA F1 Regulations.",
+    "decision": "1 Penalty Lap.",
+    "kinds": [
+     "lap"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_british_grand_prix_-_infringement_-_car_55_-_overtaking_the_safety_car.pdf",
+    "laps": 1
+   }
+  ],
+  "8": [
+   {
+    "doc": 32,
+    "title": "Infringement - Car 6 - Failing to follow Race Directors Instructions (SC2-SC1)",
+    "pub": "27.06.26 18:13",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Qualifying",
+    "fact": "Car 6 exceeded the time limit between the Safety Car lines.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations and non-compliance with Race Director’s Competition Note (item 1, document 6).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_infringement_-_car_6_-_failing_to_follow_race_directors_instructions_sc2-sc1.pdf"
+   },
+   {
+    "doc": 42,
+    "title": "Infringement - Car 14 - Pit Lane Speeding",
+    "pub": "28.06.26 16:31",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 80.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_infringement_-_car_14_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 45,
+    "title": "Decision - Car 23 - Alleged yellow flag infringement",
+    "pub": "28.06.26 17:00",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Car 23 allegedly failed to slow for a single yellow flag",
+    "breach": "Alleged breach of Article B1.8.4 a of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_decision_-_car_23_-_alleged_yellow_flag_infringement.pdf"
+   },
+   {
+    "doc": 47,
+    "title": "Decision - Car 30 - Failure to follow Race Director's Instructions - Practice Starts",
+    "pub": "28.06.26 17:38",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "The Driver did not follow the Race Director’s instruction considering practice starts (item 13.6 of the Competition Notes) by crossing the white line at pit exit and subsequently cutting back in to make a practice start.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 13.6, document 6).",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_decision_-_car_30_-_failure_to_follow_race_directors_instructions_-_practice_starts.pdf"
+   },
+   {
+    "doc": 49,
+    "title": "Decision - Car 81 - Alleged failing to follow Race Directors Instructions (SC2-SC1)",
+    "pub": "28.06.26 17:41",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Car 81 allegedly exceeded the time limit between the Safety Car lines.",
+    "breach": "Alleged breach of Article 12.2.1.i of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_decision_-_car_81_-_alleged_failing_to_follow_race_directors_instructions_sc2-sc1.pdf"
+   },
+   {
+    "doc": 50,
+    "title": "Decision - Car 14 - Alleged ignoring blue flags",
+    "pub": "28.06.26 17:42",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Car 14 had several blue flags displayed prior to the car behind passing",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 e) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_decision_-_car_14_-_alleged_ignoring_blue_flags.pdf"
+   },
+   {
+    "doc": 51,
+    "title": "Decision - Car 18 - Alleged ignoring blue flags",
+    "pub": "28.06.26 17:46",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Car 18 had several blue flags displayed prior to the car behind passing",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 e) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_decision_-_car_18_-_alleged_ignoring_blue_flags.pdf"
+   },
+   {
+    "doc": 55,
+    "title": "Decision - Car 11 - Alleged false start - Moving before signal",
+    "pub": "28.06.26 19:24",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Car 11 moved prior to the start signal.",
+    "breach": "Breach of Article B5.11.1 of the FIA F1 Regulations.",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_austrian_grand_prix_-_decision_-_car_11_-_alleged_false_start_-_moving_before_signal.pdf"
+   }
+  ],
+  "7": [
+   {
+    "doc": 19,
+    "title": "Infringement - Car 14 - Pit exit incident",
+    "pub": "12.06.26 18:02",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Car 14 crossed the white line at the pit exit.",
+    "breach": "Breach of Appendix L, Chapter IV Article 6 c) of the International Sporting Code.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_14_-_pit_exit_incident.pdf"
+   },
+   {
+    "doc": 20,
+    "title": "Infringement - Car 77 - Pit Lane Speeding",
+    "pub": "12.06.26 18:11",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 2",
+    "fact": "Pit lane speeding – 80.5 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Cadillac Formula 1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_77_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 21,
+    "title": "Infringement - Car 11 - Pit Lane Speeding",
+    "pub": "12.06.26 18:26",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 2",
+    "fact": "Pit lane speeding – 84.4 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Cadillac Formula 1 Team) is fined €500.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_11_-_pit_lane_speeding.pdf",
+    "eur": 500
+   },
+   {
+    "doc": 33,
+    "title": "Infringement - Car 18 - Pit Lane Speeding",
+    "pub": "13.06.26 13:41",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Pit lane speeding – 85.9 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Aston Martin Aramco F1 Team) is fined €600.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_18_-_pit_lane_speeding.pdf",
+    "eur": 600
+   },
+   {
+    "doc": 39,
+    "title": "Infringement - Car 12 - Driving erratically",
+    "pub": "13.06.26 14:36",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Car 12 was driving in an erratic manner in turn 2.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 e) of the International Sporting Code.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_12_-_driving_erratically.pdf"
+   },
+   {
+    "doc": 40,
+    "title": "Infringement - Car 16 - Impeding of Car 27",
+    "pub": "13.06.26 15:38",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 3",
+    "fact": "Car 16 impeded Car 27 in Turn 5",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Driver: Warning. Competitor: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_16_-_impeding_of_car_27.pdf"
+   },
+   {
+    "doc": 52,
+    "title": "Infringement - Car 14 - PU elements and changes used during Parc Ferme",
+    "pub": "14.06.26 12:56",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE) 4th MGU-K All Power Unit elements were replaced without the approval of the FIA Technical Delegate during Parc fermé.",
+    "breach": "Breaches of Article B8.2.2 (read with B8.2.3), B3.5.3 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_14_-_pu_elements_and_changes_used_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 57,
+    "title": "Decision - Car 27 - Alleged leaving the track and gaining an advantage",
+    "pub": "14.06.26 17:13",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 27 allegedly left the track and gained an advantage in Turn 2",
+    "breach": "Alleged breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_decision_-_car_27_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
+   },
+   {
+    "doc": 58,
+    "title": "Decision - Car 41 - Alleged leaving the track and gaining an advantage",
+    "pub": "14.06.26 17:14",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "Car 41 allegedly left the track and gained an advantage in Turn 2",
+    "breach": "Alleged breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_decision_-_car_41_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
+   },
+   {
+    "doc": 62,
+    "title": "Infringement - Car 43 - Failing to slow for yellow flags",
+    "pub": "14.06.26 19:06",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Car 43 failed to slow for a single yellow flag",
+    "breach": "Breach of Article B1.8.4 a. of the FIA F1 Regulations.",
+    "decision": "10 second time penalty imposed after the Race. 1 penalty point (total of 2 for the 12 month period).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_43_-_failing_to_slow_for_yellow_flags.pdf",
+    "sec": 10,
+    "pp": 1,
+    "ppTotal": 2,
+    "post": true
+   },
+   {
+    "doc": 63,
+    "title": "Infringement - Car 23 - Start Procedure Infringement",
+    "pub": "14.06.26 19:07",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Car 23 started the formation lap with parts of a tyre blanket still on the car.",
+    "breach": "Breach of Article B5.5.5.a of the FIA F1 Regulations.",
+    "decision": "The competitor (Atlassian Williams F1 Team) is fined €5,000",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_23_-_start_procedure_infringement.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 64,
+    "title": "Infringement - Car 55 - Start Procedure Infringement",
+    "pub": "14.06.26 19:08",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "The Mechanics of Car 55 left equipment on the grass area next to the grid after the 15 second signal.",
+    "breach": "Breach of Article B5.5.5.a of the FIA F1 Regulations.",
+    "decision": "The competitor (Atlassian Williams F1 Team) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_55_-_start_procedure_infringement.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 66,
+    "title": "Infringement - Car 12 - Leaving the track without a justifiable reason",
+    "pub": "14.06.26 19:15",
+    "num": 12,
+    "code": "ANT",
+    "driver": null,
+    "team": "",
+    "session": null,
+    "fact": null,
+    "breach": "Breach of Appendix L Chapter IV Article 2 c) of the FIA International Sporting Code and Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "Deletion of the lap time shown in accordance with Article 12.4.1.e of the FIA International Sporting Code. Note Competitors are reminded that they have the right to appeal certain decisions of the Stewards, in accordance with Article 15 of the FIA International Sporting Code and Chapter 5 of the FIA Judicial and Disciplinary Rules, within the applicable time limits. Decisions of the Stewards are taken independently of the FIA and are based solely on the relevant regulations, guidelines and evidence presented. Felix Holter Natalie Corsmit Kipras Aleknavičius Derek Warwick David Domingo The Stewards",
+    "kinds": [
+     "laptime"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_12_-_leaving_the_track_without_a_justifiable_reason.pdf"
+   },
+   {
+    "doc": 67,
+    "title": "Infringement - Car 12 - Leaving the track without a justifiable reason multiple times",
+    "pub": "14.06.26 19:22",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Car 12 left the track four times during the race.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 c) of the International Sporting Code.",
+    "decision": "5 second time penalty imposed after the Race.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_barcelona-catalunya_grand_prix_-_infringement_-_car_12_-_leaving_the_track_without_a_justifiable_reason_multiple_times.pdf",
+    "sec": 5,
+    "post": true
+   }
+  ],
+  "6": [
+   {
+    "doc": 17,
+    "title": "Infringement - Car 1 - Media Commitment",
+    "pub": "05.06.26 12:32",
+    "num": 1,
+    "code": "NOR",
+    "driver": "Lando Norris",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Thursday Press Conference",
+    "fact": "The driver was late attending the Thursday Press Conference",
+    "breach": "Breach of Article B10.1.1.a of the FIA F1 Regulations and Articles 12.2.1.i and 12.2.1.p of the FIA International Sporting Code.",
+    "decision": "The competitor (McLaren Mastercard F1 Team) is fined €5,000. This fine is suspended for a period of 12 months subject to no further breach of a similar nature.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_1_-_media_commitment.pdf",
+    "eur": 5000,
+    "susp": 5000
+   },
+   {
+    "doc": 18,
+    "title": "Infringement - Car 16 - Media Commitment",
+    "pub": "05.06.26 12:32",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Thursday Press Conference",
+    "fact": "The driver was late attending the Thursday Press Conference",
+    "breach": "Breach of Article B10.1.1.a of the FIA F1 Regulations and Articles 12.2.1.i and 12.2.1.p of the FIA International Sporting Code.",
+    "decision": "The competitor (Scuderia Ferrari HP) is fined €5,000. This fine is suspended for a period of 12 months subject to no further breach of a similar nature.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_16_-_media_commitment.pdf",
+    "eur": 5000,
+    "susp": 5000
+   },
+   {
+    "doc": 27,
+    "title": "Infringement - Car 63 - Pit Lane Speeding",
+    "pub": "05.06.26 15:12",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 60.3 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Mercedes-AMG PETRONAS F1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_63_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 29,
+    "title": "Infringement - Car 16 - Impeding of Car 30",
+    "pub": "05.06.26 16:19",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 1",
+    "fact": "Car 16 unnecessarily impeded Car 30 into turn 18",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Competitor: Formal warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_16_-_impeding_of_car_30.pdf"
+   },
+   {
+    "doc": 30,
+    "title": "Infringement - Car 41 - Impeding of Car 81",
+    "pub": "05.06.26 16:35",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Car 41 unnecessarily impeded Car 81 into turn 12",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Competitor: Formal warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_41_-_impeding_of_car_81.pdf"
+   },
+   {
+    "doc": 32,
+    "title": "Decision - Car 30 - Alleged leaving the pitlane after the end of the session",
+    "pub": "05.06.26 16:42",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Car 30 left the pit lane when the light at the end of the pit lane was red.",
+    "breach": "Breach of Article B1.6.3e of the FIA F1 Regulations.",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_decision_-_car_30_-_alleged_leaving_the_pitlane_after_the_end_of_the_session.pdf"
+   },
+   {
+    "doc": 34,
+    "title": "Infringement - Car 14 - Pit Lane Speeding",
+    "pub": "05.06.26 18:25",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Pit lane speeding – 60.5 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Aston Martin Aramco F1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_14_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 36,
+    "title": "Infringement - Car 12 - Pit Lane Speeding",
+    "pub": "05.06.26 18:25",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Pit lane speeding – 60.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Mercedes-AMG PETRONAS F1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_12_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 42,
+    "title": "Infringement - Car 1 - Technical non-conformity (CDS)",
+    "pub": "05.06.26 20:17",
+    "num": 1,
+    "code": "NOR",
+    "driver": "Lando Norris",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Free Practice 2",
+    "fact": "The CDS did not function when the car stopped on the track.",
+    "breach": "Breach of Article C9.3 of the FIA F1 Regulations.",
+    "decision": "The competitor (McLaren Mastercard F1 Team) is fined €30,000, €10,000 of which is suspended for a period of 12 months subject to no further breaches of this regulation.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_1_-_technical_non-conformity_cds.pdf",
+    "eur": 30000,
+    "susp": 10000
+   },
+   {
+    "doc": 49,
+    "title": "Infringement - Car 43 - Pit Lane Speeding",
+    "pub": "06.06.26 14:13",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Pit lane speeding – 68.9 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (BWT Alpine F1 Team) is fined €900.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_43_-_pit_lane_speeding.pdf",
+    "eur": 900
+   },
+   {
+    "doc": 50,
+    "title": "Infringement - Car 23 - Pit Lane Speeding",
+    "pub": "06.06.26 14:16",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Pit lane speeding – 60.2 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Atlassian Williams F1 Team) is fined €100.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_23_-_pit_lane_speeding.pdf",
+    "eur": 100
+   },
+   {
+    "doc": 60,
+    "title": "Infringement - Car 23 - Pit Lane incident with Car 41",
+    "pub": "06.06.26 18:58",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 41 was delayed in entering his pit stop by Car 23 and had to swerve around Car 23 and its mechanics.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations and Article 12.2.1.h of the FIA International Sporting Code.",
+    "decision": "Competitor: Formal warning A fine of €5,000 is also imposed on the Competitor for a breach of Article 12.2.1.h of the FIA International Sporting Code.",
+    "kinds": [
+     "warning",
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_23_-_pit_lane_incident_with_car_41.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 61,
+    "title": "Infringement - Car 27 - Failure to follow Race Director's Instructions - Tunnel",
+    "pub": "06.06.26 19:17",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 27 was travelling slowly ahead of Car 16 in the tunnel",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code.",
+    "decision": "Competitor: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_27_-_failure_to_follow_race_directors_instructions_-_tunnel.pdf"
+   },
+   {
+    "doc": 69,
+    "title": "Infringement - Car 11 - False start - Out of position",
+    "pub": "07.06.26 15:31",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Car 11 was out of position at the start of the race, taking the vacant position left by Car 5 which started in the pit lane.",
+    "breach": "Breach of Article B5.11.1 of the FIA F1 Regulations.",
+    "decision": "Drive through penalty.",
+    "kinds": [
+     "drive"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_11_-_false_start_-_out_of_position.pdf"
+   },
+   {
+    "doc": 70,
+    "title": "Infringement - Car 44 - Pit lane speeding",
+    "pub": "07.06.26 16:17",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Pit lane speeding – 60.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_44_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 71,
+    "title": "Infringement - Car 63 - Pit lane speeding",
+    "pub": "07.06.26 18:26",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 60.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_63_-_pit_lane_speeding_0.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 72,
+    "title": "Infringement - Car 43 - Pit lane speeding",
+    "pub": "07.06.26 18:26",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 60.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_43_-_pit_lane_speeding_0.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 73,
+    "title": "Infringement - Car 10 - Pit lane speeding",
+    "pub": "07.06.26 18:26",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 60.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_10_-_pit_lane_speeding.pdf",
+    "sec": 5,
+    "overturned": "Doc 99: rescinded on Right of Review - Car 10 did not exceed 60 km/h; 5 s removed"
+   },
+   {
+    "doc": 74,
+    "title": "Infringement - Car 81 - Pit lane speeding",
+    "pub": "07.06.26 18:27",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 60.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_81_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 75,
+    "title": "Infringement - Car 10 - Pit lane speeding",
+    "pub": "07.06.26 18:27",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 60.4 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_10_-_pit_lane_speeding_0.pdf",
+    "sec": 5,
+    "overturned": "Doc 99: rescinded on Right of Review - Car 10 did not exceed 60 km/h; 5 s removed"
+   },
+   {
+    "doc": 77,
+    "title": "Infringement - Car 18 - Exceeded track limits",
+    "pub": "07.06.26 18:28",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Car 18 exceeded track limits",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_18_-_exceeded_track_limits.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 82,
+    "title": "Infringement - Car 11 - False start - Out of position at restart",
+    "pub": "07.06.26 19:35",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Car 11 was out of position at the restart after the red flag",
+    "breach": "Breach of Article B5.11 of the FIA F1 Regulations.",
+    "decision": "10 second time penalty imposed after the Race.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_11_-_false_start_-_out_of_position_at_restart.pdf",
+    "sec": 10,
+    "post": true
+   },
+   {
+    "doc": 83,
+    "title": "Decision - Alleged Red Flag Infringement",
+    "pub": "07.06.26 19:35",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "During the suspension of the Race, mechanics of the Oracle Red Bull Racing Team were working on car number 6 during the race suspension other than as permitted under the regulations.",
+    "breach": "Alleged breach of Article B5.14.4.a of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_decision_-_alleged_red_flag_infringement.pdf"
+   },
+   {
+    "doc": 84,
+    "title": "Decision - Car 6 - Alleged Safety Car infringement",
+    "pub": "07.06.26 19:42",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Car 6 Allegedly left a gap of more than 10 lengths whilst behind the Safety Car",
+    "breach": "Alleged breach of Article B5.13.2 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_decision_-_car_6_-_alleged_safety_car_infringement.pdf"
+   },
+   {
+    "doc": 85,
+    "title": "Decision - Car 44 - Alleged Safety Car infringement",
+    "pub": "07.06.26 19:42",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 44 Allegedly left a gap of more than 10 lengths whilst behind the Safety Car",
+    "breach": "Alleged breach of Article B5.13.2 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_decision_-_car_44_-_alleged_safety_car_infringement.pdf"
+   },
+   {
+    "doc": 86,
+    "title": "Infringement - Car 11 - Failing to follow Race Directors Event Notes - Practice starts",
+    "pub": "07.06.26 19:42",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Car 11 failed to follow the Race Directors instructions regarding practice starts",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Event Note (item 13.6, document 48).",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_11_-_failing_to_follow_race_directors_event_notes_-_practice_starts.pdf"
+   },
+   {
+    "doc": 89,
+    "title": "Infringement - Car 27 - Causing a collision with Car 55",
+    "pub": "07.06.26 20:28",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 27 collided with Car 55 in Turn 8",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty imposed after the Race.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_27_-_causing_a_collision_with_car_55.pdf",
+    "sec": 10,
+    "post": true
+   },
+   {
+    "doc": 90,
+    "title": "Decision - Car 43 - Allegedly causing a collision with Car 55",
+    "pub": "07.06.26 20:28",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Car 43 allegedly caused a collision with Car 55 at turn 8.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_decision_-_car_43_-_allegedly_causing_a_collision_with_car_55.pdf"
+   },
+   {
+    "doc": 93,
+    "title": "Infringement - Car 63 - Failing to serve time penalty correctly",
+    "pub": "10.06.26 22:30",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Failure to serve a penalty during a pit stop.",
+    "breach": "Breach of Article B1.9.6b.iii of the FIA F1 Regulations.",
+    "decision": "Drive through penalty.",
+    "kinds": [
+     "drive"
+    ],
+    "url": "https://www.fia.com/system/files/documents/doc_93_-_2026_monaco_grand_prix_-_infringement_-_car_63_-_failing_to_serve_time_penalty_correctly.pdf"
+   }
+  ],
+  "5": [
+   {
+    "doc": 18,
+    "title": "Infringement - Car 16 - Pit Lane Speeding",
+    "pub": "22.05.26 19:34",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 96.3 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Scuderia Ferrari HP) is fined €1000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_16_-_pit_lane_speeding.pdf",
+    "eur": 1000
+   },
+   {
+    "doc": 22,
+    "title": "Infringement - Car 31 - Leaving the pitlane after the end of the session",
+    "pub": "22.05.26 20:31",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Car 31 left the pit lane when the light at the end of the pit lane was red.",
+    "breach": "Breach of Article B1.6.3e of the FIA F1 Regulations.",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_31_-_leaving_the_pitlane_after_the_end_of_the_session.pdf"
+   },
+   {
+    "doc": 26,
+    "title": "Infringement - Car 30 - Breach of Article C9.3",
+    "pub": "22.05.26 23:24",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Free Practice 1",
+    "fact": "The CDS did not function when the car stopped on the track.",
+    "breach": "Breach of Article C9.3 of the FIA F1 Regulations.",
+    "decision": "The competitor (Visa Cash App Racing Bulls F1 Team) is fined €30,000, €20,000 of which is suspended for a period of 12 months subject to no further breach of this regulation by the Competitor, for either of its cars.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_30_-_breach_of_article_c9.3.pdf",
+    "eur": 30000,
+    "susp": 20000
+   },
+   {
+    "doc": 37,
+    "title": "Infringement - Failure to follow Race Director's instructions (SC2-SC1 Time)",
+    "pub": "23.05.26 03:03",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 41 exceeded the time limit between the Safety Car lines.",
+    "breach": "Breach of Article B1.8.5 of the FIA F1 Regulations and non-compliance with Race Director’s Event Note (item 1, document 6).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_failure_to_follow_race_directors_instructions_sc2-sc1_time.pdf"
+   },
+   {
+    "doc": 38,
+    "title": "Infringement - Car 12 - Failure to follow Race Director's instructions (SC2-SC1 Time)",
+    "pub": "23.05.26 15:09",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 12 exceeded the time limit between the Safety Car lines.",
+    "breach": "Breach of Article B1.8.5 of the FIA F1 Regulations and non-compliance with Race Director’s Event Note (item 1, document 6).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_12_-_failure_to_follow_race_directors_instructions_sc2-sc1_time.pdf"
+   },
+   {
+    "doc": 46,
+    "title": "Infringement - Car 77 - Parc Ferme",
+    "pub": "23.05.26 17:14",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the car has been changed while under Parc Ferme.",
+    "breach": "Breach of Article B3.5.3 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_77_-_parc_ferme.pdf"
+   },
+   {
+    "doc": 47,
+    "title": "Infringement - Car 87 - Parc Ferme",
+    "pub": "23.05.26 17:14",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the car has been changed while under Parc Ferme.",
+    "breach": "Breach of Article B3.5.3 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane. TGR Haas F1 Team changed the setup of Car 87 under Parc Ferme, without the approval of the Technical Delegate, this not being in accordance with Article B3.5.3 of the FIA F1 Regulations. The F1 car is therefore required to start the Sprint from pit lane as per Article B3.5.3b of the FIA F1 Regulations. Competitors are reminded that they have the right to appeal certain decisions of the Stewards, in accordance with Article 15 of the FIA International Sporting Code and Chapter 5 of the FIA Judicial and Disciplinary Rules, within the applicable time limits. Decisions of the Stewards are taken independently of the FIA and are based solely on the relevant regulations, guidelines and evidence presented. Garry Connelly Tanja Geilhausen Pedro Lamy Marcel Demers",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_87_-_parc_ferme.pdf"
+   },
+   {
+    "doc": 48,
+    "title": "Infringement - Car 10 - Parc Ferme",
+    "pub": "23.05.26 17:17",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the car has been changed while under Parc Ferme and the team continued to work on the car beyond the covers-on time.",
+    "breach": "Breaches of Articles B3.4.2a and B3.5.7 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_10_-_parc_ferme.pdf"
+   },
+   {
+    "doc": 49,
+    "title": "Infringement - Car 23 - Parc Ferme",
+    "pub": "23.05.26 17:18",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the car has been changed while under Parc Ferme and the team continued to work on the car beyond the covers-on time.",
+    "breach": "Breaches of Articles B3.4.2a and B3.5.7 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_23_-_parc_ferme.pdf"
+   },
+   {
+    "doc": 54,
+    "title": "Infringement - Car 18 - Starting procedure infringement",
+    "pub": "23.05.26 19:49",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Sprint",
+    "fact": "Car 18 did not start the formation lap.",
+    "breach": "Breach of Article B5.6.1 of the FIA F1 Regulations.",
+    "decision": "No penalty applied",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_18_-_starting_procedure_infringement.pdf"
+   },
+   {
+    "doc": 55,
+    "title": "Infringement - Car 27 - Leaving the track and gaining an advantage",
+    "pub": "23.05.26 19:49",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Sprint",
+    "fact": "Car 27 left the track and rejoined in the same position, whilst defending against Car 30",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_27_-_leaving_the_track_and_gaining_an_advantage.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 56,
+    "title": "Infringement - Car 11 - Forcing Car 30 off track",
+    "pub": "23.05.26 19:50",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Sprint",
+    "fact": "Car 11 forced Car 30 off the track prior to Turn 13",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 b) of the International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_11_-_forcing_car_30_off_track.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 57,
+    "title": "Decision - Car 44 - Alleged leaving the track and gaining an advantage",
+    "pub": "23.05.26 19:50",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Sprint",
+    "fact": "Car 44 left the track and rejoined at Turn 13",
+    "breach": "Alleged breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_decision_-_car_44_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
+   },
+   {
+    "doc": 64,
+    "title": "Decision - Car 31 - Alleged Procedural Infringement",
+    "pub": "23.05.26 21:53",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Sprint",
+    "fact": "Car 31 was reported as having air released on the left rear tyre with the wheel fitted to the car.",
+    "breach": "Alleged breach of Point 2.5, Point 2.7 and Point 2.8 of FIA-F1-DOC-062A Tyre Operating Procedure",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_decision_-_car_31_-_alleged_procedural_infringement.pdf"
+   },
+   {
+    "doc": 76,
+    "title": "Infringement - Car 14 - Unsafe release from garage",
+    "pub": "24.05.26 01:05",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 14 was released from the garage into the path of Car 43",
+    "breach": "Breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "The competitor (Aston Martin Aramco F1 Team) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_14_-_unsafe_release_from_garage.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 77,
+    "title": "Infringement - Car 18 - Released in an unsafe condition",
+    "pub": "24.05.26 01:10",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 18 was released from the garage with wheel covers still fitted.",
+    "breach": "Breach of Article B1.6.2b.i of the FIA F1 Regulations.",
+    "decision": "The competitor (Aston Martin Aramco F1 Team) is fined €7,500.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_18_-_released_in_an_unsafe_condition.pdf",
+    "eur": 7500
+   },
+   {
+    "doc": 80,
+    "title": "Infringement - Car 11 - Failing to follow Race Directors Event Notes",
+    "pub": "24.05.26 01:22",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Qualifying",
+    "fact": "Car 11 failed to move to the right into turn 13 as required in the Competition Notes.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_11_-_failing_to_follow_race_directors_event_notes.pdf"
+   },
+   {
+    "doc": 81,
+    "title": "Decision - Car 44 - Alleged impeding of Car 10",
+    "pub": "24.05.26 01:23",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Qualifying",
+    "fact": "Car 44 allegedly impeded Car 10 on the approach to Turn 8.",
+    "breach": "Alleged breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_decision_-_car_44_-_alleged_impeding_of_car_10.pdf"
+   },
+   {
+    "doc": 82,
+    "title": "Decision - Car 18 - Allegedly impeded Car 27",
+    "pub": "24.05.26 01:23",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 18 allegedly impeded Car 27 on the approach to Turn 5",
+    "breach": "Alleged breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_decision_-_car_18_-_allegedly_impeded_car_27.pdf"
+   },
+   {
+    "doc": 89,
+    "title": "Infringement - Car 18 - PU Elements changed under Parc Ferme",
+    "pub": "24.05.26 19:08",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "The following Power Unit elements have been used: 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE) All Power Unit elements were replaced without the approval of the FIA Technical Delegate during parc fermé.",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) and B3.5.3 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_18_-_pu_elements_changed_under_parc_ferme.pdf"
+   },
+   {
+    "doc": 96,
+    "title": "Infringement - Car 27 - Pit Lane Speeding",
+    "pub": "25.05.26 00:52",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 80.3 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_27_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 97,
+    "title": "Infringement - Car 77 - Pit Lane Speeding",
+    "pub": "25.05.26 01:57",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 80.1 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_77_-_pit_lane_speeding.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 98,
+    "title": "Infringement - Car 5 - Driving unnecessarily slowly during VSC.",
+    "pub": "25.05.26 01:59",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 5 exceeded the VSC delta in several mini sectors during a VSC deployment.",
+    "breach": "Breach of Article B1.8.5 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_5_-_driving_unnecessarily_slowly_during_vsc.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 99,
+    "title": "Infringement - Car 27 - Starting procedure infringement",
+    "pub": "25.05.26 02:08",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Cars 27 and 30 were out of position at Safety Car Line 1 during the formation lap. Car 27 did not enter the Pit Lane as required by the Regulations.",
+    "breach": "Breach of Article B5.6.4 of the FIA F1 Regulations.",
+    "decision": "A mandatory Stop-and-Go penalty imposed after the Race. This penalty is suspended for the period ending at the final race of the 2026 Championship on condition that no further similar breach, by this driver, occurs. In addition the driver is Reprimanded for failure to start the formation lap in the correct order. This is the driver’s first Reprimand for the Season.",
+    "kinds": [
+     "stopgo",
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_27_-_starting_procedure_infringement.pdf",
+    "post": true
+   },
+   {
+    "doc": 100,
+    "title": "Infringement - Car 81 - Collision with Car 23",
+    "pub": "25.05.26 02:09",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Race",
+    "fact": "Car 81 collided with Car 23 in Turn 10",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_81_-_collision_with_car_23.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 101,
+    "title": "Infringement - Car 6 - More than one change of direction",
+    "pub": "29.05.26 16:49",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Car 6 made more than one change of direction to defend its position",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 b) of the International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_6_-_more_than_one_change_of_direction.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 102,
+    "title": "Decision - Car 11 - Ignoring blue flags",
+    "pub": "25.05.26 02:11",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Car 11 had 6 sets of blue flags displayed prior to the lapped car behind passing.",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 e) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_decision_-_car_11_-_ignoring_blue_flags.pdf"
+   },
+   {
+    "doc": 103,
+    "title": "Infringement - Car 30 - Starting procedure infringement",
+    "pub": "25.05.26 02:12",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "Cars 27 and 30 were out of position at Safety Car Line 1 during the formation lap. Car 30 left the grid before Car 27",
+    "breach": "Breach of Article B5.6.4 of the FIA F1 Regulations.",
+    "decision": "Reprimanded for failure to start the formation lap in the correct order. This is the driver’s first Reprimand for the Season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_30_-_starting_procedure_infringement.pdf"
+   },
+   {
+    "doc": 104,
+    "title": "Infringement - Car 63 - Unsafe act",
+    "pub": "25.05.26 02:22",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "The driver threw his head restraint onto the track after his car came to a halt during the race.",
+    "breach": "Breach of Article 12.2.1.h of the FIA International Sporting Code.",
+    "decision": "The driver George Russell is fined €5.000, suspended for a period of 12 months subject to no further breaches by the driver of a similar nature.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_63_-_unsafe_act.pdf",
+    "eur": 5000,
+    "susp": 5000
+   },
+   {
+    "doc": 106,
+    "title": "Infringement - Car 6 - Failing to slow for yellow flags",
+    "pub": "25.05.26 02:25",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Car 6 failed to slow under double yellow flags at T13",
+    "breach": "Breach of Appendix H, Article 2.5.5 b) of the International Sporting Code and Article B 1.8.4b of the FIA F1 Regulations.",
+    "decision": "10 Second Stop-and-Go penalty.",
+    "kinds": [
+     "stopgo"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_canadian_grand_prix_-_infringement_-_car_6_-_failing_to_slow_for_yellow_flags.pdf"
+   }
+  ],
+  "4": [
+   {
+    "doc": 21,
+    "title": "Infringement - Car 16 - Pit Lane Speeding",
+    "pub": "01.05.26 21:01",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 1",
+    "fact": "Pit lane speeding – 81.4 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "The competitor (Scuderia Ferrari HP) is fined €200.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_16_-_pit_lane_speeding.pdf",
+    "eur": 200
+   },
+   {
+    "doc": 28,
+    "title": "Infringement - Car 23 - Track Limits",
+    "pub": "02.05.26 01:32",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 23 exceeded track limits at Turn 6 during SQ1.",
+    "breach": "Breaches of Article B1.8.6 of the FIA F1 Regulations and Appendix L, Chapter IV, Article 2 c) of the International Sporting Code.",
+    "decision": "The lap time of 1.30.988 of Car 23 recorded in SQ1 is hereby deleted. All lap times of Car 23 in SQ2 are deleted. Car 23 will therefore be classified in position 19 in Sprint Qualifying.",
+    "kinds": [
+     "laptime"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_23_-_track_limits.pdf"
+   },
+   {
+    "doc": 31,
+    "title": "Decision - Car 1 - Alleged failure to follow Race Director's Instructions (SC2-1 Time)",
+    "pub": "02.05.26 01:52",
+    "num": 1,
+    "code": "NOR",
+    "driver": null,
+    "team": "",
+    "session": null,
+    "fact": null,
+    "breach": "Alleged breach of Article B1.8.5 of the FIA F1 Regulations and Article 12.2.1.i of the FIA International Sporting Code (non-compliance with the Race Director’s Competition Notes, item 1, document 20).",
+    "decision": "No Further Action Reasons The Stewards heard the driver and the team representative and thoroughly reviewed Marshalling/Positioning data, timing data and on-board camera footage. Car 1 (Norris) failed to stay below the required time limit as stipulated by the Race Director’s Competition Notes. Car 1 was within the approved delta time for almost the whole lap until just before turn 17, where he was suddenly passed by Car 27. That then forced Car 1 to react to create a necessary and appropriate gap to set up a push lap. The Stewards considered this an extenuating circumstance and determined that he did not drive unnecessarily slowly. Note Competitors are reminded that they have the right to appeal certain decisions of the Stewards, in accordance with Article 15 of the FIA International Sporting Code and Chapter 5 of the FIA Judicial and Disciplinary Rules, within the applicable time limits. Decisions of the Stewards are taken independently of the FIA and are based solely on the relevant regulations, guidelines and evidence presented. Nish Shetty Natalie Corsmit Vitantonio Liuzzi Steve Pence The Stewards",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_1_-_alleged_failure_to_follow_race_directors_instructions_sc2-1_time.pdf"
+   },
+   {
+    "doc": 40,
+    "title": "Infringement - Car 41 - Parc Ferme",
+    "pub": "02.05.26 16:54",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The team continued to work on the car beyond the covers-on time.",
+    "breach": "Breach of Article B3.4.2(a) of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_41_-_parc_ferme.pdf"
+   },
+   {
+    "doc": 49,
+    "title": "Infringement - Car 12 - Leaving the track without a justifiable reason multiple times",
+    "pub": "02.05.26 19:34",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Sprint",
+    "fact": "Leaving the track without a justifiable reason multiple times.",
+    "breach": "Breaches of Appendix L, Chapter IV, Article 2 c) of the International Sporting Code and B1.8.6 of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_12_-_leaving_the_track_without_a_justifiable_reason_multiple_times.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 54,
+    "title": "Infringement - Car 5 - Technical non-conformity (Engine intake air pressure)",
+    "pub": "02.05.26 21:07",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Sprint",
+    "fact": "Engine intake air pressure exceeded maximum permitted limit.",
+    "breach": "Breach of Article C5.3.2 of the FIA F1 Regulations.",
+    "decision": "Car 5 is disqualified from the Sprint classifications.",
+    "kinds": [
+     "dsq"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_5_-_technical_non-conformity_engine_intake_air_pressure.pdf"
+   },
+   {
+    "doc": 70,
+    "title": "Infringement - Car 6 - Technical nonconformity (Floor Board)",
+    "pub": "03.05.26 13:30",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Qualifying",
+    "fact": "LHS and RHS floor board were protruding out of the reference volume.",
+    "breach": "Breach of Article C3.5.5 of the FIA F1 Regulations.",
+    "decision": "Car 6 is disqualified from the Qualifying classifications.",
+    "kinds": [
+     "dsq"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_6_-_technical_nonconformity_floor_board.pdf"
+   },
+   {
+    "doc": 75,
+    "title": "Infringement - Car 6 - PU Elements changed under Parc Ferme",
+    "pub": "03.05.26 16:43",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE) Power Unit element and the control electronics unit were replaced without the approval of the FIA Technical Delegate during Parc Ferme.",
+    "breach": "Breach of Article B8.2.2 (read with B8.2.3) & B3.5.3 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_6_-_pu_elements_changed_under_parc_ferme.pdf"
+   },
+   {
+    "doc": 80,
+    "title": "Infringement - Car 77 - Pit Lane Speeding",
+    "pub": "03.05.26 20:47",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Pit lane speeding – 89.5 km/h",
+    "breach": "Breach of Article B1.6.3a of the FIA F1 Regulations.",
+    "decision": "Drive through penalty.",
+    "kinds": [
+     "drive"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_77_-_pit_lane_speeding.pdf"
+   },
+   {
+    "doc": 91,
+    "title": "Decision - Car 31 - Alleged yellow flag infringement",
+    "pub": "03.05.26 23:10",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Alleged failure to slow under yellow flags at Turn 15.",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 b) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_31_-_alleged_yellow_flag_infringement.pdf"
+   },
+   {
+    "doc": 92,
+    "title": "Decision - Car 23 - Alleged yellow flag infringement",
+    "pub": "03.05.26 23:11",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Alleged failure to slow under yellow flags at Turn 15.",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 b) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_23_-_alleged_yellow_flag_infringement.pdf"
+   },
+   {
+    "doc": 93,
+    "title": "Decision - Car 14 - Alleged yellow flag infringement",
+    "pub": "03.05.26 23:13",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Race",
+    "fact": "Alleged failure to slow under yellow flags at Turn 15.",
+    "breach": "Alleged breach of Appendix H, Article 2.5.5 b) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_14_-_alleged_yellow_flag_infringement.pdf"
+   },
+   {
+    "doc": 94,
+    "title": "Decision - Car 3 - Alleged incident with Car 63",
+    "pub": "03.05.26 23:22",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Contact made at turn 1 between Cars 3 and 63.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_3_-_alleged_incident_with_car_63.pdf"
+   },
+   {
+    "doc": 95,
+    "title": "Decision - Car 63 - Alleged incident with Car 3",
+    "pub": "03.05.26 23:21",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Contact made at turn 1 between Cars 3 and 63.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_63_-_alleged_incident_with_car_3.pdf"
+   },
+   {
+    "doc": 97,
+    "title": "Infringement - Car 16 - Leaving the track multiple times and driving in an unsafe condition",
+    "pub": "03.05.26 23:24",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 16 left the track on several occasions without a justifiable reason.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "Drive through penalty imposed after the Race. (20 seconds added to elapsed Race time).",
+    "kinds": [
+     "drive"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_16_-_leaving_the_track_multiple_times_and_driving_in_an_unsafe_condition_.pdf",
+    "post": true
+   },
+   {
+    "doc": 99,
+    "title": "Infringement - Car 3 - Pit Exit Incident",
+    "pub": "03.05.26 23:48",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Crossed the white line at pit exit.",
+    "breach": "Breach of Appendix L, Chapter IV Article 6 c) of the International Sporting Code.",
+    "decision": "5 second time penalty imposed after the Race. (5 seconds added to elapsed Race time).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_3_-_pit_exit_incident.pdf",
+    "sec": 5,
+    "post": true
+   },
+   {
+    "doc": 100,
+    "title": "Decision - Car 30 - Alleged incident with Car 10",
+    "pub": "03.05.26 23:55",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "Collision between cars 30 and 10 in Turn 17.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_decision_-_car_30_-_alleged_incident_with_car_10.pdf"
+   }
+  ],
+  "3": [
+   {
+    "doc": 23,
+    "title": "Decision - Car 30 - Alleged incident with car 55",
+    "pub": "27.03.26 07:18",
+    "num": 30,
+    "code": "LAW",
+    "driver": "Liam Lawson",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Car 55 was travelling slowly ahead of Car 30 at the exit of turn 11.",
+    "breach": "Alleged breach of Article B1.8.5 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_japanese_grand_prix_-_decision_-_car_30_-_alleged_incident_with_car_55.pdf"
+   },
+   {
+    "doc": 25,
+    "title": "Decision - Car 23 - Alleged incident with car 11",
+    "pub": "27.03.26 07:29",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "A collision occurred between Cars 23 and 11 at turn 16.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_japanese_grand_prix_-_decision_-_car_23_-_alleged_incident_with_car_11.pdf"
+   },
+   {
+    "doc": 26,
+    "title": "Decision - Car 44 - Alleged incident with car 3",
+    "pub": "27.03.26 07:49",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Free Practice 1",
+    "fact": "Incident between Cars 44 and 3 between turns 14 and 15.",
+    "breach": "Alleged breach of Article B1.8.5 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_japanese_grand_prix_-_decision_-_car_44_-_alleged_incident_with_car_3.pdf"
+   },
+   {
+    "doc": 33,
+    "title": "Infringement - Car 43 - Impeding of Car 3",
+    "pub": "27.03.26 09:23",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Car 43 impeded Car 3 into turn 15.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_japanese_grand_prix_-_infringement_-_car_43_-_impeding_of_car_3.pdf"
+   },
+   {
+    "doc": 44,
+    "title": "Infringement - Car 81 - Impeding of Car 27",
+    "pub": "28.03.26 05:34",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Car 81 impeded Car 27 into turn 15.",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_japanese_grand_prix_-_infringement_-_car_81_-_impeding_of_car_27.pdf"
+   }
+  ],
+  "2": [
+   {
+    "doc": 20,
+    "title": "Infringement - Car 23 - Breach of Practice Start Procedure",
+    "pub": "13.03.26 07:20",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 1",
+    "fact": "Car 23 performed a practice start on the grid while another car was stationary on the same side of the grid",
+    "breach": "Breach of Article B4.2.2c of the FIA F1 Regulations.",
+    "decision": "Driver: Reprimand (Driving).",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_23_-_breach_of_practice_start_procedure.pdf"
+   },
+   {
+    "doc": 28,
+    "title": "Decision - Car 12 - Alleged impeding of Car 1",
+    "pub": "13.03.26 10:40",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 12 Allegedly Impeded Car 1 at Turn 1",
+    "breach": "Alleged breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_decision_-_car_12_-_alleged_impeding_of_car_1.pdf"
+   },
+   {
+    "doc": 30,
+    "title": "Decision - Car 10 - Alleged impeding of Car 3",
+    "pub": "13.03.26 11:55",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "Car 10 allegedly impeded Car 3 at Turn 14",
+    "breach": "Alleged breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_decision_-_car_10_-_alleged_impeding_of_car_3.pdf"
+   },
+   {
+    "doc": 42,
+    "title": "Infringement - Car 23 - Changes made during Parc Ferme",
+    "pub": "14.03.26 02:53",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint Qualifying",
+    "fact": "The setup of the suspension has been changed while under Parc Ferme.",
+    "breach": "Breach of Article B3.5.7 of the FIA F1 Regulations.",
+    "decision": "Required to start the Sprint from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_23_-_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 48,
+    "title": "Infringement - Car 12 - Causing a Collision with Car 6",
+    "pub": "14.03.26 05:38",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Sprint",
+    "fact": "Car 12 collided with Car 6 in Turn 6 on Lap 1",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2d of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_12_-_causing_a_collision_with_car_6.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 49,
+    "title": "Infringement - Car 11 - Safety Car ECU minimum time",
+    "pub": "14.03.26 05:41",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Sprint",
+    "fact": "Exceeding minimum time set by ECU behind safety car",
+    "breach": "Breach of Article B5.13.2b of the FIA F1 Regulations.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_11_-_safety_car_ecu_minimum_time.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 51,
+    "title": "Infringement - Car 6 - Failing to follow Race Director's instruction",
+    "pub": "14.03.26 05:57",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Sprint",
+    "fact": "The Driver did not follow the Race Director’s Instruction considering practice starts (item 13.5 of the Event Notes).",
+    "breach": "Breach of Article 12.2.1i of the International Sporting Code in combination with Item 13.5 of the Race Director Competition Notes.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_6_-_failing_to_follow_race_directors_instruction.pdf"
+   },
+   {
+    "doc": 52,
+    "title": "Infringement - Car 10 - Released in an unsafe condition",
+    "pub": "14.03.26 06:30",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Car 10 left its garage with an antenna shield still fitted",
+    "breach": "Breach of Article B1.6.2b.i of the FIA F1 Regulations.",
+    "decision": "The competitor (BWT Alpine F1 Team) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_10_-_released_in_an_unsafe_condition.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 68,
+    "title": "Infringement - Car 23 - Changes made during Parc Ferme",
+    "pub": "15.03.26 05:41",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Qualifying",
+    "fact": "The setup of the suspension has been changed while under Parc Ferme.",
+    "breach": "Breach of Article B3.5.7 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane under Article B3.5.7b of the FIA F1 Regulations.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_23_-_changes_made_during_parc_ferme_0.pdf"
+   },
+   {
+    "doc": 72,
+    "title": "Infringement - Car 31 - Causing a collision with Car 43",
+    "pub": "15.03.26 09:32",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Car 31 colided with Car 43 in Turm 2",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2d of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_chinese_grand_prix_-_infringement_-_car_31_-_causing_a_collision_with_car_43.pdf",
+    "sec": 10
+   }
+  ],
+  "1": [
+   {
+    "doc": 25,
+    "title": "Infringement - Car 63 - Failure to follow Race Director Instruction - Practice Start",
+    "pub": "06.03.26 10:44",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Practice 2",
+    "fact": "Car 63 performed a practice start outside the designated practice start area",
+    "breach": "Breach of Article 12.2.1.i of the FIA International Sporting Code in combination with Item 14.1 of the Race Director Competition Notes (Document 8).",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_infringement_-_car_63_-_failure_to_follow_race_director_instruction_-_practice_start.pdf"
+   },
+   {
+    "doc": 26,
+    "title": "Infringement - Car 63 - Pit Lane Incident",
+    "pub": "06.03.26 10:44",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Practice 2",
+    "fact": "Pit Lane Incident with Car 41",
+    "breach": "Breach of Appendix L, Chapter IV, Article 5b of the International Sporting Code.",
+    "decision": "Driver: Reprimand",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_infringement_-_car_63_-_pit_lane_incident.pdf"
+   },
+   {
+    "doc": 27,
+    "title": "Decision - Car 43 - Allegedly Driving Unnecessarily Slow",
+    "pub": "06.03.26 10:44",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Practice 2",
+    "fact": "Driving Unnecessarily Slow on the Main Straight",
+    "breach": "Alleged Breach of Article B1.8.5 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_43_-_allegedly_driving_unnecessarily_slow.pdf"
+   },
+   {
+    "doc": 35,
+    "title": "Decision - Car 12 - Alleged pitlane incident",
+    "pub": "07.03.26 07:57",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "Alleged pitlane incident – Working on the car in the fast lane",
+    "breach": "Alleged breach of Article B1.6.1e of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_12_-_alleged_pitlane_incident.pdf"
+   },
+   {
+    "doc": 41,
+    "title": "Infringement - Car 10 - Released in an unsafe condition",
+    "pub": "07.03.26 09:37",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 10 was released from its garage in an unsafe condition.",
+    "breach": "Breach of Article B1.6.2 b) i) of the FIA F1 Regulations.",
+    "decision": "The Competitor (BWT Alpine F1 Team) is fined €5.000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_infringement_-_car_10_-_released_in_an_unsafe_condition.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 42,
+    "title": "Infringement - Car 12 - Released in an unsafe condition",
+    "pub": "07.03.26 09:37",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 12 was released from its garage in an unsafe condition.",
+    "breach": "Breach of Article B1.6.2 b) i) of the FIA F1 Regulations.",
+    "decision": "The Competitor (Mercedes-AMG Petronas F1 Team) is fined €7,500.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_infringement_-_car_12_-_released_in_an_unsafe_condition.pdf",
+    "eur": 7500
+   },
+   {
+    "doc": 59,
+    "title": "Decision - Car 27 - Start Procedure Infringement",
+    "pub": "08.03.26 06:42",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "At the end of the reconnaissance laps Car 27 did not reach the grid under its own power.",
+    "breach": "Alleged breach of Article B5.2.4 of the FIA F1 Regulations.",
+    "decision": "No further Action",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_27_-_start_procedure_infringement.pdf"
+   },
+   {
+    "doc": 60,
+    "title": "Infringement - Car 43 - Grid Procedure Infringement",
+    "pub": "08.03.26 07:12",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Grid Procedure",
+    "fact": "A member of the Team's personnel was touching Car 43 on the grid after the fifteen second signal was shown.",
+    "breach": "Breach of Article B5.5.5 a) i) of the FIA F1 Regulations.",
+    "decision": "Stop and Go Penalty",
+    "kinds": [
+     "stopgo"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_infringement_-_car_43_-_grid_procedure_infringement.pdf"
+   },
+   {
+    "doc": 62,
+    "title": "Decision - Car 31 - Alleged causing a collision with Car 10",
+    "pub": "08.03.26 07:34",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Contact occurred between Car 31 and Car 10 at Turn 3.",
+    "breach": "Alleged breach of Appendix L, Chapter IV Art 2(d) of the FIA International Sporting Code.",
+    "decision": "No further action",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_31_-_alleged_causing_a_collision_with_car_10.pdf"
+   },
+   {
+    "doc": 63,
+    "title": "Decision - Car 10 - Alleged causing a collision with Car 31",
+    "pub": "08.03.26 07:34",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Contact occurred between Car 10 and Car 31 at Turn 3.",
+    "breach": "Alleged breach of Appendix L, Chapter IV Art 2(d) of the FIA International Sporting Code.",
+    "decision": "No further action",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_10_-_alleged_causing_a_collision_with_car_31.pdf"
+   },
+   {
+    "doc": 64,
+    "title": "Decision - Car 31 - Allegedly driving unnecessarily slowly",
+    "pub": "08.03.26 07:58",
+    "num": 31,
+    "code": "OCO",
+    "driver": "Esteban Ocon",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Car 31 exceeded the VSC delta in several mini-sectors during a VSC deployment",
+    "breach": "Alleged breach of Article B1.8.5 and/or B5.12.2.a of the FIA F1 Regulations",
+    "decision": "No further action",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_31_-_allegedly_driving_unnecessarily_slowly.pdf"
+   },
+   {
+    "doc": 66,
+    "title": "Decision - Car 11 - Alleged forcing another driver off the track",
+    "pub": "08.03.26 08:04",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Alleged Forcing another driver off the track at Turn 3",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2b) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_australian_grand_prix_-_decision_-_car_11_-_alleged_forcing_another_driver_off_the_track.pdf"
+   }
+  ]
+ }
+}

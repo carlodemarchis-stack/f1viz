@@ -96,6 +96,13 @@ def build(rnd, f1):
             r["delta"] = (r["qpos"] - r["pos"]) if r["qpos"] else None
         wk["grid"] = grid
         got.append("grid:%d" % len(grid))
+        try:                                   # reasons from data/penalties.json (fetch_penalties.py)
+            import fetch_penalties as fp
+            pp = os.path.join(ROOT, "data", "penalties.json")
+            if os.path.exists(pp):
+                fp.annotate(grid, fp.grid_reasons(rnd, json.load(open(pp))["rounds"]))
+        except Exception as e:
+            print("  R%-2d grid reasons skipped: %s" % (rnd, e))
     print("  R%-2d %-16s %s" % (rnd, cal.get("short", ""), ", ".join(got) or "nothing found"))
     return wk if got else None
 

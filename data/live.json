@@ -2,7 +2,7 @@
  "meta": {
   "season": 2026,
   "round": 15,
-  "updated": "2026-09-25T16:11:21Z"
+  "updated": "2026-09-25T19:20:28Z"
  },
  "round": 15,
  "gp": "Azerbaijan Grand Prix",
@@ -1907,7 +1907,16 @@
    "out": false,
    "rookie": false,
    "qpos": 9,
-   "delta": -5
+   "delta": -5,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 5,
+     "why": "Yellow flag",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_55_-_failure_to_slow_for_yellow_flags_0.pdf"
+    }
+   ]
   },
   {
    "pos": 15,
@@ -2021,7 +2030,16 @@
    "out": false,
    "rookie": false,
    "qpos": 20,
-   "delta": 0
+   "delta": 0,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 3,
+     "why": "Impeding PIA",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_11_-_impeding_car_81.pdf"
+    }
+   ]
   },
   {
    "pos": 21,
@@ -2040,7 +2058,23 @@
    "out": false,
    "rookie": false,
    "qpos": 19,
-   "delta": -2
+   "delta": -2,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 25,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_14_-_pu_elements.pdf"
+    },
+    {
+     "k": "grid",
+     "n": 5,
+     "why": "PU change",
+     "ses": "Free Practice 3",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_14_-_pu_element.pdf"
+    }
+   ]
   },
   {
    "pos": 22,
@@ -2059,7 +2093,16 @@
    "out": false,
    "rookie": false,
    "qpos": 21,
-   "delta": -1
+   "delta": -1,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 20,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_18_-_pu_elements.pdf"
+    }
+   ]
   }
  ]
 }
