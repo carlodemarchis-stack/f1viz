@@ -79,10 +79,16 @@ def pdf_text(url):
         print("   unreadable %s: %s" % (url, e)); return ""
 
 
-# rulings later rescinded on a Right of Review: (round, doc) -> the document that overturned it
-OVERTURNED = {
-    (6, 73): "Rescinded on review (FIA doc 99): did not exceed 60 km/h, 5 s removed",
-    (6, 75): "Rescinded on review (FIA doc 99): did not exceed 60 km/h, 5 s removed",
+# rulings later rescinded and still void: (round, doc) -> the document that overturned it.
+# Checked against each round's latest Final Race Classification "PENALTIES" notes.
+OVERTURNED = {}
+# rulings whose status changed but that stand in the final classification: (round, doc) -> note
+HISTORY = {
+    # Monaco: stewards rescinded both on Alpine's Right of Review (doc 99, 12 Jun); the FIA
+    # International Court of Appeal reinstated them after McLaren and Red Bull appealed
+    # (hearing 25 Aug; revised classification doc 106, 5 Sep) - Gasly back to P7.
+    (6, 73): "rescinded on review 12 Jun, reinstated by the FIA Court of Appeal 5 Sep",
+    (6, 75): "rescinded on review 12 Jun, reinstated by the FIA Court of Appeal 5 Sep",
 }
 
 FIELDS = ["No / Driver", "Competitor", "Time", "Session", "Fact", "Infringement", "Decision", "Reason"]
@@ -194,6 +200,8 @@ def collect(rounds=None, verbose=False):
             ov = OVERTURNED.get((rnd, f["doc"]))
             if ov:
                 rows[-1]["overturned"] = ov
+            if HISTORY.get((rnd, f["doc"])):
+                rows[-1]["history"] = HISTORY[(rnd, f["doc"])]
         rows.sort(key=lambda r: (r["doc"] or 0))
         result[str(rnd)] = rows
         pen = [r for r in rows if r["kinds"] and r["kinds"] != ["nfa"]]
@@ -330,6 +338,7 @@ def note(x):
                                               " (%d in 12 months)" % x["ppTotal"] if x.get("ppTotal") else ""))
     if x.get("post"): bits.append("applied after the session")
     if "subject to" in d.lower() and "classif" in d.lower(): bits.append("if classified")
+    if x.get("history"): bits.append(x["history"])
     return " · ".join(bits)
 
 
