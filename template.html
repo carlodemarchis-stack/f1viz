@@ -610,6 +610,38 @@ a.sgd-chip.pen:hover{border-color:var(--bad);color:#fff}
 .rc-tab.wall-tab.on{color:var(--ink);background:color-mix(in srgb,var(--c,#00D7B6) 42%,transparent)}
 .rc-wall{flex:1;min-height:0;overflow:auto;padding:6px 10px 8px}
 .rc-strat{flex:1;min-height:0;overflow:auto;padding:8px 12px 10px}
+/* stewards tab: every FIA ruling of the weekend, grouped by session */
+.rc-stew{flex:1;min-height:0;overflow:auto;padding:6px 12px 10px}
+.sw-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:2px 0 8px;font-size:11.5px;color:var(--muted)}
+.sw-hd b{color:var(--ink)}
+.sw-nfa{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer;font-family:inherit;
+  font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:20px}
+.sw-nfa:hover{color:var(--ink);border-color:var(--muted-2)}
+.sw-g{margin-bottom:8px}
+.sw-s{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin:0 0 3px 2px}
+.sw-row{display:grid;grid-template-columns:44px 96px minmax(0,1fr) auto;gap:9px;align-items:center;padding:4px 6px;
+  border-radius:7px;font-size:12px}
+.sw-row:nth-child(odd){background:rgba(255,255,255,.028)}
+.sw-who{font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.03em;padding:2px 0;border-radius:4px;cursor:pointer;
+  border:0;border-left:3px solid var(--cc,var(--muted-2));background:color-mix(in srgb,var(--cc,#888) 16%,transparent);color:var(--ink)}
+.sw-who:disabled{cursor:default;color:var(--muted)}
+.sw-who:not(:disabled):hover{background:color-mix(in srgb,var(--cc) 34%,transparent)}
+.sw-tag{justify-self:start;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:4px;white-space:nowrap;
+  --k:#9aa6b8;background:color-mix(in srgb,var(--k) 20%,transparent);color:color-mix(in srgb,var(--k) 70%,#fff);
+  border:1px solid color-mix(in srgb,var(--k) 42%,transparent)}
+.k-dsq .sw-tag{--k:#ff4d5e}.k-race .sw-tag{--k:#e77b83}.k-grid .sw-tag{--k:#f5a623}.k-rep .sw-tag{--k:#c9a3ff}
+.k-fine .sw-tag{--k:#7fb2ff}.k-warn .sw-tag{--k:#9aa6b8}.k-nfa .sw-tag{--k:#5b6576}
+.sw-why{min-width:0;color:var(--ink);line-height:1.3}
+.sw-why i{display:block;font-style:normal;font-size:10px;color:var(--muted-2)}
+.sw-why i.sw-ov{color:#79d69b}
+.k-nfa .sw-why{color:var(--muted)}
+.sw-row.over .sw-tag{text-decoration:line-through;opacity:.7}
+.sw-doc{font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--muted-2);text-decoration:none;padding:2px 6px;border-radius:4px;border:1px solid var(--line)}
+.sw-doc:hover{color:var(--ink);border-color:var(--muted-2)}
+.sw:not(.all) .sw-row.k-nfa,.sw:not(.all) .sw-g.only-nfa{display:none}
+.sw-note{margin:10px 2px 0;font-size:10px;color:var(--muted-2)}
+@media (max-width:600px){ .sw-row{grid-template-columns:38px auto minmax(0,1fr) auto;gap:7px;padding:4px 3px;font-size:11.5px}
+  .sw-tag{font-size:9.5px;padding:2px 5px} .rc-stew{padding:6px 4px 10px} }
 .gp .tyr{display:flex;gap:2px;justify-content:flex-end;align-items:center}
 .gp .tyr i{width:6px;height:6px;border-radius:50%;display:block}
 .gp .tyr em{color:var(--muted-2);font-style:normal}
@@ -1081,6 +1113,7 @@ const RADIO = /*__RADIO__*/;
 const LIVE = /*__LIVE__*/;
 const WEEKENDS = /*__WEEKENDS__*/;
 const EXTRAS = /*__EXTRAS__*/;
+const STEW = /*__STEWARDS__*/;                 // FIA stewards' decisions per round (tools/fetch_penalties.py)
 const UPCOMING = /*__UPCOMING__*/;        // schedule-only cards for rounds still to come
 const CAL27 = /*__CAL27__*/;              // next season's calendar, the closing card
 // the round being run has its own weekend card, so it is not repeated here
@@ -1110,6 +1143,39 @@ let mode='drivers', idx=0, playing=false, timer=null, curGP=0, lvSesKey='', sgSe
 const CTXA={drivers:"Drivers' Championship",constructors:"Constructors' Championship",races:"Grand Prix Results"};
 const list = () => mode==='races' ? DATA.races : (mode==='drivers' ? D : C);
 const N = () => list().length;
+const stewOf = r => (STEW&&STEW[r]&&STEW[r].length)?STEW[r]:null;
+const FIADOC = 'https://www.fia.com/system/files/decision-document/';
+function stewSummary(rnd){
+  const L=stewOf(rnd); if(!L) return null;
+  const act=L.filter(e=>e.k!=='nfa'&&!e.v);
+  const race=act.filter(e=>e.s==='Race'&&(e.k==='race'||e.k==='dsq'));
+  const sec=race.reduce((s,e)=>{ const m=/^\+(\d+)s$/.exec(e.t); return s+(m?+m[1]:0); },0);
+  return {n:act.length, race:race.length, sec, all:L.length};
+}
+function stewList(r){
+  const L=stewOf(r.r), s=stewSummary(r.r), groups=[];
+  L.forEach(e=>{ let g=groups.find(x=>x.s===e.s); if(!g) groups.push(g={s:e.s,rows:[]}); g.rows.push(e); });
+  const nfa=L.filter(e=>e.k==='nfa').length;
+  const row=e=>{ const d=D.find(x=>x.code===e.c);
+    return `<div class="sw-row k-${e.k}${e.v?' over':''}">
+      <button class="sw-who"${d?` data-dc="${e.c}" style="--cc:${d.color}" title="Open ${d.family}'s card"`:` disabled title="${e.n||''}"`}>${e.c}</button>
+      <span class="sw-tag">${e.t}</span>
+      <span class="sw-why">${e.w}${e.x?`<i>${e.x}</i>`:''}${e.v?`<i class="sw-ov">${e.v}</i>`:''}</span>
+      <a class="sw-doc" href="${FIADOC}${e.u}" target="_blank" rel="noopener" title="FIA stewards' decision (PDF)">FIA</a></div>`; };
+  return `<div class="sw">
+    <div class="sw-hd"><span><b>${s.n}</b> sanction${s.n===1?'':'s'} across the weekend${s.race?` · <b>${s.race}</b> in the race${s.sec?` (+${s.sec}s)`:''}`:''}</span>
+      ${nfa?`<button class="sw-nfa" data-n="${nfa}">+ ${nfa} investigated, no action</button>`:''}</div>
+    ${groups.map(g=>`<div class="sw-g${g.rows.every(e=>e.k==='nfa')?' only-nfa':''}"><div class="sw-s">${g.s}</div>${g.rows.map(row).join('')}</div>`).join('')}
+    <div class="sw-note">Source: FIA stewards' decisions (fia.com). Warnings and reprimands go to the driver, fines to the team.</div>
+  </div>`;
+}
+function wireStew(host){
+  if(!host) return;
+  const b=host.querySelector('.sw-nfa'), sw=host.querySelector('.sw');
+  if(b) b.onclick=()=>{ const on=sw.classList.toggle('all');
+    b.textContent=on?'Hide no-action rulings':`+ ${b.dataset.n} investigated, no action`; };
+  host.querySelectorAll('.sw-who[data-dc]').forEach(el=>{ el.onclick=()=>goDriver(el.dataset.dc); });
+}
 const hasOvt = () => !!(EXTRAS&&EXTRAS.overtakes&&Object.keys(EXTRAS.overtakes).length);
 const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?(hasOvt()?5:4):(1+(hasLive()?1:0)+upcList().length+((CAL27||[]).length?1:0)));   // races: [+ weekend in progress] + season map + rounds to come [+ next season]
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
@@ -1463,6 +1529,9 @@ function raceCard(r){
             const t=Object.entries(o.by)[0]||['—',0];
             return `<div class="rc-row" title="Position changes on track, excluding the standing start${o.skip.length>1?' and the restart':''}"><span>On-track passes</span>
               <b>${o.total} <em class="mut2">· most ${t[0]} ${t[1]}</em></b></div>`;})()}
+          ${(()=>{const st=stewSummary(r.r); if(!st) return '';
+            return `<div class="rc-row" title="FIA stewards' sanctions across the weekend; details in the Stewards tab"><span>Stewards</span>
+              <b>${st.race?`${st.race} race penalt${st.race>1?'ies':'y'}${st.sec?` · +${st.sec}s`:''}`:'<em class="none">None in the race</em>'} <em class="mut2">· ${st.n} all weekend</em></b></div>`;})()}
           <div class="rc-row"><span>Safety car</span><b>${(()=>{const s=r.safety||{};if(s.unknown)return '<em class="none">—</em>';const p=[];if(s.sc)p.push(s.sc+' SC');if(s.vsc)p.push(s.vsc+' VSC');return p.length?p.join(' · '):'<em class="none">None</em>';})()}</b></div>
       ${(()=>{const red=(r.safety||{}).red||0;return red>0?`<div class="rc-row"><span>Red flag</span><b style="color:var(--bad)">⚑ ${red>1?red+' stoppages':'Yes'}</b></div>`:'';})()}
         </div>
@@ -1481,7 +1550,7 @@ function raceCard(r){
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
-      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}${stintsOf(r.r)?`<button class="rc-tab" data-tab="strat">Strategy</button>`:''}<button class="rc-tab wall-tab" data-tab="wall"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
+      <div class="gphead"><div class="gph-l"><div class="rc-tabset"><button class="rc-tab on" data-tab="res">Results</button><button class="rc-tab" data-tab="lap" data-lc="${r.r}"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>Lap evolution</button>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?`<button class="rc-tab" data-tab="radio">Radio</button>`:''}${stintsOf(r.r)?`<button class="rc-tab" data-tab="strat">Strategy</button>`:''}${stewOf(r.r)?`<button class="rc-tab" data-tab="stew">Stewards</button>`:''}<button class="rc-tab wall-tab" data-tab="wall"${r.nolaps?' disabled title="Lap-by-lap timing not published yet"':''}>The Wall</button></div><div class="wall-pills" hidden></div><span class="wall-maxmsg" hidden></span></div><span class="rc-date">${r.short} · ${fmtDate(r.date)}</span><div class="lc-meta" hidden><span class="lc-hint">Tap a driver to follow</span><span class="lc-banner"></span><span class="lc-legend"><span><i style="background:#4ad991"></i>PB</span><span><i style="background:#c9a3ff"></i>Fastest</span><span><i style="background:#f5a623"></i>Pit</span></span></div></div>
       <div class="rc-view">
         <div class="clshead"><span></span><span></span><span>Driver</span><span class="h-grid">Grid</span><span class="h-delta">+/−</span><span class="h-fl">FL</span><span class="h-pit">Pit</span><span>Result</span><span>Pts</span></div>
         <div class="rc-cls">${cls}</div>
@@ -1490,6 +1559,7 @@ function raceCard(r){
       <div class="rc-wall" data-wr="${r.r}" hidden></div>
       <div class="rc-radio" hidden>${(RADIO&&RADIO.radio&&RADIO.radio[r.r])?raceRadioList(r):''}</div>
       <div class="rc-strat" hidden>${stintsOf(r.r)?stratChart(r):''}</div>
+      <div class="rc-stew" hidden>${stewOf(r.r)?stewList(r):''}</div>
     </div>
   </div>`;
 }
@@ -2295,7 +2365,8 @@ function lcHash(){ try{
           : onLiveCard() ? (lvSesKey?('/'+lvSesKey):'')
           : (mode==='races'&&lcTab==='lap') ? ('/lap'+(lcCurLap>0?'/'+lcCurLap:''))
           : (mode==='races'&&lcTab==='wall') ? '/wall'
-          : (mode==='races'&&lcTab==='strat') ? '/strat' : '';
+          : (mode==='races'&&lcTab==='strat') ? '/strat'
+          : (mode==='races'&&lcTab==='stew') ? '/stew' : '';
   history.replaceState(null,'','#'+mode+'/'+idx+t); }catch(e){}
   updateSocialMeta(); }
 // followed drivers persist across races + sessions (keyed by stable driver code)
@@ -2498,21 +2569,24 @@ function render(dir){
       document.documentElement.dataset.team=e.winner.teamId||'';
       $('#cwho').textContent=`R${e.r} ${e.short}`;
       const tabs=[...wrap.querySelectorAll('.rc-tab')];
-      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), rad=wrap.querySelector('.rc-radio'), wl=wrap.querySelector('.rc-wall'), strat=wrap.querySelector('.rc-strat'), card=wrap.querySelector('.card'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
+      if(tabs.length){ const view=wrap.querySelector('.rc-view'), lc=wrap.querySelector('.rc-lc'), rad=wrap.querySelector('.rc-radio'), wl=wrap.querySelector('.rc-wall'), strat=wrap.querySelector('.rc-strat'), stew=wrap.querySelector('.rc-stew'), card=wrap.querySelector('.card'), lcRound=+wrap.querySelector('[data-lc]').dataset.lc;
         const meta=wrap.querySelector('.lc-meta'), date=wrap.querySelector('.rc-date');
         const setTab=t=>{ lcTab=t; tabs.forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
           if(rad) rad.setAttribute('hidden','');
           if(strat) strat.setAttribute('hidden','');
+          if(stew) stew.setAttribute('hidden','');
           if(wl){ wl.setAttribute('hidden',''); wl.innerHTML=''; }               // reset The Wall (fresh mount each time)
           const wpills=wrap.querySelector('.wall-pills'); if(wpills && t!=='wall'){ wpills.setAttribute('hidden',''); wpills.innerHTML=''; const wmax=wrap.querySelector('.wall-maxmsg'); if(wmax)wmax.hidden=true; }
           if(card) card.classList.toggle('wall-on', t==='wall');                 // full-width takeover only for The Wall
           if(t==='lap'){ date.setAttribute('hidden',''); meta.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.removeAttribute('hidden'); mountLapChart(lcRound, lc); }
           else if(t==='radio'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(rad)rad.removeAttribute('hidden'); }
           else if(t==='strat'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(strat)strat.removeAttribute('hidden'); }
+          else if(t==='stew'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; if(stew)stew.removeAttribute('hidden'); }
           else if(t==='wall'){ if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); view.setAttribute('hidden',''); lc.setAttribute('hidden',''); lc.innerHTML=''; wl.removeAttribute('hidden'); mountWall(lcRound, wl); }
           else { if(window.__lcStop)window.__lcStop(); meta.setAttribute('hidden',''); date.removeAttribute('hidden'); lc.setAttribute('hidden',''); lc.innerHTML=''; view.removeAttribute('hidden'); lcCurLap=0; } lcHash(); };
         tabs.forEach(b=>{ if(b.hasAttribute('disabled'))return; b.onclick=()=>setTab(b.dataset.tab); });
-        if(lcTab==='lap') setTab('lap'); else if(lcTab==='radio'&&rad) setTab('radio'); else if(lcTab==='strat'&&strat&&strat.innerHTML) setTab('strat'); else if(lcTab==='wall') setTab('wall');   // keep the tab when navigating between races
+        wireStew(stew);
+        if(lcTab==='stew'&&stew&&stew.innerHTML) setTab('stew'); else if(lcTab==='lap') setTab('lap'); else if(lcTab==='radio'&&rad) setTab('radio'); else if(lcTab==='strat'&&strat&&strat.innerHTML) setTab('strat'); else if(lcTab==='wall') setTab('wall');   // keep the tab when navigating between races
       }
     } else {
       wrap.innerHTML = mode==='drivers'?driverCard(e):constructorCard(e);
@@ -2598,10 +2672,11 @@ function applyHash(){
   const i=parseInt(m[1],10); idx=isNaN(i)?0:Math.max(0,Math.min(TOT()-1,i));
   const onLap = m[0]==='races' && m[2]==='lap';
   lcTab = onLap ? 'lap' : (m[0]==='races' && m[2]==='wall') ? 'wall'
-        : (m[0]==='races' && m[2]==='strat') ? 'strat' : 'res';
+        : (m[0]==='races' && m[2]==='strat') ? 'strat'
+        : (m[0]==='races' && m[2]==='stew') ? 'stew' : 'res';
   lcSeekLap = onLap ? (parseInt(m[3],10)||0) : 0;
   // weekend card: restore the selected tab (fp1/fp2/fp3/quali/gaps/sgrid) so a reload lands back on it
-  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && m[2]!=='strat' && m[2]!=='wk' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
+  if(m[0]==='races' && m[2] && m[2]!=='lap' && m[2]!=='wall' && m[2]!=='strat' && m[2]!=='stew' && m[2]!=='wk' && hasLive() && idx===DATA.races.length) lvSesKey=m[2];
   pendingWeekend = (m[0]==='races' && m[2]==='wk');               // reopen that round's weekend after render
   if(pendingWeekend && m[3]) lvSesKey=m[3];
   pendingRace = (m[0]==='drivers' && m[2]==='race') ? (parseInt(m[3],10)||null) : null;   // deep-dive round to reopen

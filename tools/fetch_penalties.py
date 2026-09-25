@@ -81,8 +81,8 @@ def pdf_text(url):
 
 # rulings later rescinded on a Right of Review: (round, doc) -> the document that overturned it
 OVERTURNED = {
-    (6, 73): "Doc 99: rescinded on Right of Review - Car 10 did not exceed 60 km/h; 5 s removed",
-    (6, 75): "Doc 99: rescinded on Right of Review - Car 10 did not exceed 60 km/h; 5 s removed",
+    (6, 73): "Rescinded on review (FIA doc 99): did not exceed 60 km/h, 5 s removed",
+    (6, 75): "Rescinded on review (FIA doc 99): did not exceed 60 km/h, 5 s removed",
 }
 
 FIELDS = ["No / Driver", "Competitor", "Time", "Session", "Fact", "Infringement", "Decision", "Reason"]
@@ -220,8 +220,12 @@ def for_sprint(x):
     return "the sprint" in d or ("sprint/race" in d and (x["session"] or "").startswith("Sprint"))
 
 
+ACRONYMS = ["PU", "SC", "VSC", "RD", "CDS", "SCL", "SC2", "SC1", "SCL1", "SCL2", "ECU", "DRS", "FIA", "ISC"]
+
+
 def why(x, bynum_code):
-    t = re.sub(r"^(?:Corrected )?(?:Infringement|Decision)\s*-\s*Car \d+\s*-\s*", "", x["title"]).strip()
+    """Short, sentence-case reason from the document title; car numbers become driver codes."""
+    t = re.sub(r"^(?:Corrected )?(?:Infringement|Decision)\s*-\s*(?:Car \d+\s*-\s*)?", "", x["title"]).strip()
     tl = t.lower()
     if "pu element" in tl:
         return "PU change in parc fermé" if "parc f" in tl else "PU change"
@@ -229,10 +233,15 @@ def why(x, bynum_code):
         return "Parc fermé change"
     if "yellow" in tl:
         return "Yellow flag"
-    m = re.search(r"imped\w*(?: of)? car (\d+)", tl)
-    if m:
-        return "Impeding " + (bynum_code.get(int(m.group(1))) or "car " + m.group(1))
-    return t[:1].upper() + t[1:]
+    if "pit lane speeding" in tl or "pitlane speeding" in tl:
+        m = re.search(r"([\d.]+)\s*km/h", x.get("fact") or "")
+        return "Pit-lane speeding" + (" · %s km/h" % m.group(1) if m else "")
+    t = t[:1].upper() + t[1:].lower()
+    t = re.sub(r"\bcars? (\d+)\b", lambda m: bynum_code.get(int(m.group(1))) or ("car " + m.group(1)), t)
+    t = re.sub(r"\bimped\w*(?: of)? ([A-Z]{3})", lambda m: ("I" if m.group(0)[0] == "I" else "i") + "mpeding " + m.group(1), t, flags=re.I)
+    for a in ACRONYMS:
+        t = re.sub(r"\b%s\b" % a.lower(), a, t)
+    return t.replace("race director's", "Race Director's").replace("race directors", "Race Director's")
 
 
 def grid_reasons(rnd, P):
@@ -275,11 +284,86 @@ def annotate_files(P, rounds=None):
         print("   grid reasons r%-2s %2d driver(s)  %s" % (rnd, n, os.path.relpath(path, ROOT)))
 
 
+# ---- slim copy embedded in the page (build.py -> /*__STEWARDS__*/) ------------------------
+SLIM = os.path.join(ROOT, "data", "stewards.json")
+SES_ORDER = ["Thursday Press Conference", "Free Practice 1", "Practice 1", "Free Practice 2", "Practice 2",
+             "Free Practice 3", "Sprint Qualifying", "Sprint", "Qualifying", "Reconnaissance Laps",
+             "Grid Procedure", "Race"]
+SES_AB = {"Free Practice 1": "FP1", "Practice 1": "FP1", "Free Practice 2": "FP2", "Practice 2": "FP2",
+          "Free Practice 3": "FP3", "Sprint Qualifying": "Sprint Quali", "Qualifying": "Qualifying",
+          "Reconnaissance Laps": "Recon laps", "Grid Procedure": "Grid", "Thursday Press Conference": "Media day"}
+
+
+def tag(x):
+    """-> (category, label) for the most severe sanction in a ruling."""
+    k, v = x["kinds"], x
+    if "dsq" in k: return "dsq", "Disqualified"
+    if "drive" in k: return "race", "Drive-through"
+    if "stopgo" in k:
+        m = re.search(r"(\d+)\s*second stop", x["decision"].lower())
+        return "race", ("%ds stop-go" % int(m.group(1))) if m else "Stop-go"
+    if "lap" in k: return "race", "+%d lap" % v.get("laps", 1)
+    if "time" in k: return "race", "+%ds" % v.get("sec", 0)
+    if "pitlane" in k: return "grid", "Pit-lane start"
+    if "grid" in k: return "grid", "−%d grid" % v.get("grid", 0)
+    if "back" in k: return "grid", "Back of grid"
+    if "laptime" in k: return "race", "Lap time deleted"
+    if "reprimand" in k: return "rep", "Reprimand"
+    if "fine" in k:
+        eur = v.get("eur")
+        return "fine", ("€{:,}".format(eur) if eur else "Fine")
+    if "warning" in k: return "warn", "Warning"
+    if "nfa" in k: return "nfa", "No action"
+    return "nfa", "Noted"
+
+
+def note(x):
+    d, bits = x["decision"], []
+    if "fine" in x["kinds"] and not tag(x)[0] == "fine" and x.get("eur"):
+        bits.append("team fined €{:,}".format(x["eur"]))
+    if x.get("susp"):
+        bits.append("€{:,} suspended".format(x["susp"]))
+    m = re.search(r"(\d+(?:st|nd|rd|th)) reprimand of the season", d)
+    if m: bits.append(m.group(1) + " reprimand of the season")
+    if x.get("pp"):
+        bits.append("%d penalty point%s%s" % (x["pp"], "" if x["pp"] == 1 else "s",
+                                              " (%d in 12 months)" % x["ppTotal"] if x.get("ppTotal") else ""))
+    if x.get("post"): bits.append("applied after the session")
+    if "subject to" in d.lower() and "classif" in d.lower(): bits.append("if classified")
+    return " · ".join(bits)
+
+
+def slim(P):
+    f1 = json.load(open(F1P))
+    bynum_code = {int(d["num"]): d["code"] for d in f1["drivers"]}
+    out = {}
+    for rnd, rows in P.items():
+        lst = []
+        for x in rows:
+            cat, lbl = tag(x)
+            who = x.get("code") or ((x.get("driver") or "").split()[-1].upper()[:3] if x.get("driver") else None) \
+                or ("#%d" % x["num"] if x.get("num") else "Team")
+            ses = x.get("session") or ""
+            e = {"c": who, "s": SES_AB.get(ses, ses or "Other"), "o": SES_ORDER.index(ses) if ses in SES_ORDER else 99,
+                 "k": cat, "t": lbl, "w": why(x, bynum_code), "u": x["url"].rsplit("/", 1)[-1]}
+            if not x.get("code") and x.get("driver"): e["n"] = x["driver"]
+            nt = note(x)
+            if nt: e["x"] = nt
+            if x.get("overturned"): e["v"] = x["overturned"]
+            lst.append(e)
+        sev = ["dsq", "race", "grid", "rep", "fine", "warn", "nfa"]
+        lst.sort(key=lambda e: (e["o"], sev.index(e["k"]), e["c"]))
+        out[rnd] = lst
+    json.dump(out, open(SLIM, "w"), ensure_ascii=False, separators=(",", ":"))
+    return out
+
+
 def refresh(rounds, verbose=False):
     """Fetch the given rounds, merge them into data/penalties.json, annotate grids. -> P"""
     P = json.load(open(OUT))["rounds"] if os.path.exists(OUT) else {}
     P.update(collect(rounds, verbose))
     json.dump({"source": "fia.com/documents", "rounds": P}, open(OUT, "w"), ensure_ascii=False, indent=1)
+    slim(P)
     annotate_files(P, rounds)
     return P
 
