@@ -106,9 +106,11 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .jump button.on{background:rgba(255,255,255,.09);color:#fff}
 .jump button .rn{color:#7f8db0;font-weight:800;font-size:11px;min-width:26px}
 .jump button.on .rn{color:#c7d2e6}
+body.embed .controls,body.embed .credit,body.embed .brand{display:none}
+body.embed .film{padding-bottom:22px}
 .credit{position:fixed;right:20px;bottom:26px;font-size:10px;color:#54648a;z-index:5;text-align:right;line-height:1.4}
 .credit b{color:#8ea0c0;font-weight:700}
-<!-- Umami --><script defer src="https://m.aguywithascarf.com/k.js" data-website-id="1ad8252c-e7e7-4559-b6ab-3298ce6bd099"></script><!-- End Umami -->
+<!-- Umami --><script>if(!/[?&]embed=1/.test(location.search)){const u=document.createElement('script');u.defer=true;u.src='https://m.aguywithascarf.com/k.js';u.dataset.websiteId='1ad8252c-e7e7-4559-b6ab-3298ce6bd099';document.head.appendChild(u);}</script><!-- End Umami -->
 </style></head>
 <body><div class="film">
   <div class="hd"><div class="brand">F1<span>viz</span></div><div class="kick" id="kick"></div><div class="sub">Drivers' Championship · 2026</div></div>
@@ -132,6 +134,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 <script src="_film_data.js"></script>
 <script>
 const F=window.FILM, DR=F.drivers, R=F.rounds, TOT=F.totalRounds;
+const EMBED=/[?&]embed=1/.test(location.search);   // still frame inside the F1viz app: latest round, no player
+if(EMBED) document.body.classList.add('embed');
 const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/figs/'+s+'.png');
 const IMGC=s=>(window.FACEB64&&window.FACEB64[s])||('img/cut/'+s+'.png');
 const IMGCIRC=r=>(window.CIRCB64&&window.CIRCB64[r])||('img/circuits/'+r+'.png');
@@ -290,9 +294,9 @@ function renderPodium(rd, compose){
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
 function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0) renderWelcome(); else setRound(card-1, back?'back':'fwd'); syncHash(); }   // forward = full reveal, backward = direct
 // URL state: #<round> (or #0 = welcome) so a reload / shared link returns to the same card
-function syncHash(){ try{ history.replaceState(null,'','#'+card); }catch(e){} }
+function syncHash(){ if(EMBED) return; try{ history.replaceState(null,'','#'+card); }catch(e){} }
 function applyHash(){ const n=parseInt((location.hash||'').replace('#',''),10);
-  card=(isNaN(n)||n<=0)?0:Math.min(TOT,n);
+  card=(isNaN(n)||n<=0)?(EMBED?TOT:0):Math.min(TOT,n);   // embed without a round -> the latest one
   if(card===0) renderWelcome(); else setRound(card-1,'instant');   // direct restore — don't replay the intro/clip
 }
 addEventListener('hashchange', ()=>{ stop(); applyHash(); });

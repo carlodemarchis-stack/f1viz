@@ -276,6 +276,18 @@ button{font-family:inherit}
 .gp .spr i{font-style:normal;color:rgba(150,166,205,.28);font-weight:400}
 .gpcard.con .gpcols,.gpcard.con .gp{grid-template-columns:24px 18px minmax(0,1fr) 50px 50px 44px 22px}
 
+/* ---------- standings film still (film.html?embed=1): podium + every driver sized by points ---------- */
+.filmcard{grid-column:1/-1;position:relative;padding:0;overflow:hidden;background:#0c1430;min-height:min(78vh,760px)}
+/* the film lays out for a wide screen, so it renders at a fixed 1440x860 and is scaled to fit (fitFilm) —
+   identical on a phone, just smaller. pointer-events:none: a still, keys and clicks stay with the app */
+.filmcard iframe{position:absolute;left:50%;top:50%;width:1440px;height:860px;border:0;display:block;pointer-events:none;
+  transform:translate(-50%,-50%) scale(var(--fs,.5));transform-origin:center}
+@media (max-width:1100px){ .filmcard{min-height:0;aspect-ratio:1440/860;align-self:start} }
+@media (max-width:700px){ .filmcard .film-open{font-size:9px;padding:3px 8px} .filmcard .fo-long{display:none} }
+.filmcard .film-open{position:absolute;left:3%;top:12%;z-index:2;font-size:10px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:#c7d2e6;text-decoration:none;padding:5px 11px;border-radius:20px;
+  background:rgba(10,16,34,.75);border:1px solid rgba(255,255,255,.14)}
+.filmcard .film-open:hover{color:#fff;border-color:rgba(255,255,255,.35)}
 /* ---------- final grid card ---------- */
 .gridcard{grid-column:1/-1;display:flex;flex-direction:column;padding:20px 26px 14px}
 .gridcard h2{font-weight:700;font-size:19px;letter-spacing:.01em}
@@ -1180,7 +1192,7 @@ function wireStew(host){
   host.querySelectorAll('.sw-who[data-dc]').forEach(el=>{ el.onclick=()=>goDriver(el.dataset.dc); });
 }
 const hasOvt = () => !!(EXTRAS&&EXTRAS.overtakes&&Object.keys(EXTRAS.overtakes).length);
-const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?(hasOvt()?5:4):(1+(hasLive()?1:0)+upcList().length+((CAL27||[]).length?1:0)));   // races: [+ weekend in progress] + season map + rounds to come [+ next season]
+const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?((hasOvt()?5:4)+(mode==='drivers'?1:0)):(1+(hasLive()?1:0)+upcList().length+((CAL27||[]).length?1:0)));   // races: [+ weekend in progress] + season map + rounds to come [+ next season]
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
@@ -2197,6 +2209,18 @@ const isMob=()=>matchMedia('(max-width:900px)').matches;
 const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?'lead':''}" style="--cc:${color}" data-jump="${jump}">
   <div class="hlabel"><span class="hpos">${pos}</span><span class="hname">${family}</span></div>
   <div class="htrack"><div class="hbar" style="width:max(3px,calc((100% - var(--hres,44px))*${(w/100).toFixed(4)}))">${extra}</div><span class="hpts">${val}</span></div></div>`;
+// the standings film's latest frame, embedded as-is so it looks exactly like film.html
+function filmCard(){
+  return `<div class="card enter"><div class="panel filmcard">
+    <iframe src="film.html?embed=1#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round}" tabindex="-1"></iframe>
+    <a class="film-open" href="film.html#1" target="_blank" rel="noopener" title="Open the standings film: the championship race by race">▶ Play<span class="fo-long"> the season</span></a></div></div>`;
+}
+let filmRO=null;
+function fitFilm(){
+  const c=wrap.querySelector('.filmcard'); if(filmRO){ filmRO.disconnect(); filmRO=null; } if(!c) return;
+  const fit=()=>c.style.setProperty('--fs', Math.min(c.clientWidth/1440, c.clientHeight/860).toFixed(4));
+  fit(); if(window.ResizeObserver){ filmRO=new ResizeObserver(fit); filmRO.observe(c); }
+}
 function gridCard(){
   const L=list(), mx=mode==='drivers'?gmaxD:gmaxC;
   const title=mode==='drivers'?"Standings — Drivers":"Standings — Constructors";
@@ -2604,8 +2628,9 @@ function render(dir){
     document.documentElement.style.setProperty('--c','#00D7B6');
     document.documentElement.dataset.team='';
     if(mode==='drivers'){
-      const k=idx-N();
-      if(k===3){ wrap.innerHTML=leadLapsCard(); $('#cwho').textContent='Leading laps'; mountLeadLaps(); }
+      const k=idx-N()-1;                        // -1: the standings film card comes first
+      if(k===-1){ wrap.innerHTML=filmCard(); $('#cwho').textContent='Championship'; fitFilm(); }
+      else if(k===3){ wrap.innerHTML=leadLapsCard(); $('#cwho').textContent='Leading laps'; mountLeadLaps(); }
       else { wrap.innerHTML = k===0?gridCard():k===1?barCard('laps'):k===2?barCard('sprint'):barCard('ovt');
         $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':k===2?'Sprint points':'On-track passes';
         wrap.querySelectorAll('.col,.hrow[data-jump]').forEach(c=>c.onclick=()=>go(+c.dataset.jump)); }
@@ -2778,11 +2803,13 @@ function buildJump(){
   const items = mode==='races'
     ? list().map((e,i)=>`<div class="jitem" style="--jc:${e.winner.color}" data-j="${i}"><span class="jp">R${e.r}</span><span class="jb"></span><b>${e.short}</b></div>`).join('')
     : list().map(e=>`<div class="jitem" style="--jc:${e.color}" data-j="${e.pos-1}"><span class="jp">${e.pos}</span><span class="jb"></span><b>${mode==='drivers'?e.family:e.name}</b></div>`).join('');
+  const o=N()+(mode==='drivers'?1:0);          // drivers: the standings film card sits before Standings
   const tail = (mode==='drivers'||mode==='constructors')
-    ? `<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">▦</span><span class="jb"></span><b>Standings</b></div>
-       <div class="jitem" style="--jc:#00D7B6" data-j="${N()+1}"><span class="jp">◷</span><span class="jb"></span><b>Laps completed</b></div>
-       <div class="jitem" style="--jc:#00D7B6" data-j="${N()+2}"><span class="jp">⚡</span><span class="jb"></span><b>Sprint points</b></div>
-       <div class="jitem" style="--jc:#00D7B6" data-j="${N()+3}"><span class="jp">☰</span><span class="jb"></span><b>Leading laps</b></div>`
+    ? (mode==='drivers'?`<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">★</span><span class="jb"></span><b>Championship</b></div>`:'')
+      +`<div class="jitem" style="--jc:#00D7B6" data-j="${o}"><span class="jp">▦</span><span class="jb"></span><b>Standings</b></div>
+       <div class="jitem" style="--jc:#00D7B6" data-j="${o+1}"><span class="jp">◷</span><span class="jb"></span><b>Laps completed</b></div>
+       <div class="jitem" style="--jc:#00D7B6" data-j="${o+2}"><span class="jp">⚡</span><span class="jb"></span><b>Sprint points</b></div>
+       <div class="jitem" style="--jc:#00D7B6" data-j="${o+3}"><span class="jp">☰</span><span class="jb"></span><b>Leading laps</b></div>`
     : mode==='races'
       ? `<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">▦</span><span class="jb"></span><b>Season map</b></div>`
       : `<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">▦</span><span class="jb"></span><b>Standings</b></div>`;

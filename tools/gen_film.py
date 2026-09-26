@@ -29,3 +29,8 @@ for r in range(1,LAST+1):
                    'podium':scorers[:3],'scorers':scorers})
 open('_film_data.js','w').write('window.FILM='+json.dumps({'totalRounds':LAST,'drivers':DRIVERS,'rounds':rounds}))
 print('wrote _film_data.js —',LAST,'rounds')
+# film.html = the template with the data inlined (self-contained page, served standalone and embedded in the app)
+tpl=open('_film_standings.html').read(); tag='<script src="_film_data.js"></script>'
+assert tpl.count(tag)==1
+open('film.html','w').write(tpl.replace(tag,'<script>'+open('_film_data.js').read()+'</script>'))
+print('wrote film.html')
