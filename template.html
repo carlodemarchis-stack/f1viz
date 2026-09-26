@@ -597,6 +597,9 @@ a.sgd-chip.pen:hover{border-color:var(--bad);color:#fff}
 @media (orientation:portrait){.sgd{grid-template-columns:1fr}.sgd-car{display:none}}
 /* The Wall — full-width lap/position grid */
 .gph-l{display:flex;align-items:center;gap:12px;min-width:0}
+/* six race tabs: the tabs keep their width and the date gives way (ellipsis) instead of being overlapped */
+.card:not(.wall-on) .raceres .gph-l{flex:0 0 auto}
+.raceres .gphead>.rc-date{min-width:0;margin-left:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wall-pills{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .wpill{display:inline-flex;align-items:center;gap:3px;padding:2px 3px 2px 8px;border-radius:999px;background:color-mix(in srgb,var(--pc) 20%,transparent);border:1px solid color-mix(in srgb,var(--pc) 55%,transparent)}
 .wpill i{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;color:color-mix(in srgb,var(--pc) 72%,#fff)}

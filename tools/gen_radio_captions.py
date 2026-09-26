@@ -8,7 +8,7 @@ Resumable: skips clips that already have a 'cap'.
 --round limits the work to a single round, which is what makes FORCE usable: re-running a
 better model over one race costs minutes, over the whole season it costs hours.
 """
-import json, os, sys
+import json, os, re, sys
 from faster_whisper import WhisperModel
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +33,29 @@ PROMPT = ("Formula 1 team radio between a driver and their race engineer. Englis
 HALLUCINATIONS = ("thank you for watching", "thanks for watching", "grazie a tutti",
                   "we'll be right back", "please subscribe", "subscribe to",
                   "sottotitoli", "amara.org", "www.")
+
+
+def collapse(txt):
+    """Keep one copy of a sentence Whisper repeated back-to-back ("Head down. Head down. ...")."""
+    out = []
+    for sen in re.split(r"(?<=[.!?])\s+", txt.strip()):
+        if not out or sen.lower() != out[-1].lower():
+            out.append(sen)
+    if len(out) > 1 and out[-1][-1:] not in ".!?" and out[-2].lower().startswith(out[-1].lower()):
+        out.pop()                                   # the loop's cut-off tail ("Head d")
+    return " ".join(out)
+
+
+def looping(txt):
+    """Whisper's other failure on near-silence: a token repeated or counted on and on
+    ("0.1, 0.1, 0.1 ..." / "1, 2, 3 ... 63"). Radio never sounds like that."""
+    w = re.findall(r"[\w.']+", txt.lower())
+    if len(w) < 12:
+        return False
+    nums = sum(1 for x in w if re.fullmatch(r"[\d.]+", x))
+    return len(set(w)) / len(w) < 0.35 or (nums >= 20 and nums / len(w) > 0.8)
+
+
 print("loading model:", model_name, "force=", FORCE, "round=", ROUND or "all", flush=True)
 m = WhisperModel(model_name, device="cpu", compute_type="int8")
 
@@ -58,8 +81,8 @@ for c in clips:
         segs, _ = m.transcribe(p, beam_size=5, temperature=0,
                                condition_on_previous_text=False, vad_filter=True,
                                initial_prompt=PROMPT)
-        txt = " ".join(s.text.strip() for s in segs).strip()
-        if any(h in txt.lower() for h in HALLUCINATIONS):
+        txt = collapse(" ".join(s.text.strip() for s in segs).strip())
+        if any(h in txt.lower() for h in HALLUCINATIONS) or looping(txt):
             txt = ""
     except Exception as e:
         txt = ""
