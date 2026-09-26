@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build index.html from template.html + the data files (single source of truth for the inline step)."""
-import os, json
+import os, json, hashlib
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def rd(p, default="null"):
     fp = os.path.join(ROOT, p)
@@ -16,6 +16,8 @@ out = (tpl.replace("/*__DATA__*/",   rd("data/f1.json"))
           .replace("/*__EXTRAS__*/", rd("data/extras.json", '{"stints":{},"overtakes":{}}'))
           .replace("/*__UPCOMING__*/", rd("data/upcoming.json", "[]"))
           .replace("/*__CAL27__*/", rd("data/cal2027.json", "[]"))
-          .replace("/*__STEWARDS__*/", rd("data/stewards.json", "{}")))
+          .replace("/*__STEWARDS__*/", rd("data/stewards.json", "{}"))
+          # the Championship card embeds film.html: version it by content so browsers refetch it when it changes
+          .replace("__FILMV__", hashlib.md5(open(os.path.join(ROOT, "film.html"), "rb").read()).hexdigest()[:8]))
 open(os.path.join(ROOT, "index.html"), "w").write(out)
 print("built index.html", len(out), "bytes")

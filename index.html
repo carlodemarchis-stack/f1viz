@@ -2296,7 +2296,7 @@ const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?
 // the standings film's latest frame, embedded as-is so it looks exactly like film.html
 function filmCard(){
   return `<div class="card enter"><div class="panel filmcard">
-    <iframe src="film.html?embed=1#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
+    <iframe src="film.html?embed=1&v=011a3b53#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
     <a class="film-open" href="film.html#1" target="_blank" rel="noopener" title="Open the standings film: the championship race by race">▶ Play<span class="fo-long"> the season</span></a></div></div>`;
 }
 let filmRO=null;
