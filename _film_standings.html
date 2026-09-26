@@ -108,6 +108,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .jump button.on .rn{color:#c7d2e6}
 body.embed .controls,body.embed .credit,body.embed .brand{display:none}
 body.embed .film{padding-bottom:22px}
+body.embed .d,body.embed .pfig{cursor:pointer}
+body.embed .d:hover .fig,body.embed .pfig:hover img{filter:brightness(1.15) drop-shadow(0 7px 14px rgba(0,0,0,.55))}
 .credit{position:fixed;right:20px;bottom:26px;font-size:10px;color:#54648a;z-index:5;text-align:right;line-height:1.4}
 .credit b{color:#8ea0c0;font-weight:700}
 <!-- Umami --><script>if(!/[?&]embed=1/.test(location.search)){const u=document.createElement('script');u.defer=true;u.src='https://m.aguywithascarf.com/k.js';u.dataset.websiteId='1ad8252c-e7e7-4559-b6ab-3298ce6bd099';document.head.appendChild(u);}</script><!-- End Umami -->
@@ -136,6 +138,11 @@ body.embed .film{padding-bottom:22px}
 const F=window.FILM, DR=F.drivers, R=F.rounds, TOT=F.totalRounds;
 const EMBED=/[?&]embed=1/.test(location.search);   // still frame inside the F1viz app: latest round, no player
 if(EMBED) document.body.classList.add('embed');
+// embedded in the F1viz app: a driver click opens that driver's card there, and keys go back to the app
+if(EMBED && parent!==window){
+  document.addEventListener('click',e=>{ const t=e.target.closest('[data-code]'); if(t) parent.postMessage({f1vizDriver:t.dataset.code},location.origin); });
+  addEventListener('keydown',e=>{ try{ parent.document.dispatchEvent(new KeyboardEvent('keydown',{key:e.key,code:e.code,bubbles:true})); }catch(_){} });
+}
 const IMGF=s=>(window.FULLB64&&window.FULLB64[s])||('img/figs/'+s+'.png');
 const IMGC=s=>(window.FACEB64&&window.FACEB64[s])||('img/cut/'+s+'.png');
 const IMGCIRC=r=>(window.CIRCB64&&window.CIRCB64[r])||('img/circuits/'+r+'.png');
@@ -151,7 +158,7 @@ function setBg(on){ if(!pod)return; pod.classList.toggle('has-vid', on);
 // build one persistent element per driver (union of all)
 const cells={};
 Object.keys(DR).forEach(code=>{
-  const d=DR[code], el=document.createElement('div'); el.className='d'; el.style.opacity=0; el.style.setProperty('--dc',d.col||'#888');
+  const d=DR[code], el=document.createElement('div'); el.className='d'; el.dataset.code=code; el.style.opacity=0; el.style.setProperty('--dc',d.col||'#888');
   el.innerHTML=`<span class="glow"></span><span class="pts-row"><span class="pts" style="background:${d.col||'#888'};color:${txt(d.col)}"></span></span>`
     +`<img class="fig" src="${IMGF(d.slug)}" alt="" style="height:0" onerror="this.dataset.broken='1';this.style.visibility='hidden'">`
     +`<span class="code">${code}</span><span class="rank"></span>`;
@@ -279,7 +286,7 @@ function renderPodium(rd, compose){
   const by=p=>rd.podium.find(x=>x.pos===p), order=[by(2),by(1),by(3)], figH=[132,170,110];
   const figs=order.map((p,i)=>{ if(!p)return''; const d=DR[p.code]||{};
     const dly=compose?`;animation-delay:${(p.pos-1)*160}ms`:'';
-    return `<div class="pfig${compose?' pi':''}" style="--sc:${d.col||'#888'}${dly}">
+    return `<div class="pfig${compose?' pi':''}" data-code="${p.code}" style="--sc:${d.col||'#888'}${dly}">
       <img src="${IMGF(d.slug)}" style="height:${figH[i]}px" onerror="this.style.visibility='hidden'">
       <div class="pnm">${d.fam||p.code}</div>
       <div class="ptm">${p.teamName||''}</div>
@@ -315,7 +322,7 @@ const fasttog=document.getElementById('fasttog');
 function syncFastTog(){ fasttog.classList.toggle('off', !fastMode); fasttog.title = fastMode ? 'Fast mode: on — skipping the Race/map intro (click for full reveal)' : 'Fast mode: off — full reveal (click to skip the intro)'; }
 fasttog.onclick=()=>{ fastMode=!fastMode; localStorage.setItem('f1viz.filmfast', fastMode?'1':'0'); syncFastTog(); };
 syncFastTog();
-addEventListener('keydown',e=>{ if(e.key==='ArrowRight'){ if(finalizeReveal) finalizeReveal(); stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} else if(e.key==='p'||e.key==='P'){ showPointsPop=!showPointsPop; } });
+addEventListener('keydown',e=>{ if(EMBED) return; if(e.key==='ArrowRight'){ if(finalizeReveal) finalizeReveal(); stop();show(card+1);} else if(e.key==='ArrowLeft'){stop();show(card-1);} else if(e.key===' '){e.preventDefault();play();} else if(e.key==='p'||e.key==='P'){ showPointsPop=!showPointsPop; } });
 let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ card===0?renderWelcome():setRound(cur,'instant'); },120);});
 document.getElementById('ctot').textContent=TOT;
 

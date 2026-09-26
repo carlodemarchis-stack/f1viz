@@ -278,10 +278,9 @@ button{font-family:inherit}
 
 /* ---------- standings film still (film.html?embed=1): podium + every driver sized by points ---------- */
 .filmcard{grid-column:1/-1;position:relative;padding:0;overflow:hidden;background:#0c1430;min-height:min(78vh,760px)}
-/* the film lays out for a wide screen, so it renders at a fixed 1440x860 and is scaled to fit (fitFilm) —
-   identical on a phone, just smaller. pointer-events:none: a still, keys and clicks stay with the app */
-.filmcard iframe{position:absolute;left:50%;top:50%;width:1440px;height:860px;border:0;display:block;pointer-events:none;
-  transform:translate(-50%,-50%) scale(var(--fs,.5));transform-origin:center}
+/* the film lays out for a wide screen: fitFilm renders it at a virtual size with the card's own proportions
+   (never narrower than 1200px) and scales it down, so it fills the card edge to edge — a phone gets the same frame smaller */
+.filmcard iframe{position:absolute;left:0;top:0;border:0;display:block;transform-origin:0 0;transform:scale(var(--fs,.5))}
 @media (max-width:1100px){ .filmcard{min-height:0;aspect-ratio:1440/860;align-self:start} }
 @media (max-width:700px){ .filmcard .film-open{font-size:9px;padding:3px 8px} .filmcard .fo-long{display:none} }
 .filmcard .film-open{position:absolute;left:3%;top:12%;z-index:2;font-size:10px;font-weight:800;letter-spacing:.1em;
@@ -2297,15 +2296,20 @@ const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?
 // the standings film's latest frame, embedded as-is so it looks exactly like film.html
 function filmCard(){
   return `<div class="card enter"><div class="panel filmcard">
-    <iframe src="film.html?embed=1#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round}" tabindex="-1"></iframe>
+    <iframe src="film.html?embed=1#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
     <a class="film-open" href="film.html#1" target="_blank" rel="noopener" title="Open the standings film: the championship race by race">▶ Play<span class="fo-long"> the season</span></a></div></div>`;
 }
 let filmRO=null;
 function fitFilm(){
   const c=wrap.querySelector('.filmcard'); if(filmRO){ filmRO.disconnect(); filmRO=null; } if(!c) return;
-  const fit=()=>c.style.setProperty('--fs', Math.min(c.clientWidth/1440, c.clientHeight/860).toFixed(4));
+  const f=c.querySelector('iframe');
+  const fit=()=>{ const W=c.clientWidth, H=c.clientHeight; if(!W||!H) return;
+    const vw=Math.max(1200, Math.round(860*W/H)), s=W/vw;          // virtual 860px tall unless the card is narrow
+    f.style.width=vw+'px'; f.style.height=Math.round(H/s)+'px'; c.style.setProperty('--fs', s.toFixed(4)); };
   fit(); if(window.ResizeObserver){ filmRO=new ResizeObserver(fit); filmRO.observe(c); }
 }
+// a click on a figure inside the embedded film (film.html?embed=1) opens that driver's card
+addEventListener('message',e=>{ if(e.origin===location.origin && e.data && e.data.f1vizDriver) goDriver(e.data.f1vizDriver); });
 function gridCard(){
   const L=list(), mx=mode==='drivers'?gmaxD:gmaxC;
   const title=mode==='drivers'?"Standings — Drivers":"Standings — Constructors";
