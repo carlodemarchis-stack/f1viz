@@ -1060,7 +1060,7 @@ a.sgd-chip.pen:hover{border-color:var(--bad);color:#fff}
 }
 </style>
 <!-- Cloudflare Web Analytics -->
-<!-- Umami --><script defer src="https://m.aguywithascarf.com/k.js" data-website-id="1ad8252c-e7e7-4559-b6ab-3298ce6bd099"></script><!-- End Umami -->
+<!-- Umami --><script>try{/[?&#]noumami\b/.test(location.href)&&localStorage.setItem('umami.disabled','1')}catch(e){}</script><script defer src="https://m.aguywithascarf.com/k.js" data-website-id="1ad8252c-e7e7-4559-b6ab-3298ce6bd099"></script><!-- End Umami -->
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "66a3db0eedcf4172af8af1b83049df62"}'></script>
 <!-- End Cloudflare Web Analytics -->
 </head>
@@ -2296,7 +2296,7 @@ const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?
 // the standings film's latest frame, embedded as-is so it looks exactly like film.html
 function filmCard(){
   return `<div class="card enter"><div class="panel filmcard">
-    <iframe src="film.html?embed=1&v=011a3b53#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
+    <iframe src="film.html?embed=1&v=4f11aba3#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
     <a class="film-open" href="film.html#1" target="_blank" rel="noopener" title="Open the standings film: the championship race by race">▶ Play<span class="fo-long"> the season</span></a></div></div>`;
 }
 let filmRO=null;
