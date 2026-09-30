@@ -118,6 +118,9 @@ def kinds(dec):
     """Machine tags for the Decision text. Order: most severe first."""
     d = dec.lower()
     k, v = [], {}
+    if "converted to" in d:                  # "10 second time penalty converted to a drop of 5 grid positions ..."
+        v["conv"] = True                     # -> classify by what it became, not by what was first given
+        d = d.split("converted to", 1)[1]
     if re.search(r"\bno further action\b|\bno penalty (?:is )?applied", d): k.append("nfa")
     if "disqualif" in d: k.append("dsq")
     m = re.search(r"(\d+)\s*(?:-| )?second(?:s)? time penalty", d)
@@ -144,6 +147,10 @@ def kinds(dec):
     if m: v["ppTotal"] = int(m.group(1))
     if re.search(r"lap time[s]? .*deleted|deletion of .*lap time", d): k.append("laptime")
     if "imposed after the" in d: v["post"] = True
+    m = re.search(r"(\d+) seconds added to (?:the )?elapsed", d)
+    if m and ("drive" in k or "stopgo" in k):  # a drive-through given after the flag is served as time
+        k = [x for x in k if x not in ("drive", "stopgo")] + (["time"] if "time" not in k else [])
+        v["sec"] = int(m.group(1))
     if k != ["nfa"] and "nfa" in k: k.remove("nfa")
     return k, v
 
@@ -253,11 +260,14 @@ def why(x, bynum_code):
 
 
 def grid_reasons(rnd, P):
-    """-> {code: [{"k", "n", "why", "ses", "url"}]} for the Grand Prix starting grid of round rnd."""
+    """-> {code: [{"k", "n", "why", "ses", "url"}]} for the Grand Prix starting grid of round rnd.
+    Also carries grid drops handed out in the PREVIOUS round's race ("... at the next race")."""
     f1 = json.load(open(F1P))
     bynum_code = {int(d["num"]): d["code"] for d in f1["drivers"]}
     out = {}
-    for x in P.get(str(rnd), []):
+    nxt = lambda x: x.get("session") == "Race" and "next race" in x["decision"].lower()   # given in a race -> next round
+    carried = [dict(x, session="R%d race" % (rnd - 1)) for x in P.get(str(rnd - 1), []) if nxt(x)]
+    for x in [x for x in P.get(str(rnd), []) if not nxt(x)] + carried:
         if x.get("overturned") or not x.get("code") or not (set(x["kinds"]) & GRID_KINDS) or for_sprint(x):
             continue
         k = "pitlane" if "pitlane" in x["kinds"] else ("grid" if "grid" in x["kinds"] else "back")
@@ -337,6 +347,8 @@ def note(x):
         bits.append("%d penalty point%s%s" % (x["pp"], "" if x["pp"] == 1 else "s",
                                               " (%d in 12 months)" % x["ppTotal"] if x.get("ppTotal") else ""))
     if x.get("post"): bits.append("applied after the session")
+    if x.get("conv"): bits.append(re.sub(r"\s+", " ", x["decision"]).split(".")[0])
+    if "next race" in d.lower() and x.get("session") == "Race": bits.append("applies at the next race")
     if "subject to" in d.lower() and "classif" in d.lower(): bits.append("if classified")
     if x.get("history"): bits.append(x["history"])
     return " · ".join(bits)

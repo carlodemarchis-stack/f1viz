@@ -1,1 +1,57 @@
-{}
+{
+ "meta": {
+  "season": 2026,
+  "round": 16,
+  "updated": "2026-09-30T11:08:05Z"
+ },
+ "round": 16,
+ "gp": "Bahrain Grand Prix in Malaysia",
+ "full": "Bahrain Grand Prix in Malaysia",
+ "short": "Malaysia",
+ "flag": "🇲🇾",
+ "country": "Malaysia",
+ "circuit": "Sepang International Circuit",
+ "locality": "Kuala Lumpur",
+ "date": "2026-10-04",
+ "tz": "Asia/Kuala_Lumpur",
+ "laps": 56,
+ "length": "5.543",
+ "distance": "310.408",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-10-02T04:30:00Z",
+   "end": "2026-10-02T05:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp2",
+   "name": "Practice 2",
+   "start": "2026-10-02T08:00:00Z",
+   "end": "2026-10-02T09:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp3",
+   "name": "Practice 3",
+   "start": "2026-10-03T04:30:00Z",
+   "end": "2026-10-03T05:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-10-03T08:00:00Z",
+   "end": "2026-10-03T09:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-10-04T07:00:00Z",
+   "end": "2026-10-04T09:00:00+00:00",
+   "results": []
+  }
+ ]
+}

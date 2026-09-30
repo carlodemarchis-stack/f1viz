@@ -161,6 +161,111 @@
     "grid": 5,
     "pp": 2,
     "ppTotal": 4
+   },
+   {
+    "doc": 65,
+    "title": "Decision - Car 41 - Collision with Car 30 in turn 1",
+    "pub": "26.09.26 17:29",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Race",
+    "fact": "Collison between cars 41 and 30 in Turn 1.",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_decision_-_car_41_-_collision_with_car_30_in_turn_1.pdf"
+   },
+   {
+    "doc": 66,
+    "title": "Infringement - Car 43 - Collision with Car 10 in Turn 1",
+    "pub": "26.09.26 17:30",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "Collision with Car 10 in Turn 1",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty converted to a drop of 5 grid positions at the next race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_43_-_collision_with_car_10_in_turn_1.pdf",
+    "conv": true,
+    "grid": 5
+   },
+   {
+    "doc": 67,
+    "title": "Decision - Car 77 - Turn 15 Incident",
+    "pub": "26.09.26 17:40",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Car 77 left the track at Turn 15 and made contact with the wall. After exiting the car and replacing the steering wheel, the driver remained in the vicinity of the car for a period of time, including inspecting the rear of the car.",
+    "breach": "Alleged breach of Article 12.2.1.h of the FIA International Sporting Code",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_decision_-_car_77_-_turn_15_incident.pdf"
+   },
+   {
+    "doc": 68,
+    "title": "Infringement - Car 5 - Overtaking under yellow flags",
+    "pub": "26.09.26 17:52",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Overtaking under yellow flags",
+    "breach": "Breach of Appendix H, Article 2.5.5 b) of the International Sporting Code",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_5_-_overtaking_under_yellow_flags.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 69,
+    "title": "Infringement - Car 6 - Failing to follow Race Directors Instructions - Practice Start",
+    "pub": "26.09.26 17:54",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Reconnaissance Laps",
+    "fact": "Failure to follow Race Directors instruction.",
+    "breach": "Alleged breach of Article 12.2.1.i of the International Sporting Code and non- compliance with Race Director’s Competition Note (item 13.6, document 56) – Practice start infringement at 14:20.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_6_-_failing_to_follow_race_directors_instructions_-_practice_start.pdf"
+   },
+   {
+    "doc": 70,
+    "title": "Infringement - Car 55 - Failing to follow Race Directors Instructions - Practice Start",
+    "pub": "26.09.26 17:54",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Failure to follow Race Directors instruction.",
+    "breach": "Alleged breach of Article 12.2.1.i of the International Sporting Code and non- compliance with Race Director’s Competition Note (item 13.6, document 56) – Practice start infringement.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_55_-_failing_to_follow_race_directors_instructions_-_practice_start.pdf"
    }
   ],
   "14": [
@@ -2647,8 +2752,8 @@
      "time"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_10_-_pit_lane_speeding.pdf",
-    "sec": 5,
-    "history": "rescinded on review 12 Jun, reinstated by the FIA Court of Appeal 5 Sep"
+    "history": "rescinded on review 12 Jun, reinstated by the FIA Court of Appeal 5 Sep",
+    "sec": 5
    },
    {
     "doc": 74,
@@ -2684,8 +2789,8 @@
      "time"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_monaco_grand_prix_-_infringement_-_car_10_-_pit_lane_speeding_0.pdf",
-    "sec": 5,
-    "history": "rescinded on review 12 Jun, reinstated by the FIA Court of Appeal 5 Sep"
+    "history": "rescinded on review 12 Jun, reinstated by the FIA Court of Appeal 5 Sep",
+    "sec": 5
    },
    {
     "doc": 77,
@@ -3628,10 +3733,11 @@
     "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
     "decision": "Drive through penalty imposed after the Race. (20 seconds added to elapsed Race time).",
     "kinds": [
-     "drive"
+     "time"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_miami_grand_prix_-_infringement_-_car_16_-_leaving_the_track_multiple_times_and_driving_in_an_unsafe_condition_.pdf",
-    "post": true
+    "post": true,
+    "sec": 20
    },
    {
     "doc": 99,

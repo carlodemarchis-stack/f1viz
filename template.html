@@ -2736,7 +2736,13 @@ function gotoMode(m,last){ mode=m;
 // at a film's last card, next() rolls to the next tab's first card (and prev() the reverse)
 function next(){ if(idx>=TOT()-1) gotoMode(MODES[(MODES.indexOf(mode)+1)%3],false); else go(idx+1); }
 function prev(){ if(idx<=0) gotoMode(MODES[(MODES.indexOf(mode)+2)%3],true); else go(idx-1); }
-function setMode(m){ if(m===mode)return; setPlay(false); gotoMode(m,false); }
+const modeIdx={};                               // where each film was left during this visit
+function setMode(m){ if(m===mode)return; setPlay(false); modeIdx[mode]=idx;
+  if(m==='races'){ mode=m;                      // RACES opens on the current GP, or wherever the visitor left it
+    document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+    $('#ctxA').textContent=CTXA[m];
+    idx = modeIdx.races!=null ? Math.min(modeIdx.races, TOT()-1) : curGPIdx(); render(); return; }
+  gotoMode(m,false); }
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
 (()=>{ const b=document.getElementById('brand'); if(b) b.onclick=()=>{ setPlay(false); idx=0; render(); }; })();   // the logo goes back to the first card of whichever film you are in
 // yellow top-bar note → jump to the weekend-in-progress card (hidden once the round has been applied)
@@ -2747,6 +2753,13 @@ document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>setMode(b.da
 // The POST -> PRE hand-over depends on the gap to the next race, and the two tile exactly:
 //   one-week gap  POST Mon-Wed, PRE from Thursday   (race day + 3)
 //   longer gap    POST Mon-Fri, PRE from Saturday   (race day + 5)
+// the GP the yellow note is about, as a RACES-film index: its own card once raced, the live
+// weekend while it runs (that card sits right after the last race), otherwise the season map
+function curGPIdx(){
+  const st=raceNote(); if(!st) return 0;
+  const i=DATA.races.findIndex(x=>x.r===st.c.r);
+  return i>=0 ? i : DATA.races.length;
+}
 function raceNote(now){
   const cal=DATA.calendar||[]; if(!cal.length) return null;
   const mid=d=>{const x=new Date(d); x.setHours(0,0,0,0); return x;};
@@ -2761,7 +2774,8 @@ function raceNote(now){
   if(days(today,fp1)>=0)  return {k:'live',c:next,t:`This weekend is ${next.locality||next.short}! Click here to check the latest results.`};
   if(prev){
     const pd=mid(new Date(prev.date+'T00:00:00')), gap=days(race,pd);
-    const postEnd=new Date(pd); postEnd.setDate(postEnd.getDate()+(gap<=7?3:5));
+    // one-week break up to 8 days: Baku raced on a Saturday, so Baku -> Sepang is 8 days and still a one-week break
+    const postEnd=new Date(pd); postEnd.setDate(postEnd.getDate()+(gap<=8?3:5));
     if(days(today,postEnd)<=0) return {k:'post',c:prev,t:`The ${prev.short} GP is done — results, radio and the recap are in. Click here.`};
   }
   const d=days(fp1,today);
@@ -2782,12 +2796,7 @@ function raceNote(now){
     if(mode!=='races'){ mode='races';
       document.querySelectorAll('.modes button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='races'));
       $('#ctxA').textContent=CTXA.races; }
-    // always the GP the note is about: its own card once raced, the live weekend while it
-    // runs, otherwise the season map, which is where an upcoming round is shown
-    if(hasLive() && LIVE.round===st.c.r) return goLive();
-    const i=DATA.races.findIndex(x=>x.r===st.c.r);
-    idx = i>=0 ? i : DATA.races.length;
-    render(); };
+    idx=curGPIdx(); render(); };
 })();
 
 /* autoplay */
