@@ -2036,7 +2036,7 @@ function nextSeasonCard(){
 function worldMapCard(){
   const [W,Hh]=DATA.worldVB;
   const proj=g=>[(g.long+180)/360*W, (90-g.lat)/180*Hh];
-  const TOPc=76, BOTc=414, LEFc=140, RIGc=930;   // crop window (drop poles/Alaska/empty Pacific)
+  const TOPc=64, BOTc=414, LEFc=140, RIGc=930;   // crop window (drop poles/Alaska/empty Pacific); top leaves room for Montreal's winner
   const cand=[]; [9,15,22,30,40,52,64].forEach(rad=>[-90,-55,-125,-25,-155,55,125,25,155,0,180].forEach(a=>
     cand.push([Math.cos(a*Math.PI/180)*rad, Math.sin(a*Math.PI/180)*rad])));
   const ov=(a,b)=>!(a.x+a.w<b.x||b.x+b.w<a.x||a.y+a.h<b.y||b.y+b.h<a.y);
@@ -2048,14 +2048,11 @@ function worldMapCard(){
     const d=D.find(x=>x.code===r.winner.code); if(d) winSlug[r.r]=d.slug; } });
   // The race winner standing on the dot. Drawn before the label is placed and its box
   // pushed into the same list, so the round number steps aside instead of landing on him.
-  const FH=32, RATIO=0.27;       // big enough to read as a driver, not just a coloured mark
-  // Near the top of the inset there is not room for a full-height figure, and the clip
-  // path would behead him (Silverstone and Monza). Shrink to fit instead, so the whole
-  // driver shows and his feet stay on the dot.
-  const figure=(x,y,r,plc,minY)=>{ const sl=winSlug[r]; if(!sl) return '';
-    // minY is the edge that would crop him; the inset passes null because its markers are
-    // drawn outside the clip and are free to stand out over the frame
-    const h=minY==null?FH:Math.min(FH, Math.max(13, y-minY-1.5)), w=h*RATIO;
+  const FH=56, RATIO=0.27;       // one height for every winner, main map and Europe inset alike
+  // The inset's markers are drawn outside its clip, so a figure near its top stands out over
+  // the frame rather than being cropped.
+  const figure=(x,y,r,plc)=>{ const sl=winSlug[r]; if(!sl) return '';
+    const h=FH, w=h*RATIO;
     plc.push({x:x-w/2-1,y:y-h-1,w:w+2,h:h+1});
     return `<image class="wfig" href="img/winners/${sl}.png${IMGV}" x="${(x-w/2).toFixed(2)}" y="${(y-h).toFixed(2)}"
       width="${w.toFixed(2)}" height="${h.toFixed(2)}" preserveAspectRatio="xMidYMax meet"/>`; };
@@ -2090,7 +2087,7 @@ function worldMapCard(){
   // later one, which is how Monza's winner ended up standing on Monaco's number.
   const layout=(items,plc,toXY,minX,maxX,minY,maxY,labMinY)=>{
     const pre=items.map(g=>{ const [x,y]=toXY(g), done=g.r<=DATA.meta.round;
-      return {g,x,y,done, marks: done ? figure(x,y,g.r,plc,minY)+codeMark(x,y,g.r,plc) : ''}; });
+      return {g,x,y,done, marks: done ? figure(x,y,g.r,plc)+codeMark(x,y,g.r,plc) : ''}; });
     return pre.map(p=>`${gtag(p.g)}${p.marks}${dot(p.x,p.y,'R'+p.g.r,p.done,plc,minX,maxX,labMinY!=null?labMinY:minY,maxY)}</g>`).join('');
   };
   // ---- main map (Europe rounds drawn as bare dots; labelled in the inset) ----
