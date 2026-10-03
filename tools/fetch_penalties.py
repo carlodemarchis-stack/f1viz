@@ -156,7 +156,14 @@ def kinds(dec):
 
 
 def cal_round(name, cal):
-    return next((c for c in cal if name.lower().startswith(c["gp"].lower())), None)
+    n = name.lower()
+    c = next((c for c in cal if n.startswith(c["gp"].lower())), None)
+    if c:
+        return c
+    # the FIA files a relocated race under its original name: "Bahrain Grand Prix" is our
+    # "Bahrain in Malaysia" (Sepang, R16). Match on the first word when only one round has it.
+    first = [c for c in cal if c["gp"].lower().split()[0] == n.split()[0]]
+    return first[0] if len(first) == 1 else None
 
 
 def collect(rounds=None, verbose=False):
@@ -222,6 +229,25 @@ def collect(rounds=None, verbose=False):
         print("\n%d ruling-titled docs without a Decision field (referrals, 107%%, permission to start):" % len(missing))
         for rnd, t in missing: print("   r%d  %s" % (rnd, t))
     return result
+
+
+# ---- the FIA's own starting grid (when formula1.com has not published one yet) ----------
+def fia_grid(rnd):
+    """-> (label, [(grid pos, car number, time or None)]) from the round's latest Final, else
+    Provisional, Starting Grid document; (None, []) when neither is out."""
+    cal = json.load(open(F1P))["calendar"]
+    for name, docs in events(lambda n: (cal_round(n, cal) or {}).get("r") == rnd):
+        for kind in ("Final Starting Grid", "Provisional Starting Grid"):
+            d = next((x for x in docs if re.search(r"\b%s$" % kind, x["title"]) and "Sprint" not in x["title"]), None)
+            if not d:
+                continue
+            t = pdf_text(d["url"])
+            body = t[t.find("Enclosed"):t.find("PENALTIES")]
+            rows = re.findall(r"^(\d{1,2})\n(\d{1,2}) [^\n]+\n[^\n]+\n(?:(\d:\d\d\.\d{3})\n)?", body + "\n", re.M)
+            got = sorted((int(p), int(n), tm or None) for p, n, tm in rows)
+            if got and [g[0] for g in got] == list(range(1, len(got) + 1)):
+                return kind, got
+    return None, []
 
 
 # ---- starting-grid reasons ---------------------------------------------------------------

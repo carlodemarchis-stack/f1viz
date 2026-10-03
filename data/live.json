@@ -2,7 +2,7 @@
  "meta": {
   "season": 2026,
   "round": 16,
-  "updated": "2026-10-03T11:08:16Z"
+  "updated": "2026-10-03T12:32:13Z"
  },
  "round": 16,
  "gp": "Bahrain Grand Prix in Malaysia",
@@ -1640,6 +1640,328 @@
    "start": "2026-10-04T07:00:00Z",
    "end": "2026-10-04T09:00:00+00:00",
    "results": []
+  }
+ ],
+ "grid": [
+  {
+   "pos": 1,
+   "code": "VER",
+   "num": 3,
+   "name": "Verstappen",
+   "team": "Red Bull",
+   "col": "#3671C6",
+   "tid": "red_bull",
+   "slug": "verstappen",
+   "time": "1:35.130",
+   "qpos": 1,
+   "delta": 0
+  },
+  {
+   "pos": 2,
+   "code": "HAM",
+   "num": 44,
+   "name": "Hamilton",
+   "team": "Ferrari",
+   "col": "#E80020",
+   "tid": "ferrari",
+   "slug": "hamilton",
+   "time": "1:35.428",
+   "qpos": 2,
+   "delta": 0
+  },
+  {
+   "pos": 3,
+   "code": "ANT",
+   "num": 12,
+   "name": "Antonelli",
+   "team": "Mercedes",
+   "col": "#00D7B6",
+   "tid": "mercedes",
+   "slug": "antonelli",
+   "time": "1:35.631",
+   "qpos": 4,
+   "delta": 1
+  },
+  {
+   "pos": 4,
+   "code": "LEC",
+   "num": 16,
+   "name": "Leclerc",
+   "team": "Ferrari",
+   "col": "#E80020",
+   "tid": "ferrari",
+   "slug": "leclerc",
+   "time": "1:35.666",
+   "qpos": 5,
+   "delta": 1
+  },
+  {
+   "pos": 5,
+   "code": "NOR",
+   "num": 1,
+   "name": "Norris",
+   "team": "McLaren",
+   "col": "#FF8000",
+   "tid": "mclaren",
+   "slug": "norris",
+   "time": "1:35.757",
+   "qpos": 6,
+   "delta": 1
+  },
+  {
+   "pos": 6,
+   "code": "PIA",
+   "num": 81,
+   "name": "Piastri",
+   "team": "McLaren",
+   "col": "#FF8000",
+   "tid": "mclaren",
+   "slug": "piastri",
+   "time": "1:35.762",
+   "qpos": 7,
+   "delta": 1
+  },
+  {
+   "pos": 7,
+   "code": "RUS",
+   "num": 63,
+   "name": "Russell",
+   "team": "Mercedes",
+   "col": "#00D7B6",
+   "tid": "mercedes",
+   "slug": "russell",
+   "time": "1:35.871",
+   "qpos": 8,
+   "delta": 1
+  },
+  {
+   "pos": 8,
+   "code": "HAD",
+   "num": 6,
+   "name": "Hadjar",
+   "team": "Red Bull",
+   "col": "#3671C6",
+   "tid": "red_bull",
+   "slug": "hadjar",
+   "time": "1:35.558",
+   "qpos": 3,
+   "delta": -5,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 5,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_6_-_changes_to_pu_elements.pdf"
+    }
+   ]
+  },
+  {
+   "pos": 9,
+   "code": "GAS",
+   "num": 10,
+   "name": "Gasly",
+   "team": "Alpine",
+   "col": "#00A1E8",
+   "tid": "alpine",
+   "slug": "gasly",
+   "time": "1:37.210",
+   "qpos": 9,
+   "delta": 0
+  },
+  {
+   "pos": 10,
+   "code": "BOR",
+   "num": 5,
+   "name": "Bortoleto",
+   "team": "Audi",
+   "col": "#D81C1C",
+   "tid": "audi",
+   "slug": "bortoleto",
+   "time": "1:37.673",
+   "qpos": 10,
+   "delta": 0
+  },
+  {
+   "pos": 11,
+   "code": "LAW",
+   "num": 30,
+   "name": "Lawson",
+   "team": "Racing Bulls",
+   "col": "#6C98FF",
+   "tid": "rb",
+   "slug": "lawson",
+   "time": "1:37.023",
+   "qpos": 11,
+   "delta": 0
+  },
+  {
+   "pos": 12,
+   "code": "ALO",
+   "num": 14,
+   "name": "Alonso",
+   "team": "Aston Martin",
+   "col": "#00A88E",
+   "tid": "aston_martin",
+   "slug": "alonso",
+   "time": "1:37.220",
+   "qpos": 12,
+   "delta": 0
+  },
+  {
+   "pos": 13,
+   "code": "SAI",
+   "num": 55,
+   "name": "Sainz",
+   "team": "Williams",
+   "col": "#3AA6E0",
+   "tid": "williams",
+   "slug": "sainz",
+   "time": "1:37.527",
+   "qpos": 13,
+   "delta": 0
+  },
+  {
+   "pos": 14,
+   "code": "STR",
+   "num": 18,
+   "name": "Stroll",
+   "team": "Aston Martin",
+   "col": "#00A88E",
+   "tid": "aston_martin",
+   "slug": "stroll",
+   "time": "1:37.566",
+   "qpos": 14,
+   "delta": 0
+  },
+  {
+   "pos": 15,
+   "code": "HUL",
+   "num": 27,
+   "name": "Hülkenberg",
+   "team": "Audi",
+   "col": "#D81C1C",
+   "tid": "audi",
+   "slug": "hulkenberg",
+   "time": "1:37.970",
+   "qpos": 17,
+   "delta": 2
+  },
+  {
+   "pos": 16,
+   "code": "BEA",
+   "num": 87,
+   "name": "Bearman",
+   "team": "Haas",
+   "col": "#B9BDC2",
+   "tid": "haas",
+   "slug": "bearman",
+   "time": "1:37.980",
+   "qpos": 18,
+   "delta": 2
+  },
+  {
+   "pos": 17,
+   "code": "OCO",
+   "num": 31,
+   "name": "Ocon",
+   "team": "Haas",
+   "col": "#B9BDC2",
+   "tid": "haas",
+   "slug": "ocon",
+   "time": "1:38.233",
+   "qpos": 19,
+   "delta": 2
+  },
+  {
+   "pos": 18,
+   "code": "ALB",
+   "num": 23,
+   "name": "Albon",
+   "team": "Williams",
+   "col": "#3AA6E0",
+   "tid": "williams",
+   "slug": "albon",
+   "time": "1:38.600",
+   "qpos": 20,
+   "delta": 2
+  },
+  {
+   "pos": 19,
+   "code": "BOT",
+   "num": 77,
+   "name": "Bottas",
+   "team": "Cadillac",
+   "col": "#C8A24B",
+   "tid": "cadillac",
+   "slug": "bottas",
+   "time": "1:38.611",
+   "qpos": 21,
+   "delta": 2
+  },
+  {
+   "pos": 20,
+   "code": "PER",
+   "num": 11,
+   "name": "Pérez",
+   "team": "Cadillac",
+   "col": "#C8A24B",
+   "tid": "cadillac",
+   "slug": "perez",
+   "time": "1:38.933",
+   "qpos": 22,
+   "delta": 2
+  },
+  {
+   "pos": 21,
+   "code": "COL",
+   "num": 43,
+   "name": "Colapinto",
+   "team": "Alpine",
+   "col": "#00A1E8",
+   "tid": "alpine",
+   "slug": "colapinto",
+   "time": null,
+   "qpos": 15,
+   "delta": -6,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 10,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_43_-_changes_to_pu_elements.pdf"
+    },
+    {
+     "k": "grid",
+     "n": 5,
+     "why": "Collision with GAS in turn 1",
+     "ses": "R15 race",
+     "url": "https://www.fia.com/system/files/decision-document/2026_azerbaijan_grand_prix_-_infringement_-_car_43_-_collision_with_car_10_in_turn_1.pdf"
+    }
+   ]
+  },
+  {
+   "pos": 22,
+   "code": "LIN",
+   "num": 41,
+   "name": "Lindblad",
+   "team": "Racing Bulls",
+   "col": "#6C98FF",
+   "tid": "rb",
+   "slug": "lindblad",
+   "time": null,
+   "qpos": 16,
+   "delta": -6,
+   "pen": [
+    {
+     "k": "grid",
+     "n": 30,
+     "why": "PU change",
+     "ses": "Free Practice 1",
+     "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_41_-_changes_to_pu_elements.pdf"
+    }
+   ]
   }
  ]
 }

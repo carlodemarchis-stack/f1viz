@@ -465,9 +465,25 @@ def main():
                 r["delta"] = (r["qpos"] - r["pos"]) if r["qpos"] else None
             live["grid"] = g
             src["grid"] = "f1.com"
-        elif isinstance(prev_grid, list) and prev_grid:
-            live["grid"] = prev_grid
-            kept.append("grid")
+        else:
+            # formula1.com can be hours late; the FIA publishes the grid as a stewards' document
+            try:
+                import fetch_penalties as fp
+                kind, fg = fp.fia_grid(rnd)
+            except Exception as e:
+                kind, fg = None, []; print("  FIA grid skipped: %s" % e)
+            qrows = {r["num"]: r for x in live["sessions"] if x["key"] == "quali" for r in x["results"]}
+            if fg and all(n in qrows for _, n, _ in fg):
+                g = []
+                for pos, num, tm in fg:
+                    r = {k: v for k, v in qrows[num].items() if k not in ("seg", "laps", "gap", "gapS", "out", "rookie")}
+                    r.update(pos=pos, time=tm, qpos=qrows[num]["pos"], delta=qrows[num]["pos"] - pos)
+                    g.append(r)
+                live["grid"] = g
+                src["grid"] = "FIA (%s)" % kind.split()[0].lower()
+            elif isinstance(prev_grid, list) and prev_grid:
+                live["grid"] = prev_grid
+                kept.append("grid")
 
     # stewards' decisions (fia.com): refresh this round and explain the grid order. Best effort -
     # a failure here must never cost the session results above.
