@@ -293,11 +293,12 @@ button{font-family:inherit}
 .rec-now{font-size:10.5px;color:#9fb0c8;margin-top:3px;min-height:14px}
 .rec-now em{font-style:normal;font-weight:800;color:var(--rc,#fff)}
 .rec-row{position:relative;flex:1;min-height:150px;margin-top:6px}
-.rec-d{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;transform:translateX(-50%)}
+.rec-d{position:absolute;bottom:14px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;transform:translateX(-50%)}
 .rec-d img{display:block;width:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));transition:filter .15s}
 .rec-d:hover img{filter:brightness(1.15) drop-shadow(0 8px 14px rgba(0,0,0,.5))}
 .rec-d .rp{font-size:11px;font-weight:800;padding:1.5px 6px;border-radius:5px;margin-bottom:5px;line-height:1.25;box-shadow:0 2px 7px rgba(0,0,0,.35);white-space:nowrap}
-.rec-d .rp u{text-decoration:none;font-size:9px;opacity:.85;margin-left:3px}
+.rec-d .rn{position:absolute;top:calc(100% + 3px);font-size:8.5px;font-weight:800;letter-spacing:.06em;line-height:1;padding:1px 4px;border-radius:3px;
+  color:#0b1120;background:#dbe4f4}          /* this driver added one at the latest round */
 .rec-d .rc{margin-top:5px;font-size:11px;font-weight:800;letter-spacing:.02em;line-height:1;white-space:nowrap}
 @media (max-width:900px){ .rec-cols{grid-template-columns:1fr!important;gap:12px} .reccard{min-height:0;padding:16px 14px 12px} .rec-row{min-height:190px;flex:0 0 190px} }
 .filmcard{grid-column:1/-1;position:relative;padding:0;overflow:hidden;background:#0c1430;min-height:min(78vh,760px)}
@@ -2337,9 +2338,9 @@ function recordsCard(){
     const who=now[K.k].map(c=>{ const d=D.find(x=>x.code===c); return `<em style="--rc:${d?d.color:'#fff'}">${c}</em>`; }).join(' · ');
     const cells=L.map(d=>{ const add=now[K.k].includes(d.code);
       return `<div class="rec-d" data-dc="${d.code}" data-v="${d[K.k]}" title="${d.family}: ${d[K.k]} ${K.t.toLowerCase()}">
-        <span class="rp" style="background:${d.color};color:${readable(d.color)}">${d[K.k]}${add?'<u>+1</u>':''}</span>
+        <span class="rp" style="background:${d.color};color:${readable(d.color)}">${d[K.k]}</span>
         <img src="${IMGF(d.slug)}" alt="${d.family}" onerror="this.style.visibility='hidden'">
-        <span class="rc" style="color:${d.color}">${d.code}</span></div>`; }).join('');
+        <span class="rc" style="color:${d.color}">${d.code}</span>${add?`<span class="rn" title="Added one at Round ${R}">R${R}</span>`:''}</div>`; }).join('');
     return `<div class="rec-col"><div class="rec-hd"><b>${K.t}</b><i>${tot} in ${DATA.races.length} races</i></div>
       <div class="rec-now">R${R}: ${who||'—'}</div><div class="rec-row">${cells}</div></div>`; }).join('');
   return `<div class="card enter"><div class="panel reccard">
@@ -2353,7 +2354,7 @@ function fitRecords(){
   const ASPECT=0.27, GAP=8, MINW=30;              // the figure cut-outs are ~0.27 wide per unit of height
   const fit=()=>card.querySelectorAll('.rec-row').forEach(row=>{
     const cells=[...row.querySelectorAll('.rec-d')]; if(!cells.length) return;
-    const W=row.clientWidth-4, H=row.clientHeight-38;            // room for the pill above and the code below
+    const W=row.clientWidth-4, H=row.clientHeight-50;            // room for the pill above, the code and R-tag below
     if(W<=0||H<=0) return;
     const vals=cells.map(c=>+c.dataset.v), mx=Math.max(...vals);
     const wOf=(mh,v)=>Math.max(ASPECT*mh*v/mx, MINW);
