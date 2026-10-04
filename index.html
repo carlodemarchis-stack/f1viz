@@ -213,6 +213,16 @@ button{font-family:inherit}
 .clegend .cli.b2 i{opacity:.32}
 .clegend .cli.b3 i{opacity:.16}
 .clegend .cli.spr i{background:#ff3d9a;opacity:.9}
+.ptsview{display:inline-flex;gap:2px;background:var(--line-2);border-radius:7px;padding:2px;margin-right:10px}
+.ptsview button{border:0;background:transparent;color:var(--muted-2);font-family:inherit;font-size:8.5px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 7px;border-radius:5px;cursor:pointer}
+.ptsview button.on{background:color-mix(in srgb,var(--c) 30%,transparent);color:var(--ink)}
+.ptsview button:not(.on):hover{color:var(--ink)}
+.chart2 .pcol{position:absolute;bottom:0;transform:translateX(-50%);display:flex;flex-direction:column-reverse;align-items:stretch}
+.chart2 .pcol i{display:block;background:var(--c);opacity:.85;border-radius:0}
+.chart2 .pcol i.s{background:#ff3d9a;opacity:.9;border-radius:2px 2px 0 0}
+.chart2 .pcol i:last-child{border-radius:2px 2px 0 0}
+.chart2 .pcol b{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:2px;font-size:9px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
 .clegend .cli b{color:var(--ink);font-weight:800;margin-left:3px;font-variant-numeric:tabular-nums}
 .chart2{flex:1;display:flex;flex-direction:column;min-height:0}
 .chart2 .cplot{position:relative;flex:1;min-height:58px}
@@ -1445,7 +1455,7 @@ function driverCard(d){
       <div class="idbody">
         <div class="statgrid r1">${d.wins>0?statCell(d.wins,'Wins'):statCell(d.best?('P'+d.best):'—','Best')}${statCell(d.podiums,'Podiums')}${d.poles>0?statCell(d.poles,'Poles'):statCell(x.bestGrid?('P'+x.bestGrid):'—','Best Grid')}${statCell(d.fl,'Fastest')}${statCell(x.dnf,'DNF')}</div>
         <div class="statgrid r1"><div class="stat"><b class="up">${x.racesGain}</b><span>Gained</span></div><div class="stat"><b>${x.racesKept}</b><span>Kept</span></div><div class="stat"><b class="down">${x.racesLost}</b><span>Lost</span></div>${statCell(d.sprintWins,'Spr Wins')}${statCell(d.sprintPoles,'Spr Poles')}</div>
-        <div class="arc"><div class="arc-h"><span class="arc-t"><span>Points per round</span>${(()=>{const s=d.races.reduce((a,r)=>a+((r.spr>0)?r.spr:0),0);return s>0?`<span class="clegend"><span class="cli"><i></i>Race<b>${d.points-s}</b></span><span class="cli spr"><i></i>Sprint<b>${s}</b></span></span>`:'';})()}</span><span class="l">${d.points} total</span></div>${driverStackChart(d)}</div>
+        <div class="arc"><div class="arc-h"><span class="arc-t"><span>Points per round</span>${(()=>{const s=d.races.reduce((a,r)=>a+((r.spr>0)?r.spr:0),0);return s>0?`<span class="clegend"><span class="cli"><i></i>Race<b>${d.points-s}</b></span><span class="cli spr"><i></i>Sprint<b>${s}</b></span></span>`:'';})()}</span><span class="l">${ptsViewToggle()}${d.points} total</span></div>${driverStackChart(d)}</div>
       </div>
     </div>
     <div class="panel gpcard drv">
@@ -1541,7 +1551,29 @@ function stackChartHTML(c){
     <div class="cxaxis">${flags}</div></div>`;
 }
 
+// "Points per round" can be cumulative (the area) or one column per race, sprint stacked on top
+let ptsView='cum';
+try{ if(localStorage.getItem('f1viz.ptsView')==='race') ptsView='race'; }catch(e){}
+function setPtsView(v){ ptsView=v; try{ localStorage.setItem('f1viz.ptsView',v); }catch(e){} render(); }
+function ptsViewToggle(){
+  return `<span class="ptsview" onclick="event.stopPropagation()"><button class="${ptsView==='cum'?'on':''}" onclick="setPtsView('cum')">Cumulative</button><button class="${ptsView==='race'?'on':''}" onclick="setPtsView('race')">Per race</button></span>`;
+}
+function driverRaceCols(d){
+  const n=DATA.rounds.length, byr={}; d.races.forEach(r=>byr[r.r]=r);
+  const vals=DATA.rounds.map(rd=>{ const r=byr[rd.r]; return r?{r:Math.max(0,r.rpts||0), s:Math.max(0,r.spr||0)}:null; });
+  const max=Math.max(1,...vals.map(v=>v?v.r+v.s:0));
+  const px=i=> n===1?50:(5+90*i/(n-1)), w=Math.min(4.2, 70/n);
+  const H=76;                                       // % of the plot used by the tallest column (room for its label)
+  const grid=DATA.rounds.map((r,i)=>`<span class="cx" style="left:${px(i)}%"></span>`).join('');
+  const cols=vals.map((v,i)=>{ if(!v) return '';
+    const t=v.r+v.s, hr=H*v.r/max, hs=H*v.s/max;
+    return `<span class="pcol" style="left:${px(i)}%;width:${w}%;height:${(hr+hs).toFixed(2)}%" title="R${DATA.rounds[i].r} ${DATA.rounds[i].gp}: ${v.r} race${v.s?` + ${v.s} sprint`:''}">
+      ${t>0?`<b>${t}</b>`:''}<i style="height:${t?(100*v.r/t).toFixed(2):0}%"></i>${v.s?`<i class="s" style="height:${(100*v.s/t).toFixed(2)}%"></i>`:''}</span>`; }).join('');
+  const flags=DATA.rounds.map((r,i)=>`<span class="cflag" style="left:${px(i)}%" title="R${r.r} ${r.gp}">${r.flag}</span>`).join('');
+  return `<div class="chart2"><div class="cplot">${grid}${cols}</div><div class="cxaxis">${flags}</div></div>`;
+}
 function driverStackChart(d){
+  if(ptsView==='race') return driverRaceCols(d);
   const n=DATA.rounds.length, byr={}; d.races.forEach(r=>byr[r.r]=r);
   let cr=0,cs=0; const cumR=[],cumT=[];
   for(let k=1;k<=n;k++){const r=byr[k]; cr+=r?r.rpts:0; cs+=(r&&r.spr)?r.spr:0; cumR.push(cr); cumT.push(cr+cs);}
