@@ -3,6 +3,8 @@
 Reads text from data/recaps.json, writes audio/rNN.mp3.
 Usage: ELEVENLABS_API_KEY=... python3 tools/gen_recap_audio.py [round ...]
 (no round args = all rounds)
+Translations: EL_LANG=fr (it, es, de, ja, zh) reads recaps[r]["tr"][lang] and writes audio/<lang>/rNN.mp3;
+the multilingual model takes the language from the text.
 """
 import os, sys, json, time, urllib.request, urllib.error
 
@@ -14,7 +16,8 @@ VOICE_ID = os.environ.get("EL_VOICE_ID", "onwK4e9ZLuTAKqWW03F9")   # 'Daniel' â€
 MODEL    = os.environ.get("EL_MODEL", "eleven_multilingual_v2")
 STAB     = float(os.environ.get("EL_STABILITY", "0.30"))
 STYLE    = float(os.environ.get("EL_STYLE", "0.45"))
-OUT_DIR  = os.environ.get("EL_OUT", "audio")                       # variant folder, e.g. audio-antoni
+LANG     = os.environ.get("EL_LANG", "")                           # "" = the English recap
+OUT_DIR  = os.environ.get("EL_OUT", "audio/" + LANG if LANG else "audio")   # variant folder, e.g. audio-antoni
 FMT      = "mp3_44100_128"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,8 +30,11 @@ for rnd in wanted:
     entry = recaps.get(rnd)
     if not entry:
         print(f"R{rnd}: no recap, skip"); continue
+    text = (entry.get("tr") or {}).get(LANG) if LANG else entry["recap"]
+    if not text:
+        print(f"R{rnd}: no {LANG} translation, skip"); continue
     body = json.dumps({
-        "text": entry["recap"],
+        "text": text,
         "model_id": MODEL,
         # lower stability + higher style = more expressive / passionate delivery
         "voice_settings": {"stability": STAB, "similarity_boost": 0.75, "style": STYLE, "use_speaker_boost": True},

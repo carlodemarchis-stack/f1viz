@@ -450,6 +450,11 @@ button{font-family:inherit}
 .rc-recap-toggle{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left}
 .rc-recap-lbl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 78%,#fff)}
 .rc-recap-note{font-size:8.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);padding:2px 6px;border:1px solid var(--line-2);border-radius:20px}
+.rc-langs{display:flex;flex-wrap:wrap;gap:2px;flex:0 1 auto;justify-content:flex-end}
+.rc-langs button{border:0;background:transparent;color:var(--muted-2);font-family:inherit;font-size:9.5px;font-weight:800;letter-spacing:.06em;
+  padding:3px 6px;border-radius:5px;cursor:pointer}
+.rc-langs button.on{background:color-mix(in srgb,var(--c) 28%,transparent);color:var(--ink)}
+.rc-langs button:not(.on):hover{color:var(--ink)}
 .rc-recap-chev{width:16px;height:16px;fill:var(--muted-2);margin-left:auto;flex:0 0 auto;transition:transform .22s}
 .rc-recap.open .rc-recap-chev{transform:rotate(180deg)}
 .rc-recap-txt{margin:0;font-size:12px;line-height:1.55;color:var(--muted);max-height:0;overflow:hidden;transition:max-height .28s ease}
@@ -1551,7 +1556,28 @@ function driverStackChart(d){
 let _recapRound=null;
 const AUDIO_DIR=(function(){try{var v=(new URLSearchParams(location.search).get('voice')||'').replace(/[^a-z0-9_-]/gi,'');return v?('audio-'+v+'/'):'audio/';}catch(e){return 'audio/';}})();
 const AUDIO_VER='3';   // bump when regenerating clips to bust the browser cache (same filenames)
-function _recapText(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round]&&RECAPS.recaps[round].recap)||''; }catch(e){ return ''; } }
+// recap languages: English is the original; translations live in recaps[r].tr[lang] with audio/<lang>/rNN.mp3
+const RECAP_LANGS=[['en','EN','en-GB'],['fr','FR','fr-FR'],['it','IT','it-IT'],['es','ES','es-ES'],['de','DE','de-DE'],['ja','日本','ja-JP'],['zh','中文','zh-CN']];
+let recapLang='en'; try{ recapLang=localStorage.getItem('f1viz.recapLang')||'en'; }catch(e){}
+function _recapEntry(round){ try{ return (RECAPS&&RECAPS.recaps&&RECAPS.recaps[round])||null; }catch(e){ return null; } }
+function _recapLangOf(round){ const e=_recapEntry(round); return (recapLang!=='en' && e && e.tr && e.tr[recapLang]) ? recapLang : 'en'; }
+function _recapText(round){ const e=_recapEntry(round); if(!e) return ''; const L=_recapLangOf(round); return (L==='en'?e.recap:e.tr[L])||''; }
+function recapLangChips(round){
+  const e=_recapEntry(round); if(!e||!e.tr) return '';
+  const cur=_recapLangOf(round);
+  return `<span class="rc-langs" onclick="event.stopPropagation()">${RECAP_LANGS.filter(([k])=>k==='en'||e.tr[k]).map(([k,lbl])=>
+    `<button class="${k===cur?'on':''}" lang="${k}" onclick="setRecapLang(${round},'${k}',this)">${lbl}</button>`).join('')}</span>`;
+}
+function setRecapLang(round, lang, btn){
+  recapLang=lang; try{ localStorage.setItem('f1viz.recapLang',lang); }catch(e){}
+  const box=btn.closest('.rc-recap'); const playing=(_recapRound===round);
+  if(playing) stopRecap();
+  if(box){ box.querySelector('.rc-recap-txt').textContent=_recapText(round);
+    box.querySelectorAll('.rc-langs button').forEach(b=>b.classList.toggle('on',b.getAttribute('lang')===_recapLangOf(round)));
+    const nt=box.querySelector('.rc-recap-note'); if(nt) nt.textContent=_recapLangOf(round)==='en'?'AI voice':'AI voice · AI translation';
+    _recapSetOpen(box,true);
+    if(playing){ const pb=box.querySelector('.rc-recap-play'); if(pb) speakRecap(round,pb); } }
+}
 function _recapClear(){ document.querySelectorAll('.rc-recap-play.on').forEach(b=>b.classList.remove('on')); }
 function _recapSetOpen(box, open){ if(!box)return; box.classList.toggle('open', open); const tg=box.querySelector('.rc-recap-toggle'); if(tg) tg.setAttribute('aria-expanded', open); }
 function toggleRecap(btn){ const box=btn.closest('.rc-recap'); if(!box)return; const open=box.classList.toggle('open'); btn.setAttribute('aria-expanded', open); }
@@ -1567,7 +1593,8 @@ function speakRecap(round, btn){
   stopRecap();
   _recapRound=round;
   if(btn){ btn.classList.add('on'); _recapSetOpen(box,true); }               // reveal text on play
-  const a=new Audio(AUDIO_DIR+'r'+String(round).padStart(2,'0')+'.mp3?v='+AUDIO_VER);   // premium AI voice (versioned to bust cache)
+  const L=_recapLangOf(round);
+  const a=new Audio((L==='en'?AUDIO_DIR:'audio/'+L+'/')+'r'+String(round).padStart(2,'0')+'.mp3?v='+AUDIO_VER);   // premium AI voice (versioned to bust cache)
   a.addEventListener('ended', ()=>{ if(_recapRound===round){ _recapRound=null; _recapAudio=null; _recapClear(); _recapAdvance(); } });
   a.addEventListener('error', ()=>{ _recapAudio=null; _speakFallback(round, btn); });   // no clip → browser voice
   _recapAudio=a;
@@ -1577,6 +1604,7 @@ function _speakFallback(round, btn){
   const synth=window.speechSynthesis; if(!synth || _recapRound!==round) return;
   const rc=_recapText(round); if(!rc) return;
   const u=new SpeechSynthesisUtterance(rc); u.rate=1; u.pitch=1;
+  u.lang=(RECAP_LANGS.find(x=>x[0]===_recapLangOf(round))||[])[2]||'en-GB';
   u.onend=()=>{ if(_recapRound===round){ _recapRound=null; _recapClear(); _recapAdvance(); } };
   u.onerror=()=>{ if(_recapRound===round){ _recapRound=null; _recapClear(); } };
   if(btn) btn.classList.add('on');
@@ -1652,7 +1680,7 @@ function raceCard(r){
       ${(()=>{const rc=_recapText(r.r); return rc?`<div class="rc-recap">
         <div class="rc-recap-hd"><button class="rc-recap-play" onclick="speakRecap(${r.r},this)" aria-label="Play race recap">
           <svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg class="ic-stop" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg></button>
-          <button class="rc-recap-toggle" onclick="toggleRecap(this)" aria-expanded="false"><span class="rc-recap-lbl">Race recap</span><span class="rc-recap-note">AI voice</span><svg class="rc-recap-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button></div>
+          <button class="rc-recap-toggle" onclick="toggleRecap(this)" aria-expanded="false"><span class="rc-recap-lbl">Race recap</span><span class="rc-recap-note">${_recapLangOf(r.r)==='en'?'AI voice':'AI voice · AI translation'}</span><svg class="rc-recap-chev" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button>${recapLangChips(r.r)}</div>
         <p class="rc-recap-txt">${rc}</p></div>`:'';})()}
     </div>
     <div class="panel raceres">
