@@ -58,7 +58,8 @@ def build(f1, rnd):
     teamid = {c["name"]: c["teamId"] for c in f1["constructors"]}
 
     cands = []
-    for v in (cal.get("short"), cal.get("country"), cal.get("locality")):
+    # a relocated race keeps its original page: "Bahrain in Malaysia" lives at /racing/2026/bahrain
+    for v in (cal.get("short"), cal.get("country"), cal.get("locality"), (cal.get("gp") or "").split(" ")[0]):
         sl = ul.f1com_slug(v or "")
         if sl and sl not in cands:
             cands.append(sl)
