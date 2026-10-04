@@ -51,6 +51,11 @@ def grid_starts(rc):
     for L in oe:
         if L > 1 and any(s <= L <= s + 3 for s in ss):
             out.add(L)
+    # a standing start with no OVERTAKE ENABLED after it is itself the start: Sepang 2026 ran
+    # lap 1 behind the safety car and took the standing start on lap 2 (checked: no other round changes)
+    for s in ss:
+        if s > 1 and not any(s <= L <= s + 3 for L in oe):
+            out.add(s)
     return sorted(out)
 
 

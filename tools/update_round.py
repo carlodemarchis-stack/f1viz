@@ -55,11 +55,10 @@ def fetch_all_laps(rnd):
 
 def openf1_safety(rnd, cal):
     """Return ({sc,vsc,red}, {lap:flag}) from OpenF1 race control; best-effort."""
-    mtgs = curl_json(f"https://api.openf1.org/v1/meetings?year={YEAR}") or []
-    m = [x for x in mtgs if cal["country"] in (x.get("country_name") or "") or cal["gp"] in (x.get("meeting_name") or "")]
-    if not m: return {"sc": 0, "vsc": 0, "red": 0}, {}
-    ss = curl_json(f"https://api.openf1.org/v1/sessions?meeting_key={m[0]['meeting_key']}") or []
-    race = [s for s in ss if s.get("session_name") == "Race"]
+    # match the race session by date: a relocated race keeps its original country/name in
+    # OpenF1 (Sepang 2026 = "Bahrain"), which a name match would miss -> silently zero
+    ss = curl_json(f"https://api.openf1.org/v1/sessions?year={YEAR}&session_name=Race") or []
+    race = [s for s in ss if str(s.get("date_start", ""))[:10] == cal["date"]]
     if not race: return {"sc": 0, "vsc": 0, "red": 0}, {}
     rc = curl_json(f"https://api.openf1.org/v1/race_control?session_key={race[0]['session_key']}") or []
     sc = vsc = red = 0; flags = {}

@@ -45,7 +45,8 @@ def main():
     cal = next(c for c in f1["calendar"] if c["r"] == rnd)
     num2code = {int(d["num"]): d["code"] for d in f1["drivers"] if d.get("num")}
 
-    ses = api("sessions", year=YEAR, country_name=cal["country"].replace(" ", "%20"))
+    # by date, not country: OpenF1 files a relocated race under its original country (Sepang = Bahrain)
+    ses = api("sessions", year=YEAR, session_name="Race")
     rs = [s for s in ses if s.get("session_name") == "Race" and str(s.get("date_start", ""))[:10] == cal["date"]]
     if not rs:
         raise SystemExit("no OpenF1 race session for round %d" % rnd)

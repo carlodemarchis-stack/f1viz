@@ -33,7 +33,8 @@ def build(rnd, f1):
     # one country can host several races (Miami / United States / Las Vegas) and f1.com's slug is
     # not always the country ("UK" -> great-britain), so try the round's own names in turn
     cands, seen = [], set()
-    for v in (cal.get("short"), cal.get("country"), cal.get("locality"), cal.get("gp")):
+    # + the GP's first word: a relocated race keeps its page ("Bahrain in Malaysia" -> /bahrain)
+    for v in (cal.get("short"), cal.get("country"), cal.get("locality"), cal.get("gp"), (cal.get("gp") or "").split(" ")[0]):
         sl = ul.f1com_slug(v or "")
         if sl and sl not in seen:
             seen.add(sl); cands.append(sl)
