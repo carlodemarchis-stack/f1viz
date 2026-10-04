@@ -1653,7 +1653,7 @@ function driverStackChart(d){
 
 let _recapRound=null;
 const AUDIO_DIR=(function(){try{var v=(new URLSearchParams(location.search).get('voice')||'').replace(/[^a-z0-9_-]/gi,'');return v?('audio-'+v+'/'):'audio/';}catch(e){return 'audio/';}})();
-const AUDIO_VER='6';   // bump when regenerating clips to bust the browser cache (same filenames)
+const AUDIO_VER='7';   // bump when regenerating clips to bust the browser cache (same filenames)
 // recap languages: English is the original; translations live in recaps[r].tr[lang] with audio/<lang>/rNN.mp3
 const RECAP_LANGS=[['en','EN','en-GB'],['fr','FR','fr-FR'],['it','IT','it-IT'],['es','ES','es-ES'],['de','DE','de-DE'],['ja','日本','ja-JP'],['zh','中文','zh-CN']];
 let recapLang='en'; try{ recapLang=localStorage.getItem('f1viz.recapLang')||'en'; }catch(e){}
