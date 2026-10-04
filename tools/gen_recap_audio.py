@@ -12,7 +12,10 @@ KEY = os.environ.get("ELEVENLABS_API_KEY")
 if not KEY:
     sys.exit("Set ELEVENLABS_API_KEY in the environment.")
 
-VOICE_ID = os.environ.get("EL_VOICE_ID", "onwK4e9ZLuTAKqWW03F9")   # 'Daniel' — British news presenter
+# native voice per translation language (chosen by Carlo in the ElevenLabs dashboard); used unless
+# EL_VOICE_ID is set explicitly. Languages not listed fall back to the English narrator.
+LANG_VOICES = {"it": "yDOeU0zaoLSK6sD7aroY", "fr": "0bKGtCCpdKSI5NjGhU3z"}
+VOICE_ID = os.environ.get("EL_VOICE_ID") or LANG_VOICES.get(os.environ.get("EL_LANG", ""), "onwK4e9ZLuTAKqWW03F9")   # default 'Daniel
 MODEL    = os.environ.get("EL_MODEL", "eleven_multilingual_v2")
 STAB     = float(os.environ.get("EL_STABILITY", "0.30"))
 STYLE    = float(os.environ.get("EL_STYLE", "0.45"))
