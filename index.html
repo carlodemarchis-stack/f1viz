@@ -277,6 +277,29 @@ button{font-family:inherit}
 .gpcard.con .gpcols,.gpcard.con .gp{grid-template-columns:24px 18px minmax(0,1fr) 50px 50px 44px 22px}
 
 /* ---------- standings film still (film.html?embed=1): podium + every driver sized by points ---------- */
+/* ---------- records card: podiums / poles / fastest laps, figures sized by count (film look) ---------- */
+.reccard{grid-column:1/-1;position:relative;overflow:hidden;display:flex;flex-direction:column;padding:20px 26px 16px;
+  min-height:min(78vh,760px);background:radial-gradient(120% 90% at 50% 0%,#16244a 0%,#0c1430 42%,#070b1c 100%)}
+.reccard .rc-kick{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#dbe4f4;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.reccard .rc-kick span{color:#7f8db0;font-size:11px;padding-left:10px;border-left:1px solid rgba(255,255,255,.14)}
+.reccard .rec-tag{position:absolute;top:8px;right:26px;font-weight:800;font-style:italic;letter-spacing:-.05em;line-height:.9;
+  font-size:clamp(70px,13vh,160px);color:rgba(255,255,255,.07);pointer-events:none;user-select:none}
+.rec-cols{flex:1;min-height:0;display:grid;grid-template-columns:var(--rcols,repeat(3,minmax(0,1fr)));gap:22px;margin-top:14px}
+.rec-col{position:relative;display:flex;flex-direction:column;min-height:0;min-width:0;border-radius:14px;padding:12px 12px 10px;
+  background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.rec-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.rec-hd b{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#eef1f6}
+.rec-hd i{font-style:normal;font-size:10.5px;color:#7f8db0;letter-spacing:.06em;white-space:nowrap}
+.rec-now{font-size:10.5px;color:#9fb0c8;margin-top:3px;min-height:14px}
+.rec-now em{font-style:normal;font-weight:800;color:var(--rc,#fff)}
+.rec-row{position:relative;flex:1;min-height:150px;margin-top:6px}
+.rec-d{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;transform:translateX(-50%)}
+.rec-d img{display:block;width:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));transition:filter .15s}
+.rec-d:hover img{filter:brightness(1.15) drop-shadow(0 8px 14px rgba(0,0,0,.5))}
+.rec-d .rp{font-size:11px;font-weight:800;padding:1.5px 6px;border-radius:5px;margin-bottom:5px;line-height:1.25;box-shadow:0 2px 7px rgba(0,0,0,.35);white-space:nowrap}
+.rec-d .rp u{text-decoration:none;font-size:9px;opacity:.85;margin-left:3px}
+.rec-d .rc{margin-top:5px;font-size:11px;font-weight:800;letter-spacing:.02em;line-height:1;white-space:nowrap}
+@media (max-width:900px){ .rec-cols{grid-template-columns:1fr!important;gap:12px} .reccard{min-height:0;padding:16px 14px 12px} .rec-row{min-height:190px;flex:0 0 190px} }
 .filmcard{grid-column:1/-1;position:relative;padding:0;overflow:hidden;background:#0c1430;min-height:min(78vh,760px)}
 /* the film lays out for a wide screen: fitFilm renders it at a virtual size with the card's own proportions
    (never narrower than 1200px) and scales it down, so it fills the card edge to edge — a phone gets the same frame smaller */
@@ -1281,7 +1304,7 @@ function wireStew(host){
   host.querySelectorAll('.sw-who[data-dc]').forEach(el=>{ el.onclick=()=>goDriver(el.dataset.dc); });
 }
 const hasOvt = () => !!(EXTRAS&&EXTRAS.overtakes&&Object.keys(EXTRAS.overtakes).length);
-const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?((hasOvt()?5:4)+(mode==='drivers'?1:0)):(1+(hasLive()?1:0)+upcList().length+((CAL27||[]).length?1:0)));   // races: [+ weekend in progress] + season map + rounds to come [+ next season]
+const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?((hasOvt()?5:4)+(mode==='drivers'?2:0)):(1+(hasLive()?1:0)+upcList().length+((CAL27||[]).length?1:0)));   // races: [+ weekend in progress] + season map + rounds to come [+ next season]
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
@@ -2296,6 +2319,52 @@ const mobRow=(pos,family,color,jump,w,val,extra='')=>`<div class="hrow ${pos==1?
   <div class="hlabel"><span class="hpos">${pos}</span><span class="hname">${family}</span></div>
   <div class="htrack"><div class="hbar" style="width:max(3px,calc((100% - var(--hres,44px))*${(w/100).toFixed(4)}))">${extra}</div><span class="hpts">${val}</span></div></div>`;
 // the standings film's latest frame, embedded as-is so it looks exactly like film.html
+// podiums, pole positions and fastest laps - Grands Prix only - each driver as a full figure
+// sized by his count; whoever added to a tally at the latest round is called out
+const IMGF = s => `img/figs/${s}.png${IMGV}`;
+const readable=hex=>{ const h=(hex||'#888').replace('#',''), r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+  return (0.299*r+0.587*g+0.114*b)>150?'#0b1120':'#fff'; };   // dark text on light team colours (as in the film)
+const REC_KINDS=[{k:'podiums',t:'Podiums'},{k:'poles',t:'Pole positions'},{k:'fl',t:'Fastest laps'}];
+function recordsCard(){
+  const last=DATA.races[DATA.races.length-1], R=last.r, cal=(DATA.calendar||[]).find(c=>c.r===R)||{};
+  const now={podiums:(last.cls||[]).slice(0,3).map(c=>c.code), poles:last.pole?[last.pole.code]:[], fl:last.fl?[last.fl.code]:[]};
+  // each column is as wide as its figures need at a common height: sum of value/max (+ a little per driver)
+  const need=REC_KINDS.map(K=>{ const v=D.map(d=>d[K.k]||0).filter(x=>x>0), mx=Math.max(1,...v);
+    return v.reduce((s,x)=>s+x/mx,0)+0.35*v.length+0.6; });
+  const cols=REC_KINDS.map(K=>{
+    const L=D.filter(d=>d[K.k]>0).sort((a,b)=>b[K.k]-a[K.k]||a.pos-b.pos);
+    const tot=L.reduce((s,d)=>s+d[K.k],0);
+    const who=now[K.k].map(c=>{ const d=D.find(x=>x.code===c); return `<em style="--rc:${d?d.color:'#fff'}">${c}</em>`; }).join(' · ');
+    const cells=L.map(d=>{ const add=now[K.k].includes(d.code);
+      return `<div class="rec-d" data-dc="${d.code}" data-v="${d[K.k]}" title="${d.family}: ${d[K.k]} ${K.t.toLowerCase()}">
+        <span class="rp" style="background:${d.color};color:${readable(d.color)}">${d[K.k]}${add?'<u>+1</u>':''}</span>
+        <img src="${IMGF(d.slug)}" alt="${d.family}" onerror="this.style.visibility='hidden'">
+        <span class="rc" style="color:${d.color}">${d.code}</span></div>`; }).join('');
+    return `<div class="rec-col"><div class="rec-hd"><b>${K.t}</b><i>${tot} in ${DATA.races.length} races</i></div>
+      <div class="rec-now">R${R}: ${who||'—'}</div><div class="rec-row">${cells}</div></div>`; }).join('');
+  return `<div class="card enter"><div class="panel reccard">
+    <div class="rec-tag">R${R}</div>
+    <div class="rc-kick">Race ${R} · ${cal.flag||''} ${cal.full||last.full||''}<span>Podiums · poles · fastest laps · Grands Prix</span></div>
+    <div class="rec-cols" style="--rcols:${need.map(n=>'minmax(0,'+n.toFixed(2)+'fr)').join(' ')}">${cols}</div></div></div>`;
+}
+let recRO=null;
+function fitRecords(){
+  const card=wrap.querySelector('.reccard'); if(recRO){ recRO.disconnect(); recRO=null; } if(!card) return;
+  const ASPECT=0.27, GAP=8, MINW=30;              // the figure cut-outs are ~0.27 wide per unit of height
+  const fit=()=>card.querySelectorAll('.rec-row').forEach(row=>{
+    const cells=[...row.querySelectorAll('.rec-d')]; if(!cells.length) return;
+    const W=row.clientWidth-4, H=row.clientHeight-38;            // room for the pill above and the code below
+    if(W<=0||H<=0) return;
+    const vals=cells.map(c=>+c.dataset.v), mx=Math.max(...vals);
+    const wOf=(mh,v)=>Math.max(ASPECT*mh*v/mx, MINW);
+    let mh=H; for(let i=0;i<6;i++){ const tw=vals.reduce((s,v)=>s+wOf(mh,v),0)+GAP*(vals.length-1); if(tw>W) mh*=W/tw; else break; }
+    const tw=vals.reduce((s,v)=>s+wOf(mh,v),0)+GAP*(vals.length-1);
+    let x=(W-tw)/2+2;
+    cells.forEach((c,i)=>{ const w=wOf(mh,vals[i]); c.style.left=(x+w/2)+'px'; c.querySelector('img').style.height=Math.max(8,mh*vals[i]/mx)+'px'; x+=w+GAP; });
+  });
+  fit(); if(window.ResizeObserver){ recRO=new ResizeObserver(fit); recRO.observe(card); }
+  card.querySelectorAll('.rec-d[data-dc]').forEach(el=>{ el.onclick=()=>goDriver(el.dataset.dc); });
+}
 function filmCard(){
   return `<div class="card enter"><div class="panel filmcard">
     <iframe src="film.html?embed=1&v=30b30b74#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
@@ -2724,8 +2793,9 @@ function render(dir){
     document.documentElement.style.setProperty('--c','#00D7B6');
     document.documentElement.dataset.team='';
     if(mode==='drivers'){
-      const k=idx-N()-1;                        // -1: the standings film card comes first
-      if(k===-1){ wrap.innerHTML=filmCard(); $('#cwho').textContent='Championship'; fitFilm(); }
+      const k=idx-N()-2;                        // -2: the standings film, -1: records, then the charts
+      if(k===-2){ wrap.innerHTML=filmCard(); $('#cwho').textContent='Championship'; fitFilm(); }
+      else if(k===-1){ wrap.innerHTML=recordsCard(); $('#cwho').textContent='Podiums · poles · fastest laps'; fitRecords(); }
       else if(k===3){ wrap.innerHTML=leadLapsCard(); $('#cwho').textContent='Leading laps'; mountLeadLaps(); }
       else { wrap.innerHTML = k===0?gridCard():k===1?barCard('laps'):k===2?barCard('sprint'):barCard('ovt');
         $('#cwho').textContent = k===0?'Standings':k===1?'Laps completed':k===2?'Sprint points':'On-track passes';
@@ -2908,9 +2978,10 @@ function buildJump(){
   const items = mode==='races'
     ? list().map((e,i)=>`<div class="jitem" style="--jc:${e.winner.color}" data-j="${i}"><span class="jp">R${e.r}</span><span class="jb"></span><b>${e.short}</b></div>`).join('')
     : list().map(e=>`<div class="jitem" style="--jc:${e.color}" data-j="${e.pos-1}"><span class="jp">${e.pos}</span><span class="jb"></span><b>${mode==='drivers'?e.family:e.name}</b></div>`).join('');
-  const o=N()+(mode==='drivers'?1:0);          // drivers: the standings film card sits before Standings
+  const o=N()+(mode==='drivers'?2:0);          // drivers: the standings film + records cards sit before Standings
   const tail = (mode==='drivers'||mode==='constructors')
-    ? (mode==='drivers'?`<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">★</span><span class="jb"></span><b>Championship</b></div>`:'')
+    ? (mode==='drivers'?`<div class="jitem" style="--jc:#00D7B6" data-j="${N()}"><span class="jp">★</span><span class="jb"></span><b>Championship</b></div>
+       <div class="jitem" style="--jc:#00D7B6" data-j="${N()+1}"><span class="jp">◆</span><span class="jb"></span><b>Podiums · poles · FL</b></div>`:'')
       +`<div class="jitem" style="--jc:#00D7B6" data-j="${o}"><span class="jp">▦</span><span class="jb"></span><b>Standings</b></div>
        <div class="jitem" style="--jc:#00D7B6" data-j="${o+1}"><span class="jp">◷</span><span class="jb"></span><b>Laps completed</b></div>
        <div class="jitem" style="--jc:#00D7B6" data-j="${o+2}"><span class="jp">⚡</span><span class="jb"></span><b>Sprint points</b></div>
