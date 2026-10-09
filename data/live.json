@@ -1,1 +1,57 @@
-{}
+{
+ "meta": {
+  "season": 2026,
+  "round": 17,
+  "updated": "2026-10-09T08:22:12Z"
+ },
+ "round": 17,
+ "gp": "Singapore Grand Prix",
+ "full": "Singapore Grand Prix",
+ "short": "Singapore",
+ "flag": "🇸🇬",
+ "country": "Singapore",
+ "circuit": "Marina Bay Street Circuit",
+ "locality": "Marina Bay",
+ "date": "2026-10-11",
+ "tz": "Asia/Singapore",
+ "laps": 62,
+ "length": "4.940",
+ "distance": "306.280",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-10-09T08:30:00Z",
+   "end": null,
+   "results": []
+  },
+  {
+   "key": "sq",
+   "name": "Sprint Qualifying",
+   "start": "2026-10-09T12:30:00Z",
+   "end": null,
+   "results": []
+  },
+  {
+   "key": "sprint",
+   "name": "Sprint",
+   "start": "2026-10-10T09:00:00Z",
+   "end": null,
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-10-10T13:00:00Z",
+   "end": null,
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-10-11T12:00:00Z",
+   "end": null,
+   "results": []
+  }
+ ]
+}
