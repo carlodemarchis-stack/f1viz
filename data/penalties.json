@@ -4427,6 +4427,42 @@
     "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_1_-_alleged_driving_erratically.pdf"
    }
   ],
-  "17": []
+  "17": [
+   {
+    "doc": 20,
+    "title": "Infringement - Car 63 - Changes to PU elements",
+    "pub": "09.10.26 14:03",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": null,
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 5th Exhaust Set (EXH) 4th MGU-K",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 40 grid positions in the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_63_-_changes_to_pu_elements.pdf",
+    "grid": 40
+   },
+   {
+    "doc": 29,
+    "title": "Infringement - Car 3 - Yellow flag infringement",
+    "pub": "09.10.26 17:39",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Sprint Qualifying",
+    "fact": "Car 3 overtook Car 44 under single yellow flags.",
+    "breach": "Breach of Appendix H, Article 2.5.5b of the FIA International Sporting Code.",
+    "decision": "No penalty is applied.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_3_-_yellow_flag_infringement.pdf"
+   }
+  ]
  }
 }
