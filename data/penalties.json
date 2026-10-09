@@ -4373,6 +4373,58 @@
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_5_-_causing_a_collision_with_car_55.pdf",
     "sec": 10
+   },
+   {
+    "doc": 57,
+    "title": "Decision - Car 23 - Alleged driving erratically",
+    "pub": "04.10.26 14:54",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Race",
+    "fact": "Driving erratically in the pit entry road.",
+    "breach": "Alleged breaches of Article 1.8.5 of the FIA F1 Regulations and Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_decision_-_car_23_-_alleged_driving_erratically.pdf"
+   },
+   {
+    "doc": 58,
+    "title": "Infringement - Car 27 - Unsafe release",
+    "pub": "04.10.26 15:20",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Unsafe act during the pit stop resulting in an unsafe situation.",
+    "breach": "Breach of Article 12.2.1.h of the FIA International Sporting Code.",
+    "decision": "The competitor (Audi Revolut F1 Team) is fined €30,000 of which €20,000 is suspended for 12 months on condition that the Competitor does not commit a similar infringement during its pitstops in the meantime.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_27_-_unsafe_release.pdf",
+    "eur": 30000
+   },
+   {
+    "doc": 59,
+    "title": "Infringement - Car 1 - Alleged driving erratically",
+    "pub": "04.10.26 15:49",
+    "num": 1,
+    "code": "NOR",
+    "driver": "Lando Norris",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Race",
+    "fact": "Driving erratically under Safety Car conditions.",
+    "breach": "Breach of Articles B5.13.2a of the FIA F1 Regulations and Appendix L, Chapter IV, Articles 2 e) of the International Sporting Code.",
+    "decision": "Driver: Reprimand (Driving). This is the driver’s 1st reprimand of the season.",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_bahrain_grand_prix_in_malaysia_-_infringement_-_car_1_-_alleged_driving_erratically.pdf"
    }
   ],
   "17": []
