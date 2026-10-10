@@ -4615,6 +4615,23 @@
      "nfa"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_77_-_causing_a_collision_with_car_23.pdf"
+   },
+   {
+    "doc": 73,
+    "title": "Infringement - Car 27 - Impeding of Car 55",
+    "pub": "10.10.26 20:47",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 27 impeded Car 55 in turn 5",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "No penalty applied",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_27_-_impeding_of_car_55.pdf"
    }
   ]
  }
