@@ -226,10 +226,15 @@ def f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col):
     out, lead = [], None
     for row in tbl[1:]:
         get = lambda k: row[ci[k]] if ci[k] is not None and ci[k] < len(row) else ""
+        label = None
         try:
             pos = int(get("pos"))
         except ValueError:
-            continue                                            # NC / DQ rows carry a non-numeric position
+            # NC / DQ / DNS rows: keep them (a sprint can lose 8 cars), numbered after the
+            # classified finishers below, and flagged so the card shows DNF rather than a gap
+            if get("pos").strip().upper() not in ("NC", "DQ", "DSQ", "DNS", "EX", "EXC"):
+                continue
+            pos, label = None, get("pos").strip().upper()
         try:
             num = int(get("num"))
         except ValueError:
@@ -263,9 +268,16 @@ def f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col):
             "gapS": 0.0 if pos == 1 else (round(best - lead, 3) if best and lead else None),
             "laps": int(get("laps")) if get("laps").isdigit() else None,
             "seg": [fmt_lap(x) if x else None for x in segs] if segs else None,
-            "out": False,
+            "out": bool(label) or get("time").strip().upper() in ("DNF", "DNS", "DSQ"),
             "rookie": fd is None,
         })
+        if label or out[-1]["out"]:
+            out[-1]["pl"] = label                  # "NC"/"DQ" shown instead of a number when unclassified
+            out[-1]["res"] = get("time").strip().upper() if get("time").strip().upper() in ("DNF", "DNS", "DSQ") else (label or "DNF")
+    n = max([x["pos"] for x in out if x["pos"] is not None] or [0])
+    for x in out:
+        if x["pos"] is None:
+            n += 1; x["pos"] = n
     out.sort(key=lambda x: x["pos"])
     return out or None
 

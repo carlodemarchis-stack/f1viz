@@ -540,6 +540,8 @@ button{font-family:inherit}
   flex:1;min-height:0;overflow:hidden}   /* share the panel height like .clsrow so a full 22-car field always fits */
 .lvrow:nth-child(odd){background:rgba(255,255,255,.028)}
 .lvrow.lk{cursor:pointer}
+.lvrow.out{opacity:.6}.lvrow.out .lvp{font-size:10px;letter-spacing:.04em}
+.lvout{font-style:normal;font-weight:800;color:var(--bad);letter-spacing:.04em}
 .lvrow.lk:hover{background:rgba(255,255,255,.075)}
 .lvrow.lk:hover .lvd b{color:#fff}
 .lvrow .lvp{font-weight:800;font-variant-numeric:tabular-nums;color:var(--muted-2)}
@@ -1779,13 +1781,13 @@ function liveCard(){
       const sg=segCols?(r.seg||[]):[], sv=sg.map(t=>t?clockS(t):null);
       const bi=sv.reduce((b,v,i)=>(v!=null&&(b<0||v<sv[b]))?i:b,-1);
       const known=D.some(d=>d.code===r.code);
-      return `<div class="lvrow${segCols?' q':''}${r.pos===1?' p1':''}${known?' lk':''}"${
+      return `<div class="lvrow${segCols?' q':''}${r.pos===1?' p1':''}${known?' lk':''}${r.out?' out':''}"${
         known?` data-dc="${r.code}" title="Open ${r.name||r.code}'s card"`:''} style="--dc:${r.col}">
-      <span class="lvp">${r.pos}</span>
+      <span class="lvp">${r.pl||r.pos}</span>
       <span class="lvd"><b>${r.code}</b><span>${r.name||''}${r.team?' · '+r.team:''}</span>${r.rookie?'<u>Rookie</u>':''}</span>
       <span class="lvt">${r.time||'—'}</span>${segCols?[0,1,2].map(i=>
         `<span class="lvq${i===bi?' best':''}">${sg[i]||'<i>—</i>'}</span>`).join(''):''}
-      <span class="lvg">${r.pos===1?'leader':(r.gap||'—')}</span>
+      <span class="lvg">${r.out?`<em class="lvout">${r.res||'DNF'}</em>`:r.pos===1?'leader':(r.gap||'—')}</span>
       <span class="lvl">${r.laps??'—'}</span></div>`;}).join('')}</div>`
     : `<div class="lv-empty">No session results yet.<br>They appear here as soon as each session is captured.</div>`;
   const stat=(v,l)=>v?`<span><b>${v}</b><i>${l}</i></span>`:'';
