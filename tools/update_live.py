@@ -432,7 +432,16 @@ def main():
         out = []
         for r in res:
             n = r.get("driver_number")
-            pos = r.get("position")
+            pos, label = r.get("position"), None
+            if pos is not None and not isinstance(pos, int):
+                # OpenF1 writes "RT" (no time set) and the like as text: keep the row, numbered
+                # after the classified drivers below, exactly as the formula1.com reader does
+                try:
+                    pos = int(pos)
+                except (TypeError, ValueError):
+                    pos, label = None, str(pos).upper()
+            elif pos is None and (r.get("dnf") or r.get("dns") or r.get("dsq")):
+                label = "DSQ" if r.get("dsq") else ("DNS" if r.get("dns") else "NC")   # retired, not classified
             od = drv.get(n, {})
             fd = bynum.get(n)
             code = (fd or {}).get("code") or od.get("name_acronym") or str(n)
@@ -452,9 +461,18 @@ def main():
                 "time": fmt_lap(best),
                 "laps": r.get("number_of_laps"),
                 "seg": quali_segments(r.get("duration")),
-                "out": bool(r.get("dnf") or r.get("dns") or r.get("dsq")),
+                "out": bool(r.get("dnf") or r.get("dns") or r.get("dsq") or label),
                 "rookie": fd is None,
             })
+            if label:
+                out[-1]["pl"] = label
+                out[-1]["res"] = "No time" if label == "RT" else ("DNF" if label == "NC" else label)
+                out[-1]["_lbl"] = True
+        n_cls = max([x["pos"] for x in out if x["pos"] is not None] or [0])
+        # retirements in reverse order of laps completed, like the official classification
+        for x in sorted([x for x in out if x["pos"] is None], key=lambda x: -(x.get("laps") or 0)):
+            if x.pop("_lbl", False) and x["pos"] is None:
+                n_cls += 1; x["pos"] = n_cls
         out = [x for x in out if x["pos"] is not None]
         out.sort(key=lambda x: x["pos"])
         # gap is derived from the best times: OpenF1's gap_to_leader is a scalar in practice but a
