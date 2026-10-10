@@ -232,7 +232,7 @@ def f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col):
         except ValueError:
             # NC / DQ / DNS rows: keep them (a sprint can lose 8 cars), numbered after the
             # classified finishers below, and flagged so the card shows DNF rather than a gap
-            if get("pos").strip().upper() not in ("NC", "DQ", "DSQ", "DNS", "EX", "EXC"):
+            if get("pos").strip().upper() not in ("NC", "DQ", "DSQ", "DNS", "EX", "EXC", "RT"):   # RT = retired, no time (quali)
                 continue
             pos, label = None, get("pos").strip().upper()
         try:
@@ -273,7 +273,8 @@ def f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col):
         })
         if label or out[-1]["out"]:
             out[-1]["pl"] = label                  # "NC"/"DQ" shown instead of a number when unclassified
-            out[-1]["res"] = get("time").strip().upper() if get("time").strip().upper() in ("DNF", "DNS", "DSQ") else (label or "DNF")
+            out[-1]["res"] = get("time").strip().upper() if get("time").strip().upper() in ("DNF", "DNS", "DSQ") else \
+                ("No time" if label == "RT" else (label or "DNF"))
     n = max([x["pos"] for x in out if x["pos"] is not None] or [0])
     for x in out:
         if x["pos"] is None:

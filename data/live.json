@@ -2,7 +2,7 @@
  "meta": {
   "season": 2026,
   "round": 17,
-  "updated": "2026-10-10T13:19:38Z"
+  "updated": "2026-10-10T14:55:35Z"
  },
  "round": 17,
  "gp": "Singapore Grand Prix",
@@ -1275,7 +1275,472 @@
    "name": "Qualifying",
    "start": "2026-10-10T13:00:00Z",
    "end": null,
-   "results": []
+   "results": [
+    {
+     "pos": 1,
+     "code": "VER",
+     "num": 3,
+     "name": "Verstappen",
+     "team": "Red Bull",
+     "col": "#3671C6",
+     "tid": "red_bull",
+     "slug": "verstappen",
+     "time": "1:31.373",
+     "gap": null,
+     "gapS": 0.0,
+     "laps": 15,
+     "seg": [
+      "1:33.241",
+      "1:31.639",
+      "1:31.373"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 2,
+     "code": "LEC",
+     "num": 16,
+     "name": "Leclerc",
+     "team": "Ferrari",
+     "col": "#E80020",
+     "tid": "ferrari",
+     "slug": "leclerc",
+     "time": "1:31.427",
+     "gap": "+0.054",
+     "gapS": 0.054,
+     "laps": 25,
+     "seg": [
+      "1:32.774",
+      "1:31.953",
+      "1:31.427"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 3,
+     "code": "HAM",
+     "num": 44,
+     "name": "Hamilton",
+     "team": "Ferrari",
+     "col": "#E80020",
+     "tid": "ferrari",
+     "slug": "hamilton",
+     "time": "1:31.496",
+     "gap": "+0.123",
+     "gapS": 0.123,
+     "laps": 25,
+     "seg": [
+      "1:32.429",
+      "1:31.529",
+      "1:31.496"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 4,
+     "code": "ANT",
+     "num": 12,
+     "name": "Antonelli",
+     "team": "Mercedes",
+     "col": "#00D7B6",
+     "tid": "mercedes",
+     "slug": "antonelli",
+     "time": "1:31.562",
+     "gap": "+0.189",
+     "gapS": 0.189,
+     "laps": 23,
+     "seg": [
+      "1:33.601",
+      "1:32.079",
+      "1:31.562"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 5,
+     "code": "NOR",
+     "num": 1,
+     "name": "Norris",
+     "team": "McLaren",
+     "col": "#FF8000",
+     "tid": "mclaren",
+     "slug": "norris",
+     "time": "1:31.712",
+     "gap": "+0.339",
+     "gapS": 0.339,
+     "laps": 24,
+     "seg": [
+      "1:32.775",
+      "1:31.895",
+      "1:31.712"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 6,
+     "code": "RUS",
+     "num": 63,
+     "name": "Russell",
+     "team": "Mercedes",
+     "col": "#00D7B6",
+     "tid": "mercedes",
+     "slug": "russell",
+     "time": "1:31.747",
+     "gap": "+0.374",
+     "gapS": 0.374,
+     "laps": 23,
+     "seg": [
+      "1:33.617",
+      "1:32.212",
+      "1:31.747"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 7,
+     "code": "PIA",
+     "num": 81,
+     "name": "Piastri",
+     "team": "McLaren",
+     "col": "#FF8000",
+     "tid": "mclaren",
+     "slug": "piastri",
+     "time": "1:31.860",
+     "gap": "+0.487",
+     "gapS": 0.487,
+     "laps": 22,
+     "seg": [
+      "1:33.076",
+      "1:32.245",
+      "1:31.860"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 8,
+     "code": "GAS",
+     "num": 10,
+     "name": "Gasly",
+     "team": "Alpine",
+     "col": "#00A1E8",
+     "tid": "alpine",
+     "slug": "gasly",
+     "time": "1:32.225",
+     "gap": "+0.852",
+     "gapS": 0.852,
+     "laps": 22,
+     "seg": [
+      "1:33.182",
+      "1:32.602",
+      "1:32.225"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 9,
+     "code": "LAW",
+     "num": 30,
+     "name": "Lawson",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "tid": "rb",
+     "slug": "lawson",
+     "time": "1:32.369",
+     "gap": "+0.996",
+     "gapS": 0.996,
+     "laps": 21,
+     "seg": [
+      "1:32.885",
+      "1:32.319",
+      "1:32.369"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 10,
+     "code": "LIN",
+     "num": 41,
+     "name": "Lindblad",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "tid": "rb",
+     "slug": "lindblad",
+     "time": "1:32.781",
+     "gap": "+1.408",
+     "gapS": 1.408,
+     "laps": 21,
+     "seg": [
+      "1:33.288",
+      "1:32.498",
+      "1:32.781"
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 11,
+     "code": "HUL",
+     "num": 27,
+     "name": "Hülkenberg",
+     "team": "Audi",
+     "col": "#D81C1C",
+     "tid": "audi",
+     "slug": "hulkenberg",
+     "time": "1:32.784",
+     "gap": "+1.411",
+     "gapS": 1.411,
+     "laps": 19,
+     "seg": [
+      "1:33.147",
+      "1:32.784",
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 12,
+     "code": "BEA",
+     "num": 87,
+     "name": "Bearman",
+     "team": "Haas",
+     "col": "#B9BDC2",
+     "tid": "haas",
+     "slug": "bearman",
+     "time": "1:32.908",
+     "gap": "+1.535",
+     "gapS": 1.535,
+     "laps": 12,
+     "seg": [
+      "1:33.356",
+      "1:32.908",
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 13,
+     "code": "OCO",
+     "num": 31,
+     "name": "Ocon",
+     "team": "Haas",
+     "col": "#B9BDC2",
+     "tid": "haas",
+     "slug": "ocon",
+     "time": "1:33.323",
+     "gap": "+1.950",
+     "gapS": 1.95,
+     "laps": 15,
+     "seg": [
+      "1:33.803",
+      "1:33.323",
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 14,
+     "code": "SAI",
+     "num": 55,
+     "name": "Sainz",
+     "team": "Williams",
+     "col": "#3AA6E0",
+     "tid": "williams",
+     "slug": "sainz",
+     "time": "1:33.526",
+     "gap": "+2.153",
+     "gapS": 2.153,
+     "laps": 15,
+     "seg": [
+      "1:33.774",
+      "1:33.526",
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 15,
+     "code": "BOR",
+     "num": 5,
+     "name": "Bortoleto",
+     "team": "Audi",
+     "col": "#D81C1C",
+     "tid": "audi",
+     "slug": "bortoleto",
+     "time": "1:33.658",
+     "gap": "+2.285",
+     "gapS": 2.285,
+     "laps": 19,
+     "seg": [
+      "1:34.169",
+      "1:33.658",
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 16,
+     "code": "COL",
+     "num": 43,
+     "name": "Colapinto",
+     "team": "Alpine",
+     "col": "#00A1E8",
+     "tid": "alpine",
+     "slug": "colapinto",
+     "time": "1:33.261",
+     "gap": "+1.888",
+     "gapS": 1.888,
+     "laps": 14,
+     "seg": [
+      "1:33.261",
+      "1:33.787",
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 17,
+     "code": "ALO",
+     "num": 14,
+     "name": "Alonso",
+     "team": "Aston Martin",
+     "col": "#00A88E",
+     "tid": "aston_martin",
+     "slug": "alonso",
+     "time": "1:34.223",
+     "gap": "+2.850",
+     "gapS": 2.85,
+     "laps": 9,
+     "seg": [
+      "1:34.223",
+      null,
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 18,
+     "code": "ALB",
+     "num": 23,
+     "name": "Albon",
+     "team": "Williams",
+     "col": "#3AA6E0",
+     "tid": "williams",
+     "slug": "albon",
+     "time": "1:34.289",
+     "gap": "+2.916",
+     "gapS": 2.916,
+     "laps": 10,
+     "seg": [
+      "1:34.289",
+      null,
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 19,
+     "code": "STR",
+     "num": 18,
+     "name": "Stroll",
+     "team": "Aston Martin",
+     "col": "#00A88E",
+     "tid": "aston_martin",
+     "slug": "stroll",
+     "time": "1:34.946",
+     "gap": "+3.573",
+     "gapS": 3.573,
+     "laps": 8,
+     "seg": [
+      "1:34.946",
+      null,
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 20,
+     "code": "PER",
+     "num": 11,
+     "name": "Pérez",
+     "team": "Cadillac",
+     "col": "#C8A24B",
+     "tid": "cadillac",
+     "slug": "perez",
+     "time": "1:35.123",
+     "gap": "+3.750",
+     "gapS": 3.75,
+     "laps": 8,
+     "seg": [
+      "1:35.123",
+      null,
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 21,
+     "code": "BOT",
+     "num": 77,
+     "name": "Bottas",
+     "team": "Cadillac",
+     "col": "#C8A24B",
+     "tid": "cadillac",
+     "slug": "bottas",
+     "time": "1:35.984",
+     "gap": "+4.611",
+     "gapS": 4.611,
+     "laps": 10,
+     "seg": [
+      "1:35.984",
+      null,
+      null
+     ],
+     "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 22,
+     "code": "HAD",
+     "num": 6,
+     "name": "Hadjar",
+     "team": "Red Bull",
+     "col": "#3671C6",
+     "tid": "red_bull",
+     "slug": "hadjar",
+     "time": null,
+     "gap": null,
+     "gapS": null,
+     "laps": 3,
+     "seg": [
+      null,
+      null,
+      null
+     ],
+     "out": true,
+     "rookie": false,
+     "pl": "RT",
+     "res": "No time"
+    }
+   ]
   },
   {
    "key": "race",

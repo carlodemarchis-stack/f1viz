@@ -4547,6 +4547,74 @@
      "nfa"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_decision_-_car_41_-_alleged_driving_opposite_direction.pdf"
+   },
+   {
+    "doc": 58,
+    "title": "Decision - Car 1 - Alleged causing a collision with car 81",
+    "pub": "10.10.26 15:40",
+    "num": 1,
+    "code": "NOR",
+    "driver": "Lando Norris",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Sprint",
+    "fact": "Car 1 and Car 81 collided at turn 5",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_decision_-_car_1_-_alleged_causing_a_collision_with_car_81.pdf"
+   },
+   {
+    "doc": 59,
+    "title": "Decision - Car 81 - Alleged causing a collision with car 1",
+    "pub": "10.10.26 15:40",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Sprint",
+    "fact": "Car 1 and Car 81 collided at turn 5",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_decision_-_car_81_-_alleged_causing_a_collision_with_car_1.pdf"
+   },
+   {
+    "doc": 61,
+    "title": "Infringement - Car 23 - Causing a Collision with Car 5",
+    "pub": "10.10.26 16:20",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Sprint",
+    "fact": "Car 23 collided with Car 5 in Turn 16",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the International Sporting Code.",
+    "decision": "No Penalty is applied",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_23_-_causing_a_collision_with_car_5.pdf"
+   },
+   {
+    "doc": 62,
+    "title": "Infringement - Car 77 - Causing a Collision with Car 23",
+    "pub": "10.10.26 16:20",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Sprint",
+    "fact": "Car 77 collided with Car 23 in Turn 16",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the International Sporting Code.",
+    "decision": "No Penalty is applied",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_77_-_causing_a_collision_with_car_23.pdf"
    }
   ]
  }
