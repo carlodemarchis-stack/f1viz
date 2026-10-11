@@ -76,6 +76,14 @@ def build(f1, rnd):
         raise SystemExit("f1.com has no race result for round %d yet" % rnd)
     flt = table(mid, slug, "fastest-laps") or []
     grid_t = table(mid, slug, "starting-grid") or []
+    # sprint weekend: points per driver from the sprint classification (NC rows score 0), so
+    # each race entry carries spr and pts = race + sprint, exactly as the jolpica path does
+    spr_t = table(mid, slug, "sprint-results") or []
+    SP = {}
+    for c in spr_t[1:]:
+        if len(c) >= 7 and re.search(r"[A-Z]{3}$", c[2] or ""):
+            SP[code_of(c[2])] = int(c[6]) if c[6].strip().isdigit() else 0
+    is_sprint = len(SP) >= 10
 
     grid = {}
     for c in grid_t[1:]:
@@ -124,9 +132,9 @@ def build(f1, rnd):
             r=rnd, gp=cal["gp"], flag=cal["flag"], country=cal["country"], circuit=cal["circuit"],
             locality=cal["locality"], date=cal["date"], grid=grid.get(code, 0),
             fin=(int(pos) if clsd else None), ptxt=(pos if clsd else "R"),
-            pts=rpts, status=status, laps=int(laps) if laps.isdigit() else 0,
+            pts=rpts + (SP.get(code) or 0), status=status, laps=int(laps) if laps.isdigit() else 0,
             fl=(fl_rank.get(code) == 1), flrank=fl_rank.get(code), flTime=fl_time.get(code),
-            quali=quali.get(code), time=timev, rpts=rpts, spr=None,
+            quali=quali.get(code), time=timev, rpts=rpts, spr=(SP.get(code) if is_sprint else None),
             pits=None,                      # f1.com's pit table is incomplete; unknown beats a wrong count
             tid=tid)
         d = dstatic.get(code, {})
@@ -148,7 +156,7 @@ def build(f1, rnd):
         cls=cls,
         safety=dict(sc=0, vsc=0, red=0, unknown=True),   # f1.com does not publish this
         nolaps=True)                                     # no lap-by-lap -> card disables those tabs
-    return dentries, race_entry, cal
+    return dentries, race_entry, cal, is_sprint
 
 
 def main():
@@ -158,13 +166,15 @@ def main():
     rnd = int(args[args.index("--round") + 1])
     do = "--apply" in args
     f1 = json.load(open(F1P))
-    dentries, race_entry, cal = build(f1, rnd)
+    dentries, race_entry, cal, is_sprint = build(f1, rnd)
 
     print("round %d — %s" % (rnd, cal["full"]))
     print("  classified %d | winner %s | pole %s | fastest %s"
           % (len(dentries), race_entry["winner"]["family"], race_entry["pole"]["family"],
              (race_entry["fl"] or {}).get("family", "—")))
     print("  top 5: " + ", ".join("%s %s(%s)" % (c["pos"], c["code"], c["pts"]) for c in race_entry["cls"][:5]))
+    if is_sprint:
+        print("  sprint: " + ", ".join("%s +%d" % (c, p) for c, p in sorted(((c, d["spr"]) for c, d in dentries.items() if d.get("spr")), key=lambda t: -t[1])))
     if not do:
         print("\ndry run — pass --apply to write data/f1.json"); return
 
@@ -180,6 +190,8 @@ def main():
          "circuit": cal["circuit"], "locality": cal["locality"], "date": cal["date"]}]
     f1["rounds"].sort(key=lambda r: r["r"])
     f1["raceLaps"][str(rnd)] = race_entry["laps"]
+    if is_sprint and rnd not in f1["meta"]["sprintRounds"]:
+        f1["meta"]["sprintRounds"] = sorted(f1["meta"]["sprintRounds"] + [rnd])
     f1["meta"]["round"] = max(r["r"] for r in f1["races"])
     lastcal = next(c for c in f1["calendar"] if c["r"] == f1["meta"]["round"])
     f1["meta"]["roundName"] = lastcal["gp"]; f1["meta"]["roundCountry"] = lastcal["country"]

@@ -4632,6 +4632,109 @@
      "nfa"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_27_-_impeding_of_car_55.pdf"
+   },
+   {
+    "doc": 79,
+    "title": "Infringement - Car 63 - Additional changes to PU elements",
+    "pub": "11.10.26 11:47",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 20 grid positions in the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_63_-_additional_changes_to_pu_elements.pdf",
+    "grid": 20
+   },
+   {
+    "doc": 80,
+    "title": "Infringement - Car 14 - PU element and changes made during Parc Ferme",
+    "pub": "11.10.26 12:25",
+    "num": 14,
+    "code": "ALO",
+    "driver": "Fernando Alonso",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 6th Turbocharger (TC) In addition, the setup of the suspension has been changed while under parc fermé. The team also continued to work on the car beyond the covers-on time.",
+    "breach": "Breaches of Article B8.2.2 (read with B8.2.3), B3.4.3a, B3.4.3b, B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_14_-_pu_element_and_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 81,
+    "title": "Infringement - Car 18 - Changes made during Parc Ferme",
+    "pub": "11.10.26 12:27",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé. The team continued to work on the car beyond the covers-on time.",
+    "breach": "Breaches of Articles B3.5.3 and B3.5.4 of the FIA F1 Regulations. Breaches of Articles B3.4.3a and B3.4.3b of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_18_-_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 83,
+    "title": "Infringement - Car 6 - PU elements and changes made during Parc Ferme",
+    "pub": "11.10.26 13:23",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Qualifying",
+    "fact": "The following Power Unit elements have been used: 8th Engine (ICE) 7th Turbocharger (TC) 7th Exhaust Set (EXH) 8th Power Unit Ancillary Component (PU-ANC) All Power Unit elements were replaced without the approval of the FIA Technical Delegate during parc fermé. In addition, the setup of the suspension has been changed while under parc fermé.",
+    "breach": "Breaches of Article B8.2.2 (read with B8.2.3), B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_6_-_pu_elements_and_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 85,
+    "title": "Infringement - Car 18 - Failure to follow Race Director's Instructions - Practice Start",
+    "pub": "11.10.26 16:06",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Reconnaissance Laps",
+    "fact": "Car 18 left the pit lane during the reconnaissance laps without performing a practice start, but did not cross the white line at pit exit.",
+    "breach": "Breach of Article 12.2.1.i of the International Sporting Code and non-compliance with Race Director’s Competition Notes (item 6.5 document 13) – Practice start infringement.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_infringement_-_car_18_-_failure_to_follow_race_directors_instructions_-_practice_start.pdf"
+   },
+   {
+    "doc": 86,
+    "title": "Decision - Car 44 - Alleged leaving the track and gaining an advantage",
+    "pub": "11.10.26 16:02",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 44 left the track in turn 1",
+    "breach": "Alleged breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_decision_-_car_44_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
    }
   ]
  }

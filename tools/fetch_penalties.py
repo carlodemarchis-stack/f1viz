@@ -245,6 +245,14 @@ def fia_grid(rnd):
             body = t[t.find("Enclosed"):t.find("PENALTIES")]
             rows = re.findall(r"^(\d{1,2})\n(\d{1,2}) [^\n]+\n[^\n]+\n(?:(\d:\d\d\.\d{3})\n)?", body + "\n", re.M)
             got = sorted((int(p), int(n), tm or None) for p, n, tm in rows)
+            # pit-lane starters are listed after the numbered slots, without a position:
+            # they start behind everyone, in the order the document lists them
+            pl = t.find("START FROM THE PIT LANE")
+            if pl > 0:
+                tail = t[pl:t.find("PENALTIES", pl) if t.find("PENALTIES", pl) > 0 else None]
+                for n in re.findall(r"^(\d{1,2}) [A-Z][^\n]*\n", tail, re.M):
+                    if int(n) not in [g[1] for g in got]:
+                        got.append((len(got) + 1, int(n), None))
             if got and [g[0] for g in got] == list(range(1, len(got) + 1)):
                 return kind, got
     return None, []
