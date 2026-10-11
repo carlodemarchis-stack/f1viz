@@ -84,6 +84,8 @@ def build(f1, rnd):
         if len(c) >= 7 and re.search(r"[A-Z]{3}$", c[2] or ""):
             SP[code_of(c[2])] = int(c[6]) if c[6].strip().isdigit() else 0
     is_sprint = len(SP) >= 10
+    sgrid = table(mid, slug, "sprint-grid") or [] if is_sprint else []
+    spr_pole = next((code_of(c[2]) for c in sgrid[1:] if c and c[0].strip() == "1"), None)
 
     grid = {}
     for c in grid_t[1:]:
@@ -156,6 +158,8 @@ def build(f1, rnd):
         cls=cls,
         safety=dict(sc=0, vsc=0, red=0, unknown=True),   # f1.com does not publish this
         nolaps=True)                                     # no lap-by-lap -> card disables those tabs
+    if is_sprint:
+        race_entry["sprPole"] = spr_pole
     return dentries, race_entry, cal, is_sprint
 
 

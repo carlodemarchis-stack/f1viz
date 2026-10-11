@@ -159,6 +159,9 @@ def build_round(f1, rnd):
         fl=(dict(code=fld["Driver"]["code"], family=dstatic[fld["Driver"]["code"]]["family"],
                  time=fld["FastestLap"]["Time"]["time"]) if fld else None),
         cls=[cls_row(r) for r in resR["Results"]], safety=safety)
+    if is_sprint:                       # sprint pole = sprint grid slot 1 (= Sprint Qualifying P1)
+        sp = [x["Driver"]["code"] for x in sprintR["SprintResults"] if str(x.get("grid")) == "1"]
+        race_entry["sprPole"] = sp[0] if sp else None
 
     # --- laps file ---
     order, times = [], []
@@ -215,6 +218,8 @@ def recompute(f1):
         dr["prog"] = prog
         dr["sprintRaces"] = sum(1 for r in rs if r.get("spr") is not None)
         dr["sprintWins"] = sum(1 for r in rs if r.get("spr") == 8)
+        # computed from each sprint round's pole-sitter - it used to be a static field nobody updated
+        dr["sprintPoles"] = sum(1 for race in f1["races"] if race.get("sprPole") == dr["code"])
         byTeam.setdefault(dr["teamId"], []).append(dr)
     # driver standings order (points, then countback)
     order = sorted(f1["drivers"], key=lambda d: (-d["points"], countback(d["races"])))
@@ -260,8 +265,8 @@ def validate(rnd):
         diffs = {k: (built[k], c.get(k)) for k in built if k not in IGN_D and built[k] != c.get(k)}
         if diffs: print(f"  DRIVER {code}: {diffs}"); dmis += 1
     rmis = 0
-    for k in ("winner", "pole", "fl", "laps"):   # 'safety' is best-effort (OpenF1 flaky) -> not gated
-        if race_entry[k] != committed_race.get(k): print(f"  RACE {k}: built={race_entry[k]} committed={committed_race.get(k)}"); rmis += 1
+    for k in ("winner", "pole", "fl", "laps", "sprPole"):   # 'safety' is best-effort (OpenF1 flaky) -> not gated
+        if race_entry.get(k) != committed_race.get(k): print(f"  RACE {k}: built={race_entry.get(k)} committed={committed_race.get(k)}"); rmis += 1
     # cls compare (ignore pts source for sprint? compare pos/code/result)
     for a, b in zip(race_entry["cls"], committed_race["cls"]):
         if {k: a[k] for k in ("pos", "code", "result", "grid")} != {k: b[k] for k in ("pos", "code", "result", "grid")}:
