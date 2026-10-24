@@ -4736,6 +4736,61 @@
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_singapore_grand_prix_-_decision_-_car_44_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
    }
+  ],
+  "18": [
+   {
+    "doc": 14,
+    "title": "Infringement - Car 43 - PU Element",
+    "pub": "23.10.26 20:44",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": null,
+    "fact": "The following Power Unit elements has been used: 4th Control Electronics Unit (PU-CE)",
+    "breach": "Breach of Article B8.2.2 (read with Article B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_43_-_pu_element.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 15,
+    "title": "Infringement - Car 5 - PU Elements",
+    "pub": "23.10.26 20:52",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": null,
+    "fact": "The following Power Unit elements have been used: 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE)",
+    "breach": "Breaches of Article B8.2.2 (read with Article B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 20 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_5_-_pu_elements.pdf",
+    "grid": 20
+   },
+   {
+    "doc": 21,
+    "title": "Decision - Car 63 - Alleged forcing another driver off the track",
+    "pub": "24.10.26 00:26",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 2",
+    "fact": "Car 63 appeared to force Car 16 off the Track at Turn 18",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 b) of the International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_decision_-_car_63_-_alleged_forcing_another_driver_off_the_track.pdf"
+   }
   ]
  }
 }
