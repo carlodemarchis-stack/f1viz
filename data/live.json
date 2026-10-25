@@ -2,7 +2,7 @@
  "meta": {
   "season": 2026,
   "round": 18,
-  "updated": "2026-10-25T13:56:50Z"
+  "updated": "2026-10-25T19:17:04Z"
  },
  "round": 18,
  "gp": "United States Grand Prix",
@@ -1930,25 +1930,6 @@
   },
   {
    "pos": 16,
-   "code": "STR",
-   "num": 18,
-   "name": "Stroll",
-   "team": "Aston Martin",
-   "col": "#00A88E",
-   "tid": "aston_martin",
-   "slug": "stroll",
-   "time": "1:36.677",
-   "gap": "+2.642",
-   "gapS": 2.642,
-   "laps": null,
-   "seg": null,
-   "out": false,
-   "rookie": false,
-   "qpos": 18,
-   "delta": 2
-  },
-  {
-   "pos": 17,
    "code": "SAI",
    "num": 55,
    "name": "Sainz",
@@ -1964,10 +1945,10 @@
    "out": false,
    "rookie": false,
    "qpos": 19,
-   "delta": 2
+   "delta": 3
   },
   {
-   "pos": 18,
+   "pos": 17,
    "code": "ALB",
    "num": 23,
    "name": "Albon",
@@ -1983,10 +1964,10 @@
    "out": false,
    "rookie": false,
    "qpos": 20,
-   "delta": 2
+   "delta": 3
   },
   {
-   "pos": 19,
+   "pos": 18,
    "code": "PER",
    "num": 11,
    "name": "Pérez",
@@ -2002,10 +1983,10 @@
    "out": false,
    "rookie": false,
    "qpos": 21,
-   "delta": 2
+   "delta": 3
   },
   {
-   "pos": 20,
+   "pos": 19,
    "code": "BOT",
    "num": 77,
    "name": "Bottas",
@@ -2021,10 +2002,10 @@
    "out": false,
    "rookie": false,
    "qpos": 22,
-   "delta": 2
+   "delta": 3
   },
   {
-   "pos": 21,
+   "pos": 20,
    "code": "COL",
    "num": 43,
    "name": "Colapinto",
@@ -2040,7 +2021,7 @@
    "out": false,
    "rookie": false,
    "qpos": 14,
-   "delta": -7,
+   "delta": -6,
    "pen": [
     {
      "k": "grid",
@@ -2052,7 +2033,7 @@
    ]
   },
   {
-   "pos": 22,
+   "pos": 21,
    "code": "BOR",
    "num": 5,
    "name": "Bortoleto",
@@ -2068,7 +2049,7 @@
    "out": false,
    "rookie": false,
    "qpos": 13,
-   "delta": -9,
+   "delta": -8,
    "pen": [
     {
      "k": "grid",
@@ -2083,6 +2064,34 @@
      "why": "PU change",
      "ses": "Free Practice 3",
      "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_5_-_additional_changes_to_pu_elements.pdf"
+    }
+   ]
+  },
+  {
+   "pos": 22,
+   "code": "STR",
+   "num": 18,
+   "name": "Stroll",
+   "team": "Aston Martin",
+   "col": "#00A88E",
+   "tid": "aston_martin",
+   "slug": "stroll",
+   "time": "1:36.677",
+   "gap": "+2.642",
+   "gapS": 2.642,
+   "laps": null,
+   "seg": null,
+   "out": false,
+   "rookie": false,
+   "qpos": 18,
+   "delta": -4,
+   "pen": [
+    {
+     "k": "pitlane",
+     "n": null,
+     "why": "Parc fermé change",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_18_-_changes_made_during_parc_ferme.pdf"
     }
    ]
   }

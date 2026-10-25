@@ -4859,6 +4859,23 @@
      "warning"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_5_-_impeding_of_car_44.pdf"
+   },
+   {
+    "doc": 48,
+    "title": "Infringement - Car 18 - Changes made during Parc Ferme",
+    "pub": "25.10.26 18:48",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Qualifying",
+    "fact": "The setup of the suspension has been changed while under parc fermé. The team continued to work on the car beyond the covers off time. The following Power Unit elements have been used: 6th Engine (ICE) 7th Turbocharger (TC) 8th Energy Store (ES) 7th Control Electronics Unit (PU-CE) 9th Power Unit Ancillary Component (PU-ANC) All Power Unit elements were replaced without the approval of the FIA Technical Delegate during parc fermé.",
+    "breach": "Breaches of Article B8.2.2 (read in conjunction with B8.2.3), B3.4.3a, B3.4.3b, B3.5.3 and B3.5.4 of the FIA F1 Regulations.",
+    "decision": "Required to start the Race from the pit lane.",
+    "kinds": [
+     "pitlane"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_18_-_changes_made_during_parc_ferme.pdf"
    }
   ]
  }
