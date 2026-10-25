@@ -4790,6 +4790,75 @@
      "nfa"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_decision_-_car_63_-_alleged_forcing_another_driver_off_the_track.pdf"
+   },
+   {
+    "doc": 35,
+    "title": "Infringement - Car 5 - Additional changes to PU elements",
+    "pub": "24.10.26 22:34",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Free Practice 3",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 5th Exhaust Set (EXH) 5th Energy Store (ES) 5th Control Electronics Unit (PU-CE) 4th MGU-K 7th Power Unit Ancillary Component (PU-ANC)",
+    "breach": "Breaches of Articles B8.2.2 (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 60 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_5_-_additional_changes_to_pu_elements.pdf",
+    "grid": 60
+   },
+   {
+    "doc": 36,
+    "title": "Infringement - Car 27 - Alleged Pit Lane Incident",
+    "pub": "24.10.26 22:40",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Whilst performing a Practice Start, Car 27 pulled out in front of Car 18.",
+    "breach": "Alleged breach of Article 12.2.1.h of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_27_-_alleged_pit_lane_incident.pdf"
+   },
+   {
+    "doc": 37,
+    "title": "Infringement - Car 6 - Driving erratically",
+    "pub": "24.10.26 22:49",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 3",
+    "fact": "Car 6 was driven in a manner that was regarded as erratic following an incident involving Car 23 at Turn1",
+    "breach": "Breach of Article B1.8.5 of the FIA F1 Regulations.",
+    "decision": "Driver: Formal warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_6_-_driving_erratically.pdf"
+   },
+   {
+    "doc": 38,
+    "title": "Infringement - Car 5 - Impeding of Car 44",
+    "pub": "24.10.26 23:03",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Car 5 impeded Car 44 in Turn 12 at 13:22",
+    "breach": "Breach of Article B4.1.1 of the FIA F1 Regulations.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_5_-_impeding_of_car_44.pdf"
    }
   ]
  }
