@@ -4876,6 +4876,59 @@
      "pitlane"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_18_-_changes_made_during_parc_ferme.pdf"
+   },
+   {
+    "doc": 51,
+    "title": "Decision - Car 5 - Alleged leaving the track and gaining and advantage",
+    "pub": "25.10.26 22:59",
+    "num": 5,
+    "code": "BOR",
+    "driver": "Gabriel Bortoleto",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 5 left the track in turn 11",
+    "breach": "Alleged breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_decision_-_car_5_-_alleged_leaving_the_track_and_gaining_and_advantage.pdf"
+   },
+   {
+    "doc": 52,
+    "title": "Infringement - Car 87 - Causing a Collision",
+    "pub": "25.10.26 22:29",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Car 87 collided with Car 10 in T13.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_87_-_causing_a_collision.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 53,
+    "title": "Infringement - Car 63 - Leaving the track and gaining an advantage",
+    "pub": "25.10.26 22:59",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Car 63 left the track and repoined gaining a lasting advantage, in Turn 12",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 c) of the FIA International Sporting Code.",
+    "decision": "5 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_united_states_grand_prix_-_infringement_-_car_63_-_leaving_the_track_and_gaining_an_advantage.pdf",
+    "sec": 5
    }
   ]
  }
