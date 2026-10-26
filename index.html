@@ -244,7 +244,7 @@ button{font-family:inherit}
 .gps{flex:1;min-height:0;overflow-y:auto;padding:2px 8px 8px;scrollbar-width:thin;scrollbar-color:rgba(150,166,205,.3) transparent}
 .gps::-webkit-scrollbar{width:7px}.gps::-webkit-scrollbar-thumb{background:rgba(150,166,205,.24);border-radius:8px}
 .gp{display:grid;align-items:center;gap:10px;width:100%;
-  padding:3.5px 10px;border:0;border-bottom:1px solid var(--line-2);background:none;cursor:pointer;
+  padding:var(--gpp,3.5px) 10px;border:0;border-bottom:1px solid var(--line-2);background:none;cursor:pointer;
   color:var(--ink);text-align:left;border-radius:8px;transition:background .13s}
 .gp:hover{background:rgba(255,255,255,.04)}
 .gp.win{background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 9%,transparent),transparent 55%)}
@@ -2509,6 +2509,14 @@ function titleRaceCard(){
     <div class="tr-axis"><span></span><div class="cxaxis">${flags}</div></div></div></div>`;
 }
 let recRO=null;
+/* season list on driver/constructor cards: trim row padding so all rounds fit before resorting to a scrollbar */
+const gpsRO=new ResizeObserver(es=>es.forEach(e=>fitGp(e.target)));
+function fitGp(g){
+  g.style.removeProperty('--gpp');
+  const over=g.scrollHeight-g.clientHeight;
+  if(over>0) g.style.setProperty('--gpp',Math.max(0,3.5-over/(2*g.children.length))+'px');
+}
+function fitGps(){ gpsRO.disconnect(); wrap.querySelectorAll('.gps').forEach(g=>{ fitGp(g); gpsRO.observe(g); }); }
 function fitRecords(){
   const card=wrap.querySelector('.reccard'); if(recRO){ recRO.disconnect(); recRO=null; } if(!card) return;
   const ASPECT=0.27, GAP=8, MINW=30;              // the figure cut-outs are ~0.27 wide per unit of height
@@ -2949,6 +2957,7 @@ function render(dir){
       if(mode==='drivers') wrap.querySelectorAll('.gp[data-gp]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openRace(D[idx].races.findIndex(x=>x.r===+g.dataset.gp));});
       else wrap.querySelectorAll('.gp[data-tr]').forEach(g=>g.onclick=()=>{gpSel=gpRows().indexOf(g);openTeamRace(+g.dataset.tr-1);});
       wrap.querySelectorAll('.gp[data-golive]').forEach(g=>g.onclick=()=>goLive());   // the in-progress weekend row
+      fitGps();
     }
   } else {
     document.documentElement.style.setProperty('--c','#00D7B6');
