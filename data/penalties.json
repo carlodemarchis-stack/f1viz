@@ -4931,6 +4931,25 @@
     "sec": 5
    }
   ],
-  "19": []
+  "19": [
+   {
+    "doc": 17,
+    "title": "Infringement - Car 77 - PU elements",
+    "pub": "30.10.26 20:52",
+    "num": 77,
+    "code": "BOT",
+    "driver": "Valtteri Bottas",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Free Practice 1",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 4th Energy Store (ES) 4th Control Electronics Unit (PU-CE) 4th MGU-K",
+    "breach": "Breaches of Article B8.2.2 (read with Article B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 50 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_77_-_pu_elements.pdf",
+    "grid": 50
+   }
+  ]
  }
 }
