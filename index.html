@@ -515,6 +515,12 @@ button{font-family:inherit}
 @keyframes lvPulse{0%,100%{opacity:1}50%{opacity:.25}}
 .lv-gp{font-weight:800;font-size:clamp(21px,3.3vh,29px);letter-spacing:-.02em;line-height:1.02}
 .lv-sub{font-size:12px;color:var(--muted)}
+.lv-title{flex:0 0 auto;display:flex;flex-direction:column;gap:5px;padding:9px 12px;border-radius:11px;
+  background:linear-gradient(135deg,rgba(245,200,35,.16),rgba(245,200,35,.05));border:1px solid rgba(245,200,35,.42)}
+.lv-title b{font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ffdb5e}
+.lv-title p{margin:0;font-size:12.5px;line-height:1.35;color:var(--ink)}
+.lv-title p strong{color:#ffe38a}
+.lv-title em{font-style:normal;font-size:11px;color:var(--muted)}
 .lv-map{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:2px 0}
 .lv-map img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1) contrast(1.05);opacity:.95}
 .lv-stats{display:flex;gap:8px;flex:0 0 auto}
@@ -1937,6 +1943,33 @@ function upcomingCard(U){
       ${anyYours&&U.sessions.length?`<div class="lv-schnote">Circuit time (${zone}) · yours (${lvZone(U.sessions[0].start)})</div>`:''}
     </div></div>`;
 }
+/* title match point: can the leader be champion at round r? Worst case for each rival taken on its
+   own; a tie goes to the leader only when the rival could not out-win him on countback. */
+function titleMath(r){
+  const sp=DATA.meta.sprintRounds||[];
+  if(!(r>DATA.meta.round) || sp.includes(r)) return null;
+  const PTS=[25,18,15,12,10,8,6,4,2,1,0], left=(DATA.calendar||[]).filter(c=>c.r>r);
+  const after=left.reduce((t,c)=>t+25+(sp.includes(c.r)?8:0),0);
+  const [ld,...rv]=D.slice().sort((a,b)=>b.points-a.points);
+  const safe=(p,X,q)=>{ const g=ld.points+PTS[p]-X.points-PTS[q];
+    return g>after || (g===after && ld.wins+(p===0) > X.wins+(q===0)+left.length); };
+  const ok=(p,X)=>PTS.every((_,q)=>(q===p&&q<10) || safe(p,X,q));     // X anywhere but ld's own place
+  const upTo=f=>{ let n=-1; while(n+1<PTS.length && f(n+1)) n++; return n; };  // worst place that still does it
+  const top=upTo(p=>rv.every(X=>ok(p,X))); if(top<0) return null;
+  const thr=rv.filter(X=>!ok(PTS.length-1,X));                          // who can still stop it if he scores nothing
+  return { ld, name:`${ld.given.split(' ').pop()} ${ld.family}`, top, done:top===PTS.length-1, thr,
+    winOnly:thr.every(X=>PTS.every((_,q)=>q===0||safe(PTS.length-1,X,q))),
+    per:thr.map(X=>{ const n=upTo(p=>p===0||safe(p,X,0)); return `${X.family} wins → ${n<1?'title fight goes on':n===PTS.length-1?'nothing needed':'he needs P'+(n+1)}`; }) };
+}
+function titleWatch(L){
+  const t=titleMath(L.round); if(!t) return '';
+  if(t.done) return `<div class="lv-title"><b>🏆 Champion-elect</b><p><strong>${t.name}</strong> has the title won.</p></div>`;
+  const alt=t.winOnly&&t.thr.length;
+  return `<div class="lv-title"><b>🏆 Title match point</b>
+    <p><strong>${t.name}</strong> is world champion in ${L.short||L.country} with a top-${t.top+1} finish${
+      alt?` — and even scoring nothing, only a win for ${t.thr.map(X=>X.family).join(' or ')} keeps it open`:''}.</p>
+    ${alt?`<em>${t.per.join(' · ')}</em>`:''}</div>`;
+}
 function liveCard(){
   const L=wkCur||LIVE, ses=lvState(L.sessions||[]);
   const anyLive=ses.some(s=>s.k==='live');
@@ -1996,6 +2029,7 @@ function liveCard(){
         <div class="lv-gp">${L.full||L.gp||''}</div>
         <div class="lv-sub">${L.circuit||''}${L.locality?' · '+L.locality:''}</div>
       </div>
+      ${titleWatch(L)}
       <div class="lv-map"><img src="img/circuits/${L.round}.png${IMGV}" alt="${L.circuit||''}" onerror="this.closest('.lv-map').style.display='none'"></div>
       <div class="lv-stats">${stat(L.laps,'Laps')}${stat(L.length?L.length+' km':'','Length')}${stat(L.distance?(+L.distance).toFixed(1)+' km':'','Distance')}</div>
       <div class="lv-sched">${ses.map(s=>{
@@ -3155,8 +3189,11 @@ function raceNote(now){
   if(!next) return prev?{k:'post',c:prev,t:`That's the 2026 season. Relive the ${prev.short} GP, and every round before it, here.`}:null;
   const race=mid(new Date(next.date+'T00:00:00'));
   const fp1=new Date(race); fp1.setDate(fp1.getDate()-2);
-  if(days(today,race)>=0) return {k:'race',c:next,t:`It's race day at ${next.locality||next.short}! Click here to follow it.`};
-  if(days(today,fp1)>=0)  return {k:'live',c:next,t:`This weekend is ${next.locality||next.short}! Click here to check the latest results.`};
+  const tm=titleMath(next.r), where=next.locality||next.short;   // a title on the line beats the generic line
+  if(days(today,race)>=0) return {k:'race',c:next,t:tm&&!tm.done?`🏆 ${tm.name} can be champion today!`
+    :`It's race day at ${where}! Click here to follow it.`};
+  if(days(today,fp1)>=0)  return {k:'live',c:next,t:tm&&!tm.done?`🏆 ${tm.name} can be champion this weekend!`
+    :`This weekend is ${where}! Click here to check the latest results.`};
   if(prev){
     const pd=mid(new Date(prev.date+'T00:00:00')), gap=days(race,pd);
     // one-week break up to 8 days: Baku raced on a Saturday, so Baku -> Sepang is 8 days and still a one-week break
