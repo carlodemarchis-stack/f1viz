@@ -1,1 +1,57 @@
-{}
+{
+ "meta": {
+  "season": 2026,
+  "round": 19,
+  "updated": "2026-10-30T09:25:52Z"
+ },
+ "round": 19,
+ "gp": "Mexico City Grand Prix",
+ "full": "Gran Premio de la Ciudad de México",
+ "short": "Mexico",
+ "flag": "🇲🇽",
+ "country": "Mexico",
+ "circuit": "Autódromo Hermanos Rodríguez",
+ "locality": "Mexico City",
+ "date": "2026-11-01",
+ "tz": "America/Mexico_City",
+ "laps": 71,
+ "length": "4.304",
+ "distance": "305.584",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-10-30T18:30:00Z",
+   "end": "2026-10-30T19:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp2",
+   "name": "Practice 2",
+   "start": "2026-10-30T22:00:00Z",
+   "end": "2026-10-30T23:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp3",
+   "name": "Practice 3",
+   "start": "2026-10-31T17:30:00Z",
+   "end": "2026-10-31T18:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-10-31T21:00:00Z",
+   "end": "2026-10-31T22:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-11-01T20:00:00Z",
+   "end": "2026-11-01T22:00:00+00:00",
+   "results": []
+  }
+ ]
+}
