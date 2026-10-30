@@ -2363,7 +2363,7 @@ function liveCard(){
     <div class="lvhead${segCols?' q':''}"><span>Pos</span><span>Driver</span>${segCols
         ?'<span class="h-lvt">Time</span><span>Q1</span><span>Q2</span><span>Q3</span>'
         :'<span>Time</span>'}<span>Gap</span><span class="h-lvl">Laps</span></div>
-    <div class="rc-cls">${cur.results.map(r=>{
+    <div class="rc-cls">${cur.results.filter(r=>!(r.rookie && /^fp/.test(cur.key))).map(r=>{   // FP stand-ins stay out; positions keep their real numbers
       // the driver's own quickest of the three — not the session best, and not necessarily
       // the lap they qualified on (that is r.time, the segment they were eliminated in)
       const sg=segCols?(r.seg||[]):[], sv=sg.map(t=>t?clockS(t):null);
