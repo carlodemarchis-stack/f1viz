@@ -1278,7 +1278,8 @@ const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?((h
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
-const TEMP_R12 = {red_bull:'LAW', rb:'TSU'};
+// R19 Mexico: Hirakawa raced the Haas in place of Ocon.
+const TEMP_R12 = {red_bull:'LAW', rb:'TSU', haas:'HIR'};
 const teamRegulars = tid => teamCars(tid).filter(d=>d.code!==TEMP_R12[tid]);          // the 2 season drivers (photo chips + columns)
 const teamTemp = tid => { const c=TEMP_R12[tid]; return c ? D.find(x=>x.code===c) : null; };
 // drivers who actually raced FOR team `tid` in round `rnum` (respects the per-race tid seat swap)
@@ -1463,7 +1464,7 @@ function constructorCard(c){
         <div class="cpos">P${c.pos}</div>
         <div class="cpts">·<b>${c.points}</b><em>pts</em></div>
         <div class="cteam"><span class="cname">${c.name}</span><span class="cnat"><span class="flag">${c.flag}</span>${c.nat}</span></div>
-        <div class="cdrivers"><div class="cdrv-row">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>${temp?`<div class="ctemp"><img class="ctface" src="${IMG(temp.slug)}" alt="" onerror="this.remove()"><span>Temporary: <b>${temp.family}</b> (R12)</span></div>`:''}</div>
+        <div class="cdrivers"><div class="cdrv-row">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>${temp?`<div class="ctemp"><img class="ctface" src="${IMG(temp.slug)}" alt="" onerror="this.remove()"><span>Temporary: <b>${temp.family}</b> (${temp.races.filter(r=>(r.tid||temp.teamId)===c.teamId).map(r=>'R'+r.r).join(', ')})</span></div>`:''}</div>
       </div>
       <div class="hero-car below"><img src="${carImg}" alt="${c.name}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'pfb',textContent:'${c.name.slice(0,2).toUpperCase()}'}))"></div>
       <div class="idbody">
@@ -1783,7 +1784,7 @@ function titleMath(r){
 }
 function titleWatch(L){
   const t=titleMath(L.round); if(!t) return '';
-  if(t.done) return `<div class="lv-title"><b>🏆 Champion-elect</b><p><strong>${t.name}</strong> has the title won.</p></div>`;
+  if(t.done) return `<div class="lv-title"><b>🏆 World champion</b><p><strong>${t.name}</strong> is the ${DATA.meta.season} world champion.</p></div>`;
   const alt=t.winOnly&&t.thr.length;
   return `<div class="lv-title"><b>🏆 Title match point</b>
     <p><strong>${t.name}</strong> is world champion in ${L.short||L.country} with a top-${t.top+1} finish${
@@ -3018,7 +3019,9 @@ function raceNote(now){
     const pd=mid(new Date(prev.date+'T00:00:00')), gap=days(race,pd);
     // one-week break up to 8 days: Baku raced on a Saturday, so Baku -> Sepang is 8 days and still a one-week break
     const postEnd=new Date(pd); postEnd.setDate(postEnd.getDate()+(gap<=8?3:5));
-    if(days(today,postEnd)<=0) return {k:'post',c:prev,t:`The ${prev.short} GP is done — results, radio and the recap are in. Click here.`};
+    const ch=titleMath(next.r);                      // settled: the leader cannot be caught any more
+    if(days(today,postEnd)<=0) return {k:'post',c:prev,t:ch&&ch.done?`🏆 ${ch.name} is the ${DATA.meta.season} world champion!`
+      :`The ${prev.short} GP is done — results, radio and the recap are in. Click here.`};
   }
   const d=days(fp1,today);
   return {k:'pre',c:next,t:`Enjoy the Formula 1 season here, and come back for the ${next.short} GP ${d===0?'today':d===1?'tomorrow':'in '+d+' days'}.`};

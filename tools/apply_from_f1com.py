@@ -50,6 +50,24 @@ def code_of(cell):
     return m.group(1) if m else cell[:3].upper()
 
 
+def new_driver(code, tid, teamById):
+    """Static driver object for a mid-season debut (same fields as update_round's ensure_driver);
+    names/nationality from jolpica's season driver list, which carries stand-ins before their results."""
+    d = next((x for x in ((ur.curl_json("https://api.jolpi.ca/ergast/f1/%d/drivers.json?limit=100" % YEAR) or {})
+                                .get("MRData", {}).get("DriverTable", {}).get("Drivers", [])) if x.get("code") == code), None)
+    if not d:
+        raise SystemExit("new driver %s is not in jolpica's %d driver list - add him by hand" % (code, YEAR))
+    tm = teamById.get(tid, {})
+    yob = int(d.get("dateOfBirth", "2000-01-01")[:4])
+    return {"pos": 0, "code": code, "num": d.get("permanentNumber", ""),
+            "given": d["givenName"], "family": d["familyName"], "nat": d["nationality"],
+            "flag": ur.NAT_FLAG.get(d["nationality"], "🏁"), "team": tm.get("name", ""),
+            "teamId": tid, "color": tm.get("color", "#888"), "color2": tm.get("color2", "#111"),
+            "slug": d["driverId"], "points": 0, "wins": 0, "podiums": 0, "poles": 0, "fl": 0,
+            "best": None, "dnf": 0, "pfin": 0, "starts": 0, "gap": 0, "prog": [], "teammate": {},
+            "races": [], "age": YEAR - yob, "sprintRaces": 0, "sprintWins": 0, "sprintPoles": 0}
+
+
 def build(f1, rnd):
     cal = next(c for c in f1["calendar"] if c["r"] == rnd)
     geo = next(g for g in f1["geo"] if g["r"] == rnd)
@@ -109,7 +127,7 @@ def build(f1, rnd):
             except Exception:
                 pass
 
-    dentries, cls = {}, []
+    dentries, cls, new_drivers = {}, [], []
     for c in rr[1:]:
         if len(c) < 7:
             continue
@@ -129,6 +147,8 @@ def build(f1, rnd):
         else:
             status, timev = "Finished", trs.rstrip("s")   # stored without the trailing 's'
         tid = ul.match_team(team, teamid) or (dstatic.get(code, {}) or {}).get("teamId")
+        if code not in dstatic:
+            dstatic[code] = new_driver(code, tid, teamById); new_drivers.append(dstatic[code])
         rpts = int(pts) if pts.strip().isdigit() else 0
         dentries[code] = dict(
             r=rnd, gp=cal["gp"], flag=cal["flag"], country=cal["country"], circuit=cal["circuit"],
@@ -160,7 +180,7 @@ def build(f1, rnd):
         nolaps=True)                                     # no lap-by-lap -> card disables those tabs
     if is_sprint:
         race_entry["sprPole"] = spr_pole
-    return dentries, race_entry, cal, is_sprint
+    return dentries, race_entry, cal, is_sprint, new_drivers
 
 
 def main():
@@ -170,7 +190,7 @@ def main():
     rnd = int(args[args.index("--round") + 1])
     do = "--apply" in args
     f1 = json.load(open(F1P))
-    dentries, race_entry, cal, is_sprint = build(f1, rnd)
+    dentries, race_entry, cal, is_sprint, new_drivers = build(f1, rnd)
 
     print("round %d — %s" % (rnd, cal["full"]))
     print("  classified %d | winner %s | pole %s | fastest %s"
@@ -179,8 +199,12 @@ def main():
     print("  top 5: " + ", ".join("%s %s(%s)" % (c["pos"], c["code"], c["pts"]) for c in race_entry["cls"][:5]))
     if is_sprint:
         print("  sprint: " + ", ".join("%s +%d" % (c, p) for c, p in sorted(((c, d["spr"]) for c, d in dentries.items() if d.get("spr")), key=lambda t: -t[1])))
+    for nd in new_drivers:
+        print("  new driver: %s %s %s -> %s" % (nd["code"], nd["given"], nd["family"], nd["team"]))
     if not do:
         print("\ndry run — pass --apply to write data/f1.json"); return
+
+    f1["drivers"] += new_drivers
 
     for dr in f1["drivers"]:
         dr["races"] = [r for r in dr["races"] if r["r"] != rnd]
