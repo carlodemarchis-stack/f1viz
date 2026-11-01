@@ -117,6 +117,9 @@ def fields(txt):
 def kinds(dec):
     """Machine tags for the Decision text. Order: most severe first."""
     d = dec.lower()
+    # "a drop of one grid position", "one penalty point": spelled-out numbers read as digits
+    d = re.sub(r"\b(one|two|three|four|five|six|seven|eight|nine|ten)\b(?=[ -]+(?:grid|place|penalty|second|lap))",
+               lambda m: str("one two three four five six seven eight nine ten".split().index(m.group(1)) + 1), d)
     k, v = [], {}
     if "converted to" in d:                  # "10 second time penalty converted to a drop of 5 grid positions ..."
         v["conv"] = True                     # -> classify by what it became, not by what was first given
