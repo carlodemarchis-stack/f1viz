@@ -2,7 +2,7 @@
  "meta": {
   "season": 2026,
   "round": 19,
-  "updated": "2026-11-01T05:10:51Z"
+  "updated": "2026-11-01T22:18:54Z"
  },
  "round": 19,
  "gp": "Mexico City Grand Prix",
@@ -22,7 +22,7 @@
    "key": "fp1",
    "name": "Practice 1",
    "start": "2026-10-30T18:30:00Z",
-   "end": "2026-10-30T19:30:00+00:00",
+   "end": null,
    "results": [
     {
      "pos": 1,
@@ -34,12 +34,12 @@
      "tid": "ferrari",
      "slug": "leclerc",
      "time": "1:18.128",
+     "gap": null,
+     "gapS": 0.0,
      "laps": 29,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": null,
-     "gapS": 0.0
+     "rookie": false
     },
     {
      "pos": 2,
@@ -51,12 +51,12 @@
      "tid": "mercedes",
      "slug": "antonelli",
      "time": "1:18.787",
+     "gap": "+0.659",
+     "gapS": 0.659,
      "laps": 30,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.659",
-     "gapS": 0.659
+     "rookie": false
     },
     {
      "pos": 3,
@@ -68,12 +68,12 @@
      "tid": "mercedes",
      "slug": null,
      "time": "1:18.861",
+     "gap": "+0.733",
+     "gapS": 0.733,
      "laps": 24,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+0.733",
-     "gapS": 0.733
+     "rookie": true
     },
     {
      "pos": 4,
@@ -85,12 +85,12 @@
      "tid": "ferrari",
      "slug": "hamilton",
      "time": "1:18.866",
+     "gap": "+0.738",
+     "gapS": 0.738,
      "laps": 25,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.738",
-     "gapS": 0.738
+     "rookie": false
     },
     {
      "pos": 5,
@@ -102,12 +102,12 @@
      "tid": "red_bull",
      "slug": null,
      "time": "1:19.113",
+     "gap": "+0.985",
+     "gapS": 0.985,
      "laps": 23,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+0.985",
-     "gapS": 0.985
+     "rookie": true
     },
     {
      "pos": 6,
@@ -119,12 +119,12 @@
      "tid": "alpine",
      "slug": "gasly",
      "time": "1:19.210",
+     "gap": "+1.082",
+     "gapS": 1.082,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.082",
-     "gapS": 1.082
+     "rookie": false
     },
     {
      "pos": 7,
@@ -136,12 +136,12 @@
      "tid": "aston_martin",
      "slug": "alonso",
      "time": "1:19.357",
+     "gap": "+1.229",
+     "gapS": 1.229,
      "laps": 29,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.229",
-     "gapS": 1.229
+     "rookie": false
     },
     {
      "pos": 8,
@@ -153,12 +153,12 @@
      "tid": "mclaren",
      "slug": "piastri",
      "time": "1:19.376",
+     "gap": "+1.248",
+     "gapS": 1.248,
      "laps": 30,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.248",
-     "gapS": 1.248
+     "rookie": false
     },
     {
      "pos": 9,
@@ -170,12 +170,12 @@
      "tid": "haas",
      "slug": "bearman",
      "time": "1:19.412",
+     "gap": "+1.284",
+     "gapS": 1.284,
      "laps": 28,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.284",
-     "gapS": 1.284
+     "rookie": false
     },
     {
      "pos": 10,
@@ -187,12 +187,12 @@
      "tid": "rb",
      "slug": "lindblad",
      "time": "1:19.478",
+     "gap": "+1.350",
+     "gapS": 1.35,
      "laps": 30,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.350",
-     "gapS": 1.35
+     "rookie": false
     },
     {
      "pos": 11,
@@ -204,12 +204,12 @@
      "tid": "red_bull",
      "slug": "hadjar",
      "time": "1:19.545",
+     "gap": "+1.417",
+     "gapS": 1.417,
      "laps": 21,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.417",
-     "gapS": 1.417
+     "rookie": false
     },
     {
      "pos": 12,
@@ -221,12 +221,12 @@
      "tid": "rb",
      "slug": null,
      "time": "1:19.604",
+     "gap": "+1.476",
+     "gapS": 1.476,
      "laps": 29,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+1.476",
-     "gapS": 1.476
+     "rookie": true
     },
     {
      "pos": 13,
@@ -238,12 +238,12 @@
      "tid": "audi",
      "slug": "hulkenberg",
      "time": "1:19.608",
+     "gap": "+1.480",
+     "gapS": 1.48,
      "laps": 27,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.480",
-     "gapS": 1.48
+     "rookie": false
     },
     {
      "pos": 14,
@@ -255,12 +255,12 @@
      "tid": "alpine",
      "slug": null,
      "time": "1:19.946",
+     "gap": "+1.818",
+     "gapS": 1.818,
      "laps": 22,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+1.818",
-     "gapS": 1.818
+     "rookie": true
     },
     {
      "pos": 15,
@@ -272,12 +272,12 @@
      "tid": "haas",
      "slug": null,
      "time": "1:19.982",
+     "gap": "+1.854",
+     "gapS": 1.854,
      "laps": 30,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+1.854",
-     "gapS": 1.854
+     "rookie": true
     },
     {
      "pos": 16,
@@ -289,12 +289,12 @@
      "tid": "williams",
      "slug": "sainz",
      "time": "1:20.006",
+     "gap": "+1.878",
+     "gapS": 1.878,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.878",
-     "gapS": 1.878
+     "rookie": false
     },
     {
      "pos": 17,
@@ -306,12 +306,12 @@
      "tid": "mclaren",
      "slug": null,
      "time": "1:20.235",
+     "gap": "+2.107",
+     "gapS": 2.107,
      "laps": 25,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+2.107",
-     "gapS": 2.107
+     "rookie": true
     },
     {
      "pos": 18,
@@ -323,12 +323,12 @@
      "tid": "cadillac",
      "slug": "perez",
      "time": "1:20.395",
+     "gap": "+2.267",
+     "gapS": 2.267,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+2.267",
-     "gapS": 2.267
+     "rookie": false
     },
     {
      "pos": 19,
@@ -340,12 +340,12 @@
      "tid": "aston_martin",
      "slug": null,
      "time": "1:20.803",
+     "gap": "+2.675",
+     "gapS": 2.675,
      "laps": 15,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+2.675",
-     "gapS": 2.675
+     "rookie": true
     },
     {
      "pos": 20,
@@ -357,12 +357,12 @@
      "tid": "williams",
      "slug": null,
      "time": "1:20.869",
+     "gap": "+2.741",
+     "gapS": 2.741,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+2.741",
-     "gapS": 2.741
+     "rookie": true
     },
     {
      "pos": 21,
@@ -374,12 +374,12 @@
      "tid": "audi",
      "slug": null,
      "time": "1:20.945",
+     "gap": "+2.817",
+     "gapS": 2.817,
      "laps": 14,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+2.817",
-     "gapS": 2.817
+     "rookie": true
     },
     {
      "pos": 22,
@@ -391,12 +391,12 @@
      "tid": "cadillac",
      "slug": null,
      "time": "1:21.365",
+     "gap": "+3.237",
+     "gapS": 3.237,
      "laps": 30,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+3.237",
-     "gapS": 3.237
+     "rookie": true
     }
    ]
   },
@@ -404,7 +404,7 @@
    "key": "fp2",
    "name": "Practice 2",
    "start": "2026-10-30T22:00:00Z",
-   "end": "2026-10-30T23:00:00+00:00",
+   "end": null,
    "results": [
     {
      "pos": 1,
@@ -416,12 +416,12 @@
      "tid": "ferrari",
      "slug": "leclerc",
      "time": "1:17.827",
+     "gap": null,
+     "gapS": 0.0,
      "laps": 35,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": null,
-     "gapS": 0.0
+     "rookie": false
     },
     {
      "pos": 2,
@@ -433,12 +433,12 @@
      "tid": "mclaren",
      "slug": "norris",
      "time": "1:17.930",
+     "gap": "+0.103",
+     "gapS": 0.103,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.103",
-     "gapS": 0.103
+     "rookie": false
     },
     {
      "pos": 3,
@@ -450,12 +450,12 @@
      "tid": "mercedes",
      "slug": "russell",
      "time": "1:17.933",
+     "gap": "+0.106",
+     "gapS": 0.106,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.106",
-     "gapS": 0.106
+     "rookie": false
     },
     {
      "pos": 4,
@@ -467,12 +467,12 @@
      "tid": "mercedes",
      "slug": "antonelli",
      "time": "1:18.044",
+     "gap": "+0.217",
+     "gapS": 0.217,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.217",
-     "gapS": 0.217
+     "rookie": false
     },
     {
      "pos": 5,
@@ -484,12 +484,12 @@
      "tid": "red_bull",
      "slug": "verstappen",
      "time": "1:18.138",
+     "gap": "+0.311",
+     "gapS": 0.311,
      "laps": 26,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.311",
-     "gapS": 0.311
+     "rookie": false
     },
     {
      "pos": 6,
@@ -501,12 +501,12 @@
      "tid": "red_bull",
      "slug": "hadjar",
      "time": "1:18.237",
+     "gap": "+0.410",
+     "gapS": 0.41,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.410",
-     "gapS": 0.41
+     "rookie": false
     },
     {
      "pos": 7,
@@ -518,12 +518,12 @@
      "tid": "rb",
      "slug": "lindblad",
      "time": "1:18.389",
+     "gap": "+0.562",
+     "gapS": 0.562,
      "laps": 34,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.562",
-     "gapS": 0.562
+     "rookie": false
     },
     {
      "pos": 8,
@@ -535,12 +535,12 @@
      "tid": "alpine",
      "slug": "gasly",
      "time": "1:18.407",
+     "gap": "+0.580",
+     "gapS": 0.58,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.580",
-     "gapS": 0.58
+     "rookie": false
     },
     {
      "pos": 9,
@@ -552,12 +552,12 @@
      "tid": "rb",
      "slug": "lawson",
      "time": "1:18.455",
+     "gap": "+0.628",
+     "gapS": 0.628,
      "laps": 32,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.628",
-     "gapS": 0.628
+     "rookie": false
     },
     {
      "pos": 10,
@@ -569,12 +569,12 @@
      "tid": "mclaren",
      "slug": "piastri",
      "time": "1:18.469",
+     "gap": "+0.642",
+     "gapS": 0.642,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.642",
-     "gapS": 0.642
+     "rookie": false
     },
     {
      "pos": 11,
@@ -586,12 +586,12 @@
      "tid": "ferrari",
      "slug": "hamilton",
      "time": "1:18.512",
+     "gap": "+0.685",
+     "gapS": 0.685,
      "laps": 13,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.685",
-     "gapS": 0.685
+     "rookie": false
     },
     {
      "pos": 12,
@@ -603,12 +603,12 @@
      "tid": "aston_martin",
      "slug": "alonso",
      "time": "1:18.596",
+     "gap": "+0.769",
+     "gapS": 0.769,
      "laps": 30,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.769",
-     "gapS": 0.769
+     "rookie": false
     },
     {
      "pos": 13,
@@ -620,12 +620,12 @@
      "tid": "haas",
      "slug": "ocon",
      "time": "1:18.774",
+     "gap": "+0.947",
+     "gapS": 0.947,
      "laps": 32,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.947",
-     "gapS": 0.947
+     "rookie": false
     },
     {
      "pos": 14,
@@ -637,12 +637,12 @@
      "tid": "haas",
      "slug": "bearman",
      "time": "1:18.849",
+     "gap": "+1.022",
+     "gapS": 1.022,
      "laps": 32,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.022",
-     "gapS": 1.022
+     "rookie": false
     },
     {
      "pos": 15,
@@ -654,12 +654,12 @@
      "tid": "audi",
      "slug": "hulkenberg",
      "time": "1:19.023",
+     "gap": "+1.196",
+     "gapS": 1.196,
      "laps": 35,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.196",
-     "gapS": 1.196
+     "rookie": false
     },
     {
      "pos": 16,
@@ -671,12 +671,12 @@
      "tid": "alpine",
      "slug": "colapinto",
      "time": "1:19.132",
+     "gap": "+1.305",
+     "gapS": 1.305,
      "laps": 34,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.305",
-     "gapS": 1.305
+     "rookie": false
     },
     {
      "pos": 17,
@@ -688,12 +688,12 @@
      "tid": "williams",
      "slug": "sainz",
      "time": "1:19.248",
+     "gap": "+1.421",
+     "gapS": 1.421,
      "laps": 28,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.421",
-     "gapS": 1.421
+     "rookie": false
     },
     {
      "pos": 18,
@@ -705,12 +705,12 @@
      "tid": "cadillac",
      "slug": "perez",
      "time": "1:19.406",
+     "gap": "+1.579",
+     "gapS": 1.579,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.579",
-     "gapS": 1.579
+     "rookie": false
     },
     {
      "pos": 19,
@@ -722,12 +722,12 @@
      "tid": "williams",
      "slug": "albon",
      "time": "1:19.578",
+     "gap": "+1.751",
+     "gapS": 1.751,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.751",
-     "gapS": 1.751
+     "rookie": false
     },
     {
      "pos": 20,
@@ -739,12 +739,12 @@
      "tid": "aston_martin",
      "slug": "stroll",
      "time": "1:19.631",
+     "gap": "+1.804",
+     "gapS": 1.804,
      "laps": 24,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.804",
-     "gapS": 1.804
+     "rookie": false
     },
     {
      "pos": 21,
@@ -756,12 +756,12 @@
      "tid": "cadillac",
      "slug": "bottas",
      "time": "1:20.165",
+     "gap": "+2.338",
+     "gapS": 2.338,
      "laps": 33,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+2.338",
-     "gapS": 2.338
+     "rookie": false
     },
     {
      "pos": 22,
@@ -773,12 +773,12 @@
      "tid": "audi",
      "slug": "bortoleto",
      "time": "1:20.174",
+     "gap": "+2.347",
+     "gapS": 2.347,
      "laps": 12,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+2.347",
-     "gapS": 2.347
+     "rookie": false
     }
    ]
   },
@@ -786,7 +786,7 @@
    "key": "fp3",
    "name": "Practice 3",
    "start": "2026-10-31T17:30:00Z",
-   "end": "2026-10-31T18:30:00+00:00",
+   "end": null,
    "results": [
     {
      "pos": 1,
@@ -798,12 +798,12 @@
      "tid": "mclaren",
      "slug": "norris",
      "time": "1:17.600",
+     "gap": null,
+     "gapS": 0.0,
      "laps": 26,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": null,
-     "gapS": 0.0
+     "rookie": false
     },
     {
      "pos": 2,
@@ -815,12 +815,12 @@
      "tid": "mercedes",
      "slug": "antonelli",
      "time": "1:17.601",
+     "gap": "+0.001",
+     "gapS": 0.001,
      "laps": 24,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.001",
-     "gapS": 0.001
+     "rookie": false
     },
     {
      "pos": 3,
@@ -832,12 +832,12 @@
      "tid": "ferrari",
      "slug": "leclerc",
      "time": "1:17.717",
+     "gap": "+0.117",
+     "gapS": 0.117,
      "laps": 21,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.117",
-     "gapS": 0.117
+     "rookie": false
     },
     {
      "pos": 4,
@@ -849,12 +849,12 @@
      "tid": "mclaren",
      "slug": "piastri",
      "time": "1:17.795",
+     "gap": "+0.195",
+     "gapS": 0.195,
      "laps": 20,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.195",
-     "gapS": 0.195
+     "rookie": false
     },
     {
      "pos": 5,
@@ -866,12 +866,12 @@
      "tid": "red_bull",
      "slug": "verstappen",
      "time": "1:17.951",
+     "gap": "+0.351",
+     "gapS": 0.351,
      "laps": 21,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.351",
-     "gapS": 0.351
+     "rookie": false
     },
     {
      "pos": 6,
@@ -883,12 +883,12 @@
      "tid": "ferrari",
      "slug": "hamilton",
      "time": "1:18.069",
+     "gap": "+0.469",
+     "gapS": 0.469,
      "laps": 18,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.469",
-     "gapS": 0.469
+     "rookie": false
     },
     {
      "pos": 7,
@@ -900,12 +900,12 @@
      "tid": "mercedes",
      "slug": "russell",
      "time": "1:18.107",
+     "gap": "+0.507",
+     "gapS": 0.507,
      "laps": 27,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.507",
-     "gapS": 0.507
+     "rookie": false
     },
     {
      "pos": 8,
@@ -917,29 +917,29 @@
      "tid": "red_bull",
      "slug": "hadjar",
      "time": "1:18.109",
+     "gap": "+0.509",
+     "gapS": 0.509,
      "laps": 19,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.509",
-     "gapS": 0.509
+     "rookie": false
     },
     {
      "pos": 9,
      "code": "LAW",
      "num": 30,
      "name": "Lawson",
-     "team": "Mercedes",
-     "col": "#00D7B6",
-     "tid": "mercedes",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "tid": "rb",
      "slug": "lawson",
      "time": "1:18.113",
+     "gap": "+0.513",
+     "gapS": 0.513,
      "laps": 28,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.513",
-     "gapS": 0.513
+     "rookie": false
     },
     {
      "pos": 10,
@@ -951,12 +951,12 @@
      "tid": "rb",
      "slug": "lindblad",
      "time": "1:18.137",
+     "gap": "+0.537",
+     "gapS": 0.537,
      "laps": 29,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.537",
-     "gapS": 0.537
+     "rookie": false
     },
     {
      "pos": 11,
@@ -968,12 +968,12 @@
      "tid": "audi",
      "slug": "hulkenberg",
      "time": "1:18.560",
+     "gap": "+0.960",
+     "gapS": 0.96,
      "laps": 32,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+0.960",
-     "gapS": 0.96
+     "rookie": false
     },
     {
      "pos": 12,
@@ -985,12 +985,12 @@
      "tid": "alpine",
      "slug": "colapinto",
      "time": "1:18.652",
+     "gap": "+1.052",
+     "gapS": 1.052,
      "laps": 31,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.052",
-     "gapS": 1.052
+     "rookie": false
     },
     {
      "pos": 13,
@@ -1002,12 +1002,12 @@
      "tid": "alpine",
      "slug": "gasly",
      "time": "1:18.674",
+     "gap": "+1.074",
+     "gapS": 1.074,
      "laps": 26,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.074",
-     "gapS": 1.074
+     "rookie": false
     },
     {
      "pos": 14,
@@ -1019,12 +1019,12 @@
      "tid": "aston_martin",
      "slug": "alonso",
      "time": "1:18.850",
+     "gap": "+1.250",
+     "gapS": 1.25,
      "laps": 25,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.250",
-     "gapS": 1.25
+     "rookie": false
     },
     {
      "pos": 15,
@@ -1036,12 +1036,12 @@
      "tid": "haas",
      "slug": "bearman",
      "time": "1:18.927",
+     "gap": "+1.327",
+     "gapS": 1.327,
      "laps": 22,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.327",
-     "gapS": 1.327
+     "rookie": false
     },
     {
      "pos": 16,
@@ -1053,12 +1053,12 @@
      "tid": "williams",
      "slug": "sainz",
      "time": "1:19.214",
+     "gap": "+1.614",
+     "gapS": 1.614,
      "laps": 22,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.614",
-     "gapS": 1.614
+     "rookie": false
     },
     {
      "pos": 17,
@@ -1070,12 +1070,12 @@
      "tid": "williams",
      "slug": "albon",
      "time": "1:19.301",
+     "gap": "+1.701",
+     "gapS": 1.701,
      "laps": 26,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.701",
-     "gapS": 1.701
+     "rookie": false
     },
     {
      "pos": 18,
@@ -1087,12 +1087,12 @@
      "tid": "aston_martin",
      "slug": "stroll",
      "time": "1:19.376",
+     "gap": "+1.776",
+     "gapS": 1.776,
      "laps": 21,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+1.776",
-     "gapS": 1.776
+     "rookie": false
     },
     {
      "pos": 19,
@@ -1104,12 +1104,12 @@
      "tid": "haas",
      "slug": null,
      "time": "1:19.504",
+     "gap": "+1.904",
+     "gapS": 1.904,
      "laps": 32,
      "seg": null,
      "out": false,
-     "rookie": true,
-     "gap": "+1.904",
-     "gapS": 1.904
+     "rookie": true
     },
     {
      "pos": 20,
@@ -1121,12 +1121,12 @@
      "tid": "cadillac",
      "slug": "bottas",
      "time": "1:20.342",
+     "gap": "+2.742",
+     "gapS": 2.742,
      "laps": 22,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": "+2.742",
-     "gapS": 2.742
+     "rookie": false
     },
     {
      "pos": 21,
@@ -1138,12 +1138,12 @@
      "tid": "audi",
      "slug": "bortoleto",
      "time": null,
+     "gap": null,
+     "gapS": null,
      "laps": 2,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": null,
-     "gapS": null
+     "rookie": false
     },
     {
      "pos": 22,
@@ -1155,12 +1155,12 @@
      "tid": "cadillac",
      "slug": "perez",
      "time": null,
+     "gap": null,
+     "gapS": null,
      "laps": 1,
      "seg": null,
      "out": false,
-     "rookie": false,
-     "gap": null,
-     "gapS": null
+     "rookie": false
     }
    ]
   },
@@ -1168,7 +1168,7 @@
    "key": "quali",
    "name": "Qualifying",
    "start": "2026-10-31T21:00:00Z",
-   "end": "2026-10-31T22:00:00+00:00",
+   "end": null,
    "results": [
     {
      "pos": 1,
@@ -1180,6 +1180,8 @@
      "tid": "ferrari",
      "slug": "hamilton",
      "time": "1:16.514",
+     "gap": null,
+     "gapS": 0.0,
      "laps": 20,
      "seg": [
       "1:17.341",
@@ -1187,9 +1189,7 @@
       "1:16.514"
      ],
      "out": false,
-     "rookie": false,
-     "gap": null,
-     "gapS": 0.0
+     "rookie": false
     },
     {
      "pos": 2,
@@ -1201,6 +1201,8 @@
      "tid": "mercedes",
      "slug": "russell",
      "time": "1:16.523",
+     "gap": "+0.009",
+     "gapS": 0.009,
      "laps": 22,
      "seg": [
       "1:17.659",
@@ -1208,9 +1210,7 @@
       "1:16.523"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.009",
-     "gapS": 0.009
+     "rookie": false
     },
     {
      "pos": 3,
@@ -1222,6 +1222,8 @@
      "tid": "ferrari",
      "slug": "leclerc",
      "time": "1:16.633",
+     "gap": "+0.119",
+     "gapS": 0.119,
      "laps": 24,
      "seg": [
       "1:17.506",
@@ -1229,9 +1231,7 @@
       "1:16.633"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.119",
-     "gapS": 0.119
+     "rookie": false
     },
     {
      "pos": 4,
@@ -1243,6 +1243,8 @@
      "tid": "red_bull",
      "slug": "verstappen",
      "time": "1:16.692",
+     "gap": "+0.178",
+     "gapS": 0.178,
      "laps": 14,
      "seg": [
       "1:17.942",
@@ -1250,9 +1252,7 @@
       "1:16.692"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.178",
-     "gapS": 0.178
+     "rookie": false
     },
     {
      "pos": 5,
@@ -1264,6 +1264,8 @@
      "tid": "mercedes",
      "slug": "antonelli",
      "time": "1:16.707",
+     "gap": "+0.193",
+     "gapS": 0.193,
      "laps": 24,
      "seg": [
       "1:17.918",
@@ -1271,9 +1273,7 @@
       "1:16.707"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.193",
-     "gapS": 0.193
+     "rookie": false
     },
     {
      "pos": 6,
@@ -1285,6 +1285,8 @@
      "tid": "mclaren",
      "slug": "norris",
      "time": "1:16.824",
+     "gap": "+0.310",
+     "gapS": 0.31,
      "laps": 21,
      "seg": [
       "1:17.733",
@@ -1292,9 +1294,7 @@
       "1:16.824"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.310",
-     "gapS": 0.31
+     "rookie": false
     },
     {
      "pos": 7,
@@ -1306,6 +1306,8 @@
      "tid": "red_bull",
      "slug": "hadjar",
      "time": "1:16.900",
+     "gap": "+0.386",
+     "gapS": 0.386,
      "laps": 20,
      "seg": [
       "1:17.385",
@@ -1313,9 +1315,7 @@
       "1:16.900"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.386",
-     "gapS": 0.386
+     "rookie": false
     },
     {
      "pos": 8,
@@ -1327,6 +1327,8 @@
      "tid": "rb",
      "slug": "lindblad",
      "time": "1:17.117",
+     "gap": "+0.603",
+     "gapS": 0.603,
      "laps": 21,
      "seg": [
       "1:18.210",
@@ -1334,9 +1336,7 @@
       "1:17.117"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.603",
-     "gapS": 0.603
+     "rookie": false
     },
     {
      "pos": 9,
@@ -1348,6 +1348,8 @@
      "tid": "alpine",
      "slug": "gasly",
      "time": "1:17.153",
+     "gap": "+0.639",
+     "gapS": 0.639,
      "laps": 20,
      "seg": [
       "1:18.194",
@@ -1355,9 +1357,7 @@
       "1:17.153"
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.639",
-     "gapS": 0.639
+     "rookie": false
     },
     {
      "pos": 10,
@@ -1369,6 +1369,8 @@
      "tid": "audi",
      "slug": "hulkenberg",
      "time": "1:17.306",
+     "gap": "+0.792",
+     "gapS": 0.792,
      "laps": 19,
      "seg": [
       "1:17.868",
@@ -1376,9 +1378,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+0.792",
-     "gapS": 0.792
+     "rookie": false
     },
     {
      "pos": 11,
@@ -1390,6 +1390,8 @@
      "tid": "alpine",
      "slug": "colapinto",
      "time": "1:17.640",
+     "gap": "+1.126",
+     "gapS": 1.126,
      "laps": 14,
      "seg": [
       "1:18.517",
@@ -1397,9 +1399,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+1.126",
-     "gapS": 1.126
+     "rookie": false
     },
     {
      "pos": 12,
@@ -1411,6 +1411,8 @@
      "tid": "mclaren",
      "slug": "piastri",
      "time": "1:17.646",
+     "gap": "+1.132",
+     "gapS": 1.132,
      "laps": 17,
      "seg": [
       "1:17.659",
@@ -1418,9 +1420,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+1.132",
-     "gapS": 1.132
+     "rookie": false
     },
     {
      "pos": 13,
@@ -1432,6 +1432,8 @@
      "tid": "audi",
      "slug": "bortoleto",
      "time": "1:17.680",
+     "gap": "+1.166",
+     "gapS": 1.166,
      "laps": 19,
      "seg": [
       "1:17.727",
@@ -1439,9 +1441,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+1.166",
-     "gapS": 1.166
+     "rookie": false
     },
     {
      "pos": 14,
@@ -1453,6 +1453,8 @@
      "tid": "haas",
      "slug": "bearman",
      "time": "1:18.083",
+     "gap": "+1.569",
+     "gapS": 1.569,
      "laps": 18,
      "seg": [
       "1:18.083",
@@ -1460,9 +1462,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+1.569",
-     "gapS": 1.569
+     "rookie": false
     },
     {
      "pos": 15,
@@ -1474,6 +1474,8 @@
      "tid": "williams",
      "slug": "sainz",
      "time": "1:18.885",
+     "gap": "+2.371",
+     "gapS": 2.371,
      "laps": 18,
      "seg": [
       "1:18.521",
@@ -1481,9 +1483,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+2.371",
-     "gapS": 2.371
+     "rookie": false
     },
     {
      "pos": 16,
@@ -1495,6 +1495,8 @@
      "tid": "williams",
      "slug": "albon",
      "time": "1:18.630",
+     "gap": "+2.116",
+     "gapS": 2.116,
      "laps": 12,
      "seg": [
       "1:18.630",
@@ -1502,9 +1504,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+2.116",
-     "gapS": 2.116
+     "rookie": false
     },
     {
      "pos": 17,
@@ -1516,6 +1516,8 @@
      "tid": "aston_martin",
      "slug": "alonso",
      "time": "1:18.908",
+     "gap": "+2.394",
+     "gapS": 2.394,
      "laps": 4,
      "seg": [
       "1:18.908",
@@ -1523,9 +1525,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+2.394",
-     "gapS": 2.394
+     "rookie": false
     },
     {
      "pos": 18,
@@ -1537,6 +1537,8 @@
      "tid": "haas",
      "slug": null,
      "time": "1:18.958",
+     "gap": "+2.444",
+     "gapS": 2.444,
      "laps": 10,
      "seg": [
       "1:18.958",
@@ -1544,9 +1546,7 @@
       null
      ],
      "out": false,
-     "rookie": true,
-     "gap": "+2.444",
-     "gapS": 2.444
+     "rookie": true
     },
     {
      "pos": 19,
@@ -1558,6 +1558,8 @@
      "tid": "aston_martin",
      "slug": "stroll",
      "time": "1:19.072",
+     "gap": "+2.558",
+     "gapS": 2.558,
      "laps": 10,
      "seg": [
       "1:19.072",
@@ -1565,9 +1567,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+2.558",
-     "gapS": 2.558
+     "rookie": false
     },
     {
      "pos": 20,
@@ -1579,6 +1579,8 @@
      "tid": "cadillac",
      "slug": "perez",
      "time": "1:19.105",
+     "gap": "+2.591",
+     "gapS": 2.591,
      "laps": 9,
      "seg": [
       "1:19.105",
@@ -1586,9 +1588,7 @@
       null
      ],
      "out": false,
-     "rookie": false,
-     "gap": "+2.591",
-     "gapS": 2.591
+     "rookie": false
     },
     {
      "pos": 21,
@@ -1600,6 +1600,8 @@
      "tid": "cadillac",
      "slug": "bottas",
      "time": "1:19.852",
+     "gap": "+3.338",
+     "gapS": 3.338,
      "laps": 9,
      "seg": [
       "1:19.852",
@@ -1607,9 +1609,30 @@
       null
      ],
      "out": false,
+     "rookie": false
+    },
+    {
+     "pos": 22,
+     "code": "LAW",
+     "num": 30,
+     "name": "Lawson",
+     "team": "Racing Bulls",
+     "col": "#6C98FF",
+     "tid": "rb",
+     "slug": "lawson",
+     "time": "1:17.029",
+     "gap": "+0.515",
+     "gapS": 0.515,
+     "laps": 0,
+     "seg": [
+      null,
+      "1:17.207",
+      "1:17.029"
+     ],
+     "out": true,
      "rookie": false,
-     "gap": "+3.338",
-     "gapS": 3.338
+     "pl": "DQ",
+     "res": "DQ"
     }
    ]
   },
@@ -1617,7 +1640,7 @@
    "key": "race",
    "name": "Race",
    "start": "2026-11-01T20:00:00Z",
-   "end": "2026-11-01T22:00:00+00:00",
+   "end": null,
    "results": []
   }
  ],
@@ -2055,8 +2078,8 @@
    "seg": null,
    "out": false,
    "rookie": false,
-   "qpos": null,
-   "delta": null,
+   "qpos": 22,
+   "delta": 0,
    "pen": [
     {
      "k": "grid",
@@ -2064,6 +2087,13 @@
      "why": "Turn 14 incident with VER",
      "ses": "Free Practice 2",
      "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_30_-_turn_14_incident_with_car_3_.pdf"
+    },
+    {
+     "k": "pitlane",
+     "n": null,
+     "why": "Parc fermé change",
+     "ses": "Qualifying",
+     "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_30_-_changes_made_during_parc_ferme.pdf"
     }
    ]
   }
