@@ -5165,6 +5165,24 @@
     "sec": 5
    },
    {
+    "doc": 70,
+    "title": "Infringement - Car 63 - Causing a collision",
+    "pub": "01.11.26 23:48",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Car 63 collided with car 6 in turn 6.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_63_-_causing_a_collision.pdf",
+    "sec": 10
+   },
+   {
     "doc": 71,
     "title": "Infringement - Car 11 - Pit Lane Speeding",
     "pub": "01.11.26 22:44",
@@ -5181,6 +5199,41 @@
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_11_-_pit_lane_speeding.pdf",
     "sec": 5
+   },
+   {
+    "doc": 74,
+    "title": "Infringement - Car 27 - Causing a collision",
+    "pub": "01.11.26 23:47",
+    "num": 27,
+    "code": "HUL",
+    "driver": "Nico Hulkenberg",
+    "team": "Audi Revolut F1 Team",
+    "session": "Race",
+    "fact": "Car 27 collided with Car 87 in turn 4",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_27_-_causing_a_collision.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 76,
+    "title": "Decision - Car 10 - Alleged leaving the track and gaining an advantage",
+    "pub": "02.11.26 00:12",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "The driver left the track at turn 1 and rejoined after turn 3, gave a position back to car 43, then at the end of the straight after turn 3, he was passed by car 30 at turn 4. Minor contact occurred during that passing manoeuvre.",
+    "breach": "Alleged breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_decision_-_car_10_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
    }
   ]
  }
