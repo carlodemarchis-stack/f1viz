@@ -162,6 +162,7 @@ button{font-family:inherit}
 .idstack .f{font-weight:800;font-size:clamp(27px,5vh,50px);color:var(--ink);letter-spacing:-.03em;line-height:.9;margin-bottom:7px}
 .idstack .meta{display:flex;align-items:center;gap:9px;font-size:15.5px;color:var(--muted);margin-bottom:9px}
 .idstack .meta b{color:var(--ink);font-weight:800}.idstack .meta .flag{font-size:19px}
+.idstack .champ{align-self:flex-start;margin:-2px 0 9px;padding:4px 10px 4px 8px;border-radius:999px;font-size:11px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:#3a2a00;background:linear-gradient(135deg,#ffe38a,#f5c542 55%,#d9a21b);box-shadow:0 2px 10px rgba(245,197,66,.35)}
 .teamline{display:inline-flex;align-items:center;gap:11px;font-weight:800;font-size:16px;letter-spacing:.01em;color:color-mix(in srgb,var(--c) 82%,#fff);white-space:nowrap;align-self:end}
 .teamline .tcar{height:28px;width:auto;object-fit:contain;flex:0 0 auto}
 /* constructor: car on top + one-line data strip */
@@ -1513,6 +1514,10 @@ function xstats(races){
 const row2=x=>`${gainedCell(x.gained)}${statCell(x.ptsFins,'Pts Fins')}${statCell(x.top10,'Top 10')}${statCell(x.dnf,'DNF')}${statCell(x.bestGrid?('P'+x.bestGrid):'—','Best Grid')}${statCell(x.avgFin!=null?x.avgFin.toFixed(1):'—','Avg Fin')}`;
 
 /* ----- driver card ----- */
+// the season's champion once it is mathematically settled: leader's margin beats every point still on offer
+const CHAMP=(()=>{ const sp=DATA.meta.sprintRounds||[], [a,b]=D.slice().sort((x,y)=>y.points-x.points);
+  const left=(DATA.calendar||[]).filter(c=>c.r>DATA.meta.round).reduce((t,c)=>t+25+(sp.includes(c.r)?8:0),0);
+  return a&&b&&a.points-b.points>left ? a.code : null; })();
 function driverCard(d){
   const byR={}; d.races.forEach(r=>byR[r.r]=r);
   const x=xstats(d.races);
@@ -1544,6 +1549,7 @@ function driverCard(d){
             <div class="gname">${d.given}</div>
             <div class="f">${d.family}</div>
             <div class="meta"><b>${d.age}</b> yrs · <span class="flag">${d.flag}</span> ${d.nat}</div>
+            ${d.code===CHAMP?`<div class="champ">🏆 ${DATA.meta.season} World Champion</div>`:''}
           </div>
         </div>
         <div class="hero-photo${isMob()?' full':''}"><img src="${isMob()?IMGFULL(d.slug):IMG(d.slug)}" alt="${d.family}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'pfb',textContent:'${initials(d.given+' '+d.family)}'}))"></div>
@@ -2584,7 +2590,7 @@ function fitRecords(){
 }
 function filmCard(){
   return `<div class="card enter"><div class="panel filmcard">
-    <iframe src="film.html?embed=1&v=cb55f1d3#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
+    <iframe src="film.html?embed=1&v=22b0978c#${DATA.meta.round}" title="Drivers' championship after Round ${DATA.meta.round} · click a driver for their card" tabindex="-1"></iframe>
     <a class="film-open" href="film.html#1" target="_blank" rel="noopener" title="Open the standings film: the championship race by race">▶ Play<span class="fo-long"> the season</span></a></div></div>`;
 }
 let filmRO=null;

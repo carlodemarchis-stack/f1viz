@@ -27,7 +27,21 @@ for r in range(1,LAST+1):
     rounds.append({'round':r,'gp':race['full'],'short':race.get('short'),'flag':race.get('flag',''),
                    'circuit':race.get('circuit'),'sprint':r in sprintRounds,'standings':st,
                    'podium':scorers[:3],'scorers':scorers})
-open('_film_data.js','w').write('window.FILM='+json.dumps({'totalRounds':LAST,'drivers':DRIVERS,'rounds':rounds}))
+# champion: the first round after which the leader's margin beats every point still on offer
+import os
+SEASON=f1['meta']['season']; SPR=set(f1['meta'].get('sprintRounds',[]))
+left=lambda r: sum(25+(8 if c['r'] in SPR else 0) for c in f1['calendar'] if c['r']>r)
+champion=None
+for r in range(1,LAST+1):
+    tbl=sorted(((cum(c,r),c) for c in DRIVERS),reverse=True)
+    if tbl[0][0]-tbl[1][0]>left(r):
+        d=drv(tbl[0][1]); cal=next(c for c in f1['calendar'] if c['r']==r)
+        img=f'img/champion-{SEASON}.jpg'
+        champion={'code':d['code'],'given':d['given'].split(' ')[-1],'family':d['family'],'season':SEASON,
+                  'teamName':DRIVERS[d['code']]['teamName'],'round':r,'total':len(f1['calendar']),
+                  'where':cal.get('locality') or cal['short'],'img':img if os.path.exists(img) else None}
+        break
+open('_film_data.js','w').write('window.FILM='+json.dumps({'totalRounds':LAST,'drivers':DRIVERS,'rounds':rounds,'champion':champion}))
 print('wrote _film_data.js —',LAST,'rounds')
 # film.html = the template with the data inlined (self-contained page, served standalone and embedded in the app)
 tpl=open('_film_standings.html').read(); tag='<script src="_film_data.js"></script>'
