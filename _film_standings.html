@@ -85,6 +85,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .ch-in{position:relative;display:flex;align-items:center;gap:52px;padding:0 6vw 60px}
 .ch-photo{flex:none;height:min(56vh,500px);aspect-ratio:750/501;border-radius:14px;overflow:hidden;
   box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14);animation:chDrop 1s cubic-bezier(.2,.9,.25,1.2) .15s both}
+.ch-photo{position:relative}
+.ch-credit{position:absolute;right:10px;bottom:8px;font-size:10px;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.8)}
 .ch-photo img{display:block;width:100%;height:100%;object-fit:cover;animation:chZoom 7s ease-out both}
 .ch-txt>*{opacity:0;animation:chUp .6s ease both}
 .ch-kick{animation-delay:.9s!important;color:#f5c542;font-size:15px;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
@@ -338,7 +340,7 @@ function playChamp(){
   const c=document.getElementById('champ'), col=['#009246','#ffffff','#ce2b37'];
   c.style.setProperty('--tc',(DR[CH.code]||{}).col||'#fff');
   c.innerHTML=`<div class="ch-bg" style="background-image:url(${CH.img})"></div>
-    <div class="ch-in"><div class="ch-photo"><img src="${CH.img}" alt="${CH.given} ${CH.family}"></div>
+    <div class="ch-in"><div class="ch-photo"><img src="${CH.img}" alt="${CH.given} ${CH.family}">${CH.credit?`<span class="ch-credit">Photo: ${CH.credit}</span>`:''}</div>
       <div class="ch-txt"><div class="ch-kick">🏆 ${CH.season} World Champion</div>
         <div class="ch-name">${CH.given}<b>${CH.family}</b></div><div class="ch-flag"></div>
         <div class="ch-how">${CH.teamName} · clinched in ${CH.where}, Round ${CH.round} of ${CH.total}</div>

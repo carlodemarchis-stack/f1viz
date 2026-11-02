@@ -37,9 +37,10 @@ for r in range(1,LAST+1):
     if tbl[0][0]-tbl[1][0]>left(r):
         d=drv(tbl[0][1]); cal=next(c for c in f1['calendar'] if c['r']==r)
         img=f'img/champion-{SEASON}.jpg'
+        CREDIT={2026:'AFP via Getty Images'}   # podium photo credit, shown on the photo
         champion={'code':d['code'],'given':d['given'].split(' ')[-1],'family':d['family'],'season':SEASON,
                   'teamName':DRIVERS[d['code']]['teamName'],'round':r,'total':len(f1['calendar']),
-                  'where':cal.get('locality') or cal['short'],'img':img if os.path.exists(img) else None}
+                  'where':cal.get('locality') or cal['short'],'img':img if os.path.exists(img) else None,'credit':CREDIT.get(SEASON)}
         break
 open('_film_data.js','w').write('window.FILM='+json.dumps({'totalRounds':LAST,'drivers':DRIVERS,'rounds':rounds,'champion':champion}))
 print('wrote _film_data.js —',LAST,'rounds')
