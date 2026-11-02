@@ -111,6 +111,8 @@ def main():
             continue
         ln = p.get("lap_number")
         dur = p.get("lane_duration") if p.get("lane_duration") is not None else p.get("pit_duration")
+        if ln == 1 and dur is None:   # pit-lane pass on the way to the grid (Mexico: 9 cars), not a stop
+            continue
         pit.setdefault(c, []).append(ln)
         pitTime.setdefault(c, {})[str(ln)] = clock(dur)
 
