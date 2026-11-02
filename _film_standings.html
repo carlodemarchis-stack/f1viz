@@ -354,17 +354,18 @@ function playChamp(){
 }
 // controls — card 0 = welcome, 1..TOT = rounds
 const playIc='<path d="M7 5v14l12-7z"/>', pauseIc='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0){ renderWelcome(); playChamp(); } else setRound(card-1, back?'back':'fwd'); syncHash(); }   // forward = full reveal, backward = direct
+function show(c){ c=Math.max(0,Math.min(TOT,c)); const back=c<card; card=c; if(card===0) renderWelcome(); else setRound(card-1, back?'back':'fwd'); syncHash(); }   // forward = full reveal, backward = direct
 // URL state: #<round> (or #0 = welcome) so a reload / shared link returns to the same card
 function syncHash(){ if(EMBED) return; try{ history.replaceState(null,'','#'+card); }catch(e){} }
 function applyHash(){ const n=parseInt((location.hash||'').replace('#',''),10);
   card=(isNaN(n)||n<=0)?(EMBED?TOT:0):Math.min(TOT,n);   // embed without a round -> the latest one
-  if(card===0){ renderWelcome(); playChamp(); } else setRound(card-1,'instant');   // direct restore — don't replay the intro/clip
+  if(card===0) renderWelcome(); else setRound(card-1,'instant');   // direct restore — don't replay the intro/clip
 }
 addEventListener('hashchange', ()=>{ stop(); applyHash(); });
 function stop(){ playing=false; clearTimeout(nextTimer); nextTimer=null; document.getElementById('playIcon').innerHTML=playIc; }
 function play(){ if(playing){ stop(); return; } playing=true; document.getElementById('playIcon').innerHTML=pauseIc;
   if(card>=TOT) show(0);                 // wrap back to the welcome card
+  if(card===0&&!champOn) playChamp();    // the champion moment waits for Play (go fullscreen first, then press Play to record)
   if(!composing) advanceSoon();          // if a round's sequence is already running, its finish will chain the next
 }
 document.getElementById('play').onclick=play;
