@@ -38,9 +38,14 @@ for r in range(1,LAST+1):
         d=drv(tbl[0][1]); cal=next(c for c in f1['calendar'] if c['r']==r)
         img=f'img/champion-{SEASON}.jpg'
         CREDIT={2026:'AFP via Getty Images'}   # podium photo credit, shown on the photo
+        # record facts, checked against jolpica (every champion 1950-2025 + dates of birth) on 2026-11-02:
+        # ANT b. 2006-08-25 -> 20y 68d on 2026-11-01; previous youngest Vettel 23y 134d (2010);
+        # Italian champions: Farina 1950, Ascari 1952 + 1953
+        FACTS={2026:[['Youngest champion ever','20 years, 68 days','Vettel was 23 in 2010'],
+                     ['First Italian champion in 73 years','since Alberto Ascari, 1953','']]}
         champion={'code':d['code'],'given':d['given'].split(' ')[-1],'family':d['family'],'season':SEASON,
                   'teamName':DRIVERS[d['code']]['teamName'],'round':r,'total':len(f1['calendar']),
-                  'where':cal.get('locality') or cal['short'],'img':img if os.path.exists(img) else None,'credit':CREDIT.get(SEASON)}
+                  'where':cal.get('locality') or cal['short'],'img':img if os.path.exists(img) else None,'credit':CREDIT.get(SEASON),'facts':FACTS.get(SEASON,[])}
         break
 open('_film_data.js','w').write('window.FILM='+json.dumps({'totalRounds':LAST,'drivers':DRIVERS,'rounds':rounds,'champion':champion}))
 print('wrote _film_data.js —',LAST,'rounds')

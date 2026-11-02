@@ -94,7 +94,9 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
 .ch-name b{display:block;color:var(--tc)}
 .ch-flag{animation:chFlag .7s ease 1.7s both!important;margin-top:20px;height:6px;width:96px;border-radius:3px;background:linear-gradient(90deg,#009246 33.3%,#fff 33.3% 66.6%,#ce2b37 66.6%);transform-origin:left}
 .ch-how{animation-delay:1.9s!important;margin-top:18px;color:#c7d2e6;font-size:16px;font-weight:600}
-.ch-go{animation-delay:2.6s!important;margin-top:28px;color:#8ea0c0;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.ch-fact{margin-top:14px;font-size:15px;color:#c7d2e6;font-weight:600}
+.ch-fact b{color:#f5c542;font-weight:850;margin-right:8px}.ch-fact i{display:block;font-style:normal;color:#7f8db0;font-size:12.5px;margin-top:3px}
+.ch-go{animation-delay:3.9s!important;margin-top:28px;color:#8ea0c0;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
 .ch-go span{display:inline-block;animation:chNudge 1s ease-in-out 3s infinite}
 .ch-conf i{position:absolute;top:-24px;width:8px;height:15px;border-radius:2px;animation:chFall linear both}
 @keyframes chIn{from{opacity:0}to{opacity:1}}
@@ -331,7 +333,7 @@ function renderPodium(rd, compose){
     +(list?`<div class="pod-list${compose?' pi':''}"${compose?' style="animation-delay:540ms"':''}>${list}</div>`:'');
 }
 // ---- champion moment (welcome card): photo + how the title was won, then on to Race 1 ----
-const CH=F.champion, CHAMP_MS=6800; let champT=[], champOn=false;
+const CH=F.champion, CHAMP_MS=9000; let champT=[], champOn=false;
 function clearChamp(){ champT.forEach(clearTimeout); champT=[]; champOn=false;
   const c=document.getElementById('champ'); c.hidden=true; c.innerHTML=''; c.classList.remove('out'); }
 function endChamp(){ clearChamp(); if(playing&&card===0) advanceSoon(); }
@@ -344,6 +346,7 @@ function playChamp(){
       <div class="ch-txt"><div class="ch-kick">🏆 ${CH.season} World Champion</div>
         <div class="ch-name">${CH.given}<b>${CH.family}</b></div><div class="ch-flag"></div>
         <div class="ch-how">${CH.teamName} · clinched in ${CH.where}, Round ${CH.round} of ${CH.total}</div>
+        ${(CH.facts||[]).map((f,i)=>`<div class="ch-fact" style="animation-delay:${(2.5+i*.6).toFixed(1)}s"><b>${f[0]}</b>${f[1]}${f[2]?`<i>${f[2]}</i>`:''}</div>`).join('')}
         <div class="ch-go">Now watch how he did it, race by race <span>▸</span></div></div></div>
     <div class="ch-conf">${Array.from({length:70},(_,i)=>`<i style="left:${(Math.random()*100).toFixed(1)}%;background:${col[i%3]};--dx:${(Math.random()*160-80).toFixed(0)}px;--rot:${(Math.random()*900-450).toFixed(0)}deg;animation-duration:${(2.6+Math.random()*1.8).toFixed(2)}s;animation-delay:${(1.1+Math.random()*1.6).toFixed(2)}s"></i>`).join('')}</div>`;
   c.hidden=false; champOn=true; c.onclick=endChamp;
