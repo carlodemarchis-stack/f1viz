@@ -101,7 +101,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,san
   background:rgba(10,16,34,.97);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:1px;
   box-shadow:0 16px 40px rgba(0,0,0,.5);z-index:30;min-width:210px}
 .jump[hidden]{display:none}
-.jump button{border:0;background:transparent;color:#c7d2e6;text-align:left;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:8px;font-family:inherit}
+.jump svg{width:1em;height:.72em}   /* inline SVG flags (Catalunya): undo the 16px .controls icon size */
+.jump button{border:0;background:transparent;color:#c7d2e6;text-align:left;padding:8px 12px;border-radius:8px;width:auto;height:auto;justify-content:flex-start;flex:none;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:8px;font-family:inherit}
 .jump button:hover{background:rgba(255,255,255,.1);color:#fff}
 .jump button.on{background:rgba(255,255,255,.09);color:#fff}
 .jump button .rn{color:#7f8db0;font-weight:800;font-size:11px;min-width:26px}
