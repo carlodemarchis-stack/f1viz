@@ -3,7 +3,7 @@ f1=json.load(open('data/f1.json'))
 teamName={t['teamId']:t['name'] for t in f1.get('constructors',[])}
 DRIVERS={d['code']:{'fam':d.get('family'),'slug':d.get('slug'),'team':d.get('teamId'),
                     'teamName':teamName.get(d.get('teamId'),''),'col':d.get('color')} for d in f1['drivers']}
-LAST=f1['meta']['round']; sprintRounds=set(f1.get('sprintRounds',[]))
+LAST=f1['meta']['round']; sprintRounds=set(f1['meta'].get('sprintRounds',[]))
 def drv(code): return next(x for x in f1['drivers'] if x['code']==code)
 def cum(code,r): return sum((x.get('pts') or 0) for x in drv(code).get('races',[]) if x['r']<=r)
 def roundPts(code,r):
@@ -29,8 +29,8 @@ for r in range(1,LAST+1):
                    'podium':scorers[:3],'scorers':scorers})
 # champion: the first round after which the leader's margin beats every point still on offer
 import os
-SEASON=f1['meta']['season']; SPR=set(f1['meta'].get('sprintRounds',[]))
-left=lambda r: sum(25+(8 if c['r'] in SPR else 0) for c in f1['calendar'] if c['r']>r)
+SEASON=f1['meta']['season']
+left=lambda r: sum(25+(8 if c['r'] in sprintRounds else 0) for c in f1['calendar'] if c['r']>r)
 champion=None
 for r in range(1,LAST+1):
     tbl=sorted(((cum(c,r),c) for c in DRIVERS),reverse=True)
