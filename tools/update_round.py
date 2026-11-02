@@ -10,7 +10,7 @@ in the EXACT f1.json schema, then recomputes every driver & constructor standing
 ALWAYS run --validate on an existing round first (proves the pipeline still matches),
 and cross-check the new round's winner/podium/points against formula1.com before publishing.
 """
-import json, os, re, sys, subprocess
+import json, os, re, sys, subprocess, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F1P  = os.path.join(ROOT, "data", "f1.json")
@@ -24,6 +24,9 @@ YEAR = 2026
 # broken matcher could not see. Verified with tools/audit_safety.py on 2026-09-07.
 SAFETY_OVERRIDE = {12: {"safety": {"sc": 0, "vsc": 2, "red": 1},
                         "flags": {"1": "S", "2": "S", "3": "S", "55": "V", "70": "V"}}}
+# Qualifying disqualifications jolpica still lists at their original place.
+# Mexico: Lawson DQ (MGU-K), classified last by formula1.com/FIA, pit-lane start.
+QUALI_OVERRIDE = {19: {"LAW": 22}}
 CIRCUIT_LEN = {"zandvoort": 4.259, "monza": 5.793, "madring": 5.474, "baku": 6.003,
                "sepang": 5.543, "marina_bay": 4.940, "americas": 5.513, "rodriguez": 4.304,
                "interlagos": 4.309, "vegas": 6.201, "losail": 5.419, "yas_marina": 5.281}
@@ -43,8 +46,11 @@ def fetch_all_laps(rnd):
     """jolpica /laps caps at 100 timing-rows per page -> paginate and merge into full Laps."""
     merged, off, total = {}, 0, None
     while True:
-        d = curl_json(f"https://api.jolpi.ca/ergast/f1/{YEAR}/{rnd}/laps.json?limit=100&offset={off}")
-        if not d: break
+        for wait in (0, 5, 15, 30):               # jolpica rate-limits (429 -> non-JSON body)
+            time.sleep(wait)
+            d = curl_json(f"https://api.jolpi.ca/ergast/f1/{YEAR}/{rnd}/laps.json?limit=100&offset={off}")
+            if d: break
+        if not d: sys.exit(f"laps: jolpica page offset={off} failed after retries -- not writing a truncated lap file")
         md = d["MRData"]; total = int(md["total"]); races = md["RaceTable"]["Races"]
         if not races: break
         for L in races[0].get("Laps", []):
@@ -107,6 +113,7 @@ def build_round(f1, rnd):
     resR  = jolp(rnd, "results")
     quali = jolp(rnd, "qualifying")
     Q = {q["Driver"]["code"]: int(q["position"]) for q in quali["QualifyingResults"]}
+    Q.update(QUALI_OVERRIDE.get(rnd, {}))
     sprintR = jolp(rnd, "sprint")
     is_sprint = bool(sprintR and "SprintResults" in sprintR)
     SP = {}
