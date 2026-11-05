@@ -5234,6 +5234,84 @@
      "nfa"
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_decision_-_car_10_-_alleged_leaving_the_track_and_gaining_an_advantage.pdf"
+   },
+   {
+    "doc": 79,
+    "title": "Infringement - Car 81 - Causing a collision",
+    "pub": "02.11.26 00:57",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Race",
+    "fact": "Car 81 collided with Car 41 at the entry to turn 2",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty imposed after the Race.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_81_-_causing_a_collision.pdf",
+    "sec": 10,
+    "post": true
+   },
+   {
+    "doc": 83,
+    "title": "Infringement - Car 63 - Failure to attend mandatory post-race commitments",
+    "pub": "02.11.26 02:33",
+    "num": 63,
+    "code": "RUS",
+    "driver": "George Russell",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "The driver did not attend the post race media commitments.",
+    "breach": "Breach of Article B10.1.4e of the FIA F1 Regulations.",
+    "decision": "The competitor (Mercedes-AMG PETRONAS F1 Team) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_63_-_failure_to_attend_mandatory_post-race_commitments.pdf",
+    "eur": 5000
+   },
+   {
+    "doc": 84,
+    "title": "Infringement - Car 10 - Failing to slow under yellow flags",
+    "pub": "02.11.26 02:34",
+    "num": 10,
+    "code": "GAS",
+    "driver": "Pierre Gasly",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "The driver passed through a double yellow flag sector and did not make the required reduction in speed.",
+    "breach": "Breach of Article B1.8.4b of the FIA F1 Regulations.",
+    "decision": "Stop and go penalty imposed after the Race. 2 penalty points (total of 2 for the 12 month period).",
+    "kinds": [
+     "stopgo"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_10_-_failing_to_slow_under_yellow_flags.pdf",
+    "pp": 2,
+    "ppTotal": 2,
+    "post": true
+   },
+   {
+    "doc": 85,
+    "title": "Infringement - Car 43 - Failing to slow under yellow flags",
+    "pub": "02.11.26 02:35",
+    "num": 43,
+    "code": "COL",
+    "driver": "Franco Colapinto",
+    "team": "BWT Alpine F1 Team",
+    "session": "Race",
+    "fact": "The driver passed through a single yellow flag sector and did not make the required reduction in speed.",
+    "breach": "Breach of Article B1.8.4a of the FIA F1 Regulations.",
+    "decision": "10 second time penalty imposed after the Race. 1 penalty points (total of 5 for the 12 month period).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_mexico_city_grand_prix_-_infringement_-_car_43_-_failing_to_slow_under_yellow_flags.pdf",
+    "sec": 10,
+    "pp": 1,
+    "ppTotal": 5,
+    "post": true
    }
   ]
  }
