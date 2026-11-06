@@ -1,1 +1,57 @@
-{}
+{
+ "meta": {
+  "season": 2026,
+  "round": 20,
+  "updated": "2026-11-06T11:09:57Z"
+ },
+ "round": 20,
+ "gp": "Brazilian Grand Prix",
+ "full": "Grande Prêmio de São Paulo",
+ "short": "Brazil",
+ "flag": "🇧🇷",
+ "country": "Brazil",
+ "circuit": "Autódromo José Carlos Pace",
+ "locality": "São Paulo",
+ "date": "2026-11-08",
+ "tz": "America/Sao_Paulo",
+ "laps": 71,
+ "length": "4.309",
+ "distance": "305.939",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-11-06T15:30:00Z",
+   "end": "2026-11-06T16:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp2",
+   "name": "Practice 2",
+   "start": "2026-11-06T19:00:00Z",
+   "end": "2026-11-06T20:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp3",
+   "name": "Practice 3",
+   "start": "2026-11-07T14:30:00Z",
+   "end": "2026-11-07T15:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-11-07T18:00:00Z",
+   "end": "2026-11-07T19:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-11-08T17:00:00Z",
+   "end": "2026-11-08T19:00:00+00:00",
+   "results": []
+  }
+ ]
+}
