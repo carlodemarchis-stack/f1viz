@@ -427,6 +427,15 @@ button{font-family:inherit}
 .rc-stats em{font-style:normal;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted-2)}
 .rc-map{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:6px 0}
 .rc-map img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1) contrast(1.05)}
+/* race replay (replay/, desktop only): a small pill at the end of the round line */
+.rc-head .rc-round:has(.rc-replay){display:flex;align-items:center;gap:10px}
+.rc-replay{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 5px;border-radius:30px;text-decoration:none;color:var(--ink);
+  font-size:10px;font-weight:800;letter-spacing:.12em;
+  background:linear-gradient(120deg,color-mix(in srgb,var(--c) 24%,#0a0d14),#0a0d14 85%);border:1px solid color-mix(in srgb,var(--c) 50%,var(--line));transition:border-color .15s,background .15s}
+.rc-replay:hover{border-color:color-mix(in srgb,var(--c) 80%,transparent);background:linear-gradient(120deg,color-mix(in srgb,var(--c) 38%,#0a0d14),#0a0d14 85%)}
+.rc-replay u{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 70%,#fff)}
+.rc-replay u svg{width:8px;height:8px;fill:#0a0d14;margin-left:1px}
+@media (max-width:900px),(pointer:coarse){.rc-replay{display:none}}
 .rc-summary{flex:0 0 auto}
 .rc-bottom{flex:0 0 auto;display:flex;gap:13px;align-items:center}
 .rc-bottom .rc-summary{flex:1 1 50%;min-width:0}
@@ -1628,6 +1637,7 @@ function _speakFallback(round, btn){
 // races: play current card's recap; when a recap ends in play mode, advance to the next race
 function _autoPlayCurrentRecap(){ const btn=wrap.querySelector('.rc-recap-play'), e=list()[idx]; if(btn && e && e.r!=null && _recapRound!==e.r) speakRecap(e.r, btn); }
 function _recapAdvance(){ if(playing && mode==='races'){ if(idx<N()-1) go(idx+1); else setPlay(false); } }
+const REPLAY=new Set([19]);   // rounds with a race replay in replay/ (built by track-lab/publish.py); desktop only
 function raceCard(r){
   const teamName={}; C.forEach(t=>teamName[t.teamId]=t.name);
   const raceLaps=DATA.raceLaps&&DATA.raceLaps[r.r];
@@ -1658,7 +1668,8 @@ function raceCard(r){
   return `<div class="card enter" style="--c:${r.winner.color}">
     <div class="panel racemeta">
       <div class="rc-head">
-        <div class="rc-round">Round ${r.r} · ${r.flag} ${r.short}</div>
+        <div class="rc-round"><span>Round ${r.r} · ${r.flag} ${r.short}</span>${REPLAY.has(r.r)?`<a class="rc-replay" href="replay/?r=${r.r}" title="Every car on the circuit: live standings, overtakes, pit stops, team radio and commentary">
+          <u><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></u>Race replay</a>`:''}</div>
         <h2 class="rc-full">${r.full}</h2>
         <div class="rc-sub">${r.circuit} · ${r.locality} · ${fmtDate(r.date)}</div>
         ${(()=>{const ci=DATA.circuits&&DATA.circuits[r.r]; return ci?`<div class="rc-stats">

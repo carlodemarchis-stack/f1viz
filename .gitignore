@@ -1,2 +1,5 @@
 .DS_Store
 img/circuits-plain/
+
+# local race-replay lab (raw data, Honda engine clip, voice server); its public build is replay/
+track-lab/
