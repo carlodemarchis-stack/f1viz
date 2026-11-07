@@ -1790,7 +1790,7 @@ function titleMath(r){
 }
 function titleWatch(L){
   const t=titleMath(L.round); if(!t) return '';
-  if(t.done) return `<div class="lv-title"><b>🏆 World champion</b><p><strong>${t.name}</strong> is the ${DATA.meta.season} world champion.</p></div>`;
+  if(t.done) return '';                                   // title settled: no box on the weekend card (Carlo 2026-11-07)
   const alt=t.winOnly&&t.thr.length;
   return `<div class="lv-title"><b>🏆 Title match point</b>
     <p><strong>${t.name}</strong> is world champion in ${L.short||L.country} with a top-${t.top+1} finish${
