@@ -488,7 +488,14 @@ def main():
 
     # starting grid - only meaningful once qualifying has run; f1.com is the only source
     if any(x["key"] in ("quali", "sq") and x["results"] for x in live["sessions"]):
-        g = via_f1com("grid")
+        # the FIA's Final Starting Grid (out ~1 h before the start) beats formula1.com, which can
+        # still show the provisional order when late penalties move cars (Brazil 2026: LIN 12 -> 18)
+        try:
+            import fetch_penalties as fp
+            kind, fg = fp.fia_grid(rnd)
+        except Exception as e:
+            kind, fg = None, []; print("  FIA grid skipped: %s" % e)
+        g = None if kind == "Final Starting Grid" else via_f1com("grid")
         if g:
             qpos = {r["code"]: r["pos"] for x in live["sessions"] if x["key"] in ("quali", "sq") for r in x["results"]}
             for r in g:
@@ -498,11 +505,6 @@ def main():
             src["grid"] = "f1.com"
         else:
             # formula1.com can be hours late; the FIA publishes the grid as a stewards' document
-            try:
-                import fetch_penalties as fp
-                kind, fg = fp.fia_grid(rnd)
-            except Exception as e:
-                kind, fg = None, []; print("  FIA grid skipped: %s" % e)
             qrows = {r["num"]: r for x in live["sessions"] if x["key"] == "quali" for r in x["results"]}
             if fg and all(n in qrows for _, n, _ in fg):
                 g = []
