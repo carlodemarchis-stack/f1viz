@@ -158,8 +158,14 @@ def kinds(dec):
     return k, v
 
 
+FIA_ALIAS = {"são paulo": "brazilian"}   # the FIA's event name -> our calendar's gp name
+
+
 def cal_round(name, cal):
     n = name.lower()
+    for k, v in FIA_ALIAS.items():
+        if n.startswith(k):
+            n = v + n[len(k):]
     c = next((c for c in cal if n.startswith(c["gp"].lower())), None)
     if c:
         return c
