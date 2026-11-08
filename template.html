@@ -1288,17 +1288,17 @@ const TOT = () => list().length + ((mode==='drivers'||mode==='constructors')?((h
 const teamCars = tid => D.filter(d=>d.teamId===tid).sort((a,b)=>a.pos-b.pos);
 // One-off Round-12 seat swap: Hadjar sat out, Lawson (Racing Bulls) drove for Red Bull, Tsunoda debuted at Racing Bulls.
 // TEMP_R12[teamId] = code of the driver who was only a temporary stand-in for that team → shown as a "Temporary" note, not a regular.
-// R19 Mexico: Hirakawa raced the Haas in place of Ocon.
-const TEMP_R12 = {red_bull:'LAW', rb:'TSU', haas:'HIR'};
-const teamRegulars = tid => teamCars(tid).filter(d=>d.code!==TEMP_R12[tid]);          // the 2 season drivers (photo chips + columns)
-const teamTemp = tid => { const c=TEMP_R12[tid]; return c ? D.find(x=>x.code===c) : null; };
+// R19 Mexico: Hirakawa raced the Haas in place of Ocon; R20 Brazil: Câmara did.
+const TEMP_R12 = {red_bull:['LAW'], rb:['TSU'], haas:['HIR','CAM']};
+const teamRegulars = tid => teamCars(tid).filter(d=>!(TEMP_R12[tid]||[]).includes(d.code));   // the 2 season drivers (photo chips + columns)
+const teamTemps = tid => (TEMP_R12[tid]||[]).map(c=>D.find(x=>x.code===c)).filter(Boolean);
 // drivers who actually raced FOR team `tid` in round `rnum` (respects the per-race tid seat swap)
 const teamRaceEntries = (tid,rnum) => D.map(d=>{ const r=d.races.find(x=>x.r===rnum && (x.tid||d.teamId)===tid); return r?{d,r}:null; }).filter(Boolean).sort((a,b)=>a.d.pos-b.d.pos);
 // points a driver scored FOR a given team (respecting tid) — total, and per-round cumulative over DATA.rounds
 const teamAttrPts = (d,tid) => d.races.reduce((s,r)=> s + (((r.tid||d.teamId)===tid)?(r.pts||0):0), 0);
 const teamCumProg = (d,tid) => { let cum=0; return DATA.rounds.map(rd=>{ const r=d.races.find(x=>x.r===rd.r && (x.tid||d.teamId)===tid); if(r) cum+=(r.pts||0); return cum; }); };
 // a team's scoring contributors (2 regulars + any temp), each with team-attributed total + cumulative, biggest first
-const teamContribs = c => { const l=[...teamRegulars(c.teamId)]; const t=teamTemp(c.teamId); if(t) l.push(t);
+const teamContribs = c => { const l=[...teamRegulars(c.teamId), ...teamTemps(c.teamId)];
   return l.map(d=>({d, tot:teamAttrPts(d,c.teamId), prog:teamCumProg(d,c.teamId)})).sort((a,b)=>b.tot-a.tot); };
 const T2COL = {}; C.forEach(x=>T2COL[x.teamId]=x.color);                              // teamId → colour
 const raceTid = (d,rnum) => { const r=d.races.find(x=>x.r===rnum); return (r&&r.tid)||d.teamId; };  // team a driver actually raced for that round
@@ -1456,7 +1456,7 @@ function teamRounds(c){
   });
 }
 function constructorCard(c){
-  const cars=teamRegulars(c.teamId), temp=teamTemp(c.teamId);
+  const cars=teamRegulars(c.teamId), temps=teamTemps(c.teamId);
   const trByR={}; teamRounds(c).forEach(t=>trByR[t.rd.r]=t);
   const rows=DATA.calendar.map((cal,i)=>{const t=trByR[cal.r];
     if(!t) return upRow(cal, DATA.calendar[i-1]);
@@ -1479,7 +1479,7 @@ function constructorCard(c){
         <div class="cpos">P${c.pos}</div>
         <div class="cpts">·<b>${c.points}</b><em>pts</em></div>
         <div class="cteam"><span class="cname">${c.name}</span><span class="cnat"><span class="flag">${c.flag}</span>${c.nat}</span></div>
-        <div class="cdrivers"><div class="cdrv-row">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>${temp?`<div class="ctemp"><img class="ctface" src="${IMG(temp.slug)}" alt="" onerror="this.remove()"><span>Temporary: <b>${temp.family}</b> (${temp.races.filter(r=>(r.tid||temp.teamId)===c.teamId).map(r=>'R'+r.r).join(', ')})</span></div>`:''}</div>
+        <div class="cdrivers"><div class="cdrv-row">${cars.map(d=>`<span class="cdrv"><img class="cface" src="${IMG(d.slug)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cface fb',textContent:'${d.code}'}))"><span class="cdinfo"><b>${d.family}</b><em>#${d.num||''}</em></span></span>`).join('')}</div>${temps.map(temp=>`<div class="ctemp"><img class="ctface" src="${IMG(temp.slug)}" alt="" onerror="this.remove()"><span>Temporary: <b>${temp.family}</b> (${temp.races.filter(r=>(r.tid||temp.teamId)===c.teamId).map(r=>'R'+r.r).join(', ')})</span></div>`).join('')}</div>
       </div>
       <div class="hero-car below"><img src="${carImg}" alt="${c.name}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'pfb',textContent:'${c.name.slice(0,2).toUpperCase()}'}))"></div>
       <div class="idbody">

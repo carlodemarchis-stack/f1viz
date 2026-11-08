@@ -68,6 +68,10 @@ def main():
     pits = api("pit", session_key=sk); time.sleep(1)
     rc = api("race_control", session_key=sk)
 
+    # the winner's in-lap after the flag is logged as one more lap with no time (Brazil 2026: lap 72
+    # of 71) - cap at the race distance the classification gives
+    dist = max((rr.get("laps") or 0) for dr in f1["drivers"] for rr in dr["races"] if rr["r"] == rnd)
+    laps = [l for l in laps if not dist or l["lap_number"] <= dist]
     nLaps = max(l["lap_number"] for l in laps)
     # lap times per lap
     times = [{} for _ in range(nLaps)]

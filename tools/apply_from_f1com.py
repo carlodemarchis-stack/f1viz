@@ -50,12 +50,22 @@ def code_of(cell):
     return m.group(1) if m else cell[:3].upper()
 
 
+DEBUT = {"CAM": {"familyName": "Câmara", "nationality": "Brazilian", "dateOfBirth": "2005-05-05",
+                 "permanentNumber": "51"}}   # what jolpica's bare entry leaves out
+
+
 def new_driver(code, tid, teamById):
     """Static driver object for a mid-season debut (same fields as update_round's ensure_driver);
     names/nationality from jolpica's season driver list, which carries stand-ins before their results."""
-    d = next((x for x in ((ur.curl_json("https://api.jolpi.ca/ergast/f1/%d/drivers.json?limit=100" % YEAR) or {})
-                                .get("MRData", {}).get("DriverTable", {}).get("Drivers", [])) if x.get("code") == code), None)
-    if not d:
+    ds = ((ur.curl_json("https://api.jolpi.ca/ergast/f1/%d/drivers.json?limit=100" % YEAR) or {})
+          .get("MRData", {}).get("DriverTable", {}).get("Drivers", []))
+    # a fresh stand-in can be listed bare (Câmara, Brazil 2026: no code/number/nationality/DOB)
+    # -> match the code on the surname and fill the gaps from DEBUT
+    d = next((x for x in ds if x.get("code") == code), None) or next(
+        (x for x in ds if not x.get("code") and x.get("familyName", "")[:3].upper() == code), None)
+    if d:
+        d = {**d, **DEBUT.get(code, {})}
+    if not d or "nationality" not in d:
         raise SystemExit("new driver %s is not in jolpica's %d driver list - add him by hand" % (code, YEAR))
     tm = teamById.get(tid, {})
     yob = int(d.get("dateOfBirth", "2000-01-01")[:4])

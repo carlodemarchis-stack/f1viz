@@ -74,9 +74,16 @@ def build_round(rnd, cal, num2code, sk):
             d, n = parse(l["date_start"]), l["lap_number"]
             if n not in start or d < start[n]:
                 start[n] = d
+    # the winner's untimed in-lap after the flag shows up as one more lap (Brazil 2026: 72 of 71)
+    timed = [l["lap_number"] for l in laps if l.get("lap_duration")]
+    if timed:
+        start = {k: v for k, v in start.items() if k <= max(timed)}
     nLaps = max(start) if start else 0
     bounds = [start[k] for k in sorted(start)]
     lap_of = lambda t: max(1, min(nLaps, bisect.bisect_right(bounds, parse(t))))
+    # weather from before lights out or after the flag must not land on lap 1 / the last lap
+    last = bounds[-1] + (bounds[-1] - bounds[-2]) * 1.1 if len(bounds) > 1 else None
+    in_race = lambda t: bounds and bounds[0] <= parse(t) and (last is None or parse(t) <= last)
 
     stints = {}
     for s in sorted(st, key=lambda x: (x.get("driver_number") or 0, x.get("stint_number") or 0)):
@@ -110,11 +117,11 @@ def build_round(rnd, cal, num2code, sk):
     if wx:
         acc = {}
         for w in wx:
-            if not w.get("date"):
+            if not w.get("date") or not in_race(w["date"]):
                 continue
             L = lap_of(w["date"])
             a = acc.setdefault(L, {"t": [], "a": [], "r": 0, "h": []})
-            if w.get("track_temperature") is not None: a["t"].append(w["track_temperature"])
+            if w.get("track_temperature"):            a["t"].append(w["track_temperature"])   # 0.0 = sensor dropout
             if w.get("air_temperature") is not None:   a["a"].append(w["air_temperature"])
             if w.get("humidity") is not None:          a["h"].append(w["humidity"])
             if w.get("rainfall"):                      a["r"] = 1
