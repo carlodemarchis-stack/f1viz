@@ -95,13 +95,16 @@ def main():
 
     os.makedirs(AUD, exist_ok=True)
     got = fail = 0
-    for code, lst in out.items():
+    # stored clips whose mp3 never arrived (an earlier failed run) are fetched again too
+    for lst in list(out.values()) + list(prev.values()):
         for c in lst:
             dst = os.path.join(AUD, c["f"])
             if os.path.exists(dst):
                 got += 1; continue
             try:
-                r = urllib.request.Request(c["url"], headers={"User-Agent": "Mozilla/5.0"})
+                # the path can carry the venue's name ("São Paulo") - percent-encode it
+                r = urllib.request.Request(urllib.parse.quote(c["url"], safe=":/%?=&"),
+                                           headers={"User-Agent": "Mozilla/5.0"})
                 data = urllib.request.urlopen(r, timeout=60).read()
                 open(dst, "wb").write(data); got += 1
             except Exception as e:

@@ -86,7 +86,10 @@ def openf1_safety(rnd, cal):
 
 # ---------- build one round in f1.json schema ----------
 NAT_FLAG = {"Japanese": "🇯🇵", "Thai": "🇹🇭", "Danish": "🇩🇰", "Chinese": "🇨🇳",
-            "American": "🇺🇸", "Argentinian": "🇦🇷", "German": "🇩🇪", "French": "🇫🇷"}
+            "American": "🇺🇸", "Argentinian": "🇦🇷", "German": "🇩🇪", "French": "🇫🇷",
+            "Brazilian": "🇧🇷", "British": "🇬🇧", "Italian": "🇮🇹", "Spanish": "🇪🇸", "Dutch": "🇳🇱",
+            "Australian": "🇦🇺", "Mexican": "🇲🇽", "Canadian": "🇨🇦", "Finnish": "🇫🇮", "Monegasque": "🇲🇨",
+            "New Zealander": "🇳🇿", "Estonian": "🇪🇪", "Swedish": "🇸🇪", "Bulgarian": "🇧🇬"}
 
 def build_round(f1, rnd):
     dstatic = {dr["code"]: dr for dr in f1["drivers"]}
