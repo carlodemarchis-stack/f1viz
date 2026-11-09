@@ -1637,7 +1637,7 @@ function _speakFallback(round, btn){
 // races: play current card's recap; when a recap ends in play mode, advance to the next race
 function _autoPlayCurrentRecap(){ const btn=wrap.querySelector('.rc-recap-play'), e=list()[idx]; if(btn && e && e.r!=null && _recapRound!==e.r) speakRecap(e.r, btn); }
 function _recapAdvance(){ if(playing && mode==='races'){ if(idx<N()-1) go(idx+1); else setPlay(false); } }
-const REPLAY=new Set([19]);   // rounds with a race replay in replay/ (built by track-lab/publish.py); desktop only
+const REPLAY=new Set([19,20]);   // rounds with a race replay in replay/ (built by track-lab/publish.py); desktop only
 function raceCard(r){
   const teamName={}; C.forEach(t=>teamName[t.teamId]=t.name);
   const raceLaps=DATA.raceLaps&&DATA.raceLaps[r.r];
