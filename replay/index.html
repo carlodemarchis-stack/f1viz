@@ -251,6 +251,8 @@ body.ctl #ctl{opacity:1}
 #ctl button small{display:block;font-size:.62em;font-weight:700;color:var(--mute);letter-spacing:.04em;margin-bottom:.15em}
 #ctl button.on small{color:#555}
 #bar{flex:1;height:22px;position:relative;cursor:pointer}
+#satc{position:fixed;right:12px;bottom:8px;font:10px/1.2 system-ui,sans-serif;color:rgba(238,242,246,.5);pointer-events:none;transition:bottom .4s;z-index:4}
+body.ctl #satc{bottom:70px}
 #bar::before{content:"";position:absolute;left:0;right:0;top:9px;height:4px;background:#2a313b;border-radius:2px}
 #bar .fill{position:absolute;left:0;top:9px;height:4px;background:var(--ink);border-radius:2px}
 #bar .m{position:absolute;top:5px;width:3px;height:12px;border-radius:1px}
@@ -293,6 +295,8 @@ body.shot *{transition:none!important;animation:none!important}
 <script src="races.js"></script>
 <script>{ const r=(location.search.match(/[?&]r=(\d+)/)||[])[1]||'20';   // ?r=19 picks the race; the latest by default
   document.write('<script src="r'+r+'.js"><\/script><script src="v'+r+'.js"><\/script>') }</script>
+<script>{ const r=window.RACE&&RACE.round;   // satellite backdrop, where one has been fitted (sat<N>.js + .webp)
+  if([20].includes(+r)) document.write('<script src="sat'+r+'.js"><\/script>') }</script>
 <script src="crowd.js"></script>
 <div id="mob"><div><b>Race replay</b>Made for a computer screen: open it on a laptop or desktop.<br><br><a href="../">← Back to F1viz</a></div></div>
 <canvas id="cv"></canvas>
@@ -312,6 +316,7 @@ body.shot *{transition:none!important;animation:none!important}
   <div id="leadz"></div>
   <div id="lights"><i></i><i></i><i></i><i></i><i></i></div>
 </div>
+<div id="satc"></div>
 <div id="ctl">
   <button id="rs" title="Restart from the grid (R)">⏮</button>
   <button id="pp">▶</button>
@@ -334,6 +339,9 @@ body.shot *{transition:none!important;animation:none!important}
 <div id="start"><div><b>▶</b><p>F fullscreen · S settings · ↑ ↓ race · R restart · Space play · click a car (or type its number) to follow it · + / − speed</p></div></div>
 <script>
 const $=s=>document.querySelector(s), cv=$('#cv'), g=cv.getContext('2d');
+let SATON=true; const SATI=window.SAT?Object.assign(new Image(),{src:window.SAT.src}):null;
+const satCredit=()=>{ const c=document.getElementById('satc'); if(c) c.textContent=SATI&&SATON?window.SAT.attr:'' };   // Google's credit stays next to its imagery
+addEventListener('DOMContentLoaded',satCredit);
 const TYRE={SOFT:['#ff2d3d','S'],MEDIUM:['#ffd12e','M'],HARD:['#f2f2ee','H'],INTERMEDIATE:['#3fc256','I'],WET:['#2f86ff','W']};
 let FOL=null, R, X=[], Y=[], VIS=[], T=0, SPEED=5, playing=false, last=0, labelsAll=false, hold=0;
 let W,H,DPR,u, tf;                       // transform
@@ -920,6 +928,13 @@ function draw(){
   const tw=Math.max(14*u,7), glow=flag==='SC'||flag==='VSC'?'#ffc531':flag==='RED'?'#ff2d3d':null;
   g.lineJoin=g.lineCap='round';
   // pit lane
+  // satellite backdrop under the circuit (B toggles): image px -> track units -> screen, faded to black in the image itself
+  if(SATI&&SATON&&SATI.complete){ const [[a,b],[c,d]]=window.SAT.A, det=a*d-b*c, Ai=[[d/det,-b/det],[-c/det,a/det]],
+      M=[[tf.k*tf.c,-tf.k*tf.s],[-tf.k*tf.s,-tf.k*tf.c]], G=[[M[0][0]*Ai[0][0]+M[0][1]*Ai[1][0], M[0][0]*Ai[0][1]+M[0][1]*Ai[1][1]],
+                                                          [M[1][0]*Ai[0][0]+M[1][1]*Ai[1][0], M[1][0]*Ai[0][1]+M[1][1]*Ai[1][1]]],
+      q=[window.SAT.o[0]-window.SAT.b[0], window.SAT.o[1]-window.SAT.b[1]],
+      t=[G[0][0]*q[0]+G[0][1]*q[1]+tf.ox-tf.k*tf.cx, G[1][0]*q[0]+G[1][1]*q[1]+tf.oy-tf.k*tf.cy];
+    g.save(); g.globalAlpha=.9; g.setTransform(DPR*G[0][0],DPR*G[1][0],DPR*G[0][1],DPR*G[1][1],DPR*t[0],DPR*t[1]); g.drawImage(SATI,0,0); g.restore() }
   path(R.pit); g.strokeStyle='#232a33'; g.lineWidth=tw*.5; g.stroke();
   // track: edge, body, centre hairline
   path(R.track,true);
@@ -1178,6 +1193,7 @@ addEventListener('keydown',e=>{
   else if(e.key==='r'||e.key==='R') restart();
   else if(e.key==='c'||e.key==='C') $('#comm').click();
   else if(e.key==='m'||e.key==='M') $('#col').click();
+  else if(e.key==='b'||e.key==='B'){ SATON=!SATON; satCredit() }
   else if(e.key==='a'||e.key==='A') $('#amb').click();
   else if(/^[0-9]$/.test(e.key)) typeNum(e.key);
   else if(e.key==='Escape'){ if($('#setm').classList.contains('on')) openSettings(false); else setFol(null) }
