@@ -389,15 +389,26 @@ def main():
             if _o.get("round") == rnd: prev_grid = _o.get("grid")
         except Exception: pass
 
-    slug = f1com_slug(live["country"])
+    # f1.com files a race under its own name first: by country, Las Vegas resolved to
+    # /racing/2026/united-states = Austin, and its results filled the Las Vegas card (2026-11-18)
+    slugs = []
+    for v in (live.get("short"), live["country"]):
+        sl = f1com_slug(v or "")
+        if sl and sl not in slugs:
+            slugs.append(sl)
+    slug = slugs[0]
     mid = None
     src = {}
 
     def via_f1com(skey):
         """f1.com fallback - only for sessions whose start time has passed."""
-        nonlocal mid
+        nonlocal mid, slug
         if mid is None:
-            mid = f1com_meeting_id(slug) or ""
+            mid = ""
+            for sl in slugs:
+                got = f1com_meeting_id(sl)
+                if got:
+                    mid, slug = got, sl; break
         if not mid:
             return None
         return f1com_results(mid, slug, skey, bynum, teamcol, teamid, tid2name, tid2col)
@@ -420,7 +431,8 @@ def main():
         res = curl_list("https://api.openf1.org/v1/session_result?session_key=%s" % sk)
         drvl = curl_list("https://api.openf1.org/v1/drivers?session_key=%s" % sk)
         if res is None or drvl is None:                      # API down -> f1.com, else keep what we had
-            got = via_f1com(s["key"]) if s["key"] in F1COM_PATH else None
+            # OpenF1 answers "No results found" for a session not yet run: never fetch one early
+            got = via_f1com(s["key"]) if (started and s["key"] in F1COM_PATH) else None
             if got:
                 row["results"] = got; src[s["key"]] = "f1.com"
             else:

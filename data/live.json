@@ -1,1 +1,57 @@
-{}
+{
+ "meta": {
+  "season": 2026,
+  "round": 21,
+  "updated": "2026-11-18T11:42:47Z"
+ },
+ "round": 21,
+ "gp": "Las Vegas Grand Prix",
+ "full": "Las Vegas Grand Prix",
+ "short": "Las Vegas",
+ "flag": "🇺🇸",
+ "country": "USA",
+ "circuit": "Las Vegas Strip Street Circuit",
+ "locality": "Las Vegas",
+ "date": "2026-11-22",
+ "tz": "America/Los_Angeles",
+ "laps": 50,
+ "length": "6.201",
+ "distance": "310.050",
+ "sessions": [
+  {
+   "key": "fp1",
+   "name": "Practice 1",
+   "start": "2026-11-20T00:30:00Z",
+   "end": "2026-11-20T01:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp2",
+   "name": "Practice 2",
+   "start": "2026-11-20T04:00:00Z",
+   "end": "2026-11-20T05:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "fp3",
+   "name": "Practice 3",
+   "start": "2026-11-21T00:30:00Z",
+   "end": "2026-11-21T01:30:00+00:00",
+   "results": []
+  },
+  {
+   "key": "quali",
+   "name": "Qualifying",
+   "start": "2026-11-21T04:00:00Z",
+   "end": "2026-11-21T05:00:00+00:00",
+   "results": []
+  },
+  {
+   "key": "race",
+   "name": "Race",
+   "start": "2026-11-22T04:00:00Z",
+   "end": "2026-11-22T06:00:00+00:00",
+   "results": []
+  }
+ ]
+}
