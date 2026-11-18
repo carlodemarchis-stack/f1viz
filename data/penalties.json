@@ -5684,6 +5684,60 @@
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_sao_paulo_grand_prix_-_infringement_-_car_27_-_leaving_the_track_and_gaining_an_advantage.pdf",
     "sec": 10
+   },
+   {
+    "doc": 78,
+    "title": "Infringement - Car 87 - Unsafe release",
+    "pub": "08.11.26 22:13",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Race",
+    "fact": "Car 87 was released in an unsafe manner into the path of Car 16.",
+    "breach": "Breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty. (5 seconds added to elapsed Race time).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_sao_paulo_grand_prix_-_infringement_-_car_87_-_unsafe_release.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 79,
+    "title": "Infringement - Car 16 - Causing a collision",
+    "pub": "08.11.26 22:20",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 16 made contact with Car 30 in turn 12.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "5 second time penalty. (5 seconds added to elapsed Race time).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_sao_paulo_grand_prix_-_infringement_-_car_16_-_causing_a_collision.pdf",
+    "sec": 5
+   },
+   {
+    "doc": 80,
+    "title": "Infringement - Car 12 - Unsafe release",
+    "pub": "08.11.26 22:33",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Race",
+    "fact": "Car 12 was released in an unsafe manner into the path of Car 43.",
+    "breach": "Breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "5 second time penalty. (5 seconds added to elapsed Race time).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_sao_paulo_grand_prix_-_infringement_-_car_12_-_unsafe_release.pdf",
+    "sec": 5
    }
   ]
  }

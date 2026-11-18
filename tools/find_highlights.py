@@ -16,7 +16,7 @@ YouTube uses - Italian, Dutch, Canadian) so a race whose highlights are not up y
 cannot silently take a neighbouring round's video. A candidate that cannot be confirmed
 is reported as UNVERIFIED and never written without being read first.
 """
-import json, os, re, sys, time, urllib.request, urllib.parse
+import json, os, re, sys, time, unicodedata, urllib.request, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 F1P = os.path.join(ROOT, "data", "f1.json")
@@ -70,7 +70,9 @@ def find(cal):
                 continue
             seen.add(vid)
             # confirm it is THIS round: the GP adjective / venue must appear in the title
-            score = sum(w for t, w in zip(tokens, (3, 2, 1)) if t.lower() in title.lower())
+            # accents folded: YouTube writes "Sao Paulo", our calendar "São Paulo"
+            fold = lambda x: unicodedata.normalize("NFKD", x).encode("ascii", "ignore").decode().lower()
+            score = sum(w for t, w in zip(tokens, (3, 2, 1)) if fold(t) in fold(title))
             if best is None or score > best[2]:
                 best = (vid, title, score)
         if best and best[2] > 0:
