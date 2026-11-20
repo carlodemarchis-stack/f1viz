@@ -5740,6 +5740,97 @@
     "sec": 5
    }
   ],
-  "21": []
+  "21": [
+   {
+    "doc": 16,
+    "title": "Infringement - Car 81 - Changes to PU element",
+    "pub": "20.11.26 07:11",
+    "num": 81,
+    "code": "PIA",
+    "driver": "Oscar Piastri",
+    "team": "McLaren Mastercard F1 Team",
+    "session": "Free Practice 2",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE)",
+    "breach": "Breach of Articles B8.2.2a (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_81_-_changes_to_pu_element.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 17,
+    "title": "Infringement - Car 12 - Changes to PU element",
+    "pub": "20.11.26 06:34",
+    "num": 12,
+    "code": "ANT",
+    "driver": "Kimi Antonelli",
+    "team": "Mercedes-AMG PETRONAS F1 Team",
+    "session": "Free Practice 2",
+    "fact": "The following Power Unit elements have been used: 6th Engine (ICE)",
+    "breach": "Breach of Articles B8.2.2a (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 5 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_12_-_changes_to_pu_element.pdf",
+    "grid": 5
+   },
+   {
+    "doc": 18,
+    "title": "Infringement - Car 55 - Changes to PU element",
+    "pub": "20.11.26 06:33",
+    "num": 55,
+    "code": "SAI",
+    "driver": "Carlos Sainz",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 2",
+    "fact": "The following Power Unit elements have been used: 5th Turbocharger (TC)",
+    "breach": "Breaches of Articles B8.2.2b (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_55_-_changes_to_pu_element.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 19,
+    "title": "Infringement - Car 18 - Changes to PU elements",
+    "pub": "20.11.26 06:33",
+    "num": 18,
+    "code": "STR",
+    "driver": "Lance Stroll",
+    "team": "Aston Martin Aramco F1 Team",
+    "session": "Free Practice 2",
+    "fact": "The following Power Unit elements have been used: 9th Energy Store (ES) 8th Control Electronics Unit (PU-CE)",
+    "breach": "Breaches of Articles B8.2.2 d) and e) (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 10 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_18_-_changes_to_pu_elements.pdf",
+    "grid": 10
+   },
+   {
+    "doc": 20,
+    "title": "Infringement - Car 87 - Changes to PU elements",
+    "pub": "20.11.26 06:46",
+    "num": 87,
+    "code": "BEA",
+    "driver": "Oliver Bearman",
+    "team": "TGR Haas F1 Team",
+    "session": "Free Practice 2",
+    "fact": "The following Power Unit elements have been used: 5th Engine (ICE) 5th Turbocharger (TC) 5th Exhaust Set (EXH) 5th MGU-K",
+    "breach": "Breaches of Articles B8.2.2 a) and b) and c) and f) (read with B8.2.3) of the FIA F1 Regulations.",
+    "decision": "Drop of 35 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_87_-_changes_to_pu_elements.pdf",
+    "grid": 35
+   }
+  ]
  }
 }
