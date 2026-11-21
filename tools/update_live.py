@@ -452,8 +452,8 @@ def main():
                     pos = int(pos)
                 except (TypeError, ValueError):
                     pos, label = None, str(pos).upper()
-            elif pos is None and (r.get("dnf") or r.get("dns") or r.get("dsq")):
-                label = "DSQ" if r.get("dsq") else ("DNS" if r.get("dns") else "NC")   # retired, not classified
+            elif pos is None:   # retired, or (no flag at all) outside 107% / no valid time: f1.com prints NC
+                label = "DSQ" if r.get("dsq") else ("DNS" if r.get("dns") else "NC")
             od = drv.get(n, {})
             fd = bynum.get(n)
             code = (fd or {}).get("code") or od.get("name_acronym") or str(n)
@@ -478,7 +478,7 @@ def main():
             })
             if label:
                 out[-1]["pl"] = label
-                out[-1]["res"] = "No time" if label == "RT" else ("DNF" if label == "NC" else label)
+                out[-1]["res"] = "No time" if label == "RT" else ("DNF" if (label == "NC" and r.get("dnf")) else label)
                 out[-1]["_lbl"] = True
         n_cls = max([x["pos"] for x in out if x["pos"] is not None] or [0])
         # retirements in reverse order of laps completed, like the official classification
@@ -494,6 +494,8 @@ def main():
             b = x.pop("_best", None)
             x["gap"] = ("+%.3f" % (b - lead)) if (b and lead and x["pos"] != 1) else None
             x["gapS"] = 0.0 if x["pos"] == 1 else (round(b - lead, 3) if (b and lead) else None)
+            if x.get("pl"):                                  # unclassified (NC/DNS/...): no gap, kept off the gap chart
+                x["gap"] = x["gapS"] = None
         row["results"] = out
         if out: src[s["key"]] = "openf1"
         live["sessions"].append(row)

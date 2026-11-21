@@ -5830,6 +5830,75 @@
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_87_-_changes_to_pu_elements.pdf",
     "grid": 35
+   },
+   {
+    "doc": 36,
+    "title": "Infringement - Car 23 - Erratic Driving in Turn 17",
+    "pub": "21.11.26 05:04",
+    "num": 23,
+    "code": "ALB",
+    "driver": "Alexander Albon",
+    "team": "Atlassian Williams F1 Team",
+    "session": "Free Practice 3",
+    "fact": "Car 23 was driven erratically in an incident involving Car 6 at Turn 17",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code.",
+    "decision": "Driver: Reprimand (Driving).",
+    "kinds": [
+     "reprimand"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_23_-_erratic_driving_in_turn_17.pdf"
+   },
+   {
+    "doc": 37,
+    "title": "Infringement - Car 3 - Erratic Driving in Turn 14",
+    "pub": "21.11.26 05:09",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 3",
+    "fact": "Driving erratically at Turn 14",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code.",
+    "decision": "Driver: Warning.",
+    "kinds": [
+     "warning"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_3_-_erratic_driving_in_turn_14.pdf"
+   },
+   {
+    "doc": 38,
+    "title": "Decision - Alleged Driving Erratically",
+    "pub": "21.11.26 05:21",
+    "num": 3,
+    "code": "VER",
+    "driver": "Max Verstappen",
+    "team": "Oracle Red Bull Racing",
+    "session": "Free Practice 3",
+    "fact": "Car 3 engaged in a series of moves on the entry of T17 in front of Car 43",
+    "breach": "Alleged breach of Appendix L, Chapter IV, Article 2 e) of the FIA International Sporting Code.",
+    "decision": "No further action.",
+    "kinds": [
+     "nfa"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_decision_-_alleged_driving_erratically.pdf"
+   },
+   {
+    "doc": 45,
+    "title": "Infringement - Car 41 Unsafe Release",
+    "pub": "21.11.26 07:44",
+    "num": 41,
+    "code": "LIN",
+    "driver": "Arvid Lindblad",
+    "team": "Visa Cash App Racing Bulls F1 Team",
+    "session": "Qualifying",
+    "fact": "Car 41 was released in an unsafe manner into the path of Car 23.",
+    "breach": "Breach of Article B1.6.2a of the FIA F1 Regulations.",
+    "decision": "The competitor (Visa Cash App Racing Bulls F1 Team) is fined €5,000.",
+    "kinds": [
+     "fine"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_41_unsafe_release.pdf",
+    "eur": 5000
    }
   ]
  }
