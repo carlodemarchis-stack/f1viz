@@ -5899,6 +5899,78 @@
     ],
     "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_41_unsafe_release.pdf",
     "eur": 5000
+   },
+   {
+    "doc": 54,
+    "title": "Infringement - Car 44 - Leaving the track and gaining an advantage",
+    "pub": "22.11.26 06:25",
+    "num": 44,
+    "code": "HAM",
+    "driver": "Lewis Hamilton",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 44 left the track at Turn 8 at 20:22, while defending a position and gained a lasting advantage.",
+    "breach": "Breach of Article B1.8.6 of the FIA F1 Regulations.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_44_-_leaving_the_track_and_gaining_an_advantage.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 60,
+    "title": "Infringement - Car 16 - Causing a collision with Car 44",
+    "pub": "22.11.26 07:11",
+    "num": 16,
+    "code": "LEC",
+    "driver": "Charles Leclerc",
+    "team": "Scuderia Ferrari HP",
+    "session": "Race",
+    "fact": "Car 16 collided with Car 44 at Turn 7.",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "10 second time penalty.",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_16_-_causing_a_collision_with_car_44.pdf",
+    "sec": 10
+   },
+   {
+    "doc": 61,
+    "title": "Infringement - Car 11 - Causing a collision with Car 51",
+    "pub": "22.11.26 08:16",
+    "num": 11,
+    "code": "PER",
+    "driver": "Sergio Perez",
+    "team": "Cadillac Formula 1 Team",
+    "session": "Race",
+    "fact": "Car 11 made contact with Car 51 in turn 14",
+    "breach": "Breach of Appendix L, Chapter IV, Article 2 d) of the FIA International Sporting Code.",
+    "decision": "Drop of 5 grid positions for the next Race in which the driver participates.",
+    "kinds": [
+     "grid"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_11_-_causing_a_collision_with_car_51.pdf",
+    "grid": 5
+   },
+   {
+    "doc": 64,
+    "title": "Infringement - Car 6 - Driving unnecessarily slowly",
+    "pub": "22.11.26 09:11",
+    "num": 6,
+    "code": "HAD",
+    "driver": "Isack Hadjar",
+    "team": "Oracle Red Bull Racing",
+    "session": "Race",
+    "fact": "Driving unnecessarily slowly under Safety Car conditions.",
+    "breach": "Breach of Article B 5.13.2 of the Formula One Sporting Regulations.",
+    "decision": "10 seconds time penalty. (10 seconds added to elapsed Race time).",
+    "kinds": [
+     "time"
+    ],
+    "url": "https://www.fia.com/system/files/decision-document/2026_las_vegas_grand_prix_-_infringement_-_car_6_-_driving_unnecessarily_slowly.pdf",
+    "sec": 10
    }
   ]
  }
