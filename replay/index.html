@@ -293,7 +293,7 @@ body.shot *{transition:none!important;animation:none!important}
 </head>
 <body>
 <script src="races.js"></script>
-<script>{ const r=(location.search.match(/[?&]r=(\d+)/)||[])[1]||'20';   // ?r=19 picks the race; the latest by default
+<script>{ const r=(location.search.match(/[?&]r=(\d+)/)||[])[1]||'21';   // ?r=19 picks the race; the latest by default
   document.write('<script src="r'+r+'.js"><\/script><script src="v'+r+'.js"><\/script>') }</script>
 <script>{ const r=window.RACE&&RACE.round;   // satellite backdrop, where one has been fitted (sat<N>.js + .webp)
   if([20].includes(+r)) document.write('<script src="sat'+r+'.js"><\/script>') }</script>
